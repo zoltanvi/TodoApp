@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.*" />
+    <PackageReference Include="gong-wpf-dragdrop" Version="3.*" />
+    <PackageReference Include="MediatR" Version="12.*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Modules.Common.Navigation\Modules.Common.Navigation.csproj" />
+    <ProjectReference Include="..\Modules.Common\Modules.Common.csproj" />
+  </ItemGroup>
+
+</Project>

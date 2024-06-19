@@ -4,8 +4,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TodoApp"
+        xmlns:Behaviors="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:valueConverters="clr-namespace:Modules.Common.Views.ValueConverters;assembly=Modules.Common.Views"
+        xmlns:attached="clr-namespace:Modules.Common.Views.AttachedProperties;assembly=Modules.Common.Views"
+        Name="TodoApp2Window"
+        Title="TodoApp"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Height="500" 
+        Width="380">
     <Grid>
 
     </Grid>

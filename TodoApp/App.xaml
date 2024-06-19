@@ -1,9 +1,23 @@
-﻿<Application x:Class="TodoApp.App"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:TodoApp"
-             StartupUri="MainWindow.xaml">
+﻿<Application
+    x:Class="TodoApp.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:TodoApp"
+    StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary>
+
+            <ResourceDictionary.MergedDictionaries>
+                <!--  Order is important  -->
+                <ResourceDictionary Source="pack://application:,,,/Modules.Common.Views;component/Resources/BindingProxies.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Modules.Common.Views;component/Resources/ValueConverters.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Modules.Common.Views;component/Resources/Icons.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Modules.Common.Views;component/Resources/ColorLists.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Modules.Common.Views;component/Styles/Styles.xaml" />
+
+            </ResourceDictionary.MergedDictionaries>
+
+        </ResourceDictionary>
+
     </Application.Resources>
 </Application>

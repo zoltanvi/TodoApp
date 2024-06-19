@@ -1,0 +1,198 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=System.Runtime">
+
+    <x:Array x:Key="ColorList" Type="system:String">
+
+        <system:String>Transparent</system:String>
+        <system:String>#FFFFFF</system:String>
+        <system:String>#F5F5F5</system:String>
+        <system:String>#E0E0E0</system:String>
+        <system:String>#BDBDBD</system:String>
+        <system:String>#757575</system:String>
+        <system:String>#424242</system:String>
+        <system:String>#212121</system:String>
+        <system:String>#000000</system:String>
+
+        <system:String>#FFCDD2</system:String>
+        <system:String>#EF9A9A</system:String>
+        <system:String>#E57373</system:String>
+        <system:String>#EF5350</system:String>
+        <system:String>#F44336</system:String>
+        <system:String>#E53935</system:String>
+        <system:String>#D32F2F</system:String>
+        <system:String>#C62828</system:String>
+        <system:String>#B71C1C</system:String>
+
+        <system:String>#F8BBD0</system:String>
+        <system:String>#F48FB1</system:String>
+        <system:String>#F06292</system:String>
+        <system:String>#EC407A</system:String>
+        <system:String>#E91E63</system:String>
+        <system:String>#D81B60</system:String>
+        <system:String>#C2185B</system:String>
+        <system:String>#AD1457</system:String>
+        <system:String>#880E4F</system:String>
+
+        <system:String>#E1BEE7</system:String>
+        <system:String>#CE93D8</system:String>
+        <system:String>#BA68C8</system:String>
+        <system:String>#AB47BC</system:String>
+        <system:String>#9C27B0</system:String>
+        <system:String>#8E24AA</system:String>
+        <system:String>#7B1FA2</system:String>
+        <system:String>#6A1B9A</system:String>
+        <system:String>#4A148C</system:String>
+
+        <system:String>#D1C4E9</system:String>
+        <system:String>#B39DDB</system:String>
+        <system:String>#9575CD</system:String>
+        <system:String>#7E57C2</system:String>
+        <system:String>#673AB7</system:String>
+        <system:String>#5E35B1</system:String>
+        <system:String>#512DA8</system:String>
+        <system:String>#4527A0</system:String>
+        <system:String>#311B92</system:String>
+
+        <system:String>#C5CAE9</system:String>
+        <system:String>#9FA8DA</system:String>
+        <system:String>#7986CB</system:String>
+        <system:String>#5C6BC0</system:String>
+        <system:String>#3F51B5</system:String>
+        <system:String>#3949AB</system:String>
+        <system:String>#303F9F</system:String>
+        <system:String>#283593</system:String>
+        <system:String>#1A237E</system:String>
+
+        <system:String>#BBDEFB</system:String>
+        <system:String>#90CAF9</system:String>
+        <system:String>#64B5F6</system:String>
+        <system:String>#42A5F5</system:String>
+        <system:String>#2196F3</system:String>
+        <system:String>#1E88E5</system:String>
+        <system:String>#1976D2</system:String>
+        <system:String>#1565C0</system:String>
+        <system:String>#0D47A1</system:String>
+
+        <system:String>#B3E5FC</system:String>
+        <system:String>#81D4FA</system:String>
+        <system:String>#4FC3F7</system:String>
+        <system:String>#29B6F6</system:String>
+        <system:String>#03A9F4</system:String>
+        <system:String>#039BE5</system:String>
+        <system:String>#0288D1</system:String>
+        <system:String>#0277BD</system:String>
+        <system:String>#01579B</system:String>
+
+        <system:String>#B2EBF2</system:String>
+        <system:String>#80DEEA</system:String>
+        <system:String>#4DD0E1</system:String>
+        <system:String>#26C6DA</system:String>
+        <system:String>#00BCD4</system:String>
+        <system:String>#00ACC1</system:String>
+        <system:String>#0097A7</system:String>
+        <system:String>#00838F</system:String>
+        <system:String>#006064</system:String>
+
+        <system:String>#B2DFDB</system:String>
+        <system:String>#80CBC4</system:String>
+        <system:String>#4DB6AC</system:String>
+        <system:String>#26A69A</system:String>
+        <system:String>#009688</system:String>
+        <system:String>#00897B</system:String>
+        <system:String>#00796B</system:String>
+        <system:String>#00695C</system:String>
+        <system:String>#004D40</system:String>
+
+        <system:String>#C8E6C9</system:String>
+        <system:String>#A5D6A7</system:String>
+        <system:String>#81C784</system:String>
+        <system:String>#66BB6A</system:String>
+        <system:String>#4CAF50</system:String>
+        <system:String>#43A047</system:String>
+        <system:String>#388E3C</system:String>
+        <system:String>#2E7D32</system:String>
+        <system:String>#1B5E20</system:String>
+
+        <system:String>#DCEDC8</system:String>
+        <system:String>#C5E1A5</system:String>
+        <system:String>#AED581</system:String>
+        <system:String>#9CCC65</system:String>
+        <system:String>#8BC34A</system:String>
+        <system:String>#7CB342</system:String>
+        <system:String>#689F38</system:String>
+        <system:String>#558B2F</system:String>
+        <system:String>#33691E</system:String>
+
+        <system:String>#F0F4C3</system:String>
+        <system:String>#E6EE9C</system:String>
+        <system:String>#DCE775</system:String>
+        <system:String>#D4E157</system:String>
+        <system:String>#CDDC39</system:String>
+        <system:String>#C0CA33</system:String>
+        <system:String>#AFB42B</system:String>
+        <system:String>#9E9D24</system:String>
+        <system:String>#827717</system:String>
+
+        <system:String>#FFF9C4</system:String>
+        <system:String>#FFF59D</system:String>
+        <system:String>#FFF176</system:String>
+        <system:String>#FFEE58</system:String>
+        <system:String>#FFEB3B</system:String>
+        <system:String>#FDD835</system:String>
+        <system:String>#FBC02D</system:String>
+        <system:String>#F9A825</system:String>
+        <system:String>#F57F17</system:String>
+
+        <system:String>#FFECB3</system:String>
+        <system:String>#FFE082</system:String>
+        <system:String>#FFD54F</system:String>
+        <system:String>#FFCA28</system:String>
+        <system:String>#FFC107</system:String>
+        <system:String>#FFB300</system:String>
+        <system:String>#FFA000</system:String>
+        <system:String>#FF8F00</system:String>
+        <system:String>#FF6F00</system:String>
+
+        <system:String>#FFE0B2</system:String>
+        <system:String>#FFCC80</system:String>
+        <system:String>#FFB74D</system:String>
+        <system:String>#FFA726</system:String>
+        <system:String>#FF9800</system:String>
+        <system:String>#FB8C00</system:String>
+        <system:String>#F57C00</system:String>
+        <system:String>#EF6C00</system:String>
+        <system:String>#E65100</system:String>
+
+        <system:String>#FFCCBC</system:String>
+        <system:String>#FFAB91</system:String>
+        <system:String>#FF8A65</system:String>
+        <system:String>#FF7043</system:String>
+        <system:String>#FF5722</system:String>
+        <system:String>#F4511E</system:String>
+        <system:String>#E64A19</system:String>
+        <system:String>#D84315</system:String>
+        <system:String>#BF360C</system:String>
+
+        <system:String>#D7CCC8</system:String>
+        <system:String>#BCAAA4</system:String>
+        <system:String>#A1887F</system:String>
+        <system:String>#8D6E63</system:String>
+        <system:String>#795548</system:String>
+        <system:String>#6D4C41</system:String>
+        <system:String>#5D4037</system:String>
+        <system:String>#4E342E</system:String>
+        <system:String>#3E2723</system:String>
+
+        <system:String>#CFD8DC</system:String>
+        <system:String>#B0BEC5</system:String>
+        <system:String>#90A4AE</system:String>
+        <system:String>#78909C</system:String>
+        <system:String>#607D8B</system:String>
+        <system:String>#546E7A</system:String>
+        <system:String>#455A64</system:String>
+        <system:String>#37474F</system:String>
+        <system:String>#263238</system:String>
+    </x:Array>
+
+</ResourceDictionary>

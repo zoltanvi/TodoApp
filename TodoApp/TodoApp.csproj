@@ -8,4 +8,9 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Modules.Common.Views\Modules.Common.Views.csproj" />
+    <ProjectReference Include="..\Modules.Common\Modules.Common.csproj" />
+  </ItemGroup>
+
 </Project>
