@@ -1,5 +1,4 @@
 ﻿using Modules.Common.Services.Navigation;
-using System.Windows.Controls;
 
 namespace Modules.Common.Views.Services.Navigation;
 

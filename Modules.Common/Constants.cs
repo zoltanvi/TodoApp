@@ -60,7 +60,7 @@
         // Keys in the App.config
         public struct ConfigKeys
         {
-            public const string DatabaseDirectoryPath = "DatabaseDirectoryPath";
+            public const string DatabaseDirectory = "DatabaseDirectory";
             public const string DatabaseFileName = "DatabaseFileName";
         }
     }
