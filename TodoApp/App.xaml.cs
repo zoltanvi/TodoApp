@@ -25,6 +25,7 @@ public partial class App : Application
             .ConfigureAppConfiguration((context, config) =>
             {
                 config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+                config.AddJsonFile("appsettings.Dev.json", optional: true, reloadOnChange: true);
             })
             .ConfigureServices((context, services) =>
             {
