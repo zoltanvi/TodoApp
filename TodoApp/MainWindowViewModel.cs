@@ -21,6 +21,8 @@ public class MainWindowViewModel : BaseViewModel
     private readonly IUIScaler _uiScaler;
     private readonly ThemeManager _themeManager;
     private readonly TrayIconModule _trayIconModule;
+    private double _myWidth;
+    private double _myHeight;
     private static WindowSettings WindowSettings => AppSettings.Instance.WindowSettings;
     private static AppWindowSettings AppWindowSettings => AppSettings.Instance.AppWindowSettings;
     public MainWindowViewModel(
@@ -109,15 +111,38 @@ public class MainWindowViewModel : BaseViewModel
     public double WindowMinimumHeight { get; set; } = 200;
     public bool IsMaximized => _windowService.IsMaximized;
     public bool IsMaximizedOrDocked => _windowService.IsMaximizedOrDocked;
-
-    // AppWindowSettings.RoundedWindowCorners and this property both must be true for the rounded corners to work
-    public bool IsRoundedCornersAllowed => _windowService.IsRoundedCornersAllowed;
+    public bool IsRoundedCornersAllowed => _windowService.IsRoundedCornersAllowed && AppWindowSettings.RoundedWindowCorners;
 
     #region Workaround
+
     // WORKAROUND properties for MultiBinding bug
     // See: https://stackoverflow.com/questions/22536645/what-hardware-platform-difference-could-cause-an-xaml-wpf-multibinding-to-checkb
-    public double MyWidth { get; set; }
-    public double MyHeight { get; set; }
+    public double MyWidth
+    {
+        get => _myWidth;
+        set
+        {
+            if (value.Equals(_myWidth)) return;
+            _myWidth = value;
+            OnPropertyChanged(nameof(MyWidth));
+            OnPropertyChanged(nameof(ClipRect));
+            OnPropertyChanged(nameof(OuterClipRect));
+        }
+    }
+
+    public double MyHeight
+    {
+        get => _myHeight;
+        set
+        {
+            if (value.Equals(_myHeight)) return;
+            _myHeight = value;
+            OnPropertyChanged(nameof(MyHeight));
+            OnPropertyChanged(nameof(ClipRect));
+            OnPropertyChanged(nameof(OuterClipRect));
+        }
+    }
+
     public int OuterMargin => 2 * AppSettings.Instance.AppWindowSettings.ResizeBorderSize;
     public Rect ClipRect => new(0, 0, MyWidth, MyHeight);
     public Rect OuterClipRect => new(0, 0, MyWidth + OuterMargin, MyHeight + OuterMargin);
@@ -152,6 +177,10 @@ public class MainWindowViewModel : BaseViewModel
         if (e.PropertyName == nameof(AppWindowSettings.ExitToTray))
         {
             _trayIconModule.IsEnabled = AppWindowSettings.ExitToTray;
+        }
+        else if (e.PropertyName == nameof(AppWindowSettings.RoundedWindowCorners))
+        {
+            OnPropertyChanged(nameof(IsRoundedCornersAllowed));
         }
     }
 

@@ -6,4 +6,7 @@
     <valueConverters:AppBorderBrushConverter x:Key="AppBorderBrushConverter"/>
     <valueConverters:TitleBarHeightConverter x:Key="TitleBarHeightConverter"/>
     <valueConverters:TitleBarHeightToGridLengthConverter x:Key="TitleBarHeightToGridLengthConverter"/>
+    <valueConverters:BoolToRoundedCornerRadiusConverter x:Key="BoolToRoundedCornerRadiusConverter"/>
+    <valueConverters:BoolToRoundedCornerRadiusDoubleConverter x:Key="BoolToRoundedCornerRadiusDoubleConverter"/>
+
 </ResourceDictionary>
