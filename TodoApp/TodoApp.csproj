@@ -6,7 +6,18 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<UseWPF>true</UseWPF>
+		<UseWindowsForms>True</UseWindowsForms>
+		<ApplicationIcon>Resources\Images\Icon.ico</ApplicationIcon>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Remove="Resources\Images\Splash.png" />
+	  <None Remove="Resources\Images\Tray.ico" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Resource Include="Resources\Images\Icon.ico" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.5">
@@ -23,6 +34,7 @@
 		<ProjectReference Include="..\Modules.Common.Navigation\Modules.Common.Navigation.csproj" />
 		<ProjectReference Include="..\Modules.Common.Views\Modules.Common.Views.csproj" />
 		<ProjectReference Include="..\Modules.Common\Modules.Common.csproj" />
+		<ProjectReference Include="..\Modules.MaterialTheme\Modules.MaterialTheme.csproj" />
 		<ProjectReference Include="..\Modules.Migration\Modules.Migration.csproj" />
 		<ProjectReference Include="..\Modules.Settings.Contracts\Modules.Settings.Contracts.csproj" />
 		<ProjectReference Include="..\Modules.Settings.Repositories\Modules.Settings.Repositories.csproj" />
@@ -43,6 +55,11 @@
 		<None Update="appsettings.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Resource Include="Resources\Images\Splash.png" />
+	  <Resource Include="Resources\Images\Tray.ico" />
 	</ItemGroup>
 
 </Project>

@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using Modules.Common.Services;
+using System.Windows;
+using TodoApp.WindowHandling;
 
 namespace TodoApp;
 /// <summary>
@@ -6,8 +8,14 @@ namespace TodoApp;
 /// </summary>
 public partial class MainWindow : Window
 {
-    public MainWindow()
+    private GridResizer _gridResizer;
+
+    public MainWindow(IUIScaler uiScaler)
     {
+        ArgumentNullException.ThrowIfNull(uiScaler);
+
         InitializeComponent();
+
+        _gridResizer = new GridResizer(Grid, Resizer, this, uiScaler);
     }
 }

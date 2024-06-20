@@ -1,13 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Windows;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Modules.Settings.Repositories;
-using System.Windows;
-using Modules.Migration;
-using MediatR;
 using Modules.Common.Cqrs.Events;
-using Microsoft.Extensions.Configuration;
 using Modules.Common.Database;
+using Modules.Common.Services.Navigation;
+using Modules.Migration;
+using Modules.Settings.Repositories;
+using Application = System.Windows.Application;
 
 namespace TodoApp;
 
@@ -18,6 +20,7 @@ namespace TodoApp;
 public partial class App : Application
 {
     private IHost _host;
+    private IServiceProvider ServiceProvider => _host.Services;
 
     public App()
     {
@@ -35,18 +38,24 @@ public partial class App : Application
 
         InitializeDatabase();
         PublishApplicationOpeningEvent();
+    }
 
+    protected override void OnStartup(StartupEventArgs e)
+    {
+        base.OnStartup(e);
+
+        CreateMainWindow();
     }
 
     private void InitializeDatabase()
     {
-        DbConfiguration.Initialize(_host.Services.GetRequiredService<IConfiguration>());
+        DbConfiguration.Initialize(ServiceProvider.GetRequiredService<IConfiguration>());
 
-        var migrationService = _host.Services.GetService<IMigrationService>();
+        var migrationService = ServiceProvider.GetService<IMigrationService>();
 
         var dbContextList = new List<DbContext>
         {
-            _host.Services.GetService<SettingDbContext>(),
+            ServiceProvider.GetService<SettingDbContext>(),
         };
 
         migrationService.Run(dbContextList);
@@ -54,8 +63,30 @@ public partial class App : Application
 
     private void PublishApplicationOpeningEvent()
     {
-        var mediator = _host.Services.GetService<IMediator>();
+        var mediator = ServiceProvider.GetService<IMediator>();
         mediator.Publish(new ApplicationOpeningEvent());
+    }
+
+    private void CreateMainWindow()
+    {
+        // Show the main window
+        var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
+        var mainWindowViewModel = ServiceProvider.GetRequiredService<MainWindowViewModel>();
+        mainWindow.DataContext = mainWindowViewModel;
+        mainWindow.Show();
+        Current.MainWindow = mainWindow;
+
+        var mainPageNavigation = ServiceProvider.GetService<IMainPageNavigationService>();
+        mainPageNavigation.Initialize(mainWindow.MainFrame);
+
+        //var sideMenuPageNavigation = ServiceProvider.GetService<ISideMenuPageNavigationService>();
+        //sideMenuPageNavigation.Initialize(mainWindow.SideMenu.SideMenuFrame);
+
+        //var overlayPageNavigation = ServiceProvider.GetService<IOverlayPageNavigationService>();
+        //overlayPageNavigation.Initialize(mainWindow.OverlayBackground.OverlayFrame);
+
+        //IoC.AppViewModel.UpdateMainPage();
+        //IoC.AppViewModel.UpdateSideMenuPage();
     }
 }
 

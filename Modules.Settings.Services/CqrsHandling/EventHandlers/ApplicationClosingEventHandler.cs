@@ -2,7 +2,7 @@
 using Modules.Common.Cqrs.Events;
 using Modules.Settings.Contracts.ViewModels;
 
-namespace Modules.Settings.Services.Cqrs.EventHandlers;
+namespace Modules.Settings.Services.CqrsHandling.EventHandlers;
 
 public class ApplicationClosingEventHandler : INotificationHandler<ApplicationClosingEvent>
 {

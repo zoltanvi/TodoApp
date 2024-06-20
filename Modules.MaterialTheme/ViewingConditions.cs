@@ -30,7 +30,7 @@ public class ViewingConditions
     public double FlRoot { get; }
     public double Z { get; }
 
-    public static ViewingConditions Make(
+    private static ViewingConditions Make(
         double[] whitePoint,
         double adaptingLuminance,
         double backgroundLstar,

@@ -2,10 +2,10 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:commonDd="clr-namespace:Modules.Common.Views.DragDrop"
                     xmlns:markupExtensions="clr-namespace:Modules.Common.Views.MarkupExtensions"
-                    xmlns:dataBinding="clr-namespace:Modules.Common.Views.DataBinding">
+                    xmlns:dataBinding="clr-namespace:Modules.Common.Views.DataBinding"
+                    xmlns:services="clr-namespace:Modules.Common.Views.Services">
 
-    <!--<settings:AppSettingsBindingProxy x:Key="AppSettings" AppSettings="{x:Static settingsContracts:AppSettings.Instance}"/>-->
-    <dataBinding:UIScalerBindingProxy x:Key="UIScaler" UIScaler="{markupExtensions:UIScalerExtension}" />
+    <dataBinding:UIScalerBindingProxy x:Key="UIScaler" UIScaler="{x:Static services:UIScaler.Instance}" />
     <commonDd:CustomDropHandlerBindingProxy x:Key="CustomDropHandler" Handler="{x:Static commonDd:CustomDropHandler.Instance}" />
 
 </ResourceDictionary>
