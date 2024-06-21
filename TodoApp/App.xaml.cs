@@ -1,14 +1,15 @@
-﻿using System.Windows;
-using MediatR;
+﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Modules.Common.Cqrs.Events;
 using Modules.Common.Database;
+using Modules.Common.Navigation;
 using Modules.Common.Services.Navigation;
 using Modules.Migration;
 using Modules.Settings.Repositories;
+using System.Windows;
 using Application = System.Windows.Application;
 
 namespace TodoApp;
@@ -77,16 +78,22 @@ public partial class App : Application
         Current.MainWindow = mainWindow;
 
         var mainPageNavigation = ServiceProvider.GetService<IMainPageNavigationService>();
+        ArgumentNullException.ThrowIfNull(mainPageNavigation);
         mainPageNavigation.Initialize(mainWindow.MainFrame);
 
-        //var sideMenuPageNavigation = ServiceProvider.GetService<ISideMenuPageNavigationService>();
-        //sideMenuPageNavigation.Initialize(mainWindow.SideMenu.SideMenuFrame);
+        var sideMenuPageNavigation = ServiceProvider.GetService<ISideMenuPageNavigationService>();
+        ArgumentNullException.ThrowIfNull(sideMenuPageNavigation);
+        sideMenuPageNavigation.Initialize(mainWindow.SideMenuFrame);
 
         //var overlayPageNavigation = ServiceProvider.GetService<IOverlayPageNavigationService>();
         //overlayPageNavigation.Initialize(mainWindow.OverlayBackground.OverlayFrame);
 
         //IoC.AppViewModel.UpdateMainPage();
         //IoC.AppViewModel.UpdateSideMenuPage();
+
+        // Test
+        //sideMenuPageNavigation.NavigateTo<ISettingsPage>();
+        mainPageNavigation.NavigateTo<ISettingsPage>();
     }
 }
 

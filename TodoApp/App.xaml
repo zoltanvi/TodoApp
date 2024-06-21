@@ -8,20 +8,37 @@
         <ResourceDictionary>
 
             <ResourceDictionary.MergedDictionaries>
-                <!--  Order is important  -->
+                <!--  Order is important!  -->
 
+
+                <!--=========================================-->
+                <!--Resources without dependencies-->
+                <ResourceDictionary Source="pack://application:,,,/Modules.Settings.Views;component/Resources/Version.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Modules.Settings.Views;component/Resources/BindingProxies.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Modules.Common.Views;component/Resources/BindingProxies.xaml" />
+
+
+                <ResourceDictionary Source="pack://application:,,,/Modules.Settings.Views;component/Resources/DataProviders.xaml" />
+
+
+                <ResourceDictionary Source="pack://application:,,,/Modules.Common.Views;component/Resources/ValueConverters.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Modules.Settings.Views;component/Resources/ValueConverters.xaml" />
+
 
                 <ResourceDictionary Source="Themes/BaseTheme.xaml" />
                 <ResourceDictionary Source="Themes/DarkTheme.xaml" />
 
+
                 <ResourceDictionary Source="pack://application:,,,/Modules.Common.Views;component/Resources/FontResources.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/Modules.Common.Views;component/Resources/ValueConverters.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Modules.Common.Views;component/Resources/Icons.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Modules.Common.Views;component/Resources/ColorLists.xaml" />
+
+                <!--=========================================-->
+                <!--Possible dependencies below-->
+
                 <ResourceDictionary Source="pack://application:,,,/Modules.Common.Views;component/Styles/BaseStyles.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Modules.Common.Views;component/Styles/Styles.xaml" />
+
 
                 <ResourceDictionary Source="pack://application:,,,/Modules.Settings.Views;component/Styles/Styles.xaml" />
 

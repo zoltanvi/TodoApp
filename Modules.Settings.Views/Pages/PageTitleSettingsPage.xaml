@@ -90,7 +90,7 @@
                             SelectedItem="{Binding AppSettings.PageTitleSettings.FontFamily, Source={StaticResource AppSettings}, Mode=TwoWay}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
-                                    <TextBlock FontFamily="{Binding Path=., Converter={StaticResource enumToFontFamilyConverter}}" Text="{Binding Converter={StaticResource camelCaseConverter}}" />
+                                    <TextBlock FontFamily="{Binding Path=., Converter={StaticResource EnumToFontFamilyConverter}}" Text="{Binding Converter={StaticResource CamelCaseConverter}}" />
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
@@ -103,7 +103,7 @@
                         <controls:FontSizeSliderControl
                             Description="Font size"
                             PreviewFontSize="{Binding AppSettings.PageTitleSettings.FontSize, Source={StaticResource AppSettings}, Mode=TwoWay}"
-                            SampleFontFamily="{Binding AppSettings.PageTitleSettings.FontFamily, Source={StaticResource AppSettings}, Converter={StaticResource enumToFontFamilyConverter}}"
+                            SampleFontFamily="{Binding AppSettings.PageTitleSettings.FontFamily, Source={StaticResource AppSettings}, Converter={StaticResource EnumToFontFamilyConverter}}"
                             Min="10"
                             Max="80"
                             Steps="2" />
@@ -134,7 +134,7 @@
                             SelectedItem="{Binding AppSettings.PageTitleSettings.HorizontalAlignment, Source={StaticResource AppSettings}, Mode=TwoWay}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding Converter={StaticResource camelCaseConverter}}" />
+                                    <TextBlock Text="{Binding Converter={StaticResource CamelCaseConverter}}" />
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>

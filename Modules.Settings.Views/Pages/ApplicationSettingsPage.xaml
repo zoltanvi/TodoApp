@@ -114,7 +114,7 @@
                             SelectedItem="{Binding AppSettings.AppWindowSettings.TitleBarHeight, Source={StaticResource AppSettings}, Mode=TwoWay}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding Converter={StaticResource camelCaseConverter}}" />
+                                    <TextBlock Text="{Binding Converter={StaticResource CamelCaseConverter}}" />
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>

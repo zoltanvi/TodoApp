@@ -53,7 +53,7 @@
                             SelectedItem="{Binding AppSettings.DateTimeSettings.TitleBarDateFormat, Source={StaticResource AppSettings}, Mode=TwoWay}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding Converter={StaticResource dateTimeFormatDisplayConverter}}" />
+                                    <TextBlock Text="{Binding Converter={StaticResource DateTimeFormatDisplayConverter}}" />
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
@@ -85,7 +85,7 @@
                             SelectedItem="{Binding AppSettings.DateTimeSettings.ReminderDateFormat, Source={StaticResource AppSettings}, Mode=TwoWay}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding Converter={StaticResource dateTimeFormatDisplayConverter}}" />
+                                    <TextBlock Text="{Binding Converter={StaticResource DateTimeFormatDisplayConverter}}" />
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
@@ -117,7 +117,7 @@
                             SelectedItem="{Binding AppSettings.DateTimeSettings.TaskCreationDateFormat, Source={StaticResource AppSettings}, Mode=TwoWay}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding Converter={StaticResource dateTimeFormatDisplayConverter}}" />
+                                    <TextBlock Text="{Binding Converter={StaticResource DateTimeFormatDisplayConverter}}" />
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>

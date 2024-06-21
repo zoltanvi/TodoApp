@@ -74,7 +74,7 @@
                             SelectedItem="{Binding AppSettings.NoteSettings.FontFamily, Source={StaticResource AppSettings}, Mode=TwoWay}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
-                                    <TextBlock FontFamily="{Binding Path=., Converter={StaticResource enumToFontFamilyConverter}}" Text="{Binding Converter={StaticResource camelCaseConverter}}" />
+                                    <TextBlock FontFamily="{Binding Path=., Converter={StaticResource EnumToFontFamilyConverter}}" Text="{Binding Converter={StaticResource CamelCaseConverter}}" />
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>

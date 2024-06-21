@@ -1,0 +1,11 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:valueConverters="clr-namespace:Modules.Settings.Views.ValueConverters">
+    
+    <valueConverters:CamelCaseConverter x:Key="CamelCaseConverter"/>
+    <valueConverters:SettingsPageTitleConverter x:Key="SettingsPageTitleConverter"/>
+    <valueConverters:FontSizeScaler x:Key="FontSizeScaler"/>
+    <valueConverters:DateTimeFormatDisplayConverter x:Key="DateTimeFormatDisplayConverter"/>
+    <valueConverters:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+
+</ResourceDictionary>

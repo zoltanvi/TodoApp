@@ -1,0 +1,60 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:dataModels="clr-namespace:Modules.Common.DataModels;assembly=Modules.Common"
+                    xmlns:system="clr-namespace:System;assembly=System.Runtime">
+
+    <ObjectDataProvider
+        x:Key="TitleBarHeightDataProvider"
+        MethodName="GetValues"
+        ObjectType="{x:Type system:Enum}">
+        <ObjectDataProvider.MethodParameters>
+            <x:Type TypeName="dataModels:TitleBarHeight" />
+        </ObjectDataProvider.MethodParameters>
+    </ObjectDataProvider>
+
+    <ObjectDataProvider
+        x:Key="ThemeStyleDataProvider"
+        MethodName="GetValues"
+        ObjectType="{x:Type system:Enum}">
+        <ObjectDataProvider.MethodParameters>
+            <x:Type TypeName="dataModels:MaterialThemeStyle" />
+        </ObjectDataProvider.MethodParameters>
+    </ObjectDataProvider>
+
+    <ObjectDataProvider
+        x:Key="FontFamilyDataProvider"
+        MethodName="GetValues"
+        ObjectType="{x:Type system:Enum}">
+        <ObjectDataProvider.MethodParameters>
+            <x:Type TypeName="dataModels:FontFamily" />
+        </ObjectDataProvider.MethodParameters>
+    </ObjectDataProvider>
+
+    <ObjectDataProvider
+        x:Key="AlignmentDataProvider"
+        MethodName="GetValues"
+        ObjectType="{x:Type system:Enum}">
+        <ObjectDataProvider.MethodParameters>
+            <x:Type TypeName="dataModels:HorizontalAlignment" />
+        </ObjectDataProvider.MethodParameters>
+    </ObjectDataProvider>
+
+    <ObjectDataProvider
+        x:Key="TaskSpacingDataProvider"
+        MethodName="GetValues"
+        ObjectType="{x:Type system:Enum}">
+        <ObjectDataProvider.MethodParameters>
+            <x:Type TypeName="dataModels:TaskSpacing" />
+        </ObjectDataProvider.MethodParameters>
+    </ObjectDataProvider>
+
+    <ObjectDataProvider
+        x:Key="ThicknessDataProvider"
+        MethodName="GetValues"
+        ObjectType="{x:Type system:Enum}">
+        <ObjectDataProvider.MethodParameters>
+            <x:Type TypeName="dataModels:Thickness" />
+        </ObjectDataProvider.MethodParameters>
+    </ObjectDataProvider>
+
+</ResourceDictionary>

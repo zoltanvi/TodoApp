@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Modules.Common.Navigation;
 using Modules.Common.Services;
 using Modules.Common.Services.Navigation;
+using Modules.Common.Views.Pages;
 using Modules.Common.Views.Services;
 using Modules.Common.Views.Services.Navigation;
 using Modules.Migration;
@@ -41,6 +43,7 @@ public static class Program
         services.AddSingleton<IOverlayPageNavigationService, OverlayPageNavigationService>();
 
         AddDatabases(services);
+        AddPages(services);
 
         return services;
     }
@@ -50,5 +53,31 @@ public static class Program
         services.AddSettingsRepository();
         
         services.AddMigrationsService();
+    }
+
+    private static void AddPages(IServiceCollection services)
+    {
+        //services.AddScoped<ICategoryListPage, CategoryPage>();
+        //services.AddScoped<INoteEditorPage, NotePage>();
+        //services.AddScoped<INoteListPage, NoteListPage>();
+        //services.AddScoped<IRecycleBinPage, RecycleBinPage>();
+        services.AddScoped<ISettingsPage, SettingsPage>();
+        //services.AddSingleton<ITaskPage, TaskPage>();
+
+        services.AddScoped<IEmptyPage, EmptyPage>();
+        //services.AddScoped<ITaskNotificationPage, NotificationPage>();
+        //services.AddScoped<ITaskReminderEditorPage, ReminderEditorPage>();
+        //services.AddScoped<ITaskReminderPage, TaskReminderPage>();
+
+        //services.AddScoped<CategoryPageViewModel>();
+        //services.AddScoped<NotePageViewModel>();
+        //services.AddScoped<NoteListPageViewModel>();
+        //services.AddScoped<RecycleBinPageViewModel>();
+        services.AddScoped<SettingsPageViewModel>();
+        //services.AddScoped<TaskPageViewModel>();
+
+        //services.AddScoped<NotificationPageViewModel>();
+        //services.AddScoped<ReminderEditorPageViewModel>();
+        //services.AddScoped<TaskReminderPageViewModel>();
     }
 }

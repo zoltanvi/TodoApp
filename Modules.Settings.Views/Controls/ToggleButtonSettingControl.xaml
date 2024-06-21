@@ -16,17 +16,14 @@
                     <ColumnDefinition Width="auto" />
                 </Grid.ColumnDefinitions>
                 <Label
-                    x:Name="MyLabel"
                     Grid.Column="0"
                     Content="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}"
                     Style="{DynamicResource SettingsIconLabelStyle}" />
                 <TextBlock
-                    x:Name="MyTextBlock"
                     Grid.Column="1"
                     Style="{DynamicResource SettingsDescriptionStyle}"
                     Text="{Binding Description, RelativeSource={RelativeSource AncestorType=UserControl}}" />
                 <ToggleButton
-                    x:Name="MyToggleButton"
                     Grid.Column="2"
                     IsChecked="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}"
                     Style="{DynamicResource ToggleSideMenuStyle}" />

@@ -55,13 +55,17 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
+            <!--  Side menu page  -->
             <Grid Grid.Column="0">
-
-                <Border Background="Yellow">
-                    <TextBlock Text="Hello" />
+                <Border
+                    Margin="5 5 0 5"
+                    HorizontalAlignment="Stretch"
+                    ClipToBounds="True"
+                    CornerRadius="6">
+                    <Frame
+                        x:Name="SideMenuFrame"
+                        attached:NoFrameHistory.Value="True"/>
                 </Border>
-                <!--  Side menu page  -->
-                <!--<local:SideMenuControl x:Name="SideMenu" />-->
 
             </Grid>
 
@@ -71,7 +75,7 @@
                 Grid.Column="2"
                 Margin="-6 0 0 0"
                 attached:NoFrameHistory.Value="True"
-                AutomationProperties.AutomationId="MainPageFrame" />
+                />
 
             <!--  RESIZER HANDLE  -->
 

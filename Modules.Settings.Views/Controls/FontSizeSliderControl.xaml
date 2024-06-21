@@ -35,7 +35,7 @@
             Grid.Column="2"
             Grid.Row="1"
             Content="Sample text"
-            FontSize="{Binding ElementName=FontSizeSlider, Path=PreviewFontSize, Converter={StaticResource fontSizeScaler}}"
+            FontSize="{Binding ElementName=FontSizeSlider, Path=PreviewFontSize, Converter={StaticResource FontSizeScaler}}"
             FontFamily="{Binding ElementName=FontSizeSlider, Path=SampleFontFamily}"
             Foreground="{DynamicResource OnSurface}"
             HorizontalAlignment="Center" />

@@ -5,7 +5,6 @@
     xmlns:attached="clr-namespace:Modules.Common.Views.AttachedProperties;assembly=Modules.Common.Views"
     xmlns:commonPages="clr-namespace:Modules.Common.Views.Pages;assembly=Modules.Common.Views"
     xmlns:controls="clr-namespace:Modules.Settings.Views.Controls"
-    xmlns:converters="clr-namespace:Modules.Settings.Views.ValueConverters"
     xmlns:dataModels="clr-namespace:Modules.Settings.Contracts.Models;assembly=Modules.Settings.Contracts"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -16,9 +15,6 @@
     d:DesignWidth="800"
     x:TypeArguments="pages:SettingsPageViewModel"
     mc:Ignorable="d">
-    <commonPages:BasePage.Resources>
-        <converters:SettingsPageTitleConverter x:Key="settingsPageTitleConverter" />
-    </commonPages:BasePage.Resources>
 
     <Border>
         <Grid>
@@ -39,7 +35,7 @@
                 <TextBlock
                     Grid.Column="0"
                     Style="{DynamicResource PageTitleTextBlockStyle}"
-                    Text="{Binding SettingsPageFrameType, Converter={StaticResource settingsPageTitleConverter}}" />
+                    Text="{Binding SettingsPageFrameType, Converter={StaticResource SettingsPageTitleConverter}}" />
 
                 <!--  BACK button  -->
                 <Button
