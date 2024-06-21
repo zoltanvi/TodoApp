@@ -36,16 +36,6 @@ public enum ViewModelMessages
     NoteChanged,
 
     /// <summary>
-    /// The navigator button (top left on the title bar) has been clicked
-    /// </summary>
-    SideMenuButtonClicked,
-
-    /// <summary>
-    /// Closing of the side menu has been requested
-    /// </summary>
-    SideMenuCloseRequested,
-
-    /// <summary>
     /// Ctrl + Shift + L has been pressed in a RichTextBox
     /// </summary>
     NextThemeWithHotkeyRequested,

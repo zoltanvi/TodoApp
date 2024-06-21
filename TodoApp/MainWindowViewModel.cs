@@ -1,13 +1,13 @@
-﻿using System.ComponentModel;
-using MediatR;
+﻿using MediatR;
 using Modules.Common.Cqrs.Events;
 using Modules.Common.DataBinding;
 using Modules.Common.OBSOLETE.Mediator;
 using Modules.Common.Services;
+using Modules.Common.ViewModel;
 using Modules.Settings.Contracts.ViewModels;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
-using Modules.Common.ViewModel;
 using TodoApp.Themes;
 using TodoApp.WindowHandling;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
@@ -45,7 +45,7 @@ public class MainWindowViewModel : BaseViewModel
         MinimizeCommand = new RelayCommand(() => _windowService.Minimize());
         MaximizeCommand = new RelayCommand(() => _windowService.Maximize());
         CloseCommand = new RelayCommand(CloseWindow);
-        ToggleSideMenuCommand = new RelayCommand(() => AppSettings.Instance.ThemeSettings.DarkMode ^= true);
+        ToggleSideMenuCommand = new RelayCommand(() => AppSettings.Instance.SessionSettings.SideMenuOpen ^= true);
 
         _windowService.Deactivated += (s, e) => _windowService.Topmost = AppWindowSettings.AlwaysOnTop;
         _windowService.Resized += (s, e) =>
@@ -54,6 +54,7 @@ public class MainWindowViewModel : BaseViewModel
             OnPropertyChanged(nameof(IsMaximized));
             OnPropertyChanged(nameof(IsMaximizedOrDocked));
         };
+
         _windowService.Loaded += OnWindowLoaded;
         _windowService.Closing += OnWindowClosing;
         //_windowService.Closed += (s, e) => _context.Dispose();

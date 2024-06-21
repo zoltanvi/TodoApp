@@ -1,12 +1,12 @@
 ﻿using Modules.Common.Cqrs.Events;
-using Modules.Common.OBSOLETE.Mediator;
 using Modules.Common.Services;
+using Modules.Common.Views.Services;
 using Modules.Settings.Contracts.ViewModels;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
-using Modules.Common.Views.Services;
 using TodoApp.CqrsHandling.EventHandlers;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 using Window = System.Windows.Window;
@@ -45,7 +45,7 @@ public class GridResizer
             {
                 clampedValue = 0;
             }
-            // Do nothing between snapping width and minimum side menu widh
+            // Do nothing between snapping width and minimum side menu width
             else if (clampedValue > SnappingWidth && clampedValue < MinColumnWidth)
             {
                 clampedValue = MinColumnWidth;
@@ -109,11 +109,25 @@ public class GridResizer
         _grid.MouseMove += Grid_MouseMove;
 
         _window.SizeChanged += WindowSizeChanged;
-        _window.StateChanged += Window_StateChanged;
+        _window.StateChanged += OnWindowStateChanged;
 
         UiScaledEventSecondHandler.UiScaled += OnUiScaled;
-        MediatorOBSOLETE.Register(OnSideMenuButtonClicked, ViewModelMessages.SideMenuButtonClicked);
-        MediatorOBSOLETE.Register(OnSideMenuCloseRequested, ViewModelMessages.SideMenuCloseRequested);
+        SessionSettings.PropertyChanged += OnSessionSettingsChanged;
+    }
+
+    private void OnSessionSettingsChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(SessionSettings.SideMenuOpen))
+        {
+            if (IsSideMenuOpen)
+            {
+                RecalculateLeftColumnWidth();
+            }
+            else
+            {
+                LeftColumnWidth = 0;
+            }
+        }
     }
 
     private void OnUiScaled(UiScaledEvent notification)
@@ -123,7 +137,7 @@ public class GridResizer
         LeftColumnWidth = newWidth;
     }
 
-    private void OnDoubleClickTimer(object sender, EventArgs e)
+    private void OnDoubleClickTimer(object? sender, EventArgs e)
     {
         TimerService.Instance.StopTimer(_doubleClickTimer);
 
@@ -144,7 +158,7 @@ public class GridResizer
         }
     }
 
-    private async void Window_StateChanged(object sender, EventArgs e)
+    private async void OnWindowStateChanged(object? sender, EventArgs e)
     {
         await Task.Delay(10);
 
@@ -166,20 +180,6 @@ public class GridResizer
         }
     }
 
-    private void OnSideMenuButtonClicked(object obj)
-    {
-        if (LeftColumnWidth == 0)
-        {
-            RecalculateLeftColumnWidth();
-            IsSideMenuOpen = true;
-        }
-        else
-        {
-            LeftColumnWidth = 0;
-            IsSideMenuOpen = false;
-        }
-    }
-
     private void GridSplitter_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
         _isDraggingEnabled = false;
@@ -196,12 +196,6 @@ public class GridResizer
         IsSideMenuOpen = !IsSideMenuOpen;
 
         TimerService.Instance.StartTimer(_doubleClickTimer);
-    }
-
-    private void OnSideMenuCloseRequested(object obj)
-    {
-        LeftColumnWidth = 0;
-        IsSideMenuOpen = false;
     }
 
     private void RecalculateLeftColumnWidth()

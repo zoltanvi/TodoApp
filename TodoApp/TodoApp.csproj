@@ -62,4 +62,8 @@
 	  <Resource Include="Resources\Images\Tray.ico" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="CqrsHandling\CommandHandlers\" />
+	</ItemGroup>
+
 </Project>
