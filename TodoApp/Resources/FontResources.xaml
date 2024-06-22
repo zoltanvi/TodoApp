@@ -1,0 +1,43 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!--  Default Fonts =================================================================================  -->
+
+    <FontFamily x:Key="UIFont">Segoe UI</FontFamily>
+    <FontFamily x:Key="UIBoldFont">Segoe UI Bold</FontFamily>
+    <FontFamily x:Key="UIMonospaceFont">Consolas</FontFamily>
+    <FontFamily x:Key="IconFont">pack://application;,,,/Modules.Common.Views;component/Resources/Fonts/#Segoe Fluent Icons</FontFamily>
+
+    <!--  ================================================================================================  -->
+
+    <!--  Calibri,  -->
+    <!--  Consolas,  -->
+    <!--  CourierNew,  -->
+
+    <FontFamily x:Key="FiraSansLight">pack://application;,,,/Modules.Common.Views;component/Resources/Fonts/FiraSans/#Fira Sans ExtraLight</FontFamily>
+    <FontFamily x:Key="FiraSansRegular">pack://application;,,,/Modules.Common.Views;component/Resources/Fonts/FiraSans/#Fira Sans Regular</FontFamily>
+
+    <FontFamily x:Key="InterLight">pack://application;,,,/Modules.Common.Views;component/Resources/Fonts/Inter/#Inter ExtraLight</FontFamily>
+    <FontFamily x:Key="InterRegular">pack://application;,,,/Modules.Common.Views;component/Resources/Fonts/Inter/#Inter Regular</FontFamily>
+
+    <FontFamily x:Key="MontserratAlternatesLight">pack://application;,,,/Modules.Common.Views;component/Resources/Fonts/MontserratAlternates/#Montserrat Alternates ExtraLight</FontFamily>
+    <FontFamily x:Key="MontserratAlternatesRegular">pack://application;,,,/Modules.Common.Views;component/Resources/Fonts/MontserratAlternates/#Montserrat Alternates Regular</FontFamily>
+
+    <FontFamily x:Key="MontserratLight">pack://application;,,,/Modules.Common.Views;component/Resources/Fonts/Montserrat/#Montserrat ExtraLight</FontFamily>
+    <FontFamily x:Key="MontserratRegular">pack://application;,,,/Modules.Common.Views;component/Resources/Fonts/Montserrat/#Montserrat Regular</FontFamily>
+
+    <FontFamily x:Key="NotoSansLight">pack://application;,,,/Modules.Common.Views;component/Resources/Fonts/NotoSans/#Noto Sans Light</FontFamily>
+    <FontFamily x:Key="NotoSansRegular">pack://application;,,,/Modules.Common.Views;component/Resources/Fonts/NotoSans/#Noto Sans Regular</FontFamily>
+
+    <FontFamily x:Key="OpenSansLight">pack://application;,,,/Modules.Common.Views;component/Resources/Fonts/OpenSans/#Open Sans Light</FontFamily>
+    <FontFamily x:Key="OpenSans">pack://application;,,,/Modules.Common.Views;component/Resources/Fonts/OpenSans/#Open Sans</FontFamily>
+
+    <!--  SegoeUI,  -->
+    <!--  TimesNewRoman,  -->
+
+    <FontFamily x:Key="UbuntuLight">pack://application;,,,/Modules.Common.Views;component/Resources/Fonts/Ubuntu/#Ubuntu Light</FontFamily>
+    <FontFamily x:Key="UbuntuRegular">pack://application;,,,/Modules.Common.Views;component/Resources/Fonts/Ubuntu/#Ubuntu Regular</FontFamily>
+
+    <!--  Verdana,  -->
+
+</ResourceDictionary>

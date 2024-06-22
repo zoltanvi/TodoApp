@@ -8,6 +8,24 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\Fonts\FiraSans\FiraSans-ExtraLight.ttf" />
+    <None Remove="Resources\Fonts\FiraSans\FiraSans-Regular.ttf" />
+    <None Remove="Resources\Fonts\Inter\Inter-ExtraLight.ttf" />
+    <None Remove="Resources\Fonts\Inter\Inter-Regular.ttf" />
+    <None Remove="Resources\Fonts\MontserratAlternates\MontserratAlternates-ExtraLight.ttf" />
+    <None Remove="Resources\Fonts\MontserratAlternates\MontserratAlternates-Regular.ttf" />
+    <None Remove="Resources\Fonts\Montserrat\Montserrat-ExtraLight.ttf" />
+    <None Remove="Resources\Fonts\Montserrat\Montserrat-Regular.ttf" />
+    <None Remove="Resources\Fonts\NotoSans\NotoSans-Light.ttf" />
+    <None Remove="Resources\Fonts\NotoSans\NotoSans-Regular.ttf" />
+    <None Remove="Resources\Fonts\OpenSans\OpenSans-Light.ttf" />
+    <None Remove="Resources\Fonts\OpenSans\OpenSans-Regular.ttf" />
+    <None Remove="Resources\Fonts\SegoeIcons.ttf" />
+    <None Remove="Resources\Fonts\Ubuntu\Ubuntu-Light.ttf" />
+    <None Remove="Resources\Fonts\Ubuntu\Ubuntu-Regular.ttf" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.*" />
     <PackageReference Include="gong-wpf-dragdrop" Version="3.*" />
     <PackageReference Include="MediatR" Version="12.*" />
@@ -16,6 +34,24 @@
   <ItemGroup>
     <ProjectReference Include="..\Modules.Common.Navigation\Modules.Common.Navigation.csproj" />
     <ProjectReference Include="..\Modules.Common\Modules.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\Fonts\FiraSans\FiraSans-ExtraLight.ttf" />
+    <Resource Include="Resources\Fonts\FiraSans\FiraSans-Regular.ttf" />
+    <Resource Include="Resources\Fonts\Inter\Inter-ExtraLight.ttf" />
+    <Resource Include="Resources\Fonts\Inter\Inter-Regular.ttf" />
+    <Resource Include="Resources\Fonts\MontserratAlternates\MontserratAlternates-ExtraLight.ttf" />
+    <Resource Include="Resources\Fonts\MontserratAlternates\MontserratAlternates-Regular.ttf" />
+    <Resource Include="Resources\Fonts\Montserrat\Montserrat-ExtraLight.ttf" />
+    <Resource Include="Resources\Fonts\Montserrat\Montserrat-Regular.ttf" />
+    <Resource Include="Resources\Fonts\NotoSans\NotoSans-Light.ttf" />
+    <Resource Include="Resources\Fonts\NotoSans\NotoSans-Regular.ttf" />
+    <Resource Include="Resources\Fonts\OpenSans\OpenSans-Light.ttf" />
+    <Resource Include="Resources\Fonts\OpenSans\OpenSans-Regular.ttf" />
+    <Resource Include="Resources\Fonts\SegoeIcons.ttf" />
+    <Resource Include="Resources\Fonts\Ubuntu\Ubuntu-Light.ttf" />
+    <Resource Include="Resources\Fonts\Ubuntu\Ubuntu-Regular.ttf" />
   </ItemGroup>
 
 </Project>
