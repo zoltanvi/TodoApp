@@ -9,5 +9,7 @@
 
     <system:String x:Key="SegoeIconArrowLeft">&#xE0C4;</system:String>
     <system:String x:Key="SegoeIconPath">&#xE62F;</system:String>
+    <system:String x:Key="SegoeIconSettings">&#xE713;</system:String>
+    <system:String x:Key="SegoeIconDeleteX">&#xEDAE;</system:String>
 
 </ResourceDictionary>

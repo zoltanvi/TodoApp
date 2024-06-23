@@ -176,11 +176,6 @@
         <Setter Property="Padding" Value="5" />
     </Style>
 
-    <Style x:Key="BaseTextBlockClearTypeStyle" TargetType="TextBlock">
-        <Setter Property="FontFamily" Value="{DynamicResource UIFont}" />
-        <Setter Property="Foreground" Value="{DynamicResource OnBackground}" />
-    </Style>
-
     <Style
         x:Key="PageTitleTextBlockStyle"
         BasedOn="{StaticResource BaseTextBlockClearTypeStyle}"
@@ -314,6 +309,26 @@
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="FontSize" Value="{Binding UIScaler.FontSize.Small, Source={StaticResource UIScaler}}" />
         <Setter Property="Foreground" Value="{DynamicResource OnSurface}" />
+    </Style>
+
+
+    <Style
+        x:Key="SettingsIconLabelStyle"
+        BasedOn="{StaticResource IconLabelStyle}"
+        TargetType="Label">
+        <Setter Property="Margin" Value="0 0 10 0" />
+        <Setter Property="FontSize" Value="{Binding UIScaler.FontSize.Medium, Source={StaticResource UIScaler}}" />
+        <Setter Property="Foreground" Value="{DynamicResource OnSurface}" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+
+    <Style
+        x:Key="SettingsALabelStyle"
+        BasedOn="{StaticResource SettingsIconLabelStyle}"
+        TargetType="Label">
+        <Setter Property="FontFamily" Value="{DynamicResource UIFont}" />
     </Style>
 
 </ResourceDictionary>

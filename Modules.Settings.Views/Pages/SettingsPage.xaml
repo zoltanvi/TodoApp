@@ -84,63 +84,54 @@
                                         CommandParameter="{x:Static dataModels:SettingsPageType.AppWindowSettings}"
                                         Content="APPLICATION"
                                         Id="{x:Static dataModels:SettingsPageType.AppWindowSettings}"
-                                        SelectedPage="{Binding SettingsPageFrameContent}"
                                         Style="{StaticResource SettingsCategoryButtonStyle}" />
                                     <controls:SettingsCategoryButton
                                         Command="{Binding SwitchToPageCommand}"
                                         CommandParameter="{x:Static dataModels:SettingsPageType.ThemeSettings}"
                                         Content="THEME"
                                         Id="{x:Static dataModels:SettingsPageType.ThemeSettings}"
-                                        SelectedPage="{Binding SettingsPageFrameContent}"
                                         Style="{StaticResource SettingsCategoryButtonStyle}" />
                                     <controls:SettingsCategoryButton
                                         Command="{Binding SwitchToPageCommand}"
                                         CommandParameter="{x:Static dataModels:SettingsPageType.PageTitleSettings}"
                                         Content="PAGE TITLE"
                                         Id="{x:Static dataModels:SettingsPageType.PageTitleSettings}"
-                                        SelectedPage="{Binding SettingsPageFrameContent}"
                                         Style="{StaticResource SettingsCategoryButtonStyle}" />
                                     <controls:SettingsCategoryButton
                                         Command="{Binding SwitchToPageCommand}"
                                         CommandParameter="{x:Static dataModels:SettingsPageType.TaskPageSettings}"
                                         Content="TASK PAGE"
                                         Id="{x:Static dataModels:SettingsPageType.TaskPageSettings}"
-                                        SelectedPage="{Binding SettingsPageFrameContent}"
                                         Style="{StaticResource SettingsCategoryButtonStyle}" />
                                     <controls:SettingsCategoryButton
                                         Command="{Binding SwitchToPageCommand}"
                                         CommandParameter="{x:Static dataModels:SettingsPageType.TaskItemSettings}"
                                         Content="TASKS"
                                         Id="{x:Static dataModels:SettingsPageType.TaskItemSettings}"
-                                        SelectedPage="{Binding SettingsPageFrameContent}"
                                         Style="{StaticResource SettingsCategoryButtonStyle}" />
                                     <controls:SettingsCategoryButton
                                         Command="{Binding SwitchToPageCommand}"
                                         CommandParameter="{x:Static dataModels:SettingsPageType.TaskQuickActionsSettings}"
                                         Content="QUICK ACTIONS"
                                         Id="{x:Static dataModels:SettingsPageType.TaskQuickActionsSettings}"
-                                        SelectedPage="{Binding SettingsPageFrameContent}"
                                         Style="{StaticResource SettingsCategoryButtonStyle}" />
                                     <controls:SettingsCategoryButton
                                         Command="{Binding SwitchToPageCommand}"
                                         CommandParameter="{x:Static dataModels:SettingsPageType.TextEditorQuickActionsSettings}"
                                         Content="EDITOR"
                                         Id="{x:Static dataModels:SettingsPageType.TextEditorQuickActionsSettings}"
-                                        SelectedPage="{Binding SettingsPageFrameContent}"
                                         Style="{StaticResource SettingsCategoryButtonStyle}" />
                                     <controls:SettingsCategoryButton
                                         Command="{Binding SwitchToPageCommand}"
                                         CommandParameter="{x:Static dataModels:SettingsPageType.NotePageSettings}"
                                         Content="NOTES"
                                         Id="{x:Static dataModels:SettingsPageType.NotePageSettings}"
-                                        SelectedPage="{Binding SettingsPageFrameContent}"
                                         Style="{StaticResource SettingsCategoryButtonStyle}" />
                                     <controls:SettingsCategoryButton
                                         Command="{Binding SwitchToPageCommand}"
                                         CommandParameter="{x:Static dataModels:SettingsPageType.DateTimeSettings}"
                                         Content="DATE TIME"
                                         Id="{x:Static dataModels:SettingsPageType.DateTimeSettings}"
-                                        SelectedPage="{Binding SettingsPageFrameContent}"
                                         Style="{StaticResource SettingsCategoryButtonStyle}" />
 
 
@@ -149,7 +140,6 @@
                                         CommandParameter="{x:Static dataModels:SettingsPageType.Shortcuts}"
                                         Content="SHORTCUTS"
                                         Id="{x:Static dataModels:SettingsPageType.Shortcuts}"
-                                        SelectedPage="{Binding SettingsPageFrameContent}"
                                         Style="{StaticResource SettingsCategoryButtonStyle}" />
 
                                 </StackPanel>

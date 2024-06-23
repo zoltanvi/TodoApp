@@ -13,25 +13,35 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Modules.Common.Views", "Mod
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Modules.Common", "Modules.Common\Modules.Common.csproj", "{86E18762-B1C7-47A6-9BB3-9FA56D73D44B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Modules.Common.Navigation", "Modules.Common.Navigation\Modules.Common.Navigation.csproj", "{D48E7BBD-3ADD-444B-82CF-18D11A865B97}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Modules.Common.Navigation", "Modules.Common.Navigation\Modules.Common.Navigation.csproj", "{D48E7BBD-3ADD-444B-82CF-18D11A865B97}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Settings", "Settings", "{9ACF9C94-512F-4EA3-A045-621747D24322}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Modules.Settings.Contracts", "Modules.Settings.Contracts\Modules.Settings.Contracts.csproj", "{B80FA5A5-AD3F-4461-8393-AD7167738EEC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Modules.Settings.Contracts", "Modules.Settings.Contracts\Modules.Settings.Contracts.csproj", "{B80FA5A5-AD3F-4461-8393-AD7167738EEC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Modules.Settings.Repositories", "Modules.Settings.Repositories\Modules.Settings.Repositories.csproj", "{494C6C24-E76A-4A78-B7A1-FD56F3EE86D4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Modules.Settings.Repositories", "Modules.Settings.Repositories\Modules.Settings.Repositories.csproj", "{494C6C24-E76A-4A78-B7A1-FD56F3EE86D4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Modules.Settings.Services", "Modules.Settings.Services\Modules.Settings.Services.csproj", "{EB445A1A-7555-4E66-9670-D4FF8348647C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Modules.Settings.Services", "Modules.Settings.Services\Modules.Settings.Services.csproj", "{EB445A1A-7555-4E66-9670-D4FF8348647C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Modules.Settings.Views", "Modules.Settings.Views\Modules.Settings.Views.csproj", "{651D6EE4-D6C8-4CA0-B329-ADFADE17A4F2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Modules.Settings.Views", "Modules.Settings.Views\Modules.Settings.Views.csproj", "{651D6EE4-D6C8-4CA0-B329-ADFADE17A4F2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MaterialTheme", "MaterialTheme", "{2A10821C-21D6-4BF8-8284-ED8285838A8E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Modules.MaterialTheme", "Modules.MaterialTheme\Modules.MaterialTheme.csproj", "{1B3F31E2-BF1E-48EE-A243-78C377BF3A05}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Modules.MaterialTheme", "Modules.MaterialTheme\Modules.MaterialTheme.csproj", "{1B3F31E2-BF1E-48EE-A243-78C377BF3A05}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Migration", "Migration", "{EA39FB07-E78A-441F-82A3-52F239DC3999}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Modules.Migration", "Modules.Migration\Modules.Migration.csproj", "{40042E54-F77B-4153-A1DC-977F7D7CE31B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Modules.Migration", "Modules.Migration\Modules.Migration.csproj", "{40042E54-F77B-4153-A1DC-977F7D7CE31B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Categories", "Categories", "{A45ED5B1-7A95-4775-AF9F-D98AA6177A56}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Modules.Categories.Repositories", "Modules.Categories.Repositories\Modules.Categories.Repositories.csproj", "{0EDEBF54-C5C9-4E4D-B265-B5B69184F143}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Modules.Categories.Contracts", "Modules.Categories.Contracts\Modules.Categories.Contracts.csproj", "{E627BDE4-2254-46A8-9616-F13308C9D434}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Modules.Categories.Services", "Modules.Categories.Services\Modules.Categories.Services.csproj", "{955E431B-3886-4864-B92B-6ADBD0C3D57D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Modules.Categories.Views", "Modules.Categories.Views\Modules.Categories.Views.csproj", "{947F9897-2104-4CA4-913A-074D31380ABE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -79,6 +89,22 @@ Global
 		{40042E54-F77B-4153-A1DC-977F7D7CE31B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{40042E54-F77B-4153-A1DC-977F7D7CE31B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{40042E54-F77B-4153-A1DC-977F7D7CE31B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0EDEBF54-C5C9-4E4D-B265-B5B69184F143}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0EDEBF54-C5C9-4E4D-B265-B5B69184F143}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0EDEBF54-C5C9-4E4D-B265-B5B69184F143}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0EDEBF54-C5C9-4E4D-B265-B5B69184F143}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E627BDE4-2254-46A8-9616-F13308C9D434}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E627BDE4-2254-46A8-9616-F13308C9D434}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E627BDE4-2254-46A8-9616-F13308C9D434}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E627BDE4-2254-46A8-9616-F13308C9D434}.Release|Any CPU.Build.0 = Release|Any CPU
+		{955E431B-3886-4864-B92B-6ADBD0C3D57D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{955E431B-3886-4864-B92B-6ADBD0C3D57D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{955E431B-3886-4864-B92B-6ADBD0C3D57D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{955E431B-3886-4864-B92B-6ADBD0C3D57D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{947F9897-2104-4CA4-913A-074D31380ABE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{947F9897-2104-4CA4-913A-074D31380ABE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{947F9897-2104-4CA4-913A-074D31380ABE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{947F9897-2104-4CA4-913A-074D31380ABE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -97,6 +123,11 @@ Global
 		{1B3F31E2-BF1E-48EE-A243-78C377BF3A05} = {2A10821C-21D6-4BF8-8284-ED8285838A8E}
 		{EA39FB07-E78A-441F-82A3-52F239DC3999} = {484CB931-4DDA-42B4-84C7-7CB6D0C4F1FB}
 		{40042E54-F77B-4153-A1DC-977F7D7CE31B} = {EA39FB07-E78A-441F-82A3-52F239DC3999}
+		{A45ED5B1-7A95-4775-AF9F-D98AA6177A56} = {484CB931-4DDA-42B4-84C7-7CB6D0C4F1FB}
+		{0EDEBF54-C5C9-4E4D-B265-B5B69184F143} = {A45ED5B1-7A95-4775-AF9F-D98AA6177A56}
+		{E627BDE4-2254-46A8-9616-F13308C9D434} = {A45ED5B1-7A95-4775-AF9F-D98AA6177A56}
+		{955E431B-3886-4864-B92B-6ADBD0C3D57D} = {A45ED5B1-7A95-4775-AF9F-D98AA6177A56}
+		{947F9897-2104-4CA4-913A-074D31380ABE} = {A45ED5B1-7A95-4775-AF9F-D98AA6177A56}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9D9BCECE-B112-4247-B0B5-EB19FFAF8C55}

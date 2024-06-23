@@ -1,4 +1,9 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Modules.Categories.Repositories;
+using Modules.Categories.Views.Pages;
+using Modules.Common.Database;
 using Modules.Common.Navigation;
 using Modules.Common.Services;
 using Modules.Common.Services.Navigation;
@@ -12,6 +17,7 @@ using Modules.Settings.Services;
 using Modules.Settings.Services.CqrsHandling;
 using Modules.Settings.Views;
 using Modules.Settings.Views.Pages;
+using TodoApp.DefaultData;
 using TodoApp.Themes;
 using TodoApp.WindowHandling;
 
@@ -48,20 +54,52 @@ public static class Program
         return services;
     }
 
+    public static void InitializeDatabase(this IServiceProvider serviceProvider)
+    {
+        DbConfiguration.Initialize(serviceProvider.GetRequiredService<IConfiguration>());
+
+        var migrationService = serviceProvider.GetService<IMigrationService>();
+
+        var dbContextList = new List<DbContext>
+        {
+            serviceProvider.GetService<SettingDbContext>(),
+            serviceProvider.GetService<CategoryDbContext>(),
+        };
+
+        migrationService.Run(dbContextList);
+
+        serviceProvider.CreateDefaultData();
+    }
+
+    private static void CreateDefaultData(this IServiceProvider serviceProvider)
+    {
+        var defaultDataCreator = serviceProvider.GetService<DefaultDataCreator>();
+
+        defaultDataCreator.CreateDefaultsIfNeeded();
+    }
+
     private static void AddDatabases(IServiceCollection services)
     {
+        services.AddScoped<DefaultDataCreator>();
+
         services.AddSettingsRepository();
+        services.AddCategoriesRepository();
         
         services.AddMigrationsService();
     }
 
     private static void AddPages(IServiceCollection services)
     {
-        //services.AddScoped<ICategoryListPage, CategoryPage>();
+        services.AddScoped<ISettingsPage, SettingsPage>();
+        services.AddScoped<SettingsPageViewModel>();
+        
+        services.AddScoped<ICategoryListPage, CategoryListPage>();
+        services.AddScoped<CategoryListPageViewModel>();
+
+
         //services.AddScoped<INoteEditorPage, NotePage>();
         //services.AddScoped<INoteListPage, NoteListPage>();
         //services.AddScoped<IRecycleBinPage, RecycleBinPage>();
-        services.AddScoped<ISettingsPage, SettingsPage>();
         //services.AddSingleton<ITaskPage, TaskPage>();
 
         services.AddScoped<IEmptyPage, EmptyPage>();
@@ -69,11 +107,9 @@ public static class Program
         //services.AddScoped<ITaskReminderEditorPage, ReminderEditorPage>();
         //services.AddScoped<ITaskReminderPage, TaskReminderPage>();
 
-        //services.AddScoped<CategoryPageViewModel>();
         //services.AddScoped<NotePageViewModel>();
         //services.AddScoped<NoteListPageViewModel>();
         //services.AddScoped<RecycleBinPageViewModel>();
-        services.AddScoped<SettingsPageViewModel>();
         //services.AddScoped<TaskPageViewModel>();
 
         //services.AddScoped<NotificationPageViewModel>();

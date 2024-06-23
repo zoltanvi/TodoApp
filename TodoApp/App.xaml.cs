@@ -1,14 +1,10 @@
 ﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Modules.Common.Cqrs.Events;
-using Modules.Common.Database;
 using Modules.Common.Navigation;
 using Modules.Common.Services.Navigation;
-using Modules.Migration;
-using Modules.Settings.Repositories;
 using System.Windows;
 using Application = System.Windows.Application;
 
@@ -37,7 +33,7 @@ public partial class App : Application
             })
             .Build();
 
-        InitializeDatabase();
+        ServiceProvider.InitializeDatabase();
         PublishApplicationOpeningEvent();
     }
 
@@ -46,20 +42,6 @@ public partial class App : Application
         base.OnStartup(e);
 
         CreateMainWindow();
-    }
-
-    private void InitializeDatabase()
-    {
-        DbConfiguration.Initialize(ServiceProvider.GetRequiredService<IConfiguration>());
-
-        var migrationService = ServiceProvider.GetService<IMigrationService>();
-
-        var dbContextList = new List<DbContext>
-        {
-            ServiceProvider.GetService<SettingDbContext>(),
-        };
-
-        migrationService.Run(dbContextList);
     }
 
     private void PublishApplicationOpeningEvent()
@@ -94,6 +76,10 @@ public partial class App : Application
         // Test
         //sideMenuPageNavigation.NavigateTo<ISettingsPage>();
         mainPageNavigation.NavigateTo<ISettingsPage>();
+        sideMenuPageNavigation.NavigateTo<ICategoryListPage>();
     }
 }
+
+// Class to jump to for quick navigation with resharper
+public class Init;
 

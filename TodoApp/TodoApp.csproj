@@ -31,6 +31,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\Modules.Categories.Repositories\Modules.Categories.Repositories.csproj" />
+		<ProjectReference Include="..\Modules.Categories.Views\Modules.Categories.Views.csproj" />
 		<ProjectReference Include="..\Modules.Common.Navigation\Modules.Common.Navigation.csproj" />
 		<ProjectReference Include="..\Modules.Common.Views\Modules.Common.Views.csproj" />
 		<ProjectReference Include="..\Modules.Common\Modules.Common.csproj" />

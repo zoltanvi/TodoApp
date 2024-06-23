@@ -7,10 +7,12 @@ namespace Modules.Common.Views.Services.Navigation;
 public abstract class NavigationService : INavigationService
 {
     private readonly IServiceProvider _serviceProvider;
-    protected Frame? Frame { get; set; }
+    private Frame? Frame { get; set; }
 
     protected NavigationService(IServiceProvider serviceProvider)
     {
+        ArgumentNullException.ThrowIfNull(serviceProvider);
+
         _serviceProvider = serviceProvider;
     }
 
@@ -52,6 +54,4 @@ public abstract class NavigationService : INavigationService
     {
         return _serviceProvider.GetService(typeof(T)) as Page;
     }
-
-    private Dictionary<Type, Page> _cache = [];
 }
