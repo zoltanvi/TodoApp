@@ -48,7 +48,7 @@
                                 <!--  Outer dragging border  -->
                                 <Border
                                     Panel.ZIndex="2"
-                                    BorderBrush="{Binding AppSettings.AppWindowSettings.AppBorderColor, Source={StaticResource AppSettings}, Converter={StaticResource AppBorderBrushConverter}}"
+                                    BorderBrush="{Binding AppSettings.ApplicationSettings.AppBorderColor, Source={StaticResource AppSettings}, Converter={StaticResource AppBorderBrushConverter}}"
                                     BorderThickness="0.4"
                                     CornerRadius="{Binding IsRoundedCornersAllowed, Converter={StaticResource BoolToRoundedCornerRadiusConverter}}"
                                     Opacity="1">
@@ -63,7 +63,7 @@
                                         <Grid.RowDefinitions>
 
                                             <!--  Title Bar  -->
-                                            <RowDefinition Height="{Binding AppSettings.AppWindowSettings.TitleBarHeight, Source={StaticResource AppSettings}, Converter={StaticResource TitleBarHeightToGridLengthConverter}}" />
+                                            <RowDefinition Height="{Binding AppSettings.ApplicationSettings.TitleBarHeight, Source={StaticResource AppSettings}, Converter={StaticResource TitleBarHeightToGridLengthConverter}}" />
 
                                             <!--  Window Content  -->
                                             <RowDefinition Height="*" />

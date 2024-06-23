@@ -2,7 +2,7 @@
 
 namespace Modules.Settings.Contracts.ViewModels;
 
-public class AppWindowSettings : SettingsBase
+public class ApplicationSettings : SettingsBase
 {
     public bool AlwaysOnTop { get; set; }
     public bool AutoStart { get; set; }

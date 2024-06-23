@@ -33,31 +33,31 @@
                 <controls:ToggleButtonSettingControl
                     Icon="{DynamicResource SegoeIconAlwaysOnTop}"
                     Description="Always on top"
-                    IsChecked="{Binding AppSettings.AppWindowSettings.AlwaysOnTop, Source={StaticResource AppSettings}, Mode=TwoWay}" />
+                    IsChecked="{Binding AppSettings.ApplicationSettings.AlwaysOnTop, Source={StaticResource AppSettings}, Mode=TwoWay}" />
 
                 <!--  Auto start app with Windows  -->
                 <controls:ToggleButtonSettingControl
                     Icon="{DynamicResource SegoeIconRepeat}"
                     Description="Auto start app with Windows"
-                    IsChecked="{Binding AppSettings.AppWindowSettings.AutoStart, Source={StaticResource AppSettings}, Mode=TwoWay}" />
+                    IsChecked="{Binding AppSettings.ApplicationSettings.AutoStart, Source={StaticResource AppSettings}, Mode=TwoWay}" />
 
                 <!--  Rounded window corners  -->
                 <controls:ToggleButtonSettingControl
                     Icon="{DynamicResource SegoeIconRoundedCorners}"
                     Description="Rounded window corners"
-                    IsChecked="{Binding AppSettings.AppWindowSettings.RoundedWindowCorners, Source={StaticResource AppSettings}, Mode=TwoWay}" />
+                    IsChecked="{Binding AppSettings.ApplicationSettings.RoundedWindowCorners, Source={StaticResource AppSettings}, Mode=TwoWay}" />
 
                 <!--  Exit button minimizes to tray  -->
                 <controls:ToggleButtonSettingControl
                     Icon="{DynamicResource SegoeIconMinimizeToTray}"
                     Description="Exit button minimizes to tray"
-                    IsChecked="{Binding AppSettings.AppWindowSettings.ExitToTray, Source={StaticResource AppSettings}, Mode=TwoWay}" />
+                    IsChecked="{Binding AppSettings.ApplicationSettings.ExitToTray, Source={StaticResource AppSettings}, Mode=TwoWay}" />
 
                 <!--  Close side menu on category change  -->
                 <controls:ToggleButtonSettingControl
                     Icon="{DynamicResource SegoeIconMinimizeToTray}"
                     Description="Close side menu on category change"
-                    IsChecked="{Binding AppSettings.AppWindowSettings.CloseSideMenuOnCategoryChange, Source={StaticResource AppSettings}, Mode=TwoWay}" />
+                    IsChecked="{Binding AppSettings.ApplicationSettings.CloseSideMenuOnCategoryChange, Source={StaticResource AppSettings}, Mode=TwoWay}" />
 
                 <!--  App border color  -->
                 <Border Style="{StaticResource SettingsItemStyle}">
@@ -82,7 +82,7 @@
                             HorizontalAlignment="Right">
 
                             <commonControls:SingletonColorPicker
-                                SelectedColorString="{Binding AppSettings.AppWindowSettings.AppBorderColor, Source={StaticResource AppSettings}, Mode=TwoWay}"
+                                SelectedColorString="{Binding AppSettings.ApplicationSettings.AppBorderColor, Source={StaticResource AppSettings}, Mode=TwoWay}"
                                 Width="{Binding UIScaler.ColorPickerWidth, Source={StaticResource UIScaler}}"
                                 Height="{Binding UIScaler.ColorPickerHeight, Source={StaticResource UIScaler}}" />
                         </Border>
@@ -111,7 +111,7 @@
                             HorizontalAlignment="Right"
                             FontSize="{Binding UIScaler.FontSize.Small, Source={StaticResource UIScaler}}"
                             ItemsSource="{Binding Source={StaticResource TitleBarHeightDataProvider}}"
-                            SelectedItem="{Binding AppSettings.AppWindowSettings.TitleBarHeight, Source={StaticResource AppSettings}, Mode=TwoWay}">
+                            SelectedItem="{Binding AppSettings.ApplicationSettings.TitleBarHeight, Source={StaticResource AppSettings}, Mode=TwoWay}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding Converter={StaticResource CamelCaseConverter}}" />

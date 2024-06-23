@@ -37,7 +37,11 @@
                 <!--Possible dependencies below-->
 
                 <ResourceDictionary Source="pack://application:,,,/Modules.Common.Views;component/Styles/BaseStyles.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Modules.Common.Views;component/Styles/ScrollBarStyles.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Modules.Common.Views;component/Styles/ScrollViewerStyles.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Modules.Common.Views;component/Styles/Styles.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Modules.Common.Views;component/Styles/ComboBoxStyles.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Modules.Common.Views;component/Styles/ColorPickerStyles.xaml" />
 
 
                 <ResourceDictionary Source="pack://application:,,,/Modules.Settings.Views;component/Styles/Styles.xaml" />

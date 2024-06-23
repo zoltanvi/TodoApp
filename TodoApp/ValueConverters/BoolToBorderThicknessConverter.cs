@@ -15,6 +15,6 @@ public class BoolToBorderThicknessConverter : BaseValueConverter
         return new Thickness(
             isMaximized 
                 ? 0 
-                : AppSettings.Instance.AppWindowSettings.ResizeBorderSize);
+                : AppSettings.Instance.ApplicationSettings.ResizeBorderSize);
     }
 }

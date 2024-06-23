@@ -11,7 +11,7 @@ internal class BoolToRoundedCornerRadiusConverter : BaseValueConverter
     {
         if (value is bool turnedOn && turnedOn)
         {
-            return new CornerRadius(AppWindowSettings.TurnedOnRoundedCornersRadius);
+            return new CornerRadius(ApplicationSettings.TurnedOnRoundedCornersRadius);
         }
 
         return new CornerRadius(0);

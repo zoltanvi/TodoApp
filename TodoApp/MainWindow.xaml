@@ -30,7 +30,7 @@
 
     <WindowChrome.WindowChrome>
         <WindowChrome
-            CaptionHeight="{Binding AppSettings.AppWindowSettings.TitleBarHeight, Source={StaticResource AppSettings}, Converter={StaticResource TitleBarHeightConverter}}"
+            CaptionHeight="{Binding AppSettings.ApplicationSettings.TitleBarHeight, Source={StaticResource AppSettings}, Converter={StaticResource TitleBarHeightConverter}}"
             CornerRadius="0"
             GlassFrameThickness="0"
             ResizeBorderThickness="{Binding ResizeBorderThickness}" />

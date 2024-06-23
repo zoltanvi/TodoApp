@@ -4,7 +4,7 @@ public sealed class AppSettings : SettingsBase
 {
     public static AppSettings Instance { get; } = new();
 
-    public AppWindowSettings AppWindowSettings { get; set; } = new();
+    public ApplicationSettings ApplicationSettings { get; set; } = new();
     public ThemeSettings ThemeSettings { get; set; } = new();
     public PageTitleSettings PageTitleSettings { get; set; } = new();
     public TaskPageSettings TaskPageSettings { get; set; } = new();

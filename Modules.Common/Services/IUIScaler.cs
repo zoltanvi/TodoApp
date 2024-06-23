@@ -15,6 +15,7 @@ public interface IUIScaler
     double SliderHeight { get; }
     double SliderThumbHeight { get; }
     double SliderThumbWidth { get; }
+    double ScrollbarWidth { get; }
 
     void SetScaling(double value);
     void ZoomIn();

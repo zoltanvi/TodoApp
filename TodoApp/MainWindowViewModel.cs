@@ -24,7 +24,7 @@ public class MainWindowViewModel : BaseViewModel
     private double _myWidth;
     private double _myHeight;
     private static WindowSettings WindowSettings => AppSettings.Instance.WindowSettings;
-    private static AppWindowSettings AppWindowSettings => AppSettings.Instance.AppWindowSettings;
+    private static ApplicationSettings ApplicationSettings => AppSettings.Instance.ApplicationSettings;
     public MainWindowViewModel(
         IWindowService windowService,
         IMediator mediator,
@@ -47,7 +47,7 @@ public class MainWindowViewModel : BaseViewModel
         CloseCommand = new RelayCommand(CloseWindow);
         ToggleSideMenuCommand = new RelayCommand(() => AppSettings.Instance.SessionSettings.SideMenuOpen ^= true);
 
-        _windowService.Deactivated += (s, e) => _windowService.Topmost = AppWindowSettings.AlwaysOnTop;
+        _windowService.Deactivated += (s, e) => _windowService.Topmost = ApplicationSettings.AlwaysOnTop;
         _windowService.Resized += (s, e) =>
         {
             OnPropertyChanged(nameof(ResizeBorderThickness));
@@ -60,11 +60,11 @@ public class MainWindowViewModel : BaseViewModel
         //_windowService.Closed += (s, e) => _context.Dispose();
         _windowService.RoundedCornersChanged += (s, e) => OnPropertyChanged(nameof(IsRoundedCornersAllowed));
 
-        AppWindowSettings.PropertyChanged += OnAppWindowSettingsChanged;
+        ApplicationSettings.PropertyChanged += OnApplicationSettingsChanged;
 
         _trayIconModule = new TrayIconModule(_windowService)
         {
-            IsEnabled = AppWindowSettings.ExitToTray
+            IsEnabled = ApplicationSettings.ExitToTray
         };
     }
 
@@ -112,7 +112,7 @@ public class MainWindowViewModel : BaseViewModel
     public double WindowMinimumHeight { get; set; } = 200;
     public bool IsMaximized => _windowService.IsMaximized;
     public bool IsMaximizedOrDocked => _windowService.IsMaximizedOrDocked;
-    public bool IsRoundedCornersAllowed => _windowService.IsRoundedCornersAllowed && AppWindowSettings.RoundedWindowCorners;
+    public bool IsRoundedCornersAllowed => _windowService.IsRoundedCornersAllowed && ApplicationSettings.RoundedWindowCorners;
 
     #region Workaround
 
@@ -144,7 +144,7 @@ public class MainWindowViewModel : BaseViewModel
         }
     }
 
-    public int OuterMargin => 2 * AppSettings.Instance.AppWindowSettings.ResizeBorderSize;
+    public int OuterMargin => 2 * AppSettings.Instance.ApplicationSettings.ResizeBorderSize;
     public Rect ClipRect => new(0, 0, MyWidth, MyHeight);
     public Rect OuterClipRect => new(0, 0, MyWidth + OuterMargin, MyHeight + OuterMargin);
 
@@ -156,7 +156,7 @@ public class MainWindowViewModel : BaseViewModel
     public Thickness InnerContentPadding => new(ContentPadding);
 
     // The size of the resize border around the window
-    public int ResizeBorder => IsMaximized ? 0 : AppSettings.Instance.AppWindowSettings.ResizeBorderSize;
+    public int ResizeBorder => IsMaximized ? 0 : AppSettings.Instance.ApplicationSettings.ResizeBorderSize;
 
     // The size of the resize border around the window, taking into account the outer margin
     public Thickness ResizeBorderThickness => new(ResizeBorder);
@@ -173,13 +173,13 @@ public class MainWindowViewModel : BaseViewModel
     public ICommand ToggleSideMenuCommand { get; }
 
 
-    private void OnAppWindowSettingsChanged(object? sender, PropertyChangedEventArgs e)
+    private void OnApplicationSettingsChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(AppWindowSettings.ExitToTray))
+        if (e.PropertyName == nameof(ApplicationSettings.ExitToTray))
         {
-            _trayIconModule.IsEnabled = AppWindowSettings.ExitToTray;
+            _trayIconModule.IsEnabled = ApplicationSettings.ExitToTray;
         }
-        else if (e.PropertyName == nameof(AppWindowSettings.RoundedWindowCorners))
+        else if (e.PropertyName == nameof(ApplicationSettings.RoundedWindowCorners))
         {
             OnPropertyChanged(nameof(IsRoundedCornersAllowed));
         }

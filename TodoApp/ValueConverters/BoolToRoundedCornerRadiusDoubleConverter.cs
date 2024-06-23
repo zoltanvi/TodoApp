@@ -10,7 +10,7 @@ internal class BoolToRoundedCornerRadiusDoubleConverter : BaseValueConverter
     {
         if (value is bool turnedOn && turnedOn)
         {
-            return AppWindowSettings.TurnedOnRoundedCornersRadius;
+            return ApplicationSettings.TurnedOnRoundedCornersRadius;
         }
 
         return 0;

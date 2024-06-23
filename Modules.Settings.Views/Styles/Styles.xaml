@@ -316,9 +316,4 @@
         <Setter Property="Foreground" Value="{DynamicResource OnSurface}" />
     </Style>
 
-    <Style x:Key="BaseLabelClearTypeStyle" TargetType="Label">
-        <Setter Property="FontFamily" Value="{DynamicResource UIFont}" />
-        <Setter Property="Foreground" Value="{DynamicResource OnBackground}" />
-    </Style>
-
 </ResourceDictionary>
