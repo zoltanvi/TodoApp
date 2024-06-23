@@ -11,5 +11,7 @@
     <system:String x:Key="SegoeIconPath">&#xE62F;</system:String>
     <system:String x:Key="SegoeIconSettings">&#xE713;</system:String>
     <system:String x:Key="SegoeIconDeleteX">&#xEDAE;</system:String>
+    <system:String x:Key="SegoeIconSave">&#xE74E;</system:String>
+
 
 </ResourceDictionary>

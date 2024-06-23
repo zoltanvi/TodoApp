@@ -9,6 +9,7 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
 using TodoApp.Themes;
+using TodoApp.Time;
 using TodoApp.WindowHandling;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 
@@ -23,6 +24,7 @@ public class MainWindowViewModel : BaseViewModel
     private readonly TrayIconModule _trayIconModule;
     private double _myWidth;
     private double _myHeight;
+    private readonly TimeDisplayService _timeDisplayService;
     private static WindowSettings WindowSettings => AppSettings.Instance.WindowSettings;
     private static ApplicationSettings ApplicationSettings => AppSettings.Instance.ApplicationSettings;
     public MainWindowViewModel(
@@ -66,6 +68,12 @@ public class MainWindowViewModel : BaseViewModel
         {
             IsEnabled = ApplicationSettings.ExitToTray
         };
+
+        _timeDisplayService = new TimeDisplayService(timeLong =>
+        {
+            CurrentTime = timeLong;
+            OnPropertyChanged(nameof(CurrentTime));
+        });
     }
 
     private void OnWindowLoaded(object sender, EventArgs e)
