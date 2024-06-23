@@ -1,13 +1,12 @@
 ﻿<commonPages:GenericBasePage
     x:Class="Modules.Settings.Views.Pages.SettingsPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:attached="clr-namespace:Modules.Common.Views.AttachedProperties;assembly=Modules.Common.Views"
     xmlns:commonPages="clr-namespace:Modules.Common.Views.Pages;assembly=Modules.Common.Views"
     xmlns:controls="clr-namespace:Modules.Settings.Views.Controls"
-    xmlns:dataModels="clr-namespace:Modules.Settings.Contracts.Models;assembly=Modules.Settings.Contracts"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:pages="clr-namespace:Modules.Settings.Views.Pages"
     Title="SettingsPage"
     d:DataContext="{d:DesignInstance Type=pages:SettingsPageViewModel}"
@@ -35,7 +34,7 @@
                 <TextBlock
                     Grid.Column="0"
                     Style="{DynamicResource PageTitleTextBlockStyle}"
-                    Text="{Binding SettingsPageFrameType, Converter={StaticResource SettingsPageTitleConverter}}" />
+                    Text="{Binding ActiveCategoryId, Converter={StaticResource SettingsPageTitleConverter}}" />
 
                 <!--  BACK button  -->
                 <Button
@@ -73,77 +72,40 @@
                                 <RowDefinition Height="*" />
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
-
                             </Grid.RowDefinitions>
 
-                            <ScrollViewer Style="{DynamicResource TodoAppScrollViewerLeft}">
 
-                                <StackPanel Grid.Row="0" Orientation="Vertical">
-                                    <controls:SettingsCategoryButton
-                                        Command="{Binding SwitchToPageCommand}"
-                                        CommandParameter="{x:Static dataModels:SettingsPageType.AppWindowSettings}"
-                                        Content="APPLICATION"
-                                        Id="{x:Static dataModels:SettingsPageType.AppWindowSettings}"
-                                        Style="{StaticResource SettingsCategoryButtonStyle}" />
-                                    <controls:SettingsCategoryButton
-                                        Command="{Binding SwitchToPageCommand}"
-                                        CommandParameter="{x:Static dataModels:SettingsPageType.ThemeSettings}"
-                                        Content="THEME"
-                                        Id="{x:Static dataModels:SettingsPageType.ThemeSettings}"
-                                        Style="{StaticResource SettingsCategoryButtonStyle}" />
-                                    <controls:SettingsCategoryButton
-                                        Command="{Binding SwitchToPageCommand}"
-                                        CommandParameter="{x:Static dataModels:SettingsPageType.PageTitleSettings}"
-                                        Content="PAGE TITLE"
-                                        Id="{x:Static dataModels:SettingsPageType.PageTitleSettings}"
-                                        Style="{StaticResource SettingsCategoryButtonStyle}" />
-                                    <controls:SettingsCategoryButton
-                                        Command="{Binding SwitchToPageCommand}"
-                                        CommandParameter="{x:Static dataModels:SettingsPageType.TaskPageSettings}"
-                                        Content="TASK PAGE"
-                                        Id="{x:Static dataModels:SettingsPageType.TaskPageSettings}"
-                                        Style="{StaticResource SettingsCategoryButtonStyle}" />
-                                    <controls:SettingsCategoryButton
-                                        Command="{Binding SwitchToPageCommand}"
-                                        CommandParameter="{x:Static dataModels:SettingsPageType.TaskItemSettings}"
-                                        Content="TASKS"
-                                        Id="{x:Static dataModels:SettingsPageType.TaskItemSettings}"
-                                        Style="{StaticResource SettingsCategoryButtonStyle}" />
-                                    <controls:SettingsCategoryButton
-                                        Command="{Binding SwitchToPageCommand}"
-                                        CommandParameter="{x:Static dataModels:SettingsPageType.TaskQuickActionsSettings}"
-                                        Content="QUICK ACTIONS"
-                                        Id="{x:Static dataModels:SettingsPageType.TaskQuickActionsSettings}"
-                                        Style="{StaticResource SettingsCategoryButtonStyle}" />
-                                    <controls:SettingsCategoryButton
-                                        Command="{Binding SwitchToPageCommand}"
-                                        CommandParameter="{x:Static dataModels:SettingsPageType.TextEditorQuickActionsSettings}"
-                                        Content="EDITOR"
-                                        Id="{x:Static dataModels:SettingsPageType.TextEditorQuickActionsSettings}"
-                                        Style="{StaticResource SettingsCategoryButtonStyle}" />
-                                    <controls:SettingsCategoryButton
-                                        Command="{Binding SwitchToPageCommand}"
-                                        CommandParameter="{x:Static dataModels:SettingsPageType.NotePageSettings}"
-                                        Content="NOTES"
-                                        Id="{x:Static dataModels:SettingsPageType.NotePageSettings}"
-                                        Style="{StaticResource SettingsCategoryButtonStyle}" />
-                                    <controls:SettingsCategoryButton
-                                        Command="{Binding SwitchToPageCommand}"
-                                        CommandParameter="{x:Static dataModels:SettingsPageType.DateTimeSettings}"
-                                        Content="DATE TIME"
-                                        Id="{x:Static dataModels:SettingsPageType.DateTimeSettings}"
-                                        Style="{StaticResource SettingsCategoryButtonStyle}" />
+                            <ListView
+                                x:Name="SettingPagesList"
+                                HorizontalContentAlignment="Stretch"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                ItemsSource="{Binding Items}"
+                                ScrollViewer.CanContentScroll="False"
+                                ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                Template="{DynamicResource SettingsListBoxControlTemplate}">
 
+                                <ListView.ItemContainerStyle>
+                                    <Style TargetType="ListViewItem">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="ListViewItem">
+                                                    <ContentPresenter />
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </ListView.ItemContainerStyle>
 
-                                    <controls:SettingsCategoryButton
-                                        Command="{Binding SwitchToPageCommand}"
-                                        CommandParameter="{x:Static dataModels:SettingsPageType.Shortcuts}"
-                                        Content="SHORTCUTS"
-                                        Id="{x:Static dataModels:SettingsPageType.Shortcuts}"
-                                        Style="{StaticResource SettingsCategoryButtonStyle}" />
-
-                                </StackPanel>
-                            </ScrollViewer>
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <controls:SettingsListItemControl
+                                            ActiveCategoryId="{Binding DataContext.ActiveCategoryId, ElementName=SettingPagesList}" 
+                                            Tag="{Binding DataContext, ElementName=SettingPagesList}"/>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
                         </Grid>
                     </Border>
 

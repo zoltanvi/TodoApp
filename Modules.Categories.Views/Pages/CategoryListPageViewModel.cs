@@ -95,7 +95,7 @@ public class CategoryListPageViewModel : BaseViewModel
             var oldName = _activeCategory.Name;
 
             _activeCategory = value;
-            AppSettings.Instance.SessionSettings.ActiveCategoryId = value?.Id ?? -1;
+            AppSettings.Instance.SessionSettings.ActiveCategoryId = value.Id;
             OnPropertyChanged(nameof(ActiveCategory));
 
             _mediator.Publish(new ActiveCategoryChangedEvent

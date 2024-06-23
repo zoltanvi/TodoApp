@@ -6,4 +6,5 @@ public class SessionSettings : SettingsBase
     public bool SideMenuOpen { get; set; }
     public int ActiveCategoryId { get; set; } = 1;
     public int ActiveNoteId { get; set; }
+    public int ActiveSettingsCategoryId { get; set; } = 1;
 }

@@ -1,30 +1,29 @@
 ﻿using Modules.Common.Views.ValueConverters;
-using Modules.Settings.Contracts.Models;
 using System.Globalization;
 
 namespace Modules.Settings.Views.ValueConverters;
 
 public class SettingsPageTitleConverter : BaseValueConverter
 {
-    private readonly Dictionary<SettingsPageType, string> _pageTitles = new()
+    private readonly Dictionary<int, string> _pageTitles = new()
     {
-        { SettingsPageType.AppWindowSettings, "Application settings" },
-        { SettingsPageType.ThemeSettings, "Themes" },
-        { SettingsPageType.PageTitleSettings, "Page title settings" },
-        { SettingsPageType.TaskPageSettings, "Task page settings" },
-        { SettingsPageType.TaskItemSettings, "Task item settings" },
-        { SettingsPageType.TaskQuickActionsSettings, "Task quick actions" },
-        { SettingsPageType.TextEditorQuickActionsSettings, "Text editor quick actions" },
-        { SettingsPageType.NotePageSettings, "Note page settings" },
-        { SettingsPageType.DateTimeSettings, "Date time settings" },
-        { SettingsPageType.Shortcuts, "Shortcuts" },
+        { 1, "Application settings" },
+        { 2, "Themes" },
+        { 3, "Page title settings" },
+        { 4, "Task page settings" },
+        { 5, "Task item settings" },
+        { 6, "Task quick actions" },
+        { 7, "Text editor quick actions" },
+        { 8, "Note page settings" },
+        { 9, "Date time settings" },
+        { 10, "Shortcuts" },
     };
 
     public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        if (value is SettingsPageType page)
+        if (value is int pageId)
         {
-            if (_pageTitles.TryGetValue(page, out var title))
+            if (_pageTitles.TryGetValue(pageId, out var title))
             {
                 return title;
             }

@@ -10,7 +10,7 @@ namespace Modules.Settings.Views.Controls;
 /// </summary>
 public partial class FontSizeSliderControl : UserControl
 {
-    public static readonly DependencyProperty PreviewFontSizeProperty = DependencyProperty.Register(nameof(PreviewFontSize), typeof(double), typeof(FontSizeSliderControl), new PropertyMetadata());
+    public static readonly DependencyProperty PreviewFontSizeProperty = DependencyProperty.Register(nameof(PreviewFontSize), typeof(double), typeof(FontSizeSliderControl), new PropertyMetadata(10.0));
     public static readonly DependencyProperty DescriptionProperty = DependencyProperty.Register(nameof(Description), typeof(string), typeof(FontSizeSliderControl), new PropertyMetadata());
     public static readonly DependencyProperty MinProperty = DependencyProperty.Register(nameof(Min), typeof(double), typeof(FontSizeSliderControl), new PropertyMetadata());
     public static readonly DependencyProperty MaxProperty = DependencyProperty.Register(nameof(Max), typeof(double), typeof(FontSizeSliderControl), new PropertyMetadata());

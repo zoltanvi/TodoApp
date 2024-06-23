@@ -8,10 +8,10 @@
     xmlns:pages="clr-namespace:Modules.Categories.Views.Pages"
     xmlns:converters="clr-namespace:Modules.Common.Views.ValueConverters;assembly=Modules.Common.Views"
     d:DataContext="{d:DesignInstance Type=local:CategoryViewModel}"
-    x:Name="CategoryListItemUC"
+    x:Name="CategoryListItem"
     d:DesignHeight="60"
     d:DesignWidth="350"
-    AutomationProperties.AutomationId="CategoryListItemUC"
+    AutomationProperties.AutomationId="CategoryListItem"
     mc:Ignorable="d">
 
     <UserControl.ContextMenu>
@@ -25,8 +25,8 @@
 
     <Button
         Padding="0 2 10 2"
-        Command="{Binding Path=Tag.ChangeCategoryCommand, ElementName=CategoryListItemUC}"
-        CommandParameter="{Binding DataContext, ElementName=CategoryListItemUC}"
+        Command="{Binding Path=Tag.ChangeCategoryCommand, ElementName=CategoryListItem}"
+        CommandParameter="{Binding DataContext, ElementName=CategoryListItem}"
         ToolTip="{Binding Name}">
         <Button.Style>
             <Style BasedOn="{StaticResource ButtonHoverStyle}" TargetType="Button">
@@ -65,8 +65,8 @@
                                         x:Name="PART_DeleteButton"
                                         Grid.Column="2"
                                         Visibility="Hidden"
-                                        Command="{Binding Path=Tag.DeleteCategoryCommand, ElementName=CategoryListItemUC}"
-                                        CommandParameter="{Binding DataContext, ElementName=CategoryListItemUC}"
+                                        Command="{Binding Path=Tag.DeleteCategoryCommand, ElementName=CategoryListItem}"
+                                        CommandParameter="{Binding DataContext, ElementName=CategoryListItem}"
                                         Style="{StaticResource ButtonIconHoverCategoryDeleteStyle}"
                                         Content="{StaticResource SegoeIconDeleteX}"
                                         FontSize="{Binding UIScaler.FontSize.Small, Source={StaticResource UIScaler}}"
@@ -120,10 +120,6 @@
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Foreground" Value="{DynamicResource OnSecondaryContainer}" />
                         </Trigger>
-
-                        <!--<DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:CategoryListItemControl}}, Path=IsActive}" Value="True">
-                            <Setter Property="Foreground" Value="{DynamicResource OnSecondaryContainer}" />
-                        </DataTrigger>-->
 
                         <DataTrigger Value="True">
                             <DataTrigger.Binding>

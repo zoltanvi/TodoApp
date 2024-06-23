@@ -3,6 +3,8 @@ using Modules.Common.OBSOLETE.Mediator;
 using Modules.Common.ViewModel;
 using Modules.Common.Views.Pages;
 using Modules.Settings.Contracts.Models;
+using Modules.Settings.Contracts.ViewModels;
+using Modules.Settings.Views.Controls;
 using PropertyChanged;
 using System.Windows.Input;
 
@@ -12,9 +14,12 @@ namespace Modules.Settings.Views.Pages;
 public class SettingsPageViewModel : BaseViewModel
 {
     private readonly IServiceProvider _serviceProvider;
-    
+    private int _activeCategoryId;
+
     public SettingsPageViewModel(IServiceProvider serviceProvider)
     {
+        ArgumentNullException.ThrowIfNull(serviceProvider);
+
         _serviceProvider = serviceProvider;
 
         GoBackCommand = new RelayCommand(() =>
@@ -22,47 +27,63 @@ public class SettingsPageViewModel : BaseViewModel
             MediatorOBSOLETE.NotifyClients(ViewModelMessages.UpdateMainPage);
         });
 
-        SwitchToPageCommand = new RelayParameterizedCommand<object>(SwitchToPage);
-        
-        SettingsPageFrameType = SettingsPageType.AppWindowSettings;
-        SettingsPageFrameContent = GetSettingsPage(SettingsPageFrameType);
+        OpenPageCommand = new RelayParameterizedCommand<SettingsPageItemViewModel>(OpenSettingsPage);
+
+        Items =
+        [
+            new() { Id = 1, Name = "APPLICATION", PageType = typeof(ApplicationSettingsPage)},
+            new() { Id = 2, Name = "THEME" , PageType = typeof(ThemeSettingsPage)},
+            new() { Id = 3, Name = "PAGE TITLE", PageType = typeof(PageTitleSettingsPage) },
+            new() { Id = 4, Name = "TASK PAGE" , PageType = typeof(TaskPageSettingsPage)},
+            new() { Id = 5, Name = "TASKS" , PageType = typeof(TaskItemSettingsPage)},
+            new() { Id = 6, Name = "QUICK ACTIONS", PageType = typeof(TaskQuickActionsSettingsPage) },
+            new() { Id = 7, Name = "EDITOR", PageType = typeof(TextEditorQuickActionsSettingsPage) },
+            new() { Id = 8, Name = "NOTES", PageType = typeof(NotePageSettingsPage) },
+            new() { Id = 9, Name = "DATE TIME", PageType = typeof(DateTimeSettingsPage) },
+            new() { Id = 10, Name = "SHORTCUTS" , PageType = typeof(ShortcutsPage)}
+        ];
+
+        // Open ApplicationSettingsPage by default
+        ActiveCategoryId = 1;
     }
 
-    public BasePage SettingsPageFrameContent { get; set; }
-    public SettingsPageType SettingsPageFrameType { get; set; }
-    public ICommand GoBackCommand { get; }
-    public ICommand SwitchToPageCommand { get; }
-
-    private void SwitchToPage(object obj)
+    private void OpenSettingsPage(SettingsPageItemViewModel item)
     {
-        if (obj is SettingsPageType type)
-        {
-            SettingsPageFrameContent = GetSettingsPage(type);
-            SettingsPageFrameType = type;
 
-            OnPropertyChanged(nameof(SettingsPageFrameType));
+        ActiveCategoryId = item.Id;
+    }
+
+    public ICommand OpenPageCommand { get; }
+    public ICommand GoBackCommand { get; }
+
+    public BasePage? SettingsPageFrameContent { get; set; }
+
+    public List<SettingsPageItemViewModel> Items { get; }
+
+    public int ActiveCategoryId
+    {
+        get => _activeCategoryId;
+        private set
+        {
+            if (value == _activeCategoryId) return;
+
+            _activeCategoryId = value;
+            AppSettings.Instance.SessionSettings.ActiveSettingsCategoryId = value;
+
+            SettingsPageFrameContent = GetSettingsPage(_activeCategoryId);
+
+            OnPropertyChanged(nameof(ActiveCategoryId));
             OnPropertyChanged(nameof(SettingsPageFrameContent));
         }
     }
 
-    private BasePage GetSettingsPage(SettingsPageType type)
-        => type switch
-        {
-            SettingsPageType.NotePageSettings => GetService<NotePageSettingsPage>(),
-            SettingsPageType.TaskItemSettings => GetService<TaskItemSettingsPage>(),
-            SettingsPageType.TaskPageSettings => GetService<TaskPageSettingsPage>(),
-            SettingsPageType.TaskQuickActionsSettings => GetService<TaskQuickActionsSettingsPage>(),
-            SettingsPageType.TextEditorQuickActionsSettings => GetService<TextEditorQuickActionsSettingsPage>(),
-            SettingsPageType.ThemeSettings => GetService<ThemeSettingsPage>(),
-            SettingsPageType.AppWindowSettings => GetService<ApplicationSettingsPage>(),
-            SettingsPageType.PageTitleSettings => GetService<PageTitleSettingsPage>(),
-            SettingsPageType.DateTimeSettings => GetService<DateTimeSettingsPage>(),
-            SettingsPageType.Shortcuts => GetService<ShortcutsPage>(),
-            _ => throw new NotImplementedException($"{type} type setting page is not implemented!")
-        };
-
-    private T GetService<T>()
+    private BasePage? GetSettingsPage(int id)
     {
-        return (T?)_serviceProvider.GetService(typeof(T));
+        var itemViewModel = Items.FirstOrDefault(x => x.Id == id);
+
+        ArgumentNullException.ThrowIfNull(itemViewModel);
+
+        return (BasePage)_serviceProvider.GetService(itemViewModel.PageType);
+        
     }
 }

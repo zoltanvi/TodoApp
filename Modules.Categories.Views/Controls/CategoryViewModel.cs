@@ -6,11 +6,6 @@ namespace Modules.Categories.Views.Controls;
 [AddINotifyPropertyChangedInterface]
 public class CategoryViewModel : BaseViewModel, IEquatable<CategoryViewModel>
 {
-    public CategoryViewModel()
-    {
-        
-    }
-
     public int Id { get; set; }
     public required string Name { get; set; }
     public int ListOrder { get; set; }
