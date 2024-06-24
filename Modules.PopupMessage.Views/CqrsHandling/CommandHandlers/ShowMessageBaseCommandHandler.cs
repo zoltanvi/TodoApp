@@ -9,11 +9,8 @@ public class ShowMessageBaseCommandHandler
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(request.Message);
 
-        var viewModel = PopupMessageViewModel.Instance;
-        viewModel.Duration = request.Duration;
-        viewModel.Message = request.Message;
-        viewModel.MessageType = messageType;
-        viewModel.Visible = true;
+        PopupMessageManager.Instance.ShowMessage(request.Message, messageType, request.Duration);
+
         return Task.CompletedTask;
     }
 
