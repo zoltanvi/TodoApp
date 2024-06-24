@@ -5,6 +5,8 @@ namespace Modules.Common.Database
     public static class DbConfiguration
     {
         private const string DefaultFileName = "TodoApp";
+        private const string DefaultFolderName = "TodoAppDatabase";
+
         private static IConfiguration? _configuration;
 
         public static string DatabasePath { get; private set; }
@@ -13,6 +15,7 @@ namespace Modules.Common.Database
         static DbConfiguration()
         {
             var directory = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            directory = Path.Combine(directory, DefaultFolderName);
             var filenameWithExtension = $"{DefaultFileName}.{Constants.DatabaseFileExtension}";
 
             DatabasePath = Path.Combine(directory, filenameWithExtension);
@@ -36,6 +39,7 @@ namespace Modules.Common.Database
             if (string.IsNullOrWhiteSpace(directory))
             {
                 directory = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                directory = Path.Combine(directory, DefaultFolderName);
             }
 
             ValidatePath(directory);
