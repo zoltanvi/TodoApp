@@ -6,6 +6,8 @@ using Modules.Common.Cqrs.Events;
 using Modules.Common.Navigation;
 using Modules.Common.Services.Navigation;
 using System.Windows;
+using Modules.PopupMessage.Contracts;
+using Modules.PopupMessage.Views;
 using Application = System.Windows.Application;
 
 namespace TodoApp;
@@ -56,6 +58,10 @@ public partial class App : Application
         var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
         var mainWindowViewModel = ServiceProvider.GetRequiredService<MainWindowViewModel>();
         mainWindow.DataContext = mainWindowViewModel;
+
+        var messageControl = ServiceProvider.GetRequiredService<PopupMessageControl>();
+        mainWindow.MessageLineGrid.Children.Add(messageControl);
+        
         mainWindow.Show();
         Current.MainWindow = mainWindow;
 

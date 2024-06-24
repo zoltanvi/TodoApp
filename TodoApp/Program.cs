@@ -11,6 +11,8 @@ using Modules.Common.Views.Pages;
 using Modules.Common.Views.Services;
 using Modules.Common.Views.Services.Navigation;
 using Modules.Migration;
+using Modules.PopupMessage.Views;
+using Modules.PopupMessage.Views.CqrsHandling;
 using Modules.Settings.Contracts.ViewModels;
 using Modules.Settings.Repositories;
 using Modules.Settings.Services;
@@ -28,7 +30,8 @@ public static class Program
     public static IServiceCollection ConfigureAppServices(this IServiceCollection services)
     {
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<App>());
-        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<ServicesMediatorRegistration>());
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<SettingsCqrsRegistration>());
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<PopupMessageCqrsRegistration>());
 
         services.AddSingleton<IUIScaler>(provider => UIScaler.Instance);
         services.AddSingleton<MaterialThemeManagerService>();
@@ -47,6 +50,8 @@ public static class Program
         services.AddSingleton<IMainPageNavigationService, MainPageNavigationService>();
         services.AddSingleton<ISideMenuPageNavigationService, SideMenuPageNavigationService>();
         services.AddSingleton<IOverlayPageNavigationService, OverlayPageNavigationService>();
+
+        services.AddSingleton<PopupMessageControl>();
 
         AddDatabases(services);
         AddPages(services);

@@ -2,11 +2,12 @@
 using Modules.Common.OBSOLETE.Mediator;
 using Modules.Common.ViewModel;
 using Modules.Common.Views.Pages;
-using Modules.Settings.Contracts.Models;
 using Modules.Settings.Contracts.ViewModels;
 using Modules.Settings.Views.Controls;
 using PropertyChanged;
 using System.Windows.Input;
+using MediatR;
+using Modules.PopupMessage.Contracts.Cqrs.Commands;
 
 namespace Modules.Settings.Views.Pages;
 
@@ -15,9 +16,11 @@ public class SettingsPageViewModel : BaseViewModel
 {
     private readonly IServiceProvider _serviceProvider;
     private int _activeCategoryId;
+    private readonly IMediator _mediator;
 
-    public SettingsPageViewModel(IServiceProvider serviceProvider)
+    public SettingsPageViewModel(IServiceProvider serviceProvider, IMediator mediator)
     {
+        _mediator = mediator;
         ArgumentNullException.ThrowIfNull(serviceProvider);
 
         _serviceProvider = serviceProvider;
@@ -49,6 +52,10 @@ public class SettingsPageViewModel : BaseViewModel
 
     private void OpenSettingsPage(SettingsPageItemViewModel item)
     {
+        _mediator.Send(new ShowMessageErrorCommand
+        {
+            Message = $"Opened: {item.Name}."
+        });
 
         ActiveCategoryId = item.Id;
     }

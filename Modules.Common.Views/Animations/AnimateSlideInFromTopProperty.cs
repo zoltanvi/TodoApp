@@ -1,7 +1,6 @@
-﻿using Modules.Common.Views.Animations;
-using System.Windows;
+﻿using System.Windows;
 
-namespace TodoApp.Animation;
+namespace Modules.Common.Views.Animations;
 
 public class AnimateSlideInFromTopProperty : AnimateBaseProperty<AnimateSlideInFromTopProperty>
 {

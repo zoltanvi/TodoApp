@@ -1,6 +1,4 @@
-﻿using MediatR;
-using Modules.Common.Cqrs.Commands;
-using Modules.Common.Cqrs.Events;
+﻿using Modules.Common.Cqrs.Events;
 using Modules.Common.Services;
 using Modules.Common.ViewModel;
 using PropertyChanged;

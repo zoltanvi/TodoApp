@@ -173,8 +173,6 @@ public class MainWindowViewModel : BaseViewModel
     public bool SaveIconVisible { get; set; }
     public long CurrentTime { get; set; }
 
-    public bool MessageLineVisible { get; set; }
-
     public ICommand MinimizeCommand { get; }
     public ICommand MaximizeCommand { get; }
     public ICommand CloseCommand { get; }

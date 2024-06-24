@@ -1,3 +1,3 @@
-﻿namespace Modules.Common.Cqrs.Commands;
+﻿namespace Modules.PopupMessage.Contracts.Cqrs.Commands;
 
 public class ShowMessageErrorCommand : ShowMessageBaseCommand;

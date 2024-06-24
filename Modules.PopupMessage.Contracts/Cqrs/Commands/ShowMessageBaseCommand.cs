@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Modules.Common.Cqrs.Commands;
+namespace Modules.PopupMessage.Contracts.Cqrs.Commands;
 
 public abstract class ShowMessageBaseCommand : IRequest
 {

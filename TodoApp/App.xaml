@@ -14,6 +14,8 @@
                 <!--=========================================-->
                 <!--Resources without dependencies-->
                 <ResourceDictionary Source="pack://application:,,,/Modules.Settings.Views;component/Resources/Version.xaml" />
+
+
                 <ResourceDictionary Source="pack://application:,,,/Modules.Settings.Views;component/Resources/BindingProxies.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Modules.Common.Views;component/Resources/BindingProxies.xaml" />
 
@@ -23,6 +25,7 @@
 
                 <ResourceDictionary Source="pack://application:,,,/Modules.Common.Views;component/Resources/ValueConverters.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Modules.Settings.Views;component/Resources/ValueConverters.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Modules.PopupMessage.Views;component/Resources/ValueConverters.xaml" />
 
 
                 <ResourceDictionary Source="Themes/BaseTheme.xaml" />
@@ -44,10 +47,12 @@
                 <ResourceDictionary Source="pack://application:,,,/Modules.Common.Views;component/Styles/ComboBoxStyles.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Modules.Common.Views;component/Styles/ColorPickerStyles.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Modules.Common.Views;component/Styles/SideMenuStyles.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/Modules.Common.Views;component/Styles/ListBoxStyles.xaml" />
                 
 
                 <ResourceDictionary Source="pack://application:,,,/Modules.Settings.Views;component/Styles/Styles.xaml" />
+
+
+                <ResourceDictionary Source="pack://application:,,,/Modules.Common.Views;component/Styles/ListBoxStyles.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Modules.Settings.Views;component/Styles/ListBoxStyles.xaml" />
 
 

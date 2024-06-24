@@ -135,6 +135,11 @@
         <Grid>
             <!--  Message line  -->
 
+            <Grid Grid.ColumnSpan="3" 
+                  VerticalAlignment="Top" 
+                  Name="MessageLineGrid"
+                  />
+
             <!--<Grid
                 Grid.ColumnSpan="3"
                 VerticalAlignment="Top"

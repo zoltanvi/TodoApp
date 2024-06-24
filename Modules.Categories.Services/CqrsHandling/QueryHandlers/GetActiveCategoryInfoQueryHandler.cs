@@ -4,7 +4,7 @@ using Modules.Categories.Contracts.Cqrs.Queries;
 using Modules.Categories.Contracts.Models;
 using Modules.Settings.Contracts.ViewModels;
 
-namespace Modules.Categories.Services.Cqrs.QueryHandlers;
+namespace Modules.Categories.Services.CqrsHandling.QueryHandlers;
 
 public class GetActiveCategoryInfoQueryHandler : IRequestHandler<GetActiveCategoryInfoQuery, ActiveCategoryInfo>
 {

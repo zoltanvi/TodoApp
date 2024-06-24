@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Modules.Categories.Contracts.Cqrs.Commands;
 
-namespace Modules.Categories.Services.Cqrs.CommandHandlers;
+namespace Modules.Categories.Services.CqrsHandling.CommandHandlers;
 
 public class RenameActiveCategoryCommandHandler : IRequestHandler<RenameActiveCategoryCommand>
 {

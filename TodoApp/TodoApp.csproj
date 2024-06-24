@@ -38,6 +38,7 @@
 		<ProjectReference Include="..\Modules.Common\Modules.Common.csproj" />
 		<ProjectReference Include="..\Modules.MaterialTheme\Modules.MaterialTheme.csproj" />
 		<ProjectReference Include="..\Modules.Migration\Modules.Migration.csproj" />
+		<ProjectReference Include="..\Modules.PopupMessage.Views\Modules.PopupMessage.Views.csproj" />
 		<ProjectReference Include="..\Modules.Settings.Contracts\Modules.Settings.Contracts.csproj" />
 		<ProjectReference Include="..\Modules.Settings.Repositories\Modules.Settings.Repositories.csproj" />
 		<ProjectReference Include="..\Modules.Settings.Services\Modules.Settings.Services.csproj" />
