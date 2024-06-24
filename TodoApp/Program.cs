@@ -19,6 +19,7 @@ using Modules.Settings.Services;
 using Modules.Settings.Services.CqrsHandling;
 using Modules.Settings.Views;
 using Modules.Settings.Views.Pages;
+using Modules.Settings.Views.Services;
 using TodoApp.DefaultData;
 using TodoApp.Themes;
 using TodoApp.WindowHandling;
@@ -42,6 +43,7 @@ public static class Program
 
         services.AddSingleton<AppSettings>(provider => AppSettings.Instance);
         services.AddScoped<IAppSettingsService, AppSettingsService>();
+        services.AddSingleton<IAppSettingsAutoSaveService, AppSettingsAutoSaveService>();
 
         services.AddScoped<SettingsPage>();
         services.AddScoped<SettingsPageViewModel>();

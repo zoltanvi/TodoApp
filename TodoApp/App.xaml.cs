@@ -5,9 +5,9 @@ using Microsoft.Extensions.Hosting;
 using Modules.Common.Cqrs.Events;
 using Modules.Common.Navigation;
 using Modules.Common.Services.Navigation;
-using System.Windows;
-using Modules.PopupMessage.Contracts;
 using Modules.PopupMessage.Views;
+using Modules.Settings.Views.Services;
+using System.Windows;
 using Application = System.Windows.Application;
 
 namespace TodoApp;
@@ -37,6 +37,9 @@ public partial class App : Application
 
         ServiceProvider.InitializeDatabase();
         PublishApplicationOpeningEvent();
+
+        var autoSaveService = ServiceProvider.GetRequiredService<IAppSettingsAutoSaveService>();
+        autoSaveService.StartService();
     }
 
     protected override void OnStartup(StartupEventArgs e)

@@ -17,6 +17,7 @@
 		<ProjectReference Include="..\Modules.Common.Views\Modules.Common.Views.csproj" />
 		<ProjectReference Include="..\Modules.PopupMessage.Contracts\Modules.PopupMessage.Contracts.csproj" />
 		<ProjectReference Include="..\Modules.Settings.Contracts\Modules.Settings.Contracts.csproj" />
+		<ProjectReference Include="..\Modules.Settings.Services\Modules.Settings.Services.csproj" />
 	</ItemGroup>
 
 </Project>

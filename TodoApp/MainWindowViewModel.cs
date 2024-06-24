@@ -4,6 +4,7 @@ using Modules.Common.DataBinding;
 using Modules.Common.OBSOLETE.Mediator;
 using Modules.Common.Services;
 using Modules.Common.ViewModel;
+using Modules.Common.Views.Services;
 using Modules.Settings.Contracts.ViewModels;
 using System.ComponentModel;
 using System.Windows;
@@ -17,6 +18,11 @@ namespace TodoApp;
 
 public class MainWindowViewModel : BaseViewModel
 {
+    private int _prevLeft;
+    private int _prevTop;
+    private int _prevWidth;
+    private int _prevHeight;
+
     private readonly IWindowService _windowService;
     private readonly IMediator _mediator;
     private readonly IUIScaler _uiScaler;
@@ -74,6 +80,39 @@ public class MainWindowViewModel : BaseViewModel
             CurrentTime = timeLong;
             OnPropertyChanged(nameof(CurrentTime));
         });
+
+        TimerService.Instance.CreateTimer(TimeSpan.FromSeconds(3), UpdateAppSettingsWindowSettings, true);
+    }
+
+    /// <summary>
+    /// Updates the window size and position values in the WindowSettings if any value have changed
+    /// </summary>
+    private void UpdateAppSettingsWindowSettings(object? sender, EventArgs e)
+    {
+        if (_prevLeft != (int)_windowService.Left ||
+            _prevTop != (int)_windowService.Top)
+        {
+            _prevLeft = (int)_windowService.Left;
+            _prevTop = (int)_windowService.Top;
+
+            WindowSettings.Left = _prevLeft;
+            WindowSettings.Top = _prevTop;
+        }
+
+        if (_prevWidth != (int)_windowService.Width ||
+            _prevHeight != (int)_windowService.Height)
+        {
+            _prevWidth = (int)_windowService.Width;
+            _prevHeight = (int)_windowService.Height;
+
+            if (!_windowService.IsMinimized)
+            {
+                // Only save the window size when the window is NOT minimized,
+                // because the window size is invalid in that case.
+                WindowSettings.Width = _prevWidth;
+                WindowSettings.Height = _prevHeight;
+            }
+        }
     }
 
     private void OnWindowLoaded(object sender, EventArgs e)

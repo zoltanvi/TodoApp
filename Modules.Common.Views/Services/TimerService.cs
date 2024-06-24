@@ -17,13 +17,13 @@ public class TimerService
         _eventHandlers = new Dictionary<Guid, EventHandler>();
     }
 
-    public Guid CreateTimer(int intervalMilliseconds, EventHandler tickEventHandler, bool start = false)
+    public Guid CreateTimer(TimeSpan interval, EventHandler tickEventHandler, bool start = false)
     {
         var guid = Guid.NewGuid();
 
         DispatcherTimer timer = new DispatcherTimer();
         timer.Tick += tickEventHandler;
-        timer.Interval = TimeSpan.FromMilliseconds(intervalMilliseconds);
+        timer.Interval = interval;
 
         if (start)
         {
@@ -36,6 +36,9 @@ public class TimerService
         return guid;
     }
 
+    public Guid CreateTimer(int intervalMilliseconds, EventHandler tickEventHandler, bool start = false) => 
+        CreateTimer(TimeSpan.FromMilliseconds(intervalMilliseconds), tickEventHandler, start);
+    
     public Guid CreateTimer(EventHandler tickEventHandler, bool start = false)
     {
         return CreateTimer(DefaultInterval, tickEventHandler, start);
@@ -58,17 +61,20 @@ public class TimerService
         }
     }
 
-    public void ModifyTimerInterval(Guid guid, int intervalMilliseconds)
+    public void ModifyTimerInterval(Guid guid, TimeSpan interval)
     {
         if (_timers.TryGetValue(guid, out var timer))
         {
-            timer.Interval = TimeSpan.FromMilliseconds(intervalMilliseconds);
+            timer.Interval = interval;
         }
         else
         {
             throw new ArgumentException(NotFoundErrorMessage);
         }
     }
+
+    public void ModifyTimerInterval(Guid guid, int intervalMilliseconds) =>
+        ModifyTimerInterval(guid, TimeSpan.FromMilliseconds(intervalMilliseconds));
 
     public void StartTimer(Guid guid)
     {

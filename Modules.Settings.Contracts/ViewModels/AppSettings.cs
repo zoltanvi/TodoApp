@@ -16,5 +16,33 @@ public sealed class AppSettings : SettingsBase
     public DateTimeSettings DateTimeSettings { get; set; } = new();
     public SessionSettings SessionSettings { get; set; } = new();
 
+    public override bool IsDirty() =>
+        ApplicationSettings.IsDirty() ||
+        ThemeSettings.IsDirty() ||
+        PageTitleSettings.IsDirty() ||
+        TaskPageSettings.IsDirty() ||
+        TaskSettings.IsDirty() ||
+        TaskQuickActionSettings.IsDirty() ||
+        TextEditorQuickActionSettings.IsDirty() ||
+        NoteSettings.IsDirty() ||
+        WindowSettings.IsDirty() ||
+        DateTimeSettings.IsDirty() ||
+        SessionSettings.IsDirty();
+
+    public override void Clean()
+    {
+        ApplicationSettings.Clean();
+        ThemeSettings.Clean();
+        PageTitleSettings.Clean();
+        TaskPageSettings.Clean();
+        TaskSettings.Clean();
+        TaskQuickActionSettings.Clean();
+        TextEditorQuickActionSettings.Clean();
+        NoteSettings.Clean();
+        WindowSettings.Clean();
+        DateTimeSettings.Clean();
+        SessionSettings.Clean();
+    }
+
     private AppSettings() { }
 }
