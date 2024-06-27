@@ -20,6 +20,7 @@ using Modules.Settings.Services.CqrsHandling;
 using Modules.Settings.Views;
 using Modules.Settings.Views.Pages;
 using Modules.Settings.Views.Services;
+using Modules.Tasks.Views.Pages;
 using TodoApp.DefaultData;
 using TodoApp.Themes;
 using TodoApp.WindowHandling;
@@ -45,8 +46,6 @@ public static class Program
         services.AddScoped<IAppSettingsService, AppSettingsService>();
         services.AddSingleton<IAppSettingsAutoSaveService, AppSettingsAutoSaveService>();
 
-        services.AddScoped<SettingsPage>();
-        services.AddScoped<SettingsPageViewModel>();
         services.AddSettingsViews();
 
         services.AddSingleton<IMainPageNavigationService, MainPageNavigationService>();
@@ -103,11 +102,12 @@ public static class Program
         services.AddScoped<ICategoryListPage, CategoryListPage>();
         services.AddScoped<CategoryListPageViewModel>();
 
-
         //services.AddScoped<INoteEditorPage, NotePage>();
         //services.AddScoped<INoteListPage, NoteListPage>();
         //services.AddScoped<IRecycleBinPage, RecycleBinPage>();
-        //services.AddSingleton<ITaskPage, TaskPage>();
+        
+        services.AddScoped<ITaskPage, TaskPage>();
+        services.AddScoped<TaskPageViewModel>();
 
         services.AddScoped<IEmptyPage, EmptyPage>();
         //services.AddScoped<ITaskNotificationPage, NotificationPage>();
@@ -117,7 +117,6 @@ public static class Program
         //services.AddScoped<NotePageViewModel>();
         //services.AddScoped<NoteListPageViewModel>();
         //services.AddScoped<RecycleBinPageViewModel>();
-        //services.AddScoped<TaskPageViewModel>();
 
         //services.AddScoped<NotificationPageViewModel>();
         //services.AddScoped<ReminderEditorPageViewModel>();

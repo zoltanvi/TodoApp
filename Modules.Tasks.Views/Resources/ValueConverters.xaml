@@ -1,0 +1,16 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:valueConverters="clr-namespace:Modules.Tasks.Views.ValueConverters">
+
+    <valueConverters:BoolToThicknessConverter
+        x:Key="TaskPageTitleMarginConverter"
+        Left="15"
+        NegativeLeft="15"
+        NegativeRight="15"
+        Right="15" />
+
+    <valueConverters:HorizontalAlignmentConverter x:Key="HorizontalAlignmentConverter" />
+    <valueConverters:HorizontalAlignmentInvertedConverter x:Key="HorizontalAlignmentInvertedConverter"/>
+
+</ResourceDictionary>

@@ -44,4 +44,14 @@
         <Setter Property="Cursor" Value="Hand" />
     </Style>
 
+    <Style
+        x:Key="PageTitleTextBlockStyle"
+        BasedOn="{StaticResource BaseTextBlockClearTypeStyle}"
+        TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{DynamicResource UIBoldFont}" />
+        <Setter Property="FontSize" Value="{Binding UIScaler.FontSize.Huge, Source={StaticResource UIScaler}}" />
+        <Setter Property="Foreground" Value="{DynamicResource Primary}" />
+        <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+    </Style>
+
 </ResourceDictionary>

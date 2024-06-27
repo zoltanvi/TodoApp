@@ -132,20 +132,9 @@
         <Setter Property="Padding" Value="5" />
     </Style>
 
-    <Style
-        x:Key="PageTitleTextBlockStyle"
-        BasedOn="{StaticResource BaseTextBlockClearTypeStyle}"
-        TargetType="TextBlock">
-        <Setter Property="FontFamily" Value="{DynamicResource UIBoldFont}" />
-        <Setter Property="FontSize" Value="{Binding UIScaler.FontSize.Huge, Source={StaticResource UIScaler}}" />
-        <Setter Property="Foreground" Value="{DynamicResource Primary}" />
-        <Setter Property="TextTrimming" Value="CharacterEllipsis" />
-    </Style>
-
     <Style x:Key="SettingsDockPanelStyle" TargetType="{x:Type DockPanel}">
         <Setter Property="Margin" Value="0 0 0 0" />
     </Style>
-
 
     <!--  Toggle Button style  -->
     <Style x:Key="CustomToggleStyle" TargetType="{x:Type ToggleButton}">

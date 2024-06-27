@@ -1,0 +1,144 @@
+﻿<commonPages:GenericBasePage
+    x:Class="Modules.Tasks.Views.Pages.TaskPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:commonPages="clr-namespace:Modules.Common.Views.Pages;assembly=Modules.Common.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:pages="clr-namespace:Modules.Tasks.Views.Pages"
+    Title="TaskPage"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    x:TypeArguments="pages:TaskPageViewModel"
+    d:DataContext="{d:DesignInstance pages:TaskPageViewModel}"
+    mc:Ignorable="d">
+
+    <Border Background="{DynamicResource ApplicationBackgroundBrush}">
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <!--  Category name  -->
+                <RowDefinition Height="Auto" />
+
+                <!--  Task list  -->
+                <RowDefinition Height="*" />
+
+                <!--  Progress bar  -->
+                <RowDefinition Height="Auto" />
+
+                <!--  GridSplitter  -->
+                <RowDefinition Height="5" />
+
+                <!--  Add new task panel  -->
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Grid
+                Grid.Row="0"
+                Margin="5 0"
+                Visibility="{Binding AppSettings.PageTitleSettings.Visible, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}">
+                
+                <Grid
+                    x:Name="CategoryNamePanel"
+                    Margin="{Binding AppSettings.TaskPageSettings.TaskListMargin, Source={StaticResource AppSettings}, Converter={StaticResource TaskPageTitleMarginConverter}}"
+                    Background="#00333333"
+                    Style="{DynamicResource CurrentCategoryPanelStyle}"
+                    Visibility="{Binding IsCategoryNameTitleVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <!--  CURRENT CATEGORY DISPLAY TEXT  -->
+                        <TextBlock
+                            Grid.Column="0"
+                            Margin="0 1"
+                            HorizontalAlignment="{Binding AppSettings.PageTitleSettings.HorizontalAlignment, Source={StaticResource AppSettings}, Converter={StaticResource HorizontalAlignmentConverter}}"
+                            FontFamily="{Binding AppSettings.PageTitleSettings.FontFamily, Source={StaticResource AppSettings}, Converter={StaticResource EnumToFontFamilyConverter}}"
+                            FontSize="{Binding AppSettings.PageTitleSettings.FontSize, Source={StaticResource AppSettings}, Converter={StaticResource FontSizeScaler}}"
+                            Style="{DynamicResource PageTitleTextBlockStyle}"
+                            Text="{Binding ActiveCategoryName}"
+                            Visibility="{Binding IsCategoryNameTitleVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                    </Grid>
+
+                    <Button
+                        Margin="0 2"
+                        HorizontalAlignment="{Binding AppSettings.PageTitleSettings.HorizontalAlignment, Source={StaticResource AppSettings}, Converter={StaticResource HorizontalAlignmentInvertedConverter}}"
+                        Command="{Binding EditCategoryCommand}"
+                        Content="{DynamicResource SegoeIconEdit}"
+                        Style="{DynamicResource ButtonIconHoverRectangleStyle}"
+                        ToolTip="Edit category name"
+                        Visibility="{Binding ElementName=CategoryNamePanel, Path=Tag, Converter={StaticResource BoolToVisibilityConverter}}"
+                        />
+                </Grid>
+
+                <!--  CURRENT CATEGORY EDITOR TEXTBOX  -->
+                <!--<Border Margin="{Binding AppSettings.TaskPageSettings.TaskListMargin, Source={StaticResource AppSettings}, Converter={StaticResource TaskPageTitleMarginConverter}}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <local:SubmitEscapeTextBox
+                            Grid.Column="0"
+                            Margin="-2 0 -2 0"
+                            Padding="-1 0 -1 0"
+                            HorizontalContentAlignment="{Binding AppSettings.PageTitleSettings.HorizontalAlignment, Source={StaticResource AppSettings}, Converter={StaticResource horizontalAlignmentConverter}}"
+                            BorderBrush="{DynamicResource Tertiary}"
+                            BorderThickness="1"
+                            EnterPressedCommand="{Binding FinishCategoryEditCommand}"
+                            EscapePressedCommand="{Binding FinishCategoryEditCommand}"
+                            FontFamily="{Binding AppSettings.PageTitleSettings.FontFamily, Source={StaticResource AppSettings}, Converter={StaticResource enumToFontFamilyConverter}}"
+                            FontSize="{Binding AppSettings.PageTitleSettings.FontSize, Source={StaticResource AppSettings}, Converter={StaticResource fontSizeScaler}}"
+                            Foreground="{DynamicResource Secondary}"
+                            Style="{DynamicResource PageTitleEditorTextBoxStyle}"
+                            Text="{Binding RenameCategoryContent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+
+                            <TextBox.Visibility>
+                                <MultiBinding>
+                                    <MultiBinding.Converter>
+                                        <local:BoolToVisibilityAndConverter />
+                                    </MultiBinding.Converter>
+                                    <Binding Path="AppSettings.PageTitleSettings.Visible" Source="{StaticResource AppSettings}" />
+                                    <Binding
+                                        Mode="OneWay"
+                                        Path="IsCategoryInEditMode"
+                                        UpdateSourceTrigger="PropertyChanged" />
+                                </MultiBinding>
+                            </TextBox.Visibility>
+
+                            --><!--<Behaviors:Interaction.Triggers>
+                    <Behaviors:EventTrigger EventName="LostFocus">
+                        <Behaviors:InvokeCommandAction Command="{Binding FinishCategoryEditCommand}" />
+                    </Behaviors:EventTrigger>
+                </Behaviors:Interaction.Triggers>--><!--
+
+                            <TextBox.InputBindings>
+                                <KeyBinding Key="Return" Command="{Binding FinishCategoryEditCommand}" />
+                            </TextBox.InputBindings>
+                        </local:SubmitEscapeTextBox>
+
+                    </Grid>
+
+                </Border>
+
+                <Button
+                    Margin="15 2"
+                    HorizontalAlignment="{Binding AppSettings.PageTitleSettings.HorizontalAlignment, Source={StaticResource AppSettings}, Converter={StaticResource horizontalAlignmentInvertedConverter}}"
+                    Command="{Binding FinishCategoryEditCommand}"
+                    Content="{DynamicResource SegoeIconSave}"
+                    Style="{DynamicResource ButtonIconHoverRectangleStyle}"
+                    ToolTip="Save category name"
+                    Visibility="{Binding IsCategoryInEditMode, Converter={StaticResource boolToVisibilityConverter}}" />-->
+
+            </Grid>
+
+
+        </Grid>
+    </Border>
+
+
+</commonPages:GenericBasePage>

@@ -51,13 +51,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Modules.PopupMessage.Contra
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tasks", "Tasks", "{CD9EF1EA-9F35-4260-AD88-BF6FADFF7622}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Modules.Tasks.Contracts", "Modules.Tasks.Contracts\Modules.Tasks.Contracts.csproj", "{4F277D85-54D8-4922-BF73-3D95BFCE59F1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Modules.Tasks.Contracts", "Modules.Tasks.Contracts\Modules.Tasks.Contracts.csproj", "{4F277D85-54D8-4922-BF73-3D95BFCE59F1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Modules.Tasks.Repositories", "Modules.Tasks.Repositories\Modules.Tasks.Repositories.csproj", "{8E0A93BA-5F70-43B0-933F-B11EC500CD02}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Modules.Tasks.Repositories", "Modules.Tasks.Repositories\Modules.Tasks.Repositories.csproj", "{8E0A93BA-5F70-43B0-933F-B11EC500CD02}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F9DD16DB-76B1-41C2-8265-622E8E2D2975}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Modules.Tasks.Views", "Modules.Tasks.Views\Modules.Tasks.Views.csproj", "{0BEA5DD0-A3CD-46E2-8F0E-58117F463FB9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Modules.Tasks.Views", "Modules.Tasks.Views\Modules.Tasks.Views.csproj", "{0BEA5DD0-A3CD-46E2-8F0E-58117F463FB9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -170,8 +168,7 @@ Global
 		{CD9EF1EA-9F35-4260-AD88-BF6FADFF7622} = {484CB931-4DDA-42B4-84C7-7CB6D0C4F1FB}
 		{4F277D85-54D8-4922-BF73-3D95BFCE59F1} = {CD9EF1EA-9F35-4260-AD88-BF6FADFF7622}
 		{8E0A93BA-5F70-43B0-933F-B11EC500CD02} = {CD9EF1EA-9F35-4260-AD88-BF6FADFF7622}
-		{F9DD16DB-76B1-41C2-8265-622E8E2D2975} = {CD9EF1EA-9F35-4260-AD88-BF6FADFF7622}
-		{0BEA5DD0-A3CD-46E2-8F0E-58117F463FB9} = {F9DD16DB-76B1-41C2-8265-622E8E2D2975}
+		{0BEA5DD0-A3CD-46E2-8F0E-58117F463FB9} = {CD9EF1EA-9F35-4260-AD88-BF6FADFF7622}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9D9BCECE-B112-4247-B0B5-EB19FFAF8C55}

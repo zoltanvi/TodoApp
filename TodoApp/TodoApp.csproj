@@ -31,18 +31,24 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\Modules.Categories.Contracts\Modules.Categories.Contracts.csproj" />
 		<ProjectReference Include="..\Modules.Categories.Repositories\Modules.Categories.Repositories.csproj" />
+		<ProjectReference Include="..\Modules.Categories.Services\Modules.Categories.Services.csproj" />
 		<ProjectReference Include="..\Modules.Categories.Views\Modules.Categories.Views.csproj" />
 		<ProjectReference Include="..\Modules.Common.Navigation\Modules.Common.Navigation.csproj" />
 		<ProjectReference Include="..\Modules.Common.Views\Modules.Common.Views.csproj" />
 		<ProjectReference Include="..\Modules.Common\Modules.Common.csproj" />
 		<ProjectReference Include="..\Modules.MaterialTheme\Modules.MaterialTheme.csproj" />
 		<ProjectReference Include="..\Modules.Migration\Modules.Migration.csproj" />
+		<ProjectReference Include="..\Modules.PopupMessage.Contracts\Modules.PopupMessage.Contracts.csproj" />
 		<ProjectReference Include="..\Modules.PopupMessage.Views\Modules.PopupMessage.Views.csproj" />
 		<ProjectReference Include="..\Modules.Settings.Contracts\Modules.Settings.Contracts.csproj" />
 		<ProjectReference Include="..\Modules.Settings.Repositories\Modules.Settings.Repositories.csproj" />
 		<ProjectReference Include="..\Modules.Settings.Services\Modules.Settings.Services.csproj" />
 		<ProjectReference Include="..\Modules.Settings.Views\Modules.Settings.Views.csproj" />
+		<ProjectReference Include="..\Modules.Tasks.Contracts\Modules.Tasks.Contracts.csproj" />
+		<ProjectReference Include="..\Modules.Tasks.Repositories\Modules.Tasks.Repositories.csproj" />
+		<ProjectReference Include="..\Modules.Tasks.Views\Modules.Tasks.Views.csproj" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(Configuration)' == 'Debug'">
