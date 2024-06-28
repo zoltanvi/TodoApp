@@ -45,7 +45,7 @@
                 <!--  Exit edit mode on focus lost  -->
                 <controls:ToggleButtonSettingControl
                     Description="Exit edit mode on focus lost"
-                    Icon="{DynamicResource SegoeIconEdit}"
+                    Icon="{DynamicResource IconEdit}"
                     IsChecked="{Binding AppSettings.TaskPageSettings.ExitEditOnFocusLost, Source={StaticResource AppSettings}, Mode=TwoWay}" />
 
                 <!--  Save task on enter  -->

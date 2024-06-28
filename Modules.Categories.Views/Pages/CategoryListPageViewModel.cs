@@ -2,6 +2,7 @@
 using Modules.Categories.Contracts;
 using Modules.Categories.Contracts.Cqrs.Events;
 using Modules.Categories.Contracts.Models;
+using Modules.Categories.Services.CqrsHandling.EventHandlers;
 using Modules.Categories.Views.Controls;
 using Modules.Categories.Views.Mappings;
 using Modules.Common;
@@ -59,8 +60,9 @@ public class CategoryListPageViewModel : BaseViewModel
 
         Items = new ObservableCollection<CategoryViewModel>(activeCategories.MapToViewModelList());
         Items.CollectionChanged += ItemsOnCollectionChanged;
+        CategoryNameUpdatedEventHandler.CategoryNameUpdated += OnCategoryNameUpdated;
     }
-
+    
     public int RecycleBinCategoryId => Constants.RecycleBinCategoryId;
     public string? PendingAddNewCategoryText { get; set; }
     public ICommand AddCategoryCommand { get; }
@@ -130,6 +132,7 @@ public class CategoryListPageViewModel : BaseViewModel
     protected override void OnDispose()
     {
         Items.CollectionChanged -= ItemsOnCollectionChanged;
+        CategoryNameUpdatedEventHandler.CategoryNameUpdated -= OnCategoryNameUpdated;
     }
 
     private void ItemsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -262,6 +265,19 @@ public class CategoryListPageViewModel : BaseViewModel
     {
         //IoC.UndoManager.ClearHistory();
         SetActiveCategory(category);
+    }
+
+    private void OnCategoryNameUpdated(CategoryNameUpdatedEvent e)
+    {
+        var oldCategory = Items.FirstOrDefault(x => x.Id == e.Id);
+
+        if (oldCategory != null)
+        {
+            oldCategory.Name = e.CategoryName;
+            var index = Items.IndexOf(oldCategory);
+            Items.RemoveAt(index);
+            Items.Insert(index, oldCategory);
+        }
     }
 
     /// <summary>

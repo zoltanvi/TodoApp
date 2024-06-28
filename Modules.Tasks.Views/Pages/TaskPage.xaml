@@ -1,16 +1,17 @@
 ﻿<commonPages:GenericBasePage
     x:Class="Modules.Tasks.Views.Pages.TaskPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:commonPages="clr-namespace:Modules.Common.Views.Pages;assembly=Modules.Common.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:commonPages="clr-namespace:Modules.Common.Views.Pages;assembly=Modules.Common.Views"
+    xmlns:controls="clr-namespace:Modules.Tasks.Views.Controls"
     xmlns:pages="clr-namespace:Modules.Tasks.Views.Pages"
     Title="TaskPage"
+    d:DataContext="{d:DesignInstance pages:TaskPageViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
     x:TypeArguments="pages:TaskPageViewModel"
-    d:DataContext="{d:DesignInstance pages:TaskPageViewModel}"
     mc:Ignorable="d">
 
     <Border Background="{DynamicResource ApplicationBackgroundBrush}">
@@ -37,9 +38,8 @@
                 Grid.Row="0"
                 Margin="5 0"
                 Visibility="{Binding AppSettings.PageTitleSettings.Visible, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}">
-                
+
                 <Grid
-                    x:Name="CategoryNamePanel"
                     Margin="{Binding AppSettings.TaskPageSettings.TaskListMargin, Source={StaticResource AppSettings}, Converter={StaticResource TaskPageTitleMarginConverter}}"
                     Background="#00333333"
                     Style="{DynamicResource CurrentCategoryPanelStyle}"
@@ -60,66 +60,41 @@
                             FontSize="{Binding AppSettings.PageTitleSettings.FontSize, Source={StaticResource AppSettings}, Converter={StaticResource FontSizeScaler}}"
                             Style="{DynamicResource PageTitleTextBlockStyle}"
                             Text="{Binding ActiveCategoryName}"
-                            Visibility="{Binding IsCategoryNameTitleVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                            Visibility="{Binding IsCategoryNameTitleVisible, Converter={StaticResource BoolToVisibilityConverter}}" />
                     </Grid>
 
                     <Button
                         Margin="0 2"
                         HorizontalAlignment="{Binding AppSettings.PageTitleSettings.HorizontalAlignment, Source={StaticResource AppSettings}, Converter={StaticResource HorizontalAlignmentInvertedConverter}}"
                         Command="{Binding EditCategoryCommand}"
-                        Content="{DynamicResource SegoeIconEdit}"
+                        Content="{DynamicResource IconEdit}"
                         Style="{DynamicResource ButtonIconHoverRectangleStyle}"
-                        ToolTip="Edit category name"
-                        Visibility="{Binding ElementName=CategoryNamePanel, Path=Tag, Converter={StaticResource BoolToVisibilityConverter}}"
-                        />
+                        ToolTip="Edit category name" />
                 </Grid>
 
                 <!--  CURRENT CATEGORY EDITOR TEXTBOX  -->
-                <!--<Border Margin="{Binding AppSettings.TaskPageSettings.TaskListMargin, Source={StaticResource AppSettings}, Converter={StaticResource TaskPageTitleMarginConverter}}">
+                <Border Margin="{Binding AppSettings.TaskPageSettings.TaskListMargin, Source={StaticResource AppSettings}, Converter={StaticResource TaskPageTitleMarginConverter}}">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
 
-                        <local:SubmitEscapeTextBox
+                        <controls:SubmitEscapeTextBox
                             Grid.Column="0"
                             Margin="-2 0 -2 0"
                             Padding="-1 0 -1 0"
-                            HorizontalContentAlignment="{Binding AppSettings.PageTitleSettings.HorizontalAlignment, Source={StaticResource AppSettings}, Converter={StaticResource horizontalAlignmentConverter}}"
+                            HorizontalContentAlignment="{Binding AppSettings.PageTitleSettings.HorizontalAlignment, Source={StaticResource AppSettings}, Converter={StaticResource HorizontalAlignmentConverter}}"
                             BorderBrush="{DynamicResource Tertiary}"
                             BorderThickness="1"
                             EnterPressedCommand="{Binding FinishCategoryEditCommand}"
                             EscapePressedCommand="{Binding FinishCategoryEditCommand}"
-                            FontFamily="{Binding AppSettings.PageTitleSettings.FontFamily, Source={StaticResource AppSettings}, Converter={StaticResource enumToFontFamilyConverter}}"
-                            FontSize="{Binding AppSettings.PageTitleSettings.FontSize, Source={StaticResource AppSettings}, Converter={StaticResource fontSizeScaler}}"
+                            FontFamily="{Binding AppSettings.PageTitleSettings.FontFamily, Source={StaticResource AppSettings}, Converter={StaticResource EnumToFontFamilyConverter}}"
+                            FontSize="{Binding AppSettings.PageTitleSettings.FontSize, Source={StaticResource AppSettings}, Converter={StaticResource FontSizeScaler}}"
                             Foreground="{DynamicResource Secondary}"
                             Style="{DynamicResource PageTitleEditorTextBoxStyle}"
-                            Text="{Binding RenameCategoryContent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-
-                            <TextBox.Visibility>
-                                <MultiBinding>
-                                    <MultiBinding.Converter>
-                                        <local:BoolToVisibilityAndConverter />
-                                    </MultiBinding.Converter>
-                                    <Binding Path="AppSettings.PageTitleSettings.Visible" Source="{StaticResource AppSettings}" />
-                                    <Binding
-                                        Mode="OneWay"
-                                        Path="IsCategoryInEditMode"
-                                        UpdateSourceTrigger="PropertyChanged" />
-                                </MultiBinding>
-                            </TextBox.Visibility>
-
-                            --><!--<Behaviors:Interaction.Triggers>
-                    <Behaviors:EventTrigger EventName="LostFocus">
-                        <Behaviors:InvokeCommandAction Command="{Binding FinishCategoryEditCommand}" />
-                    </Behaviors:EventTrigger>
-                </Behaviors:Interaction.Triggers>--><!--
-
-                            <TextBox.InputBindings>
-                                <KeyBinding Key="Return" Command="{Binding FinishCategoryEditCommand}" />
-                            </TextBox.InputBindings>
-                        </local:SubmitEscapeTextBox>
+                            Text="{Binding RenameCategoryContent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            Visibility="{Binding IsCategoryNameTitleEditorVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
                     </Grid>
 
@@ -127,12 +102,12 @@
 
                 <Button
                     Margin="15 2"
-                    HorizontalAlignment="{Binding AppSettings.PageTitleSettings.HorizontalAlignment, Source={StaticResource AppSettings}, Converter={StaticResource horizontalAlignmentInvertedConverter}}"
+                    HorizontalAlignment="{Binding AppSettings.PageTitleSettings.HorizontalAlignment, Source={StaticResource AppSettings}, Converter={StaticResource HorizontalAlignmentInvertedConverter}}"
                     Command="{Binding FinishCategoryEditCommand}"
-                    Content="{DynamicResource SegoeIconSave}"
+                    Content="{DynamicResource IconSave}"
                     Style="{DynamicResource ButtonIconHoverRectangleStyle}"
                     ToolTip="Save category name"
-                    Visibility="{Binding IsCategoryInEditMode, Converter={StaticResource boolToVisibilityConverter}}" />-->
+                    Visibility="{Binding IsCategoryInEditMode, Converter={StaticResource BoolToVisibilityConverter}}" />
 
             </Grid>
 

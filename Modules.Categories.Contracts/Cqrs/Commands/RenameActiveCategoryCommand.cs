@@ -2,7 +2,7 @@
 
 namespace Modules.Categories.Contracts.Cqrs.Commands;
 
-public class RenameActiveCategoryCommand : IRequest
+public class RenameActiveCategoryCommand : IRequest<string>
 {
-    public string Name { get; set; }
+    public required string Name { get; init; }
 }

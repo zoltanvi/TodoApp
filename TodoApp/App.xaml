@@ -51,13 +51,13 @@
                 
 
                 <ResourceDictionary Source="pack://application:,,,/Modules.Settings.Views;component/Styles/Styles.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Modules.Categories.Views;component/Styles/Styles.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Modules.Tasks.Views;component/Styles/Styles.xaml" />
 
 
                 <ResourceDictionary Source="pack://application:,,,/Modules.Common.Views;component/Styles/ListBoxStyles.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Modules.Settings.Views;component/Styles/ListBoxStyles.xaml" />
 
-
-                <ResourceDictionary Source="pack://application:,,,/Modules.Categories.Views;component/Styles/Styles.xaml" />
 
 
                 <ResourceDictionary Source="Resources/ValueConverters.xaml"/>

@@ -135,7 +135,7 @@
                         <Button
                             Grid.Column="0"
                             Style="{DynamicResource ButtonIconHoverRectangleStyle}"
-                            Content="{DynamicResource SegoeIconPath}"
+                            Content="{DynamicResource IconPath}"
                             FontSize="{Binding UIScaler.FontSize.Regular, Source={StaticResource UIScaler}}"
                             Margin="0 0 10 0"
                             Padding="5"

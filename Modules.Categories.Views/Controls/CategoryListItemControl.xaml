@@ -68,7 +68,7 @@
                                         Command="{Binding Path=Tag.DeleteCategoryCommand, ElementName=CategoryListItem}"
                                         CommandParameter="{Binding DataContext, ElementName=CategoryListItem}"
                                         Style="{StaticResource ButtonIconHoverCategoryDeleteStyle}"
-                                        Content="{StaticResource SegoeIconDeleteX}"
+                                        Content="{StaticResource IconDeleteX}"
                                         FontSize="{Binding UIScaler.FontSize.Small, Source={StaticResource UIScaler}}"
                                         Cursor="Hand" />
 
