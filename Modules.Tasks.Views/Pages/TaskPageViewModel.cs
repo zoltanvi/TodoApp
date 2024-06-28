@@ -1,23 +1,30 @@
-﻿using System.ComponentModel;
-using Modules.Common.ViewModel;
+﻿using Modules.Common.ViewModel;
+using Modules.Settings.Contracts.ViewModels;
 using PropertyChanged;
 using System.Windows.Input;
-using Modules.Settings.Contracts.ViewModels;
+using MediatR;
+using Modules.Categories.Contracts.Cqrs.Queries;
 
 namespace Modules.Tasks.Views.Pages;
 
 [AddINotifyPropertyChangedInterface]
 public class TaskPageViewModel : BaseViewModel
 {
+    private readonly IMediator _mediator;
     private bool _isCategoryInEditMode;
 
-    public TaskPageViewModel()
+    public TaskPageViewModel(IMediator mediator)
     {
-        // TODO: try to make it transient with dispose
-        AppSettings.Instance.PageTitleSettings.PropertyChanged += OnPageTitleSettingsChanged;
+        ArgumentNullException.ThrowIfNull(mediator);
+        _mediator = mediator;
+
+        AppSettings.Instance.PageTitleSettings.SettingsChanged += OnPageTitleSettingsChanged;
+        var activeCategoryInfo = _mediator.Send(new GetActiveCategoryInfoQuery()).Result;
+
+        ActiveCategoryName = activeCategoryInfo.Name;
     }
 
-    private void OnPageTitleSettingsChanged(object? sender, PropertyChangedEventArgs e)
+    private void OnPageTitleSettingsChanged(object? sender, SettingsChangedEventArgs e)
     {
         if (e.PropertyName == nameof(PageTitleSettings.Visible))
         {
@@ -25,7 +32,7 @@ public class TaskPageViewModel : BaseViewModel
         }
     }
 
-    public string ActiveCategoryName { get; set; } = "TEST CATEGORY";
+    public string ActiveCategoryName { get; }
 
     public bool IsCategoryInEditMode
     {
@@ -45,4 +52,9 @@ public class TaskPageViewModel : BaseViewModel
 
     // Commands
     public ICommand EditCategoryCommand { get; }
+
+    protected override void OnDispose()
+    {
+        AppSettings.Instance.PageTitleSettings.SettingsChanged -= OnPageTitleSettingsChanged;
+    }
 }

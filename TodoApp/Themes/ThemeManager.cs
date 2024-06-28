@@ -23,12 +23,12 @@ public class ThemeManager
         _materialThemeManagerService = materialThemeManagerService;
         _materialThemeManagerService.UpdateTheme();
 
-        AppSettings.Instance.ThemeSettings.PropertyChanged += OnThemeSettingsChanged;
+        AppSettings.Instance.ThemeSettings.SettingsChanged += OnThemeSettingsChanged;
 
         CheckAndSwitchLightAndDark();
     }
 
-    private void OnThemeSettingsChanged(object? sender, PropertyChangedEventArgs e)
+    private void OnThemeSettingsChanged(object? sender, SettingsChangedEventArgs e)
     {
         _materialThemeManagerService.UpdateTheme();
 

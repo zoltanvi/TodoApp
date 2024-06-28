@@ -2,7 +2,6 @@
 using Modules.Common.Services;
 using Modules.Common.Views.Services;
 using Modules.Settings.Contracts.ViewModels;
-using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -112,10 +111,10 @@ public class GridResizer
         _window.StateChanged += OnWindowStateChanged;
 
         UiScaledEventSecondHandler.UiScaled += OnUiScaled;
-        SessionSettings.PropertyChanged += OnSessionSettingsChanged;
+        SessionSettings.SettingsChanged += OnSessionSettingsChanged;
     }
 
-    private void OnSessionSettingsChanged(object? sender, PropertyChangedEventArgs e)
+    private void OnSessionSettingsChanged(object? sender, SettingsChangedEventArgs e)
     {
         if (e.PropertyName == nameof(SessionSettings.SideMenuOpen))
         {

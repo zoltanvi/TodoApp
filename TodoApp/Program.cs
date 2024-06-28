@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Modules.Categories.Repositories;
+using Modules.Categories.Services.CqrsHandling;
 using Modules.Categories.Views.Pages;
 using Modules.Common.Database;
 using Modules.Common.Navigation;
@@ -34,6 +35,7 @@ public static class Program
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<App>());
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<SettingsCqrsRegistration>());
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<PopupMessageCqrsRegistration>());
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<CategoriesCqrsRegistration>());
 
         services.AddSingleton<IUIScaler>(provider => UIScaler.Instance);
         services.AddSingleton<MaterialThemeManagerService>();
@@ -106,8 +108,8 @@ public static class Program
         //services.AddScoped<INoteListPage, NoteListPage>();
         //services.AddScoped<IRecycleBinPage, RecycleBinPage>();
         
-        services.AddScoped<ITaskPage, TaskPage>();
-        services.AddScoped<TaskPageViewModel>();
+        services.AddTransient<ITaskPage, TaskPage>();
+        services.AddTransient<TaskPageViewModel>();
 
         services.AddScoped<IEmptyPage, EmptyPage>();
         //services.AddScoped<ITaskNotificationPage, NotificationPage>();

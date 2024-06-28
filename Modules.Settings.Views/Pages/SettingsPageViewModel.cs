@@ -3,11 +3,11 @@ using Modules.Common.DataBinding;
 using Modules.Common.OBSOLETE.Mediator;
 using Modules.Common.ViewModel;
 using Modules.Common.Views.Pages;
-using Modules.PopupMessage.Contracts.Cqrs.Commands;
 using Modules.Settings.Contracts.ViewModels;
 using Modules.Settings.Views.Controls;
 using PropertyChanged;
 using System.Windows.Input;
+using Modules.Common.Services.Navigation;
 
 namespace Modules.Settings.Views.Pages;
 
@@ -15,20 +15,20 @@ namespace Modules.Settings.Views.Pages;
 public class SettingsPageViewModel : BaseViewModel
 {
     private readonly IServiceProvider _serviceProvider;
+    private readonly IMainPageNavigationService _mainPageNavigationService;
     private int _activeCategoryId;
-    private readonly IMediator _mediator;
 
-    public SettingsPageViewModel(IServiceProvider serviceProvider, IMediator mediator)
+    public SettingsPageViewModel(
+        IServiceProvider serviceProvider, 
+        IMainPageNavigationService mainPageNavigationService)
     {
-        _mediator = mediator;
         ArgumentNullException.ThrowIfNull(serviceProvider);
+        ArgumentNullException.ThrowIfNull(mainPageNavigationService);
 
         _serviceProvider = serviceProvider;
+        _mainPageNavigationService = mainPageNavigationService;
 
-        GoBackCommand = new RelayCommand(() =>
-        {
-            MediatorOBSOLETE.NotifyClients(ViewModelMessages.UpdateMainPage);
-        });
+        GoBackCommand = new RelayCommand(() => _mainPageNavigationService.GoBackToPreviousPage());
 
         OpenPageCommand = new RelayParameterizedCommand<SettingsPageItemViewModel>(OpenSettingsPage);
 
@@ -52,11 +52,6 @@ public class SettingsPageViewModel : BaseViewModel
 
     private void OpenSettingsPage(SettingsPageItemViewModel item)
     {
-        _mediator.Send(new ShowMessageInfoCommand
-        {
-            Message = $"Opened: {item.Name}."
-        });
-
         ActiveCategoryId = item.Id;
     }
 

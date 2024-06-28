@@ -68,7 +68,7 @@ public class MainWindowViewModel : BaseViewModel
         //_windowService.Closed += (s, e) => _context.Dispose();
         _windowService.RoundedCornersChanged += (s, e) => OnPropertyChanged(nameof(IsRoundedCornersAllowed));
 
-        ApplicationSettings.PropertyChanged += OnApplicationSettingsChanged;
+        ApplicationSettings.SettingsChanged += OnApplicationSettingsChanged;
 
         _trayIconModule = new TrayIconModule(_windowService)
         {
@@ -218,7 +218,7 @@ public class MainWindowViewModel : BaseViewModel
     public ICommand ToggleSideMenuCommand { get; }
 
 
-    private void OnApplicationSettingsChanged(object? sender, PropertyChangedEventArgs e)
+    private void OnApplicationSettingsChanged(object? sender, SettingsChangedEventArgs e)
     {
         if (e.PropertyName == nameof(ApplicationSettings.ExitToTray))
         {
