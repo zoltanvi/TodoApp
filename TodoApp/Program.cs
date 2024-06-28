@@ -98,11 +98,11 @@ public static class Program
 
     private static void AddPages(IServiceCollection services)
     {
-        services.AddScoped<ISettingsPage, SettingsPage>();
-        services.AddScoped<SettingsPageViewModel>();
+        services.AddSingleton<ISettingsPage, SettingsPage>();
+        services.AddSingleton<SettingsPageViewModel>();
         
-        services.AddScoped<ICategoryListPage, CategoryListPage>();
-        services.AddScoped<CategoryListPageViewModel>();
+        services.AddTransient<ICategoryListPage, CategoryListPage>();
+        services.AddTransient<CategoryListPageViewModel>();
 
         //services.AddScoped<INoteEditorPage, NotePage>();
         //services.AddScoped<INoteListPage, NoteListPage>();
@@ -111,7 +111,7 @@ public static class Program
         services.AddTransient<ITaskPage, TaskPage>();
         services.AddTransient<TaskPageViewModel>();
 
-        services.AddScoped<IEmptyPage, EmptyPage>();
+        services.AddSingleton<IEmptyPage, EmptyPage>();
         //services.AddScoped<ITaskNotificationPage, NotificationPage>();
         //services.AddScoped<ITaskReminderEditorPage, ReminderEditorPage>();
         //services.AddScoped<ITaskReminderPage, TaskReminderPage>();

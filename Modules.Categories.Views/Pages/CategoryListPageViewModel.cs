@@ -282,7 +282,7 @@ public class CategoryListPageViewModel : BaseViewModel
             //IoC.NoteListService.ActiveNote = null;
         }
 
-        if (AppSettings.Instance.ApplicationSettings.CloseSideMenuOnCategoryChange)
+        if (AppSettings.Instance.ApplicationSettings.CloseSideMenuOnPageChange)
         {
             AppSettings.Instance.SessionSettings.SideMenuOpen = false;
         }
@@ -300,7 +300,11 @@ public class CategoryListPageViewModel : BaseViewModel
     private void OpenSettingsPage()
     {
         _mainPageNavigationService.NavigateTo<ISettingsPage>();
-        AppSettings.Instance.SessionSettings.SideMenuOpen = false;
+        
+        if (AppSettings.Instance.ApplicationSettings.CloseSideMenuOnPageChange)
+        {
+            AppSettings.Instance.SessionSettings.SideMenuOpen = false;
+        }
     }
 
     private void OpenNoteListPage()

@@ -53,11 +53,11 @@
                     Description="Exit button minimizes to tray"
                     IsChecked="{Binding AppSettings.ApplicationSettings.ExitToTray, Source={StaticResource AppSettings}, Mode=TwoWay}" />
 
-                <!--  Close side menu on category change  -->
+                <!--  Close side menu on page change  -->
                 <controls:ToggleButtonSettingControl
                     Icon="{DynamicResource SegoeIconMinimizeToTray}"
-                    Description="Close side menu on category change"
-                    IsChecked="{Binding AppSettings.ApplicationSettings.CloseSideMenuOnCategoryChange, Source={StaticResource AppSettings}, Mode=TwoWay}" />
+                    Description="Close side menu on page change"
+                    IsChecked="{Binding AppSettings.ApplicationSettings.CloseSideMenuOnPageChange, Source={StaticResource AppSettings}, Mode=TwoWay}" />
 
                 <!--  App border color  -->
                 <Border Style="{StaticResource SettingsItemStyle}">

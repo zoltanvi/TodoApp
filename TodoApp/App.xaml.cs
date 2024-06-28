@@ -82,9 +82,7 @@ public partial class App : Application
         //IoC.AppViewModel.UpdateMainPage();
         //IoC.AppViewModel.UpdateSideMenuPage();
 
-        // Test
-        //sideMenuPageNavigation.NavigateTo<ISettingsPage>();
-        mainPageNavigation.NavigateTo<ISettingsPage>();
+        mainPageNavigation.NavigateTo<ITaskPage>();
         sideMenuPageNavigation.NavigateTo<ICategoryListPage>();
     }
 }
