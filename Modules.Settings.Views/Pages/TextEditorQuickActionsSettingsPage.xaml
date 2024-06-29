@@ -32,77 +32,77 @@
 
                 <controls:ToggleButtonSettingControl
                     Description="Bold button"
-                    Icon="{DynamicResource SegoeIconBold}"
+                    Icon="{DynamicResource IconBold}"
                     IsChecked="{Binding AppSettings.TextEditorQuickActionSettings.Bold, Source={StaticResource AppSettings}, Mode=TwoWay}" />
 
                 <controls:ToggleButtonSettingControl
                     Description="Italic button"
-                    Icon="{DynamicResource SegoeIconItalic}"
+                    Icon="{DynamicResource IconItalic}"
                     IsChecked="{Binding AppSettings.TextEditorQuickActionSettings.Italic, Source={StaticResource AppSettings}, Mode=TwoWay}" />
 
                 <controls:ToggleButtonSettingControl
                     Description="Underlined button"
-                    Icon="{DynamicResource SegoeIconUnderlined}"
+                    Icon="{DynamicResource IconUnderlined}"
                     IsChecked="{Binding AppSettings.TextEditorQuickActionSettings.Underlined, Source={StaticResource AppSettings}, Mode=TwoWay}" />
 
                 <controls:ToggleButtonSettingControl
                     Description="Header1 button"
-                    Icon="{DynamicResource SegoeIconFontSize}"
+                    Icon="{DynamicResource IconFontSize}"
                     IsChecked="{Binding AppSettings.TextEditorQuickActionSettings.Large, Source={StaticResource AppSettings}, Mode=TwoWay}" />
 
                 <controls:ToggleButtonSettingControl
                     Description="Medium font button"
-                    Icon="{DynamicResource SegoeIconFontSize}"
+                    Icon="{DynamicResource IconFontSize}"
                     IsChecked="{Binding AppSettings.TextEditorQuickActionSettings.Medium, Source={StaticResource AppSettings}, Mode=TwoWay}" />
 
                 <controls:ToggleButtonSettingControl
                     Description="Small font button"
-                    Icon="{DynamicResource SegoeIconFontSize}"
+                    Icon="{DynamicResource IconFontSize}"
                     IsChecked="{Binding AppSettings.TextEditorQuickActionSettings.Small, Source={StaticResource AppSettings}, Mode=TwoWay}" />
 
                 <controls:ToggleButtonSettingControl
                     Description="Align left button"
-                    Icon="{DynamicResource SegoeIconAlignLeft}"
+                    Icon="{DynamicResource IconAlignLeft}"
                     IsChecked="{Binding AppSettings.TextEditorQuickActionSettings.AlignLeft, Source={StaticResource AppSettings}, Mode=TwoWay}" />
 
                 <controls:ToggleButtonSettingControl
                     Description="Align center button"
-                    Icon="{DynamicResource SegoeIconAlignCenter}"
+                    Icon="{DynamicResource IconAlignCenter}"
                     IsChecked="{Binding AppSettings.TextEditorQuickActionSettings.AlignCenter, Source={StaticResource AppSettings}, Mode=TwoWay}" />
 
                 <controls:ToggleButtonSettingControl
                     Description="Align right button"
-                    Icon="{DynamicResource SegoeIconAlignRight}"
+                    Icon="{DynamicResource IconAlignRight}"
                     IsChecked="{Binding AppSettings.TextEditorQuickActionSettings.AlignRight, Source={StaticResource AppSettings}, Mode=TwoWay}" />
 
                 <controls:ToggleButtonSettingControl
                     Description="Justify button"
-                    Icon="{DynamicResource SegoeIconAlignJustify}"
+                    Icon="{DynamicResource IconAlignJustify}"
                     IsChecked="{Binding AppSettings.TextEditorQuickActionSettings.AlignJustify, Source={StaticResource AppSettings}, Mode=TwoWay}" />
 
                 <controls:ToggleButtonSettingControl
                     Description="Increase font size button"
-                    Icon="{DynamicResource SegoeIconFontSizeIncrease}"
+                    Icon="{DynamicResource IconFontSizeIncrease}"
                     IsChecked="{Binding AppSettings.TextEditorQuickActionSettings.Increase, Source={StaticResource AppSettings}, Mode=TwoWay}" />
 
                 <controls:ToggleButtonSettingControl
                     Description="Decrease font size button"
-                    Icon="{DynamicResource SegoeIconFontSizeDecrease}"
+                    Icon="{DynamicResource IconFontSizeDecrease}"
                     IsChecked="{Binding AppSettings.TextEditorQuickActionSettings.Decrease, Source={StaticResource AppSettings}, Mode=TwoWay}" />
 
                 <controls:ToggleButtonSettingControl
                     Description="Monospace font button"
-                    Icon="{DynamicResource SegoeIconMonospace}"
+                    Icon="{DynamicResource IconMonospace}"
                     IsChecked="{Binding AppSettings.TextEditorQuickActionSettings.Monospace, Source={StaticResource AppSettings}, Mode=TwoWay}" />
 
                 <controls:ToggleButtonSettingControl
                     Description="Reset all formatting button"
-                    Icon="{DynamicResource SegoeIconDeleteFormatting}"
+                    Icon="{DynamicResource IconDeleteFormatting}"
                     IsChecked="{Binding AppSettings.TextEditorQuickActionSettings.Reset, Source={StaticResource AppSettings}, Mode=TwoWay}" />
 
                 <controls:ToggleButtonSettingControl
                     Description="Text color picker"
-                    Icon="{DynamicResource SegoeIconPalette}"
+                    Icon="{DynamicResource IconPalette}"
                     IsChecked="{Binding AppSettings.TextEditorQuickActionSettings.TextColor, Source={StaticResource AppSettings}, Mode=TwoWay}" />
 
             </StackPanel>

@@ -37,7 +37,7 @@
                         </Grid.ColumnDefinitions>
                         <Label
                             Grid.Column="0"
-                            Content="{DynamicResource SegoeIconWordWrap}"
+                            Content="{DynamicResource IconWordWrap}"
                             Style="{DynamicResource SettingsIconLabelStyle}" />
                         <TextBlock
                             Grid.Column="1"
@@ -60,7 +60,7 @@
                         </Grid.ColumnDefinitions>
                         <Label
                             Grid.Column="0"
-                            Content="{DynamicResource SegoeIconFontFamily}"
+                            Content="{DynamicResource IconFontFamily}"
                             Style="{DynamicResource SettingsIconLabelStyle}" />
                         <TextBlock
                             Grid.Column="1"

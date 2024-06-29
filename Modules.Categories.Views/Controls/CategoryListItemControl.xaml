@@ -49,7 +49,7 @@
 
                                     <Label
                                         Style="{DynamicResource IconLabelStyle}"
-                                        Content="{DynamicResource SegoeIconList}"
+                                        Content="{DynamicResource IconList}"
                                         FontSize="{Binding UIScaler.FontSize.Small, Source={StaticResource UIScaler}}"
                                         Margin="6 0"
                                         Padding="0"

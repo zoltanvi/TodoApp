@@ -30,7 +30,7 @@
 
                 <!--  Title visibility  -->
                 <controls:ToggleButtonSettingControl
-                    Icon="{DynamicResource SegoeIconTitle}"
+                    Icon="{DynamicResource IconTitle}"
                     Description="Visibility"
                     IsChecked="{Binding AppSettings.PageTitleSettings.Visible, Source={StaticResource AppSettings}, Mode=TwoWay}" />
 
@@ -45,7 +45,7 @@
                         </Grid.ColumnDefinitions>
                         <Label
                             Grid.Column="0"
-                            Content="{DynamicResource SegoeIconPalette}"
+                            Content="{DynamicResource IconPalette}"
                             Style="{DynamicResource SettingsIconLabelStyle}" />
                         <TextBlock
                             Grid.Column="1"
@@ -76,7 +76,7 @@
                         </Grid.ColumnDefinitions>
                         <Label
                             Grid.Column="0"
-                            Content="{DynamicResource SegoeIconFontFamily}"
+                            Content="{DynamicResource IconFontFamily}"
                             Style="{DynamicResource SettingsIconLabelStyle}" />
                         <TextBlock
                             Grid.Column="1"
@@ -120,7 +120,7 @@
                         </Grid.ColumnDefinitions>
                         <Label
                             Grid.Column="0"
-                            Content="{DynamicResource SegoeIconFontFamily}"
+                            Content="{DynamicResource IconFontFamily}"
                             Style="{DynamicResource SettingsIconLabelStyle}" />
                         <TextBlock
                             Grid.Column="1"

@@ -23,7 +23,7 @@
 
         <DockPanel Grid.Column="0" Grid.Row="0">
             <Label
-                Content="{DynamicResource SegoeIconFontSize}"
+                Content="{DynamicResource IconFontSize}"
                 Style="{DynamicResource SettingsIconLabelStyle}"
                 VerticalAlignment="Center" />
             <TextBlock Text="{Binding ElementName=FontSizeSlider, Path=Description}" Style="{DynamicResource SettingsDescriptionStyle}" />

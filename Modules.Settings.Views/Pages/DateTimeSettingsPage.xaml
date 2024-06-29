@@ -25,7 +25,7 @@
 
                 <!--  Window title bar date visible  -->
                 <controls:ToggleButtonSettingControl
-                    Icon="{DynamicResource SegoeIconCalendar}"
+                    Icon="{DynamicResource IconCalendar}"
                     Description="Window title bar date visible"
                     IsChecked="{Binding AppSettings.DateTimeSettings.TitleBarDateVisible, Source={StaticResource AppSettings}, Mode=TwoWay}" />
 
@@ -39,7 +39,7 @@
                         </Grid.ColumnDefinitions>
                         <Label
                             Grid.Column="0"
-                            Content="{DynamicResource SegoeIconCalendar}"
+                            Content="{DynamicResource IconCalendar}"
                             Style="{DynamicResource SettingsIconLabelStyle}" />
                         <TextBlock
                             Grid.Column="1"
@@ -71,7 +71,7 @@
                         </Grid.ColumnDefinitions>
                         <Label
                             Grid.Column="0"
-                            Content="{DynamicResource SegoeIconCalendar}"
+                            Content="{DynamicResource IconCalendar}"
                             Style="{DynamicResource SettingsIconLabelStyle}" />
                         <TextBlock
                             Grid.Column="1"
@@ -103,7 +103,7 @@
                         </Grid.ColumnDefinitions>
                         <Label
                             Grid.Column="0"
-                            Content="{DynamicResource SegoeIconCalendar}"
+                            Content="{DynamicResource IconCalendar}"
                             Style="{DynamicResource SettingsIconLabelStyle}" />
                         <TextBlock
                             Grid.Column="1"

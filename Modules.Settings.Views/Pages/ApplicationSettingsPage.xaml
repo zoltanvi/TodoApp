@@ -31,31 +31,31 @@
 
                 <!--  Always on top  -->
                 <controls:ToggleButtonSettingControl
-                    Icon="{DynamicResource SegoeIconAlwaysOnTop}"
+                    Icon="{DynamicResource IconAlwaysOnTop}"
                     Description="Always on top"
                     IsChecked="{Binding AppSettings.ApplicationSettings.AlwaysOnTop, Source={StaticResource AppSettings}, Mode=TwoWay}" />
 
                 <!--  Auto start app with Windows  -->
                 <controls:ToggleButtonSettingControl
-                    Icon="{DynamicResource SegoeIconRepeat}"
+                    Icon="{DynamicResource IconRepeat}"
                     Description="Auto start app with Windows"
                     IsChecked="{Binding AppSettings.ApplicationSettings.AutoStart, Source={StaticResource AppSettings}, Mode=TwoWay}" />
 
                 <!--  Rounded window corners  -->
                 <controls:ToggleButtonSettingControl
-                    Icon="{DynamicResource SegoeIconRoundedCorners}"
+                    Icon="{DynamicResource IconRoundedCorners}"
                     Description="Rounded window corners"
                     IsChecked="{Binding AppSettings.ApplicationSettings.RoundedWindowCorners, Source={StaticResource AppSettings}, Mode=TwoWay}" />
 
                 <!--  Exit button minimizes to tray  -->
                 <controls:ToggleButtonSettingControl
-                    Icon="{DynamicResource SegoeIconMinimizeToTray}"
+                    Icon="{DynamicResource IconMinimizeToTray}"
                     Description="Exit button minimizes to tray"
                     IsChecked="{Binding AppSettings.ApplicationSettings.ExitToTray, Source={StaticResource AppSettings}, Mode=TwoWay}" />
 
                 <!--  Close side menu on page change  -->
                 <controls:ToggleButtonSettingControl
-                    Icon="{DynamicResource SegoeIconMinimizeToTray}"
+                    Icon="{DynamicResource IconMinimizeToTray}"
                     Description="Close side menu on page change"
                     IsChecked="{Binding AppSettings.ApplicationSettings.CloseSideMenuOnPageChange, Source={StaticResource AppSettings}, Mode=TwoWay}" />
 
@@ -69,7 +69,7 @@
                         </Grid.ColumnDefinitions>
                         <Label
                             Grid.Column="0"
-                            Content="{DynamicResource SegoeIconPalette}"
+                            Content="{DynamicResource IconPalette}"
                             Style="{DynamicResource SettingsIconLabelStyle}" />
                         <TextBlock
                             Grid.Column="1"
@@ -100,7 +100,7 @@
                         </Grid.ColumnDefinitions>
                         <Label
                             Grid.Column="0"
-                            Content="{DynamicResource SegoeIconPalette}"
+                            Content="{DynamicResource IconPalette}"
                             Style="{DynamicResource SettingsIconLabelStyle}" />
                         <TextBlock
                             Grid.Column="1"
@@ -141,11 +141,6 @@
                             Padding="5"
                             ToolTip="Open database location in explorer"
                             Command="{Binding OpenDbLocationCommand}" />
-
-                        <!--<Label
-                            Grid.Column="0"
-                            Content="{DynamicResource SegoeIconPath}"
-                            Style="{DynamicResource SettingsIconLabelStyle}" />-->
 
                         <TextBlock
                             Grid.Column="1"

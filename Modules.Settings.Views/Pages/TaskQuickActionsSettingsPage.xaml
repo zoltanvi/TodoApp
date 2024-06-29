@@ -33,43 +33,43 @@
                 <!--  Task Checkbox  -->
                 <controls:ToggleButtonSettingControl
                     Description="Checkbox"
-                    Icon="{DynamicResource SegoeIconCheckbox}"
+                    Icon="{DynamicResource IconCheckbox}"
                     IsChecked="{Binding AppSettings.TaskQuickActionSettings.CheckboxEnabled, Source={StaticResource AppSettings}, Mode=TwoWay}" />
 
                 <!--  Reminder button  -->
                 <controls:ToggleButtonSettingControl
                     Description="Reminder button"
-                    Icon="{DynamicResource SegoeIconDateTime}"
+                    Icon="{DynamicResource IconDateTime}"
                     IsChecked="{Binding AppSettings.TaskQuickActionSettings.ReminderEnabled, Source={StaticResource AppSettings}, Mode=TwoWay}" />
 
                 <!--  Marker color button  -->
                 <controls:ToggleButtonSettingControl
                     Description="Marker color picker"
-                    Icon="{DynamicResource SegoeIconPalette}"
+                    Icon="{DynamicResource IconPalette}"
                     IsChecked="{Binding AppSettings.TaskQuickActionSettings.ColorEnabled, Source={StaticResource AppSettings}, Mode=TwoWay}" />
 
                 <!--  Background color button  -->
                 <controls:ToggleButtonSettingControl
                     Description="Background color picker"
-                    Icon="{DynamicResource SegoeIconPalette}"
+                    Icon="{DynamicResource IconPalette}"
                     IsChecked="{Binding AppSettings.TaskQuickActionSettings.BackgroundColorEnabled, Source={StaticResource AppSettings}, Mode=TwoWay}" />
 
                 <!--  BorderColor button  -->
                 <controls:ToggleButtonSettingControl
                     Description="Border color picker"
-                    Icon="{DynamicResource SegoeIconPalette}"
+                    Icon="{DynamicResource IconPalette}"
                     IsChecked="{Binding AppSettings.TaskQuickActionSettings.BorderColorEnabled, Source={StaticResource AppSettings}, Mode=TwoWay}" />
 
                 <!--  Pin button  -->
                 <controls:ToggleButtonSettingControl
                     Description="Pin button"
-                    Icon="{DynamicResource SegoeIconPin}"
+                    Icon="{DynamicResource IconPin}"
                     IsChecked="{Binding AppSettings.TaskQuickActionSettings.PinEnabled, Source={StaticResource AppSettings}, Mode=TwoWay}" />
 
                 <!--  Delete button  -->
                 <controls:ToggleButtonSettingControl
                     Description="Delete button"
-                    Icon="{DynamicResource SegoeIconTrash}"
+                    Icon="{DynamicResource IconTrash}"
                     IsChecked="{Binding AppSettings.TaskQuickActionSettings.TrashEnabled, Source={StaticResource AppSettings}, Mode=TwoWay}" />
 
             </StackPanel>
