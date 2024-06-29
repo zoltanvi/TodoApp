@@ -3,7 +3,7 @@
                     xmlns:valueConverters="clr-namespace:Modules.Common.Views.ValueConverters">
 
     <valueConverters:StringRGBToBrushConverter x:Key="StringRgbToBrushConverter" />
-    <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    <valueConverters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
     <valueConverters:BoolToVisibilityNegatedConverter x:Key="BoolToVisibilityNegatedConverter"/>
     <valueConverters:EnumToFontFamilyConverter x:Key="EnumToFontFamilyConverter"/>
 

@@ -3,7 +3,7 @@ using System.Windows;
 
 namespace Modules.Common.Views.ValueConverters;
 
-public class BoolToVisibilityNegatedConverter : BaseValueConverter
+public class BoolToVisibilityConverter : BaseValueConverter
 {
     public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
@@ -13,7 +13,7 @@ public class BoolToVisibilityNegatedConverter : BaseValueConverter
             string s => s.ToLowerInvariant() == "true",
             _ => false
         };
-        
-        return (bValue) ? Visibility.Collapsed : Visibility.Visible;
+
+        return (bValue) ? Visibility.Visible : Visibility.Collapsed;
     }
 }

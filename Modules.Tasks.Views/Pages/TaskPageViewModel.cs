@@ -14,6 +14,8 @@ public class TaskPageViewModel : BaseViewModel
 {
     private readonly IMediator _mediator;
     private bool _isCategoryInEditMode;
+    private string _renameCategoryContent = "RenameCategoryContent";
+    private string _activeCategoryName;
 
     public TaskPageViewModel(IMediator mediator)
     {
@@ -28,9 +30,28 @@ public class TaskPageViewModel : BaseViewModel
         EditCategoryCommand = new RelayCommand(EditCategory);
         FinishCategoryEditCommand = new RelayCommand(FinishCategoryEdit);
     }
-    
-    public string ActiveCategoryName { get; private set; }
-    public string RenameCategoryContent { get; set; } = "RenameCategoryContent";
+
+    public string ActiveCategoryName
+    {
+        get => _activeCategoryName;
+        private set
+        {
+            if (value == _activeCategoryName) return;
+            _activeCategoryName = value;
+            OnPropertyChanged(nameof(ActiveCategoryName));
+        }
+    }
+
+    public string RenameCategoryContent
+    {
+        get => _renameCategoryContent;
+        set
+        {
+            if (value == _renameCategoryContent) return;
+            _renameCategoryContent = value;
+            OnPropertyChanged(nameof(RenameCategoryContent));
+        }
+    }
 
     public bool IsCategoryInEditMode
     {
@@ -40,11 +61,13 @@ public class TaskPageViewModel : BaseViewModel
             if (value == _isCategoryInEditMode) return;
             _isCategoryInEditMode = value;
             OnPropertyChanged(nameof(IsCategoryInEditMode));
+            OnPropertyChanged(nameof(IsCategoryInDisplayMode));
             OnPropertyChanged(nameof(IsCategoryNameTitleVisible));
             OnPropertyChanged(nameof(IsCategoryNameTitleEditorVisible));
         }
     }
 
+    public bool IsCategoryInDisplayMode => !IsCategoryInEditMode;
     public bool IsCategoryNameTitleVisible => AppSettings.Instance.PageTitleSettings.Visible && !IsCategoryInEditMode;
     public bool IsCategoryNameTitleEditorVisible => AppSettings.Instance.PageTitleSettings.Visible && IsCategoryInEditMode;
 
@@ -57,7 +80,6 @@ public class TaskPageViewModel : BaseViewModel
         IsCategoryInEditMode = true;
         var activeCategory = _mediator.Send(new GetActiveCategoryInfoQuery()).Result;
         RenameCategoryContent = activeCategory.Name;
-        OnPropertyChanged(nameof(RenameCategoryContent));
     }
 
     private void FinishCategoryEdit()
@@ -65,7 +87,6 @@ public class TaskPageViewModel : BaseViewModel
         var newName = _mediator.Send(new RenameActiveCategoryCommand { Name = RenameCategoryContent }).Result;
         ActiveCategoryName = newName;
         IsCategoryInEditMode = false;
-        OnPropertyChanged(nameof(ActiveCategoryName));
     }
 
     private void OnPageTitleSettingsChanged(object? sender, SettingsChangedEventArgs e)
