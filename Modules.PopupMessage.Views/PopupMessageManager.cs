@@ -58,10 +58,6 @@ public class PopupMessageManager : BaseViewModel
                 TimerService.Instance.ModifyTimerInterval(_timer, duration);
                 TimerService.Instance.RestartTimer(_timer);
             }
-
-            OnPropertyChanged(nameof(Visible));
-            OnPropertyChanged(nameof(Message));
-            OnPropertyChanged(nameof(MessageType));
         }
     }
 

@@ -1,13 +1,11 @@
-﻿using MediatR;
-using Modules.Common.DataBinding;
-using Modules.Common.OBSOLETE.Mediator;
+﻿using Modules.Common.DataBinding;
+using Modules.Common.Services.Navigation;
 using Modules.Common.ViewModel;
 using Modules.Common.Views.Pages;
 using Modules.Settings.Contracts.ViewModels;
 using Modules.Settings.Views.Controls;
 using PropertyChanged;
 using System.Windows.Input;
-using Modules.Common.Services.Navigation;
 
 namespace Modules.Settings.Views.Pages;
 
@@ -58,7 +56,7 @@ public class SettingsPageViewModel : BaseViewModel
     public ICommand OpenPageCommand { get; }
     public ICommand GoBackCommand { get; }
 
-    public BasePage? SettingsPageFrameContent { get; set; }
+    public BasePage? SettingsPageFrameContent { get; private set; }
 
     public List<SettingsPageItemViewModel> Items { get; }
 
@@ -73,15 +71,12 @@ public class SettingsPageViewModel : BaseViewModel
             AppSettings.Instance.SessionSettings.ActiveSettingsCategoryId = value;
 
             SettingsPageFrameContent = GetSettingsPage(_activeCategoryId);
-
-            OnPropertyChanged(nameof(ActiveCategoryId));
-            OnPropertyChanged(nameof(SettingsPageFrameContent));
         }
     }
 
     private BasePage? GetSettingsPage(int id)
     {
-        var itemViewModel = Items.FirstOrDefault(x => x.Id == id);
+        SettingsPageItemViewModel? itemViewModel = Items.FirstOrDefault(x => x.Id == id);
 
         ArgumentNullException.ThrowIfNull(itemViewModel);
 

@@ -14,10 +14,7 @@ namespace Modules.Tasks.Views.Pages;
 public class TaskPageViewModel : BaseViewModel
 {
     private readonly IMediator _mediator;
-    private bool _isCategoryInEditMode;
-    private string _renameCategoryContent = "RenameCategoryContent";
-    private string _activeCategoryName;
-
+    
     public TaskPageViewModel(IMediator mediator)
     {
         ArgumentNullException.ThrowIfNull(mediator);
@@ -35,41 +32,11 @@ public class TaskPageViewModel : BaseViewModel
 
     public RichTextEditorViewModel AddNewTaskTextEditorViewModel { get; }
 
-    public string ActiveCategoryName
-    {
-        get => _activeCategoryName;
-        private set
-        {
-            if (value == _activeCategoryName) return;
-            _activeCategoryName = value;
-            OnPropertyChanged(nameof(ActiveCategoryName));
-        }
-    }
+    public string ActiveCategoryName { get; private set; }
 
-    public string RenameCategoryContent
-    {
-        get => _renameCategoryContent;
-        set
-        {
-            if (value == _renameCategoryContent) return;
-            _renameCategoryContent = value;
-            OnPropertyChanged(nameof(RenameCategoryContent));
-        }
-    }
+    public string RenameCategoryContent { get; set; } = "RenameCategoryContent";
 
-    public bool IsCategoryInEditMode
-    {
-        get => _isCategoryInEditMode;
-        set
-        {
-            if (value == _isCategoryInEditMode) return;
-            _isCategoryInEditMode = value;
-            OnPropertyChanged(nameof(IsCategoryInEditMode));
-            OnPropertyChanged(nameof(IsCategoryInDisplayMode));
-            OnPropertyChanged(nameof(IsCategoryNameTitleVisible));
-            OnPropertyChanged(nameof(IsCategoryNameTitleEditorVisible));
-        }
-    }
+    public bool IsCategoryInEditMode { get; set; }
 
     public bool IsCategoryInDisplayMode => !IsCategoryInEditMode;
     public bool IsCategoryNameTitleVisible => AppSettings.Instance.PageTitleSettings.Visible && !IsCategoryInEditMode;

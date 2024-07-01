@@ -6,7 +6,7 @@ using Modules.Common.Services;
 using Modules.Common.ViewModel;
 using Modules.Common.Views.Services;
 using Modules.Settings.Contracts.ViewModels;
-using System.ComponentModel;
+using PropertyChanged;
 using System.Windows;
 using System.Windows.Input;
 using TodoApp.Themes;
@@ -16,6 +16,7 @@ using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 
 namespace TodoApp;
 
+[AddINotifyPropertyChangedInterface]
 public class MainWindowViewModel : BaseViewModel
 {
     private int _prevLeft;
