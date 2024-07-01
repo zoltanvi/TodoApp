@@ -38,6 +38,7 @@
     <system:String x:Key="IconColorBar">&#xEA4B;</system:String>
     <system:String x:Key="IconDateTime">&#xEC92;</system:String>
     <system:String x:Key="IconPin">&#xE840;</system:String>
+    <system:String x:Key="IconPinFilled">&#xE842;</system:String>
     <system:String x:Key="IconTrash">&#xE74D;</system:String>
     <system:String x:Key="IconBold">&#xE8DD;</system:String>
     <system:String x:Key="IconItalic">&#xE8DB;</system:String>
@@ -51,6 +52,7 @@
     <system:String x:Key="IconMonospace">&#xEDE5;</system:String>
     <system:String x:Key="IconDeleteFormatting">&#xED60;</system:String>
     <system:String x:Key="IconWordWrap">&#xE8E4;</system:String>
+    <system:String x:Key="IconClock">&#xE121;</system:String>
 
 
 

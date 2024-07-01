@@ -1,4 +1,5 @@
-﻿using Modules.Common.Views.ValueConverters;
+﻿using Modules.Common.DataModels;
+using Modules.Common.Views.ValueConverters;
 using Modules.PopupMessage.Views.Models;
 using System.Globalization;
 
