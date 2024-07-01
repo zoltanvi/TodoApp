@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using Modules.Tasks.TextEditor.Controls;
+using System.Windows.Input;
 
 namespace Modules.Tasks.Views.Controls;
 
@@ -11,7 +12,7 @@ public class TaskItemViewModel
     public string BorderColor { get; set; }
     public string BackgroundColor { get; set; }
 
-    //public RichTextEditorViewModel TextEditorViewModel { get; }
+    public RichTextEditorViewModel TextEditorViewModel { get; }
 
     public bool IsDone
     {
@@ -19,7 +20,7 @@ public class TaskItemViewModel
         set
         {
             _isDone = value;
-            //TextEditorViewModel.TextOpacity = IsDone ? 0.25 : 1.0;
+            TextEditorViewModel.TextOpacity = IsDone ? 0.25 : 1.0;
         }
     }
 

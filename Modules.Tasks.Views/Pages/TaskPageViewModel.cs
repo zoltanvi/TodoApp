@@ -4,6 +4,7 @@ using Modules.Categories.Contracts.Cqrs.Queries;
 using Modules.Common.DataBinding;
 using Modules.Common.ViewModel;
 using Modules.Settings.Contracts.ViewModels;
+using Modules.Tasks.TextEditor.Controls;
 using PropertyChanged;
 using System.Windows.Input;
 
@@ -29,7 +30,10 @@ public class TaskPageViewModel : BaseViewModel
 
         EditCategoryCommand = new RelayCommand(EditCategory);
         FinishCategoryEditCommand = new RelayCommand(FinishCategoryEdit);
+        ToggleBottomPanelCommand = new RelayCommand(() => IsBottomPanelOpen ^= true);
     }
+
+    public RichTextEditorViewModel AddNewTaskTextEditorViewModel { get; }
 
     public string ActiveCategoryName
     {
@@ -71,9 +75,17 @@ public class TaskPageViewModel : BaseViewModel
     public bool IsCategoryNameTitleVisible => AppSettings.Instance.PageTitleSettings.Visible && !IsCategoryInEditMode;
     public bool IsCategoryNameTitleEditorVisible => AppSettings.Instance.PageTitleSettings.Visible && IsCategoryInEditMode;
 
+    public int TaskCount { get; } = 10;
+    public int FinishedTaskCount { get; } = 5;
+
+    public bool IsBottomPanelOpen { get; set; } = true;
+
     // Commands
     public ICommand EditCategoryCommand { get; }
     public ICommand FinishCategoryEditCommand { get; }
+    public ICommand ToggleBottomPanelCommand { get; }
+    public ICommand AddTaskItemCommand { get; }
+    public ICommand TextBoxFocusedCommand { get; }
 
     private void EditCategory()
     {

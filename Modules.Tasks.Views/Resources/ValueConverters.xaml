@@ -15,9 +15,13 @@
         Left="15"
         Right="15" />
 
+    <valueConverters:BoolToDoubleConverter x:Key="BoolToTaskOpacityConverter"/>
+
     <valueConverters:HorizontalAlignmentConverter x:Key="HorizontalAlignmentConverter" />
     <valueConverters:HorizontalAlignmentInvertedConverter x:Key="HorizontalAlignmentInvertedConverter" />
     <valueConverters:TaskBorderBrushConverter x:Key="TaskBorderBrushConverter"/>
     <valueConverters:TaskItemBackgroundBrushMultiValueConverter x:Key="TaskItemBackgroundBrushMultiValueConverter"/>
     <valueConverters:TaskCheckboxMarginConverter x:Key="TaskCheckboxMarginConverter"/>
+    <valueConverters:TaskSpacingToMarginConverter x:Key="TaskSpacingToMarginConverter"/>
+
 </ResourceDictionary>

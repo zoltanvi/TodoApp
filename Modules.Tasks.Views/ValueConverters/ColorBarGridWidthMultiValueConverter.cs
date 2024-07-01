@@ -15,7 +15,7 @@ internal class ColorBarGridWidthMultiValueConverter : BaseMultiValueConverter<Co
             values[1] is double scaleValue)
         {
             double width = thickness.ConvertToWidth();
-            return width * scaleValue;
+            return new GridLength(width * scaleValue);
         }
 
         return new GridLength(0);

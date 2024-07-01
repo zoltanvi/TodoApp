@@ -220,7 +220,7 @@
                                    Orientation="Horizontal">
 
                             <local:TagControl TagTitle="Created: "
-                                              Opacity="{Binding IsDone, Converter={StaticResource boolToTaskOpacityConverter}}"
+                                              Opacity="{Binding IsDone, Converter={StaticResource BoolToTaskOpacityConverter}}"
                                               Visibility="{Binding AppSettings.TaskSettings.CreationDateVisible, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}"
                                               TagColor="Geekblue">
                                 <local:TagControl.TagBody>
@@ -236,7 +236,7 @@
                             </local:TagControl>
 
                             <local:TagControl TagTitle="Modified: "
-                                              Opacity="{Binding IsDone, Converter={StaticResource boolToTaskOpacityConverter}}"
+                                              Opacity="{Binding IsDone, Converter={StaticResource BoolToTaskOpacityConverter}}"
                                               Visibility="{Binding AppSettings.TaskSettings.ModificationDateVisible, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}"
                                               TagColor="Purple">
                                 <local:TagControl.TagBody>

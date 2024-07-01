@@ -27,6 +27,7 @@
                 <ResourceDictionary Source="pack://application:,,,/Modules.Settings.Views;component/Resources/ValueConverters.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Modules.PopupMessage.Views;component/Resources/ValueConverters.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Modules.Tasks.Views;component/Resources/ValueConverters.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Modules.Tasks.TextEditor;component/Resources/ValueConverters.xaml" />
 
 
                 <ResourceDictionary Source="Themes/BaseTheme.xaml" />
