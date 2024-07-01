@@ -5,7 +5,7 @@
     xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:commonPages="clr-namespace:Modules.Common.Views.Pages;assembly=Modules.Common.Views"
     xmlns:controls="clr-namespace:Modules.Tasks.Views.Controls"
-    xmlns:controls1="clr-namespace:Modules.Tasks.TextEditor.Controls;assembly=Modules.Tasks.TextEditor"
+    xmlns:textEditor="clr-namespace:Modules.Tasks.TextEditor.Controls;assembly=Modules.Tasks.TextEditor"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:pages="clr-namespace:Modules.Tasks.Views.Pages"
@@ -239,8 +239,7 @@
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
-                        <controls1:RichTextEditorControl
-                            x:Name="BottomTextEditor"
+                        <textEditor:RichTextEditorControl
                             Grid.Row="0"
                             MaxHeight="{Binding UIScaler.TextBoxMaxHeight, Source={StaticResource UIScaler}}"
                             Padding="3 8"
@@ -253,7 +252,7 @@
                                 </b:EventTrigger>
                             </b:Interaction.Triggers>
 
-                        </controls1:RichTextEditorControl>
+                        </textEditor:RichTextEditorControl>
 
                         <Border
                             Grid.Row="1"

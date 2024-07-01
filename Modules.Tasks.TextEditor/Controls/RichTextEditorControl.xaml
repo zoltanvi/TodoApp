@@ -9,10 +9,10 @@
     xmlns:attachedProperties="clr-namespace:Modules.Common.Views.AttachedProperties;assembly=Modules.Common.Views"
     xmlns:dataBinding="clr-namespace:Modules.Common.Views.DataBinding;assembly=Modules.Common.Views"
     xmlns:valueConverters="clr-namespace:Modules.Tasks.TextEditor.ValueConverters"
-    x:Name="RichTextEditorUC"
+    x:Name="RichTextEditorUc"
     d:DesignHeight="450"
     d:DesignWidth="800"
-    mc:Ignorable="d">
+    mc:Ignorable="d" d:DataContext="{d:DesignInstance local:RichTextEditorViewModel}">
     <Grid>
         <Grid>
             <Grid.RowDefinitions>
@@ -34,14 +34,13 @@
                 Visibility="{Binding IsChecked, ElementName=IsEditorOpenToggle, Converter={StaticResource BoolToVisibilityConverter}}" />
 
             <Border
-                x:Name="ToolBarBorder"
                 Grid.Row="0"
                 Grid.Column="0"
                 Background="Transparent"
-                IsEnabled="{Binding ElementName=RichTextEditorUC, Path=IsReadOnly, Converter={StaticResource BoolNegatedConverter}}">
+                IsEnabled="{Binding ElementName=RichTextEditorUc, Path=IsReadOnly, Converter={StaticResource BoolNegatedConverter}}">
                 <DockPanel>
 
-                    <!--  PARENT STACKPANEL FOR TOOLBAR  -->
+                    <!--  PARENT STACK PANEL FOR TOOLBAR  -->
                     <StackPanel
                         x:Name="ToolBarPanel"
                         Background="#00ffffff"
@@ -55,7 +54,6 @@
 
             <!--  Main content  -->
             <Border
-                x:Name="border"
                 Grid.Row="1"
                 Grid.Column="0"
                 Margin="0 0 5 0"
@@ -69,7 +67,7 @@
                     Focusable property is needed to exit edit mode on enter keypress.
                 -->
                 <local:FormattableTextEditorBox
-                    x:Name="PART_TextEditor"
+                    x:Name="PartTextEditor"
                     attachedProperties:FocusSetter.Value="{Binding NeedFocus}"
                     AcceptsTab="{Binding AcceptsTab}"
                     Background="Transparent"
@@ -77,9 +75,8 @@
                     EmptyContentUpArrowAction="{Binding OnQuickEditRequestedAction}"
                     EnterAction="{Binding EnterAction}"
                     Focusable="{Binding Focusable}"
-                    Foreground="{DynamicResource OnBackground}"
                     IsFormattedPasteEnabled="{Binding IsFormattedPasteEnabled}"
-                    IsReadOnly="{Binding ElementName=RichTextEditorUC, Path=IsReadOnly}"
+                    IsReadOnly="{Binding ElementName=RichTextEditorUc, Path=IsReadOnly}"
                     Opacity="{Binding TextOpacity}"
                     RenderOptions.ClearTypeHint="Enabled"
                     ScrollViewer.CanContentScroll="False"
@@ -110,11 +107,12 @@
 
             <!--  Editor toggle button  -->
             <Border
+                Grid.Row="0" 
                 Grid.RowSpan="2"
                 Grid.Column="1"
                 Width="{Binding UIScaler.TextEditorToggleWidth, Source={StaticResource UIScaler}}"
                 HorizontalAlignment="right"
-                IsEnabled="{Binding ElementName=RichTextEditorUC, Path=IsReadOnly, Converter={StaticResource BoolNegatedConverter}}">
+                IsEnabled="{Binding ElementName=RichTextEditorUc, Path=IsReadOnly, Converter={StaticResource BoolNegatedConverter}}">
 
                 <Border.Visibility>
                     <MultiBinding>
@@ -123,7 +121,7 @@
                         </MultiBinding.Converter>
                         <Binding Path="IsEditMode" />
                         <Binding
-                            ElementName="PART_TextEditor"
+                            ElementName="PartTextEditor"
                             Path="IsFocused" />
                     </MultiBinding>
                 </Border.Visibility>
@@ -138,7 +136,7 @@
 
             <!--  Watermark text  -->
             <TextBlock
-                x:Name="PART_placeholder"
+                x:Name="PartPlaceholder"
                 Grid.Row="1"
                 Grid.Column="0"
                 Margin="2 0"
@@ -149,7 +147,7 @@
                 Foreground="{DynamicResource Outline}"
                 IsHitTestVisible="False"
                 Text="{Binding WatermarkText}"
-                Visibility="{Binding IsEmpty, ElementName=PART_TextEditor, Converter={StaticResource BoolToVisibilityConverter}}" />
+                Visibility="{Binding IsEmpty, ElementName=PartTextEditor, Converter={StaticResource BoolToVisibilityConverter}}" />
 
         </Grid>
     </Grid>
