@@ -57,7 +57,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Modules.Tasks.Repositories"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Modules.Tasks.Views", "Modules.Tasks.Views\Modules.Tasks.Views.csproj", "{0BEA5DD0-A3CD-46E2-8F0E-58117F463FB9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Modules.Tasks.TextEditor", "Modules.Tasks.TextEditor\Modules.Tasks.TextEditor.csproj", "{BCC14EF5-5AA2-4059-AB70-3899962BB526}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Modules.Tasks.TextEditor", "Modules.Tasks.TextEditor\Modules.Tasks.TextEditor.csproj", "{BCC14EF5-5AA2-4059-AB70-3899962BB526}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoApp.Tests", "TodoApp.Tests\TodoApp.Tests.csproj", "{3396BB43-947C-477C-9428-6E1579A6285D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -145,6 +147,10 @@ Global
 		{BCC14EF5-5AA2-4059-AB70-3899962BB526}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BCC14EF5-5AA2-4059-AB70-3899962BB526}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BCC14EF5-5AA2-4059-AB70-3899962BB526}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3396BB43-947C-477C-9428-6E1579A6285D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3396BB43-947C-477C-9428-6E1579A6285D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3396BB43-947C-477C-9428-6E1579A6285D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3396BB43-947C-477C-9428-6E1579A6285D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
