@@ -99,6 +99,8 @@ public class TaskPageViewModel : BaseViewModel
             var addedTask = _taskItemRepository.AddTask(task);
 
             Items.Add(addedTask.MapToViewModel());
+
+            AddNewTaskTextEditorViewModel.DocumentContent = string.Empty;
         }
     }
 

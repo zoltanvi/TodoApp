@@ -5,10 +5,11 @@
     xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:commonPages="clr-namespace:Modules.Common.Views.Pages;assembly=Modules.Common.Views"
     xmlns:controls="clr-namespace:Modules.Tasks.Views.Controls"
-    xmlns:textEditor="clr-namespace:Modules.Tasks.TextEditor.Controls;assembly=Modules.Tasks.TextEditor"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dd="urn:gong-wpf-dragdrop"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:pages="clr-namespace:Modules.Tasks.Views.Pages"
+    xmlns:textEditor="clr-namespace:Modules.Tasks.TextEditor.Controls;assembly=Modules.Tasks.TextEditor"
     Title="TaskPage"
     d:DataContext="{d:DesignInstance pages:TaskPageViewModel}"
     d:DesignHeight="450"
@@ -128,7 +129,62 @@
 
 
             <!--  TASK LIST CONTROL  -->
-            <!--<controls:TaskListItemControl Grid.Row="1" Height="50" />-->
+
+            <!--<controls:TaskListItemControl
+                Grid.Row="1"
+                DataContext="{Binding FirstItem}" />-->
+
+            <ListView
+                Grid.Row="1" 
+                x:Name="TaskListListView"
+                HorizontalContentAlignment="Stretch"
+                dd:DragDrop.DropHandler="{Binding Handler, Source={StaticResource CustomDropHandler}}"
+                dd:DragDrop.IsDragSource="True"
+                dd:DragDrop.IsDropTarget="True"
+                Background="Transparent"
+                BorderThickness="0"
+                ItemsSource="{Binding Items}"
+                ScrollViewer.CanContentScroll="True"
+                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                ScrollViewer.VerticalScrollBarVisibility="Auto"
+                SelectionMode="Single"
+                Template="{StaticResource TaskListControlTemplate}"
+                VirtualizingPanel.IsContainerVirtualizable="True"
+                VirtualizingPanel.IsVirtualizing="True"
+                VirtualizingPanel.ScrollUnit="Pixel"
+                VirtualizingPanel.VirtualizationMode="Recycling">
+
+                <!--  Enabling virtualization is really important  -->
+                <!--  https://stackoverflow.com/questions/3724593/why-setting-scrollviewer-cancontentscroll-to-false-disable-virtualization  -->
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel />
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListViewItem">
+                                    <ContentPresenter />
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                    </Style>
+                </ListView.ItemContainerStyle>
+
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+
+                        <!--  Task Item  -->
+                        <!--  Tag property is set because the context menu data binding is tricky  -->
+                        <controls:TaskListItemControl Tag="{Binding DataContext, ElementName=TaskListListView}" />
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
 
             <!--  PROGRESS BAR  -->
             <Grid
