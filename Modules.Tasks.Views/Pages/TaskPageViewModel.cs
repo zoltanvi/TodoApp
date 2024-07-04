@@ -28,6 +28,9 @@ public class TaskPageViewModel : BaseViewModel
         EditCategoryCommand = new RelayCommand(EditCategory);
         FinishCategoryEditCommand = new RelayCommand(FinishCategoryEdit);
         ToggleBottomPanelCommand = new RelayCommand(() => IsBottomPanelOpen ^= true);
+
+        AddNewTaskTextEditorViewModel = new RichTextEditorViewModel(false, false, true, true);
+        AddNewTaskTextEditorViewModel.WatermarkText = "Add new task";
     }
 
     public RichTextEditorViewModel AddNewTaskTextEditorViewModel { get; }

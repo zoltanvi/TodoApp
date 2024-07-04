@@ -61,6 +61,9 @@
                 <ResourceDictionary Source="pack://application:,,,/Modules.Settings.Views;component/Styles/ListBoxStyles.xaml" />
 
 
+                <ResourceDictionary Source="pack://application:,,,/Modules.Tasks.TextEditor;component/Styles/SingletonEditorColorPickerStyle.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Modules.Tasks.TextEditor;component/Resources/TextEditorToolbar.xaml" />
+
 
                 <ResourceDictionary Source="Resources/ValueConverters.xaml"/>
                 <ResourceDictionary Source="Styles/TitleBarStyles.xaml"/>

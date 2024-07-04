@@ -30,7 +30,9 @@
     </Style>
 
 
-    <Style x:Key="TextEditorArrowToggleButtonStyle" TargetType="{x:Type ToggleButton}">
+    <Style
+        x:Key="TextEditorArrowToggleButtonStyle"
+        TargetType="{x:Type ToggleButton}">
         <Setter Property="Focusable" Value="false" />
         <Setter Property="Foreground" Value="{DynamicResource OnBackground}" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
@@ -40,46 +42,44 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ToggleButton}">
                     <Border
-                    x:Name="border"
-                    Background="Transparent"
-                    BorderBrush="{TemplateBinding BorderBrush}"
-                    BorderThickness="0"
-                    SnapsToDevicePixels="true">
+                        x:Name="border"
+                        Background="Transparent"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="0"
+                        SnapsToDevicePixels="true">
                         <Grid Margin="0">
 
                             <Viewbox VerticalAlignment="Top">
                                 <Label
-                                x:Name="ArrowTop"
-                                Margin="0"
-                                Padding="0"
-                                BorderThickness="0"
-                                Content="{StaticResource IconChevronUp}"
-                                Style="{DynamicResource IconLabelStyle}"
-                                Foreground="{TemplateBinding Foreground}"
-                                />
+                                    x:Name="ArrowTop"
+                                    Margin="0"
+                                    Padding="0"
+                                    BorderThickness="0"
+                                    Content="{StaticResource IconChevronUp}"
+                                    Foreground="{TemplateBinding Foreground}"
+                                    Style="{StaticResource IconLabelStyle}" />
                             </Viewbox>
 
                             <Viewbox VerticalAlignment="Top">
                                 <Label
-                                x:Name="ArrowDown"
-                                Margin="0"
-                                Padding="0"
-                                BorderThickness="0"
-                                Content="{StaticResource IconChevronDown}"
-                                Style="{DynamicResource IconLabelStyle}" 
-                                Foreground="{TemplateBinding Foreground}"
-                                />
+                                    x:Name="ArrowDown"
+                                    Margin="0"
+                                    Padding="0"
+                                    BorderThickness="0"
+                                    Content="{StaticResource IconChevronDown}"
+                                    Foreground="{TemplateBinding Foreground}"
+                                    Style="{DynamicResource IconLabelStyle}" />
                             </Viewbox>
 
                             <ContentPresenter
-                            x:Name="contentPresenter"
-                            Margin="{TemplateBinding Padding}"
-                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                            Focusable="False"
-                            RecognizesAccessKey="True"
-                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                            Visibility="Collapsed" />
+                                x:Name="contentPresenter"
+                                Margin="{TemplateBinding Padding}"
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                Focusable="False"
+                                RecognizesAccessKey="True"
+                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                Visibility="Collapsed" />
                         </Grid>
 
                     </Border>
@@ -98,5 +98,103 @@
         </Setter>
     </Style>
 
+
+    <Style
+        x:Key="TextEditorToggleButtonStyle"
+        TargetType="{x:Type ToggleButton}">
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="Margin" Value="0 0" />
+        <Setter Property="Foreground" Value="{DynamicResource OnSurface}" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Width" Value="{Binding ActualHeight, RelativeSource={RelativeSource Self}}" />
+        <Setter Property="Opacity" Value="0.6" />
+        <Setter Property="FontFamily" Value="{StaticResource IconFont}" />
+        <Setter Property="FontSize" Value="{Binding UIScaler.FontSize.Regular, Source={StaticResource UIScaler}}" />
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}" />
+        <Setter Property="Background" Value="{DynamicResource Surface3}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Padding" Value="5" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                    <Border
+                        x:Name="border"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="4"
+                        SnapsToDevicePixels="true">
+                        <ContentPresenter
+                            x:Name="contentPresenter"
+                            Margin="{TemplateBinding Padding}"
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                            Focusable="False"
+                            RecognizesAccessKey="True"
+                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter TargetName="border" Property="Background" Value="{DynamicResource InversePrimary}" />
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="true">
+                            <Setter TargetName="border" Property="Background" Value="{DynamicResource InversePrimary}" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="true">
+                            <Setter TargetName="border" Property="Background" Value="{DynamicResource InversePrimary}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style
+        x:Key="TextEditorButtonStyle"
+        BasedOn="{StaticResource ButtonIconStyle}"
+        TargetType="{x:Type Button}">
+        <Setter Property="FontSize" Value="{Binding UIScaler.FontSize.Regular, Source={StaticResource UIScaler}}" />
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="Foreground" Value="{DynamicResource OnSurface}" />
+        <Setter Property="Margin" Value="0 0" />
+        <Setter Property="Background" Value="{DynamicResource Surface3}" />
+        <!--<Setter Property="Padding" Value="5" />-->
+        <Setter Property="Opacity" Value="0.7" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Width" Value="{Binding ActualHeight, RelativeSource={RelativeSource Self}}" />
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border
+                        x:Name="border"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="4"
+                        SnapsToDevicePixels="true">
+                        <ContentPresenter
+                            x:Name="contentPresenter"
+                            Margin="{TemplateBinding Padding}"
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                            Focusable="False"
+                            RecognizesAccessKey="True"
+                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter TargetName="border" Property="Background" Value="{DynamicResource InversePrimary}" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="true">
+                            <Setter TargetName="border" Property="Background" Value="{DynamicResource InversePrimary}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
 </ResourceDictionary>
