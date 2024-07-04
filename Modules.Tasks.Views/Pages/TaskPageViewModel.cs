@@ -11,6 +11,7 @@ using Modules.Tasks.Views.Controls;
 using Modules.Tasks.Views.Mappings;
 using PropertyChanged;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Windows.Input;
 
 namespace Modules.Tasks.Views.Pages;
@@ -47,8 +48,9 @@ public class TaskPageViewModel : BaseViewModel
 
         var tasks = _taskItemRepository.GetActiveTasksFromCategory(activeCategoryInfo.Id);
         Items = new ObservableCollection<TaskItemViewModel>(tasks.MapToViewModelList());
+        Items.CollectionChanged += ItemsOnCollectionChanged;
     }
-
+    
     public ObservableCollection<TaskItemViewModel> Items { get; }
 
     public RichTextEditorViewModel AddNewTaskTextEditorViewModel { get; }
@@ -135,5 +137,17 @@ public class TaskPageViewModel : BaseViewModel
     protected override void OnDispose()
     {
         AppSettings.Instance.PageTitleSettings.SettingsChanged -= OnPageTitleSettingsChanged;
+        Items.CollectionChanged -= ItemsOnCollectionChanged;
+    }
+
+
+    private void ItemsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        for (var i = 0; i < Items.Count; i++)
+        {
+            Items[i].ListOrder = i;
+        }
+
+        _taskItemRepository.UpdateTaskListOrders(Items.MapList());
     }
 }

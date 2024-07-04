@@ -59,7 +59,7 @@ public class TaskItemRepository : ITaskItemRepository
             .OrderBy(x => x.ListOrder)
             .ToList();
     }
-    
+
     public List<TaskItem> GetActiveTasksFromCategory(int categoryId)
     {
         return _context.Tasks
@@ -68,5 +68,18 @@ public class TaskItemRepository : ITaskItemRepository
             .Include(x => x.Reminders)
             .OrderBy(x => x.ListOrder)
             .ToList();
+    }
+
+    public void UpdateTaskListOrders(List<TaskItem> taskItems)
+    {
+        foreach (var updatedTaskItem in taskItems)
+        {
+            var dbTaskItem = _context.Tasks.Find(updatedTaskItem.Id);
+            ArgumentNullException.ThrowIfNull(dbTaskItem);
+
+            dbTaskItem.ListOrder = updatedTaskItem.ListOrder;
+        }
+
+        _context.SaveChanges();
     }
 }

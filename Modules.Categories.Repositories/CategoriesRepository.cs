@@ -81,10 +81,7 @@ public class CategoriesRepository : ICategoriesRepository
             var dbCategory = _context.Categories.Find(updatedCategory.Id);
             ArgumentNullException.ThrowIfNull(dbCategory);
 
-            if (dbCategory != null)
-            {
-                dbCategory.ListOrder = updatedCategory.ListOrder;
-            }
+            dbCategory.ListOrder = updatedCategory.ListOrder;
         }
 
         _context.SaveChanges();
