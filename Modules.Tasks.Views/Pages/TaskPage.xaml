@@ -83,7 +83,7 @@
                         Margin="0 2"
                         HorizontalAlignment="{Binding AppSettings.PageTitleSettings.HorizontalAlignment, Source={StaticResource AppSettings}, Converter={StaticResource HorizontalAlignmentInvertedConverter}}"
                         Command="{Binding EditCategoryCommand}"
-                        Content="{DynamicResource IconEdit}"
+                        Content="{StaticResource IconEdit}"
                         Style="{StaticResource ButtonIconHoverRectangleStyle}"
                         ToolTip="Edit category name"
                         Visibility="{Binding ElementName=CategoryNamePanel, Path=Tag, Converter={StaticResource BoolToVisibilityConverter}}" />
@@ -120,7 +120,7 @@
                     Margin="15 2"
                     HorizontalAlignment="{Binding AppSettings.PageTitleSettings.HorizontalAlignment, Source={StaticResource AppSettings}, Converter={StaticResource HorizontalAlignmentInvertedConverter}}"
                     Command="{Binding FinishCategoryEditCommand}"
-                    Content="{DynamicResource IconSave}"
+                    Content="{StaticResource IconSave}"
                     Style="{StaticResource ButtonIconHoverRectangleStyle}"
                     ToolTip="Save category name"
                     Visibility="{Binding IsCategoryInEditMode, Converter={StaticResource BoolToVisibilityConverter}}" />

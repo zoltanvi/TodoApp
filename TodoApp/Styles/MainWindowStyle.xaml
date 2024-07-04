@@ -124,7 +124,7 @@
                                                     HorizontalAlignment="Center"
                                                     VerticalAlignment="Center"
                                                     animation:SaveIconAnimator.Animate="{Binding SaveIconVisible}"
-                                                    Content="{DynamicResource IconSave}"
+                                                    Content="{StaticResource IconSave}"
                                                     Foreground="{DynamicResource OnSurface}"
                                                     Opacity="0"
                                                     Style="{StaticResource IconLabelStyle}" />

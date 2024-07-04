@@ -145,7 +145,7 @@
 
                             <Grid>
                                 <Label Padding="2"
-                                       Content="{DynamicResource IconClock}"
+                                       Content="{StaticResource IconClock}"
                                        FontFamily="{StaticResource IconFont}"
                                        Foreground="{DynamicResource Tertiary}" />
                                 <Grid.LayoutTransform>
@@ -165,11 +165,11 @@
 
                             <Grid>
                                 <Label Padding="2"
-                                       Content="{DynamicResource IconPinFilled}"
+                                       Content="{StaticResource IconPinFilled}"
                                        FontFamily="{StaticResource IconFont}"
                                        Foreground="{DynamicResource Tertiary}" />
                                 <Label Padding="2"
-                                       Content="{DynamicResource IconPin}"
+                                       Content="{StaticResource IconPin}"
                                        FontFamily="{StaticResource IconFont}"
                                        Foreground="{DynamicResource Tertiary}" />
                                 <Grid.LayoutTransform>
@@ -319,7 +319,7 @@
                             <Grid Visibility="{Binding IsAnyReminderOn, Converter={StaticResource BoolToVisibilityNegatedConverter}}">
                                 <Button AutomationProperties.AutomationId="TaskListItemCalendarEmptyButton"
                                         Command="{Binding OpenReminderCommand}"
-                                        Content="{DynamicResource IconCalendar}"
+                                        Content="{StaticResource IconCalendar}"
                                         Style="{StaticResource ButtonQuickActionStyle}"
                                         ToolTip="Set Reminder"
                                         IsEnabled="{Binding IsQuickActionsEnabled}"
@@ -330,7 +330,7 @@
                             <Grid Visibility="{Binding IsAnyReminderOn, Converter={StaticResource BoolToVisibilityConverter}}">
                                 <Button AutomationProperties.AutomationId="TaskListItemCalendarActiveButton"
                                         Command="{Binding OpenReminderCommand}"
-                                        Content="{DynamicResource IconDateTime}"
+                                        Content="{StaticResource IconDateTime}"
                                         Style="{StaticResource ButtonQuickActionStyle}"
                                         IsEnabled="{Binding IsQuickActionsEnabled}"
                                         Visibility="{Binding AppSettings.TaskQuickActionSettings.ReminderEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}">
@@ -381,7 +381,7 @@
                             <Grid Visibility="{Binding Pinned, Converter={StaticResource BoolToVisibilityNegatedConverter}}">
                                 <Button AutomationProperties.AutomationId="TaskListItemPinButton"
                                         Command="{Binding PinItemCommand}"
-                                        Content="{DynamicResource IconPin}"
+                                        Content="{StaticResource IconPin}"
                                         Style="{StaticResource ButtonQuickActionStyle}"
                                         Margin="4 0 0 0"
                                         ToolTip="Pin task"
@@ -391,7 +391,7 @@
                             <Grid Visibility="{Binding Pinned, Converter={StaticResource BoolToVisibilityConverter}}">
                                 <Button AutomationProperties.AutomationId="TaskListItemUnpinButton"
                                         Command="{Binding UnpinItemCommand}"
-                                        Content="{DynamicResource IconUnpin}"
+                                        Content="{StaticResource IconUnpin}"
                                         Style="{StaticResource ButtonQuickActionStyle}"
                                         Margin="4 0 0 0"
                                         ToolTip="Unpin task"
@@ -400,7 +400,7 @@
                             <!--  Trash button  -->
                             <Button AutomationProperties.AutomationId="TaskListItemTrashBinButton"
                                     Command="{Binding DeleteItemCommand}"
-                                    Content="{DynamicResource IconTrash}"
+                                    Content="{StaticResource IconTrash}"
                                     Cursor="Hand"
                                     Style="{StaticResource ButtonQuickActionRedStyle}"
                                     Margin="4 0 0 0"

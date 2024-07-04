@@ -39,7 +39,7 @@
                         </Grid.ColumnDefinitions>
                         <Label
                             Grid.Column="0"
-                            Content="{DynamicResource IconCompactMode}"
+                            Content="{StaticResource IconCompactMode}"
                             Style="{StaticResource SettingsIconLabelStyle}" />
                         <TextBlock
                             Grid.Column="1"
@@ -56,31 +56,31 @@
 
                 <!--  Item border  -->
                 <controls:ToggleButtonSettingControl
-                    Icon="{DynamicResource IconBorderVisible}"
+                    Icon="{StaticResource IconBorderVisible}"
                     Description="Task border visible"
                     IsChecked="{Binding AppSettings.TaskSettings.BorderVisible, Source={StaticResource AppSettings}, Mode=TwoWay}" />
 
                 <!--  Item background  -->
                 <controls:ToggleButtonSettingControl
-                    Icon="{DynamicResource IconBackgroundVisible}"
+                    Icon="{StaticResource IconBackgroundVisible}"
                     Description="Task background visible"
                     IsChecked="{Binding AppSettings.TaskSettings.BackgroundVisible, Source={StaticResource AppSettings}, Mode=TwoWay}" />
 
                 <!--  Creation date  -->
                 <controls:ToggleButtonSettingControl
-                    Icon="{DynamicResource IconCalendar}"
+                    Icon="{StaticResource IconCalendar}"
                     Description="Creation date visible"
                     IsChecked="{Binding AppSettings.TaskSettings.CreationDateVisible, Source={StaticResource AppSettings}, Mode=TwoWay}" />
 
                 <!--  Modification date  -->
                 <controls:ToggleButtonSettingControl
-                    Icon="{DynamicResource IconCalendar}"
+                    Icon="{StaticResource IconCalendar}"
                     Description="Modification date visible"
                     IsChecked="{Binding AppSettings.TaskSettings.ModificationDateVisible, Source={StaticResource AppSettings}, Mode=TwoWay}" />
 
                 <!--  Circular checkbox  -->
                 <controls:ToggleButtonSettingControl
-                    Icon="{DynamicResource IconCheckbox}"
+                    Icon="{StaticResource IconCheckbox}"
                     Description="Circular checkbox"
                     ToolTip="Enabled: Circle, Disabled: Rounded square"
                     IsChecked="{Binding AppSettings.TaskSettings.CircularCheckbox, Source={StaticResource AppSettings}, Mode=TwoWay}" />
@@ -96,7 +96,7 @@
                         </Grid.ColumnDefinitions>
                         <Label
                             Grid.Column="0"
-                            Content="{DynamicResource IconColorBar}"
+                            Content="{StaticResource IconColorBar}"
                             Style="{StaticResource SettingsIconLabelStyle}" />
                         <TextBlock
                             Grid.Column="1"
@@ -127,7 +127,7 @@
                         </Grid.ColumnDefinitions>
                         <Label
                             Grid.Column="0"
-                            Content="{DynamicResource IconFontFamily}"
+                            Content="{StaticResource IconFontFamily}"
                             Style="{StaticResource SettingsIconLabelStyle}" />
                         <TextBlock
                             Grid.Column="1"

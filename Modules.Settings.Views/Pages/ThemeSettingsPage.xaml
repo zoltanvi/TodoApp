@@ -37,7 +37,7 @@
                 <!--DARK MODE-->
                 <controls:ToggleButtonSettingControl
                     Description="Dark mode"
-                    Icon="{DynamicResource IconPalette}"
+                    Icon="{StaticResource IconPalette}"
                     IsChecked="{Binding AppSettings.ThemeSettings.DarkMode, Source={StaticResource AppSettings}, Mode=TwoWay}" />
 
 
@@ -51,7 +51,7 @@
                         </Grid.ColumnDefinitions>
                         <Label
                             Grid.Column="0"
-                            Content="{DynamicResource IconPalette}"
+                            Content="{StaticResource IconPalette}"
                             Style="{StaticResource SettingsIconLabelStyle}" />
                         <TextBlock
                             Grid.Column="1"
@@ -82,7 +82,7 @@
                         </Grid.ColumnDefinitions>
                         <Label
                             Grid.Column="0"
-                            Content="{DynamicResource IconPalette}"
+                            Content="{StaticResource IconPalette}"
                             Style="{StaticResource SettingsIconLabelStyle}" />
                         <TextBlock
                             Grid.Column="1"

@@ -63,7 +63,7 @@
                         Grid.Column="2"
                         AutomationProperties.AutomationId="SettingsButton"
                         Command="{Binding OpenSettingsPageCommand}"
-                        Content="{DynamicResource IconSettings}"
+                        Content="{StaticResource IconSettings}"
                         Style="{StaticResource ButtonIconHoverSideMenuStyle}"
                         ToolTip="Settings" />
                 </Grid>
@@ -146,7 +146,7 @@
                                                     Padding="0"
                                                     HorizontalAlignment="Center"
                                                     VerticalAlignment="Center"
-                                                    Content="{DynamicResource IconTrash}"
+                                                    Content="{StaticResource IconTrash}"
                                                     FontSize="{Binding UIScaler.FontSize.Small, Source={StaticResource UIScaler}}"
                                                     Style="{StaticResource IconLabelStyle}" />
 

@@ -41,7 +41,7 @@
                     Grid.Column="1"
                     AutomationProperties.AutomationId="SettingsButton"
                     Command="{Binding GoBackCommand}"
-                    Content="{DynamicResource IconArrowLeft}"
+                    Content="{StaticResource IconArrowLeft}"
                     Style="{StaticResource ButtonIconHoverRectangleStyle}"
                     ToolTip="Close settings" />
             </Grid>

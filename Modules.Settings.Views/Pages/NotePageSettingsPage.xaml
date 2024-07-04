@@ -37,7 +37,7 @@
                         </Grid.ColumnDefinitions>
                         <Label
                             Grid.Column="0"
-                            Content="{DynamicResource IconWordWrap}"
+                            Content="{StaticResource IconWordWrap}"
                             Style="{StaticResource SettingsIconLabelStyle}" />
                         <TextBlock
                             Grid.Column="1"
@@ -60,7 +60,7 @@
                         </Grid.ColumnDefinitions>
                         <Label
                             Grid.Column="0"
-                            Content="{DynamicResource IconFontFamily}"
+                            Content="{StaticResource IconFontFamily}"
                             Style="{StaticResource SettingsIconLabelStyle}" />
                         <TextBlock
                             Grid.Column="1"
