@@ -21,6 +21,7 @@ using Modules.Settings.Services.CqrsHandling;
 using Modules.Settings.Views;
 using Modules.Settings.Views.Pages;
 using Modules.Settings.Views.Services;
+using Modules.Tasks.Repositories;
 using Modules.Tasks.Views.Pages;
 using TodoApp.DefaultData;
 using TodoApp.Themes;
@@ -66,12 +67,13 @@ public static class Program
     {
         DbConfiguration.Initialize(serviceProvider.GetRequiredService<IConfiguration>());
 
-        var migrationService = serviceProvider.GetService<IMigrationService>();
+        var migrationService = serviceProvider.GetRequiredService<IMigrationService>();
 
         var dbContextList = new List<DbContext>
         {
-            serviceProvider.GetService<SettingDbContext>(),
-            serviceProvider.GetService<CategoryDbContext>(),
+            serviceProvider.GetRequiredService<SettingDbContext>(),
+            serviceProvider.GetRequiredService<CategoryDbContext>(),
+            serviceProvider.GetRequiredService<TaskItemDbContext>()
         };
 
         migrationService.Run(dbContextList);
@@ -81,7 +83,7 @@ public static class Program
 
     private static void CreateDefaultData(this IServiceProvider serviceProvider)
     {
-        var defaultDataCreator = serviceProvider.GetService<DefaultDataCreator>();
+        var defaultDataCreator = serviceProvider.GetRequiredService<DefaultDataCreator>();
 
         defaultDataCreator.CreateDefaultsIfNeeded();
     }
@@ -92,6 +94,7 @@ public static class Program
 
         services.AddSettingsRepository();
         services.AddCategoriesRepository();
+        services.AddTaskItemRepository();
         
         services.AddMigrationsService();
     }

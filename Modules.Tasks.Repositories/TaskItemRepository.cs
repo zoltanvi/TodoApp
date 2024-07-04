@@ -59,4 +59,14 @@ public class TaskItemRepository : ITaskItemRepository
             .OrderBy(x => x.ListOrder)
             .ToList();
     }
+    
+    public List<TaskItem> GetActiveTasksFromCategory(int categoryId)
+    {
+        return _context.Tasks
+            .Where(x => x.CategoryId == categoryId)
+            .Where(x => !x.IsDeleted)
+            .Include(x => x.Reminders)
+            .OrderBy(x => x.ListOrder)
+            .ToList();
+    }
 }

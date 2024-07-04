@@ -4,8 +4,13 @@ using Modules.Categories.Contracts.Cqrs.Queries;
 using Modules.Common.DataBinding;
 using Modules.Common.ViewModel;
 using Modules.Settings.Contracts.ViewModels;
+using Modules.Tasks.Contracts;
+using Modules.Tasks.Contracts.Models;
 using Modules.Tasks.TextEditor.Controls;
+using Modules.Tasks.Views.Controls;
+using Modules.Tasks.Views.Mappings;
 using PropertyChanged;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 namespace Modules.Tasks.Views.Pages;
@@ -14,11 +19,15 @@ namespace Modules.Tasks.Views.Pages;
 public class TaskPageViewModel : BaseViewModel
 {
     private readonly IMediator _mediator;
-    
-    public TaskPageViewModel(IMediator mediator)
+    private readonly ITaskItemRepository _taskItemRepository;
+
+    public TaskPageViewModel(IMediator mediator, ITaskItemRepository taskItemRepository)
     {
         ArgumentNullException.ThrowIfNull(mediator);
+        ArgumentNullException.ThrowIfNull(taskItemRepository);
+
         _mediator = mediator;
+        _taskItemRepository = taskItemRepository;
 
         AppSettings.Instance.PageTitleSettings.SettingsChanged += OnPageTitleSettingsChanged;
         var activeCategoryInfo = _mediator.Send(new GetActiveCategoryInfoQuery()).Result;
@@ -28,10 +37,19 @@ public class TaskPageViewModel : BaseViewModel
         EditCategoryCommand = new RelayCommand(EditCategory);
         FinishCategoryEditCommand = new RelayCommand(FinishCategoryEdit);
         ToggleBottomPanelCommand = new RelayCommand(() => IsBottomPanelOpen ^= true);
+        AddTaskItemCommand = new RelayCommand(AddTaskItem);
+        TextBoxFocusedCommand = new RelayCommand(OnTextBoxFocused);
 
         AddNewTaskTextEditorViewModel = new RichTextEditorViewModel(false, false, true, true);
         AddNewTaskTextEditorViewModel.WatermarkText = "Add new task";
+        AddNewTaskTextEditorViewModel.EnterAction = AddTaskItem;
+        AddNewTaskTextEditorViewModel.OnQuickEditRequestedAction = OnQuickEditRequested;
+
+        var tasks = _taskItemRepository.GetActiveTasksFromCategory(activeCategoryInfo.Id);
+        Items = new ObservableCollection<TaskItemViewModel>(tasks.MapToViewModelList());
     }
+
+    public ObservableCollection<TaskItemViewModel> Items { get; }
 
     public RichTextEditorViewModel AddNewTaskTextEditorViewModel { get; }
 
@@ -56,6 +74,38 @@ public class TaskPageViewModel : BaseViewModel
     public ICommand ToggleBottomPanelCommand { get; }
     public ICommand AddTaskItemCommand { get; }
     public ICommand TextBoxFocusedCommand { get; }
+
+
+    private void OnTextBoxFocused()
+    {
+        //IoC.OneEditorOpenService.EditMode(null);
+    }
+
+    private void AddTaskItem()
+    {
+        if (!AddNewTaskTextEditorViewModel.IsContentEmpty)
+        {
+            var activeCategory = _mediator.Send(new GetActiveCategoryInfoQuery()).Result;
+
+            var task = new TaskItem
+            {
+                Content = AddNewTaskTextEditorViewModel.DocumentContent,
+                ContentPreview = "TODO",
+                CategoryId = activeCategory.Id,
+                // TODO
+                ListOrder = Items.Count
+            };
+
+            var addedTask = _taskItemRepository.AddTask(task);
+
+            Items.Add(addedTask.MapToViewModel());
+        }
+    }
+
+    private void OnQuickEditRequested()
+    {
+        // TODO
+    }
 
     private void EditCategory()
     {
