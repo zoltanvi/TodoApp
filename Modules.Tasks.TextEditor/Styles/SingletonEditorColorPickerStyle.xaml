@@ -96,7 +96,7 @@
                                             Padding="10"
                                             BorderThickness="0"
                                             Content="{StaticResource IconChevronDown}"
-                                            Style="{DynamicResource IconLabelStyle}" />
+                                            Style="{StaticResource IconLabelStyle}" />
                                     </Viewbox>
                                 </Button>
 

@@ -14,7 +14,7 @@
             <ScrollViewer
                 Padding="{TemplateBinding Padding}"
                 Focusable="False"
-                Style="{DynamicResource TodoAppScrollViewerLeft}">
+                Style="{StaticResource TodoAppScrollViewerLeft}">
                 <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
             </ScrollViewer>
         </Border>

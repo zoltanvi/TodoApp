@@ -28,6 +28,7 @@
                 <ResourceDictionary Source="pack://application:,,,/Modules.PopupMessage.Views;component/Resources/ValueConverters.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Modules.Tasks.Views;component/Resources/ValueConverters.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Modules.Tasks.TextEditor;component/Resources/ValueConverters.xaml" />
+                <ResourceDictionary Source="Resources/ValueConverters.xaml"/>
 
 
                 <ResourceDictionary Source="Themes/BaseTheme.xaml" />
@@ -61,11 +62,10 @@
                 <ResourceDictionary Source="pack://application:,,,/Modules.Settings.Views;component/Styles/ListBoxStyles.xaml" />
 
 
+                <ResourceDictionary Source="pack://application:,,,/Modules.Settings.Views;component/Styles/SliderStyles.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Modules.Tasks.TextEditor;component/Styles/SingletonEditorColorPickerStyle.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Modules.Tasks.TextEditor;component/Resources/TextEditorToolbar.xaml" />
-
-
-                <ResourceDictionary Source="Resources/ValueConverters.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Modules.Tasks.Views;component/Styles/TaskCheckBoxStyles.xaml" />
                 <ResourceDictionary Source="Styles/TitleBarStyles.xaml"/>
                 <ResourceDictionary Source="Styles/MainWindowStyle.xaml"/>
 

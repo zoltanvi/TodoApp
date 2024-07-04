@@ -16,7 +16,7 @@
     x:TypeArguments="pages:TaskItemSettingsPageViewModel"
     Title="TaskItemSettingsPage">
 
-    <ScrollViewer Style="{DynamicResource TodoAppScrollViewer}">
+    <ScrollViewer Style="{StaticResource TodoAppScrollViewer}">
         <Grid>
 
             <Grid.RowDefinitions>
@@ -40,10 +40,10 @@
                         <Label
                             Grid.Column="0"
                             Content="{DynamicResource IconCompactMode}"
-                            Style="{DynamicResource SettingsIconLabelStyle}" />
+                            Style="{StaticResource SettingsIconLabelStyle}" />
                         <TextBlock
                             Grid.Column="1"
-                            Style="{DynamicResource SettingsDescriptionStyle}"
+                            Style="{StaticResource SettingsDescriptionStyle}"
                             Text="Spacing" />
                         <ComboBox
                             Grid.Column="2"
@@ -97,10 +97,10 @@
                         <Label
                             Grid.Column="0"
                             Content="{DynamicResource IconColorBar}"
-                            Style="{DynamicResource SettingsIconLabelStyle}" />
+                            Style="{StaticResource SettingsIconLabelStyle}" />
                         <TextBlock
                             Grid.Column="1"
-                            Style="{DynamicResource SettingsDescriptionStyle}"
+                            Style="{StaticResource SettingsDescriptionStyle}"
                             Text="Color bar thickness" />
                         <ComboBox
                             Grid.Column="2"
@@ -128,10 +128,10 @@
                         <Label
                             Grid.Column="0"
                             Content="{DynamicResource IconFontFamily}"
-                            Style="{DynamicResource SettingsIconLabelStyle}" />
+                            Style="{StaticResource SettingsIconLabelStyle}" />
                         <TextBlock
                             Grid.Column="1"
-                            Style="{DynamicResource SettingsDescriptionStyle}"
+                            Style="{StaticResource SettingsDescriptionStyle}"
                             Text="Font family" />
                         <ComboBox
                             Grid.Column="2"

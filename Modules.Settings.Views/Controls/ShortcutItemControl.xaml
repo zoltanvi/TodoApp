@@ -18,7 +18,7 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock
                     Grid.Column="0"
-                    Style="{DynamicResource SettingsDescriptionStyle}"
+                    Style="{StaticResource SettingsDescriptionStyle}"
                     Text="{Binding Description, RelativeSource={RelativeSource AncestorType=UserControl}}" />
 
                 <StackPanel Orientation="Horizontal" Grid.Column="2">

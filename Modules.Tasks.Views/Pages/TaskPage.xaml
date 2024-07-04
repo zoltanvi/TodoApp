@@ -73,7 +73,7 @@
                             HorizontalAlignment="{Binding AppSettings.PageTitleSettings.HorizontalAlignment, Source={StaticResource AppSettings}, Converter={StaticResource HorizontalAlignmentConverter}}"
                             FontFamily="{Binding AppSettings.PageTitleSettings.FontFamily, Source={StaticResource AppSettings}, Converter={StaticResource EnumToFontFamilyConverter}}"
                             FontSize="{Binding AppSettings.PageTitleSettings.FontSize, Source={StaticResource AppSettings}, Converter={StaticResource FontSizeScaler}}"
-                            Style="{DynamicResource PageTitleTextBlockStyle}"
+                            Style="{StaticResource PageTitleTextBlockStyle}"
                             Text="{Binding ActiveCategoryName}"
                             Visibility="{Binding IsCategoryNameTitleVisible, Converter={StaticResource BoolToVisibilityConverter}}" />
                     </Grid>
@@ -84,7 +84,7 @@
                         HorizontalAlignment="{Binding AppSettings.PageTitleSettings.HorizontalAlignment, Source={StaticResource AppSettings}, Converter={StaticResource HorizontalAlignmentInvertedConverter}}"
                         Command="{Binding EditCategoryCommand}"
                         Content="{DynamicResource IconEdit}"
-                        Style="{DynamicResource ButtonIconHoverRectangleStyle}"
+                        Style="{StaticResource ButtonIconHoverRectangleStyle}"
                         ToolTip="Edit category name"
                         Visibility="{Binding ElementName=CategoryNamePanel, Path=Tag, Converter={StaticResource BoolToVisibilityConverter}}" />
                 </Grid>
@@ -109,7 +109,7 @@
                             FontFamily="{Binding AppSettings.PageTitleSettings.FontFamily, Source={StaticResource AppSettings}, Converter={StaticResource EnumToFontFamilyConverter}}"
                             FontSize="{Binding AppSettings.PageTitleSettings.FontSize, Source={StaticResource AppSettings}, Converter={StaticResource FontSizeScaler}}"
                             Foreground="{DynamicResource Secondary}"
-                            Style="{DynamicResource PageTitleEditorTextBoxStyle}"
+                            Style="{StaticResource PageTitleEditorTextBoxStyle}"
                             Text="{Binding RenameCategoryContent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             Visibility="{Binding IsCategoryNameTitleEditorVisible, Converter={StaticResource BoolToVisibilityConverter}}" />
                     </Grid>
@@ -121,7 +121,7 @@
                     HorizontalAlignment="{Binding AppSettings.PageTitleSettings.HorizontalAlignment, Source={StaticResource AppSettings}, Converter={StaticResource HorizontalAlignmentInvertedConverter}}"
                     Command="{Binding FinishCategoryEditCommand}"
                     Content="{DynamicResource IconSave}"
-                    Style="{DynamicResource ButtonIconHoverRectangleStyle}"
+                    Style="{StaticResource ButtonIconHoverRectangleStyle}"
                     ToolTip="Save category name"
                     Visibility="{Binding IsCategoryInEditMode, Converter={StaticResource BoolToVisibilityConverter}}" />
             </Grid>

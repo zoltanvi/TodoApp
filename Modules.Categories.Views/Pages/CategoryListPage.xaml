@@ -55,7 +55,7 @@
                         FontFamily="{DynamicResource UIBoldFont}"
                         FontSize="{Binding UIScaler.FontSize.Regular, Source={StaticResource UIScaler}}"
                         Foreground="{DynamicResource Primary}"
-                        Style="{DynamicResource ButtonBaseStyle}"
+                        Style="{StaticResource ButtonBaseStyle}"
                         ToolTip="Click to switch to NOTES" />
 
                     <!--  Settings button  -->
@@ -64,7 +64,7 @@
                         AutomationProperties.AutomationId="SettingsButton"
                         Command="{Binding OpenSettingsPageCommand}"
                         Content="{DynamicResource IconSettings}"
-                        Style="{DynamicResource ButtonIconHoverSideMenuStyle}"
+                        Style="{StaticResource ButtonIconHoverSideMenuStyle}"
                         ToolTip="Settings" />
                 </Grid>
 
@@ -148,7 +148,7 @@
                                                     VerticalAlignment="Center"
                                                     Content="{DynamicResource IconTrash}"
                                                     FontSize="{Binding UIScaler.FontSize.Small, Source={StaticResource UIScaler}}"
-                                                    Style="{DynamicResource IconLabelStyle}" />
+                                                    Style="{StaticResource IconLabelStyle}" />
 
                                                 <ContentPresenter
                                                     Grid.Column="1"

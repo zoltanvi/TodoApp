@@ -15,7 +15,7 @@
     x:TypeArguments="pages:NotePageSettingsPageViewModel"
     Title="NotePageSettingsPage">
 
-    <ScrollViewer Style="{DynamicResource TodoAppScrollViewer}">
+    <ScrollViewer Style="{StaticResource TodoAppScrollViewer}">
         <Grid>
 
             <Grid.RowDefinitions>
@@ -38,15 +38,15 @@
                         <Label
                             Grid.Column="0"
                             Content="{DynamicResource IconWordWrap}"
-                            Style="{DynamicResource SettingsIconLabelStyle}" />
+                            Style="{StaticResource SettingsIconLabelStyle}" />
                         <TextBlock
                             Grid.Column="1"
-                            Style="{DynamicResource SettingsDescriptionStyle}"
+                            Style="{StaticResource SettingsDescriptionStyle}"
                             Text="Word wrap" />
                         <ToggleButton
                             Grid.Column="2"
                             IsChecked="{Binding AppSettings.NoteSettings.WordWrap, Source={StaticResource AppSettings}, Mode=TwoWay}"
-                            Style="{DynamicResource ToggleSideMenuStyle}" />
+                            Style="{StaticResource ToggleSideMenuStyle}" />
                     </Grid>
                 </Border>
 
@@ -61,10 +61,10 @@
                         <Label
                             Grid.Column="0"
                             Content="{DynamicResource IconFontFamily}"
-                            Style="{DynamicResource SettingsIconLabelStyle}" />
+                            Style="{StaticResource SettingsIconLabelStyle}" />
                         <TextBlock
                             Grid.Column="1"
-                            Style="{DynamicResource SettingsDescriptionStyle}"
+                            Style="{StaticResource SettingsDescriptionStyle}"
                             Text="Font family" />
                         <ComboBox
                             Grid.Column="2"

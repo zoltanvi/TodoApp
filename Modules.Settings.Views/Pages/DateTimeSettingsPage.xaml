@@ -13,7 +13,7 @@
     x:TypeArguments="pages:DateTimeSettingsPageViewModel"
     Title="DateTimeSettingsPage">
 
-    <ScrollViewer Style="{DynamicResource TodoAppScrollViewer}">
+    <ScrollViewer Style="{StaticResource TodoAppScrollViewer}">
         <Grid>
 
             <Grid.RowDefinitions>
@@ -40,10 +40,10 @@
                         <Label
                             Grid.Column="0"
                             Content="{DynamicResource IconCalendar}"
-                            Style="{DynamicResource SettingsIconLabelStyle}" />
+                            Style="{StaticResource SettingsIconLabelStyle}" />
                         <TextBlock
                             Grid.Column="1"
-                            Style="{DynamicResource SettingsDescriptionStyle}"
+                            Style="{StaticResource SettingsDescriptionStyle}"
                             Text="Window title bar date format" />
                         <ComboBox
                             Grid.Column="2"
@@ -72,10 +72,10 @@
                         <Label
                             Grid.Column="0"
                             Content="{DynamicResource IconCalendar}"
-                            Style="{DynamicResource SettingsIconLabelStyle}" />
+                            Style="{StaticResource SettingsIconLabelStyle}" />
                         <TextBlock
                             Grid.Column="1"
-                            Style="{DynamicResource SettingsDescriptionStyle}"
+                            Style="{StaticResource SettingsDescriptionStyle}"
                             Text="Reminder date format" />
                         <ComboBox
                             Grid.Column="2"
@@ -104,10 +104,10 @@
                         <Label
                             Grid.Column="0"
                             Content="{DynamicResource IconCalendar}"
-                            Style="{DynamicResource SettingsIconLabelStyle}" />
+                            Style="{StaticResource SettingsIconLabelStyle}" />
                         <TextBlock
                             Grid.Column="1"
-                            Style="{DynamicResource SettingsDescriptionStyle}"
+                            Style="{StaticResource SettingsDescriptionStyle}"
                             Text="Task creation / modification date format" />
                         <ComboBox
                             Grid.Column="2"

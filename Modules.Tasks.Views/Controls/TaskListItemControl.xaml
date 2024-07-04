@@ -104,7 +104,7 @@
                                   IsEnabled="{Binding TextEditorViewModel.IsDisplayMode}"
                                   Command="{Binding Path=IsDoneModifiedCommand}"
                                   IsChecked="{Binding IsDone}"
-                                  Style="{DynamicResource TaskCheckBoxStyle}"
+                                  Style="{StaticResource TaskCheckBoxStyle}"
                                   Margin="{Binding UIScaler.TaskCheckBoxWidth, Source={StaticResource UIScaler}, Converter={StaticResource TaskCheckboxMarginConverter}}"
                                   Visibility="{Binding AppSettings.TaskQuickActionSettings.CheckboxEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
                     </Border>
@@ -116,7 +116,7 @@
                                   IsEnabled="{Binding TextEditorViewModel.IsDisplayMode}"
                                   Command="{Binding Path=IsDoneModifiedCommand}"
                                   IsChecked="{Binding IsDone}"
-                                  Style="{DynamicResource TaskCheckBoxSquareStyle}"
+                                  Style="{StaticResource TaskCheckBoxSquareStyle}"
                                   Margin="{Binding UIScaler.TaskCheckBoxWidth, Source={StaticResource UIScaler}, Converter={StaticResource TaskCheckboxMarginConverter}}"
                                   Visibility="{Binding AppSettings.TaskQuickActionSettings.CheckboxEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
                     </Border>
@@ -320,7 +320,7 @@
                                 <Button AutomationProperties.AutomationId="TaskListItemCalendarEmptyButton"
                                         Command="{Binding OpenReminderCommand}"
                                         Content="{DynamicResource IconCalendar}"
-                                        Style="{DynamicResource ButtonQuickActionStyle}"
+                                        Style="{StaticResource ButtonQuickActionStyle}"
                                         ToolTip="Set Reminder"
                                         IsEnabled="{Binding IsQuickActionsEnabled}"
                                         Visibility="{Binding AppSettings.TaskQuickActionSettings.ReminderEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
@@ -331,7 +331,7 @@
                                 <Button AutomationProperties.AutomationId="TaskListItemCalendarActiveButton"
                                         Command="{Binding OpenReminderCommand}"
                                         Content="{DynamicResource IconDateTime}"
-                                        Style="{DynamicResource ButtonQuickActionStyle}"
+                                        Style="{StaticResource ButtonQuickActionStyle}"
                                         IsEnabled="{Binding IsQuickActionsEnabled}"
                                         Visibility="{Binding AppSettings.TaskQuickActionSettings.ReminderEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}">
                                     <Button.ToolTip>
@@ -382,7 +382,7 @@
                                 <Button AutomationProperties.AutomationId="TaskListItemPinButton"
                                         Command="{Binding PinItemCommand}"
                                         Content="{DynamicResource IconPin}"
-                                        Style="{DynamicResource ButtonQuickActionStyle}"
+                                        Style="{StaticResource ButtonQuickActionStyle}"
                                         Margin="4 0 0 0"
                                         ToolTip="Pin task"
                                         Visibility="{Binding AppSettings.TaskQuickActionSettings.PinEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
@@ -392,7 +392,7 @@
                                 <Button AutomationProperties.AutomationId="TaskListItemUnpinButton"
                                         Command="{Binding UnpinItemCommand}"
                                         Content="{DynamicResource IconUnpin}"
-                                        Style="{DynamicResource ButtonQuickActionStyle}"
+                                        Style="{StaticResource ButtonQuickActionStyle}"
                                         Margin="4 0 0 0"
                                         ToolTip="Unpin task"
                                         Visibility="{Binding AppSettings.TaskQuickActionSettings.PinEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
@@ -402,7 +402,7 @@
                                     Command="{Binding DeleteItemCommand}"
                                     Content="{DynamicResource IconTrash}"
                                     Cursor="Hand"
-                                    Style="{DynamicResource ButtonQuickActionRedStyle}"
+                                    Style="{StaticResource ButtonQuickActionRedStyle}"
                                     Margin="4 0 0 0"
                                     ToolTip="Trash task"
                                     Visibility="{Binding AppSettings.TaskQuickActionSettings.TrashEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />

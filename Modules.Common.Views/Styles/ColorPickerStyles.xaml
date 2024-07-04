@@ -47,7 +47,7 @@
                                     Padding="10"
                                     BorderThickness="0"
                                     Content="{StaticResource IconChevronDown}"
-                                    Style="{DynamicResource IconLabelStyle}" />
+                                    Style="{StaticResource IconLabelStyle}" />
                             </Viewbox>
 
                             <ContentPresenter
@@ -97,7 +97,7 @@
             <ScrollViewer
                 Padding="0 0 26 0"
                 Focusable="False"
-                Style="{DynamicResource TodoAppScrollViewer}"
+                Style="{StaticResource TodoAppScrollViewer}"
                 VerticalScrollBarVisibility="Auto">
 
                 <ItemsControl Margin="6 6 0 6" ItemsSource="{StaticResource ColorList}">

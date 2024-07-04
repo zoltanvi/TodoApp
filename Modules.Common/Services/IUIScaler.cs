@@ -16,6 +16,10 @@ public interface IUIScaler
     double SliderThumbHeight { get; }
     double SliderThumbWidth { get; }
     double ScrollbarWidth { get; }
+    double SideMenuMinimumWidth { get; }
+    double ColorPickerHalfWidth { get; }
+    double NotePageBoxWidth { get; }
+    double TaskProgressBarHeight { get; }
 
     void SetScaling(double value);
     void ZoomIn();

@@ -33,7 +33,7 @@
 
                 <TextBlock
                     Grid.Column="0"
-                    Style="{DynamicResource PageTitleTextBlockStyle}"
+                    Style="{StaticResource PageTitleTextBlockStyle}"
                     Text="{Binding ActiveCategoryId, Converter={StaticResource SettingsPageTitleConverter}}" />
 
                 <!--  BACK button  -->
@@ -42,7 +42,7 @@
                     AutomationProperties.AutomationId="SettingsButton"
                     Command="{Binding GoBackCommand}"
                     Content="{DynamicResource IconArrowLeft}"
-                    Style="{DynamicResource ButtonIconHoverRectangleStyle}"
+                    Style="{StaticResource ButtonIconHoverRectangleStyle}"
                     ToolTip="Close settings" />
             </Grid>
 

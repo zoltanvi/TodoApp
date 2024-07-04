@@ -82,7 +82,7 @@
                     ScrollViewer.CanContentScroll="False"
                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                     ScrollViewer.VerticalScrollBarVisibility="Auto"
-                    Style="{DynamicResource BaseRichTextBoxStyle}"
+                    Style="{StaticResource BaseRichTextBoxStyle}"
                     TextColor="{Binding TextColor}">
 
                     <behaviors:Interaction.Triggers>
@@ -129,9 +129,8 @@
                 <ToggleButton
                     x:Name="IsEditorOpenToggle"
                     Margin="0 2 0 0"
-                    Foreground="{DynamicResource OnBackground}"
                     IsChecked="{Binding IsToolbarOpen}"
-                    Style="{DynamicResource TextEditorArrowToggleButtonStyle}" />
+                    Style="{StaticResource TextEditorArrowToggleButtonStyle}" />
             </Border>
 
             <!--  Watermark text  -->

@@ -16,7 +16,7 @@
     x:TypeArguments="pages:TextEditorQuickActionsSettingsPageViewModel"
     mc:Ignorable="d">
 
-    <ScrollViewer Style="{DynamicResource TodoAppScrollViewer}">
+    <ScrollViewer Style="{StaticResource TodoAppScrollViewer}">
         <Grid>
 
             <Grid.RowDefinitions>

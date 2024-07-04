@@ -193,7 +193,7 @@
                             Command="{Binding UndoCommand}"
                             Content="Undo"
                             DockPanel.Dock="Right"
-                            Style="{DynamicResource ReminderBottomButtonStyle}"
+                            Style="{StaticResource ReminderBottomButtonStyle}"
                             Visibility="{Binding MessageService.UndoButtonVisible, Source={x:Static local:VML.Instance}, Converter={StaticResource boolToVisibilityConverter}}" />
                     </Grid>
 

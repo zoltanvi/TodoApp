@@ -29,7 +29,7 @@
                 Margin="0"
                 Maximum="{Binding MaxProgress, ElementName=MyTaskProgressBar}"
                 Minimum="0"
-                Style="{DynamicResource TaskProgressBarStyle}"
+                Style="{StaticResource TaskProgressBarStyle}"
                 Value="{Binding Progress, ElementName=MyTaskProgressBar}" />
 
             <!--  In-between border  -->

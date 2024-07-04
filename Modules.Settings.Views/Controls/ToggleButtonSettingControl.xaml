@@ -18,15 +18,15 @@
                 <Label
                     Grid.Column="0"
                     Content="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                    Style="{DynamicResource SettingsIconLabelStyle}" />
+                    Style="{StaticResource SettingsIconLabelStyle}" />
                 <TextBlock
                     Grid.Column="1"
-                    Style="{DynamicResource SettingsDescriptionStyle}"
+                    Style="{StaticResource SettingsDescriptionStyle}"
                     Text="{Binding Description, RelativeSource={RelativeSource AncestorType=UserControl}}" />
                 <ToggleButton
                     Grid.Column="2"
                     IsChecked="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}"
-                    Style="{DynamicResource ToggleSideMenuStyle}" />
+                    Style="{StaticResource ToggleSideMenuStyle}" />
             </Grid>
         </Border>
     </Grid>

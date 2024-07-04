@@ -4,7 +4,9 @@
     xmlns:controls="clr-namespace:Modules.Settings.Views.Controls"
     xmlns:valueConverters="clr-namespace:Modules.Common.Views.ValueConverters;assembly=Modules.Common.Views">
 
-    <Style x:Key="ButtonBaseStyle" TargetType="{x:Type Button}">
+    <Style
+        x:Key="ButtonBaseStyle"
+        TargetType="{x:Type Button}">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Foreground" Value="{DynamicResource OnBackground}" />
@@ -125,19 +127,25 @@
         <Setter Property="FontSize" Value="{Binding UIScaler.FontSize.Small, Source={StaticResource UIScaler}}" />
     </Style>
 
-    <Style x:Key="SettingsItemStyle" TargetType="Border">
+    <Style
+        x:Key="SettingsItemStyle"
+        TargetType="Border">
         <Setter Property="CornerRadius" Value="6" />
         <Setter Property="Background" Value="{DynamicResource Surface2}" />
         <Setter Property="Margin" Value="0 0 0 5" />
         <Setter Property="Padding" Value="5" />
     </Style>
 
-    <Style x:Key="SettingsDockPanelStyle" TargetType="{x:Type DockPanel}">
+    <Style
+        x:Key="SettingsDockPanelStyle"
+        TargetType="{x:Type DockPanel}">
         <Setter Property="Margin" Value="0 0 0 0" />
     </Style>
 
     <!--  Toggle Button style  -->
-    <Style x:Key="CustomToggleStyle" TargetType="{x:Type ToggleButton}">
+    <Style
+        x:Key="CustomToggleStyle"
+        TargetType="{x:Type ToggleButton}">
         <Setter Property="BorderBrush" Value="{DynamicResource Outline}" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -210,8 +218,7 @@
                             Opacity="0" />
 
                         <Grid.LayoutTransform>
-                            <ScaleTransform ScaleX="{Binding UIScaler.ScaleValue, Source={StaticResource UIScaler}}" 
-                                            ScaleY="{Binding UIScaler.ScaleValue, Source={StaticResource UIScaler}}" />
+                            <ScaleTransform ScaleX="{Binding UIScaler.ScaleValue, Source={StaticResource UIScaler}}" ScaleY="{Binding UIScaler.ScaleValue, Source={StaticResource UIScaler}}" />
                         </Grid.LayoutTransform>
                     </Grid>
 
@@ -275,6 +282,5 @@
         TargetType="Label">
         <Setter Property="FontFamily" Value="{DynamicResource UIFont}" />
     </Style>
-
 
 </ResourceDictionary>

@@ -12,7 +12,7 @@
                 Command="{Binding SetBoldCommand, RelativeSource={RelativeSource AncestorType=controls:SingletonToolbar}}"
                 Content="{DynamicResource IconBold}"
                 IsChecked="{Binding IsSelectionBold, RelativeSource={RelativeSource AncestorType=controls:SingletonToolbar}}"
-                Style="{DynamicResource TextEditorToggleButtonStyle}"
+                Style="{StaticResource TextEditorToggleButtonStyle}"
                 ToolTip="Bold (Ctrl + B)"
                 Visibility="{Binding AppSettings.TextEditorQuickActionSettings.Bold, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
             <ToggleButton
@@ -20,7 +20,7 @@
                 Command="{Binding SetItalicCommand, RelativeSource={RelativeSource AncestorType=controls:SingletonToolbar}}"
                 Content="{DynamicResource IconItalic}"
                 IsChecked="{Binding IsSelectionItalic, RelativeSource={RelativeSource AncestorType=controls:SingletonToolbar}}"
-                Style="{DynamicResource TextEditorToggleButtonStyle}"
+                Style="{StaticResource TextEditorToggleButtonStyle}"
                 ToolTip="Italic (Ctrl + I)"
                 Visibility="{Binding AppSettings.TextEditorQuickActionSettings.Italic, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
             <ToggleButton
@@ -28,7 +28,7 @@
                 Command="{Binding SetUnderlinedCommand, RelativeSource={RelativeSource AncestorType=controls:SingletonToolbar}}"
                 Content="{DynamicResource IconUnderlined}"
                 IsChecked="{Binding IsSelectionUnderlined, RelativeSource={RelativeSource AncestorType=controls:SingletonToolbar}}"
-                Style="{DynamicResource TextEditorToggleButtonStyle}"
+                Style="{StaticResource TextEditorToggleButtonStyle}"
                 ToolTip="Underline (Ctrl + U)"
                 Visibility="{Binding AppSettings.TextEditorQuickActionSettings.Underlined, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
 
@@ -38,7 +38,7 @@
                 Content="H1"
                 FontFamily="Segoe UI"
                 FontWeight="Bold"
-                Style="{DynamicResource TextEditorButtonStyle}"
+                Style="{StaticResource TextEditorButtonStyle}"
                 ToolTip="Large font"
                 Visibility="{Binding AppSettings.TextEditorQuickActionSettings.Large, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
 
@@ -48,7 +48,7 @@
                 Content="M"
                 FontFamily="Segoe UI"
                 FontWeight="Bold"
-                Style="{DynamicResource TextEditorButtonStyle}"
+                Style="{StaticResource TextEditorButtonStyle}"
                 ToolTip="Medium font size"
                 Visibility="{Binding AppSettings.TextEditorQuickActionSettings.Medium, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
 
@@ -58,7 +58,7 @@
                 Content="S"
                 FontFamily="Segoe UI"
                 FontWeight="Bold"
-                Style="{DynamicResource TextEditorButtonStyle}"
+                Style="{StaticResource TextEditorButtonStyle}"
                 ToolTip="Small font size"
                 Visibility="{Binding AppSettings.TextEditorQuickActionSettings.Small, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
 
@@ -67,7 +67,7 @@
                 Margin="2 0 0 2"
                 Command="{Binding AlignLeftCommand, RelativeSource={RelativeSource AncestorType=controls:SingletonToolbar}}"
                 Content="{DynamicResource IconAlignLeft}"
-                Style="{DynamicResource TextEditorButtonStyle}"
+                Style="{StaticResource TextEditorButtonStyle}"
                 ToolTip="Align left"
                 Visibility="{Binding AppSettings.TextEditorQuickActionSettings.AlignLeft, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
 
@@ -75,7 +75,7 @@
                 Margin="2 0 0 2"
                 Command="{Binding AlignCenterCommand, RelativeSource={RelativeSource AncestorType=controls:SingletonToolbar}}"
                 Content="{DynamicResource IconAlignCenter}"
-                Style="{DynamicResource TextEditorButtonStyle}"
+                Style="{StaticResource TextEditorButtonStyle}"
                 ToolTip="Align center"
                 Visibility="{Binding AppSettings.TextEditorQuickActionSettings.AlignCenter, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
 
@@ -84,7 +84,7 @@
                 Margin="2 0 0 2"
                 Command="{Binding AlignRightCommand, RelativeSource={RelativeSource AncestorType=controls:SingletonToolbar}}"
                 Content="{DynamicResource IconAlignRight}"
-                Style="{DynamicResource TextEditorButtonStyle}"
+                Style="{StaticResource TextEditorButtonStyle}"
                 ToolTip="Align right"
                 Visibility="{Binding AppSettings.TextEditorQuickActionSettings.AlignRight, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
 
@@ -92,7 +92,7 @@
                 Margin="2 0 0 2"
                 Command="{Binding AlignJustifyCommand, RelativeSource={RelativeSource AncestorType=controls:SingletonToolbar}}"
                 Content="{DynamicResource IconAlignJustify}"
-                Style="{DynamicResource TextEditorButtonStyle}"
+                Style="{StaticResource TextEditorButtonStyle}"
                 ToolTip="Justify"
                 Visibility="{Binding AppSettings.TextEditorQuickActionSettings.AlignJustify, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
 
@@ -100,7 +100,7 @@
                 Margin="2 0 0 2"
                 Command="{Binding IncreaseFontSizeCommand, RelativeSource={RelativeSource AncestorType=controls:SingletonToolbar}}"
                 Content="{DynamicResource IconFontSizeIncrease}"
-                Style="{DynamicResource TextEditorButtonStyle}"
+                Style="{StaticResource TextEditorButtonStyle}"
                 ToolTip="Increase font size (Ctrl + [OemCloseBrackets])"
                 Visibility="{Binding AppSettings.TextEditorQuickActionSettings.Increase, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
 
@@ -108,7 +108,7 @@
                 Margin="2 0 0 2"
                 Command="{Binding DecreaseFontSizeCommand, RelativeSource={RelativeSource AncestorType=controls:SingletonToolbar}}"
                 Content="{DynamicResource IconFontSizeDecrease}"
-                Style="{DynamicResource TextEditorButtonStyle}"
+                Style="{StaticResource TextEditorButtonStyle}"
                 ToolTip="Decrease font size (Ctrl + [OemOpenBrackets])"
                 Visibility="{Binding AppSettings.TextEditorQuickActionSettings.Decrease, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
 
@@ -116,7 +116,7 @@
                 Margin="2 0 0 2"
                 Command="{Binding MonospaceCommand, RelativeSource={RelativeSource AncestorType=controls:SingletonToolbar}}"
                 Content="{DynamicResource IconMonospace}"
-                Style="{DynamicResource TextEditorButtonStyle}"
+                Style="{StaticResource TextEditorButtonStyle}"
                 ToolTip="Toggle monospace font"
                 Visibility="{Binding AppSettings.TextEditorQuickActionSettings.Monospace, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
 
@@ -124,7 +124,7 @@
                 Margin="2 0 0 2"
                 Command="{Binding ResetFormattingCommand, RelativeSource={RelativeSource AncestorType=controls:SingletonToolbar}}"
                 Content="{DynamicResource IconDeleteFormatting}"
-                Style="{DynamicResource TextEditorButtonStyle}"
+                Style="{StaticResource TextEditorButtonStyle}"
                 ToolTip="Reset all formatting (Ctrl + H)"
                 Visibility="{Binding AppSettings.TextEditorQuickActionSettings.Reset, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
 

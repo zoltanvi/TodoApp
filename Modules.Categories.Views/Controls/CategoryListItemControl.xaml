@@ -48,7 +48,7 @@
                                     </Grid.ColumnDefinitions>
 
                                     <Label
-                                        Style="{DynamicResource IconLabelStyle}"
+                                        Style="{StaticResource IconLabelStyle}"
                                         Content="{DynamicResource IconList}"
                                         FontSize="{Binding UIScaler.FontSize.Small, Source={StaticResource UIScaler}}"
                                         Margin="6 0"

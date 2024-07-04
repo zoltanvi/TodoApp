@@ -15,7 +15,7 @@
     x:TypeArguments="pages:PageTitleSettingsPageViewModel"
     Title="PageTitleSettingsPage">
 
-    <ScrollViewer Style="{DynamicResource TodoAppScrollViewer}">
+    <ScrollViewer Style="{StaticResource TodoAppScrollViewer}">
         <Grid>
 
             <Grid.RowDefinitions>
@@ -46,10 +46,10 @@
                         <Label
                             Grid.Column="0"
                             Content="{DynamicResource IconPalette}"
-                            Style="{DynamicResource SettingsIconLabelStyle}" />
+                            Style="{StaticResource SettingsIconLabelStyle}" />
                         <TextBlock
                             Grid.Column="1"
-                            Style="{DynamicResource SettingsDescriptionStyle}"
+                            Style="{StaticResource SettingsDescriptionStyle}"
                             Text="Color" />
 
                         <Border
@@ -77,10 +77,10 @@
                         <Label
                             Grid.Column="0"
                             Content="{DynamicResource IconFontFamily}"
-                            Style="{DynamicResource SettingsIconLabelStyle}" />
+                            Style="{StaticResource SettingsIconLabelStyle}" />
                         <TextBlock
                             Grid.Column="1"
-                            Style="{DynamicResource SettingsDescriptionStyle}"
+                            Style="{StaticResource SettingsDescriptionStyle}"
                             Text="Font family" />
                         <ComboBox
                             Grid.Column="2"
@@ -121,10 +121,10 @@
                         <Label
                             Grid.Column="0"
                             Content="{DynamicResource IconFontFamily}"
-                            Style="{DynamicResource SettingsIconLabelStyle}" />
+                            Style="{StaticResource SettingsIconLabelStyle}" />
                         <TextBlock
                             Grid.Column="1"
-                            Style="{DynamicResource SettingsDescriptionStyle}"
+                            Style="{StaticResource SettingsDescriptionStyle}"
                             Text="Horizontal alignment" />
                         <ComboBox
                             Grid.Column="2"

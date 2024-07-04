@@ -68,7 +68,7 @@
                                     BorderThickness="0"
                                     Content="{StaticResource IconChevronDown}"
                                     Foreground="{TemplateBinding Foreground}"
-                                    Style="{DynamicResource IconLabelStyle}" />
+                                    Style="{StaticResource IconLabelStyle}" />
                             </Viewbox>
 
                             <ContentPresenter

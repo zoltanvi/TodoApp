@@ -14,7 +14,7 @@
     x:TypeArguments="pages:ShortcutsPageViewModel"
     mc:Ignorable="d">
 
-    <ScrollViewer Style="{DynamicResource TodoAppScrollViewer}">
+    <ScrollViewer Style="{StaticResource TodoAppScrollViewer}">
         <Grid>
 
             <Grid.RowDefinitions>
@@ -28,7 +28,7 @@
 
                 <Label
                     Content="Text editor shortcuts"
-                    Style="{DynamicResource BaseLabelClearTypeStyle}"
+                    Style="{StaticResource BaseLabelClearTypeStyle}"
                     FontSize="{Binding UIScaler.FontSize.Large, Source={StaticResource UIScaler}}" />
                 
                 <Border Height="{Binding UIScaler.FontSize.Smallest, Source={StaticResource UIScaler}}" />
@@ -127,7 +127,7 @@
 
                 <Label
                     Content="Global shortcuts"
-                    Style="{DynamicResource BaseLabelClearTypeStyle}"
+                    Style="{StaticResource BaseLabelClearTypeStyle}"
                     FontSize="{Binding UIScaler.FontSize.Large, Source={StaticResource UIScaler}}" />
                 <Border Height="{Binding UIScaler.FontSize.Smaller, Source={StaticResource UIScaler}}" />
 
