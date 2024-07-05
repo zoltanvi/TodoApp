@@ -13,6 +13,7 @@ public class RichTextEditorViewModel : BaseViewModel
     private bool _isEditMode;
     private bool _enterActionOnLostFocus;
     private bool _toolbarCloseOnLostFocus;
+    private string _documentContentPreview;
 
     public bool Focusable { get; set; }
     public bool NeedFocus { get; set; }
@@ -36,6 +37,13 @@ public class RichTextEditorViewModel : BaseViewModel
     public bool FocusOnEditMode { get; set; }
     public bool IsContentEmpty { get; set; }
     public string DocumentContent { get; set; }
+
+    public string DocumentContentPreview
+    {
+        get => _documentContentPreview;
+        set => _documentContentPreview = value;
+    }
+
     public bool IsToolbarOpen { get; set; }
     public bool IsDisplayMode => !IsEditMode;
     public string TextColor { get; set; } = Constants.ColorName.Transparent;

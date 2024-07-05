@@ -8,8 +8,11 @@ public partial class RichTextEditorControl : UserControl
 {
     private SingletonToolbar? _toolbar;
 
-    public static readonly DependencyProperty TextOpacityProperty = DependencyProperty.Register(nameof(TextOpacity), typeof(double), typeof(RichTextEditorControl), new PropertyMetadata());
-    public static readonly DependencyProperty IsReadOnlyProperty = DependencyProperty.Register(nameof(IsReadOnly), typeof(bool), typeof(RichTextEditorControl), new PropertyMetadata());
+    public static readonly DependencyProperty TextOpacityProperty = 
+        DependencyProperty.Register(nameof(TextOpacity), typeof(double), typeof(RichTextEditorControl), new PropertyMetadata());
+
+    public static readonly DependencyProperty IsReadOnlyProperty = 
+        DependencyProperty.Register(nameof(IsReadOnly), typeof(bool), typeof(RichTextEditorControl), new PropertyMetadata());
 
     public double TextOpacity
     {

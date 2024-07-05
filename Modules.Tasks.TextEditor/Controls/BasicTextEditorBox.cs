@@ -7,13 +7,23 @@ namespace Modules.Tasks.TextEditor.Controls;
 
 public class BasicTextEditorBox : RichTextBox
 {
-    internal static readonly DependencyPropertyKey IsEmptyPropertyKey = 
+    private bool _setContentInProgress;
+
+    public static readonly DependencyPropertyKey IsEmptyPropertyKey = 
         DependencyProperty.RegisterReadOnly(nameof(IsEmpty), typeof(bool), typeof(BasicTextEditorBox), new PropertyMetadata());
 
     public static readonly DependencyProperty DocumentContentProperty =
         DependencyProperty.Register(nameof(DocumentContent), typeof(string), typeof(BasicTextEditorBox), new PropertyMetadata(OnContentChanged));
 
-    private bool _setContentInProgress;
+    public static readonly DependencyProperty ContentPreviewProperty = DependencyProperty.Register(
+        nameof(ContentPreview), typeof(string), typeof(BasicTextEditorBox), new PropertyMetadata(default(string)));
+
+    public string ContentPreview
+    {
+        get { return (string)GetValue(ContentPreviewProperty); }
+        set { SetValue(ContentPreviewProperty, value); }
+    }
+
 
     /// <summary>
     /// The Document of the <see cref="BasicTextEditorBox"/> serialized into an xml format.
@@ -33,11 +43,14 @@ public class BasicTextEditorBox : RichTextBox
 
                 if (FlowDocumentHelper.DeserializeDocument(value) is FlowDocument flowDocument)
                 {
+                    SetContentPreview(flowDocument);
                     SetValue(DocumentContentProperty, value);
+
+                    // flowDocument is cleared with the ToList() below
                     Document.Blocks.Clear();
                     Document.Blocks.AddRange(flowDocument.Blocks.ToList());
                 }
-
+                
                 _setContentInProgress = false;
             }
         }
@@ -63,6 +76,13 @@ public class BasicTextEditorBox : RichTextBox
     public void UpdateContent()
     {
         DocumentContent = FlowDocumentHelper.SerializeDocument(Document);
+    }
+
+    private void SetContentPreview(FlowDocument flowDocument)
+    {
+        var items = FlowDocumentHelper.GetDocumentItems(flowDocument);
+
+        ContentPreview = string.Join(" ", items);
     }
 
     private static void OnContentChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)

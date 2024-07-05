@@ -36,6 +36,8 @@ public class TaskItemViewModel
         set => TextEditorViewModel.DocumentContent = value;
     }
 
+    public string ContentPreview => TextEditorViewModel.DocumentContentPreview;
+
     public bool IsDone
     {
         get => _isDone;

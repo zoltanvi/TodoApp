@@ -92,7 +92,7 @@ public class TaskPageViewModel : BaseViewModel
             var task = new TaskItem
             {
                 Content = AddNewTaskTextEditorViewModel.DocumentContent,
-                ContentPreview = "TODO",
+                ContentPreview = AddNewTaskTextEditorViewModel.DocumentContentPreview,
                 CategoryId = activeCategory.Id,
                 // TODO
                 ListOrder = Items.Count

@@ -72,6 +72,7 @@
                     AcceptsTab="{Binding AcceptsTab}"
                     Background="Transparent"
                     DocumentContent="{Binding DocumentContent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    ContentPreview="{Binding DocumentContentPreview, Mode=OneWayToSource, NotifyOnSourceUpdated=True}"
                     EmptyContentUpArrowAction="{Binding OnQuickEditRequestedAction}"
                     EnterAction="{Binding EnterAction}"
                     Focusable="{Binding Focusable}"
