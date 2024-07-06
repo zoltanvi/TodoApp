@@ -125,8 +125,14 @@ public class TaskItemViewModel
     private void UpdateTaskIsDone()
     {
         // TODO: unpin, move to bottom of the list or top of the list if necessary
-
-        UpdateTask();
+        if (IsDone)
+        {
+            _mediator.Publish(new FinishTaskItemRequestedEvent { TaskId = Id });
+        }
+        else
+        {
+            _mediator.Publish(new UnfinishTaskItemRequestedEvent { TaskId = Id });
+        }
     }
 
     private void UpdateTask()

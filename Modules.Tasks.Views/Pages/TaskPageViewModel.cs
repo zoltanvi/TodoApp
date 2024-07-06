@@ -6,6 +6,7 @@ using Modules.Common.ViewModel;
 using Modules.Settings.Contracts.ViewModels;
 using Modules.Tasks.Contracts;
 using Modules.Tasks.Contracts.Cqrs.Events;
+using Modules.Tasks.Contracts.Cqrs.Queries;
 using Modules.Tasks.Contracts.Models;
 using Modules.Tasks.TextEditor.Controls;
 using Modules.Tasks.Views.Controls;
@@ -54,8 +55,10 @@ public class TaskPageViewModel : BaseViewModel
 
         PinTaskItemRequestedEventHandler.PinTaskItemRequested += OnPinTaskItemRequested;
         UnpinTaskItemRequestedEventHandler.UnpinTaskItemRequested += OnUnpinTaskItemRequested;
+        FinishTaskItemRequestedEventHandler.FinishTaskItemRequested += OnFinishTaskItemRequested;
+        UnfinishTaskItemRequestedEventHandler.UnfinishTaskItemRequested += OnUnfinishTaskItemRequested;
     }
-
+    
     public ObservableCollection<TaskItemViewModel> Items { get; }
 
     public RichTextEditorViewModel AddNewTaskTextEditorViewModel { get; }
@@ -121,8 +124,16 @@ public class TaskPageViewModel : BaseViewModel
 
         _taskItemRepository.UpdateTaskItem(taskItem.Map());
 
+        var query = new TaskInsertPositionQuery
+        {
+            TaskId = request.TaskId, 
+            PositionChangeReason = PositionChangeReason.Pinned
+        };
+
+        var result = _mediator.Send(query).Result;
+
         Items.Remove(taskItem);
-        Items.Insert(0, taskItem);
+        Items.Insert(result, taskItem);
     }
 
     private void OnUnpinTaskItemRequested(UnpinTaskItemRequestedEvent request)
@@ -133,10 +144,57 @@ public class TaskPageViewModel : BaseViewModel
         taskItem.Pinned = false;
         _taskItemRepository.UpdateTaskItem(taskItem.Map());
 
-        var pinnedItems = Items.Count(x => x.Id != request.TaskId && x.Pinned);
+        var query = new TaskInsertPositionQuery
+        {
+            TaskId = request.TaskId,
+            PositionChangeReason = PositionChangeReason.Unpinned
+        };
+
+        var result = _mediator.Send(query).Result;
 
         Items.Remove(taskItem);
-        Items.Insert(pinnedItems, taskItem);
+        Items.Insert(result, taskItem);
+    }
+
+    private void OnFinishTaskItemRequested(FinishTaskItemRequestedEvent request)
+    {
+        var taskItem = Items.FirstOrDefault(x => x.Id == request.TaskId);
+        ArgumentNullException.ThrowIfNull(taskItem);
+
+        taskItem.IsDone = true;
+        taskItem.Pinned = false;
+        _taskItemRepository.UpdateTaskItem(taskItem.Map());
+
+        var query = new TaskInsertPositionQuery
+        {
+            TaskId = request.TaskId,
+            PositionChangeReason = PositionChangeReason.Done
+        };
+
+        var result = _mediator.Send(query).Result;
+
+        Items.Remove(taskItem);
+        Items.Insert(result, taskItem);
+    }
+
+    private void OnUnfinishTaskItemRequested(UnfinishTaskItemRequestedEvent request)
+    {
+        var taskItem = Items.FirstOrDefault(x => x.Id == request.TaskId);
+        ArgumentNullException.ThrowIfNull(taskItem);
+
+        taskItem.IsDone = false;
+        _taskItemRepository.UpdateTaskItem(taskItem.Map());
+
+        var query = new TaskInsertPositionQuery
+        {
+            TaskId = request.TaskId,
+            PositionChangeReason = PositionChangeReason.Undone
+        };
+
+        var result = _mediator.Send(query).Result;
+
+        Items.Remove(taskItem);
+        Items.Insert(result, taskItem);
     }
 
     private void OnQuickEditRequested()
@@ -174,6 +232,8 @@ public class TaskPageViewModel : BaseViewModel
 
         PinTaskItemRequestedEventHandler.PinTaskItemRequested -= OnPinTaskItemRequested;
         UnpinTaskItemRequestedEventHandler.UnpinTaskItemRequested -= OnUnpinTaskItemRequested;
+        FinishTaskItemRequestedEventHandler.FinishTaskItemRequested -= OnFinishTaskItemRequested;
+        UnfinishTaskItemRequestedEventHandler.UnfinishTaskItemRequested -= OnUnfinishTaskItemRequested;
     }
 
 
