@@ -82,4 +82,24 @@ public class TaskItemRepository : ITaskItemRepository
 
         _context.SaveChanges();
     }
+
+    public TaskItem UpdateTaskItem(TaskItem task)
+    {
+        var dbTask = _context.Tasks.Find(task.Id);
+        ArgumentNullException.ThrowIfNull(dbTask);
+
+        dbTask.Content = task.Content;
+        dbTask.ContentPreview = task.ContentPreview;
+        dbTask.ListOrder = task.ListOrder;
+        dbTask.Pinned = task.Pinned;
+        dbTask.IsDone = task.IsDone;
+        dbTask.ModificationDate = DateTime.Now;
+        dbTask.MarkerColor = task.MarkerColor;
+        dbTask.BorderColor = task.BorderColor;
+        dbTask.BackgroundColor = task.BackgroundColor;
+
+        _context.SaveChanges();
+
+        return dbTask;
+    }
 }

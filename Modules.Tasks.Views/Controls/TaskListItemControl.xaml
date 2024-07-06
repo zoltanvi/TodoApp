@@ -9,6 +9,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:valueConverters="clr-namespace:Modules.Tasks.Views.ValueConverters"
     xmlns:valueConverters1="clr-namespace:Modules.Common.Views.ValueConverters;assembly=Modules.Common.Views"
+    xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
     d:DataContext="{d:DesignInstance local:TaskItemViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -118,7 +119,7 @@
                             Margin="{Binding UIScaler.TaskCheckBoxWidth, Source={StaticResource UIScaler}, Converter={StaticResource TaskCheckboxMarginConverter}}"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
-                            Command="{Binding Path=IsDoneModifiedCommand}"
+                            Command="{Binding IsDoneModifiedCommand}"
                             IsChecked="{Binding IsDone}"
                             IsEnabled="{Binding TextEditorViewModel.IsDisplayMode}"
                             Style="{StaticResource TaskCheckBoxStyle}"
@@ -130,7 +131,7 @@
                             Margin="{Binding UIScaler.TaskCheckBoxWidth, Source={StaticResource UIScaler}, Converter={StaticResource TaskCheckboxMarginConverter}}"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
-                            Command="{Binding Path=IsDoneModifiedCommand}"
+                            Command="{Binding IsDoneModifiedCommand}"
                             IsChecked="{Binding IsDone}"
                             IsEnabled="{Binding TextEditorViewModel.IsDisplayMode}"
                             Style="{StaticResource TaskCheckBoxSquareStyle}"
@@ -221,6 +222,7 @@
 
                         <!--  Task description  -->
                         <controls1:RichTextEditorControl
+                            IsReadOnly="False"
                             Grid.Row="0"
                             DataContext="{Binding TextEditorViewModel}" />
 
@@ -326,16 +328,16 @@
                         </EventTrigger>
                     </Border.Triggers>
 
-                    <!--  TODO  -->
-                    <!--<Behaviors:Interaction.Triggers>
-                        <Behaviors:EventTrigger EventName="MouseEnter">
-                            <Behaviors:InvokeCommandAction Command="{Binding EnableQuickActionsCommand}" />
-                        </Behaviors:EventTrigger>
+                    <!--ENABLE OR DISABLE QUICK ACTIONS--> 
+                    <b:Interaction.Triggers>
+                        <b:EventTrigger EventName="MouseEnter">
+                            <b:InvokeCommandAction Command="{Binding EnableQuickActionsCommand}" />
+                        </b:EventTrigger>
 
-                        <Behaviors:EventTrigger EventName="MouseLeave">
-                            <Behaviors:InvokeCommandAction Command="{Binding DisableQuickActionsCommand}" />
-                        </Behaviors:EventTrigger>
-                    </Behaviors:Interaction.Triggers>-->
+                        <b:EventTrigger EventName="MouseLeave">
+                            <b:InvokeCommandAction Command="{Binding DisableQuickActionsCommand}" />
+                        </b:EventTrigger>
+                    </b:Interaction.Triggers>
 
                     <!--  HOVER PANEL  -->
                     <Border

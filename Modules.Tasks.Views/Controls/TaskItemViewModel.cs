@@ -1,22 +1,44 @@
-﻿using Modules.Settings.Contracts.ViewModels;
+﻿using MediatR;
+using Modules.Common.DataBinding;
+using Modules.Settings.Contracts.ViewModels;
+using Modules.Tasks.Contracts.Cqrs.Commands;
+using Modules.Tasks.Contracts.Cqrs.Events;
 using Modules.Tasks.TextEditor.Controls;
+using Modules.Tasks.Views.Mappings;
 using System.Windows.Input;
 
 namespace Modules.Tasks.Views.Controls;
 
 public class TaskItemViewModel
 {
+    private readonly IMediator _mediator;
     private string _contentRollback = string.Empty;
     private bool _isDone;
 
-    public TaskItemViewModel()
+    public TaskItemViewModel(IMediator mediator)
     {
+        ArgumentNullException.ThrowIfNull(mediator);
+        _mediator = mediator;
+
         // TODO: make it dynamic somehow
         TextEditorViewModel = new RichTextEditorViewModel(
             focusOnEditMode: true,
-            enterActionOnLostFocus: AppSettings.Instance.TaskPageSettings.ExitEditOnFocusLost, 
-            toolbarCloseOnLostFocus: false, 
+            enterActionOnLostFocus: AppSettings.Instance.TaskPageSettings.ExitEditOnFocusLost,
+            toolbarCloseOnLostFocus: false,
             acceptsTab: true);
+
+        EnableQuickActionsCommand = new RelayCommand(() => IsQuickActionsEnabled = true);
+        DisableQuickActionsCommand = new RelayCommand(() => IsQuickActionsEnabled = false);
+        EditItemCommand = new RelayCommand(EditItem);
+        
+        
+        ToggleIsDoneCommand = new RelayCommand(ToggleIsDone);
+        PinItemCommand = new RelayCommand(PinItem);
+        UnpinItemCommand = new RelayCommand(UnpinItem);
+        IsDoneModifiedCommand = new RelayCommand(UpdateTaskIsDone);
+
+        // CheckBox and Combobox changes the viewmodel properties directly, only need to persist the changes
+        ColorChangedNotification = new NotifiableObject(UpdateTask);
     }
 
     public int Id { get; set; }
@@ -55,10 +77,11 @@ public class TaskItemViewModel
     public bool Pinned { get; set; }
 
     // AppSettings.TaskQuickActionSettings.AnyEnabled AND TextEditorViewModel.IsDisplayMode
-    public bool IsHiddenButtonPanelVisible { get; set; }
+    public bool IsHiddenButtonPanelVisible { get; set; } = true;
     public bool IsDeleted { get; set; }
     public DateTime? DeletedDate { get; set; }
 
+    public bool IsQuickActionsEnabled { get; set; }
 
     // Commands
     public ICommand IsDoneModifiedCommand { get; }
@@ -69,4 +92,45 @@ public class TaskItemViewModel
     public ICommand UnpinItemCommand { get; }
     public ICommand DeleteItemCommand { get; }
 
+    public ICommand EnableQuickActionsCommand { get; }
+    public ICommand DisableQuickActionsCommand { get; }
+
+    public INotifiableObject ColorChangedNotification { get; }
+
+    private void EditItem()
+    {
+        // Save the content before editing for a possible rollback
+        _contentRollback = Content;
+
+        // Enable editing
+        TextEditorViewModel.IsEditMode = true;
+        //IoC.OneEditorOpenService.EditMode(this);
+    }
+
+    private void ToggleIsDone()
+    {
+        IsDone ^= true;
+        UpdateTask();
+    }
+    private void PinItem()
+    {
+        _mediator.Publish(new PinTaskItemRequestedEvent{ TaskId = Id });
+    }
+
+    private void UnpinItem()
+    {
+        _mediator.Publish(new UnpinTaskItemRequestedEvent { TaskId = Id });
+    }
+
+    private void UpdateTaskIsDone()
+    {
+        // TODO: unpin, move to bottom of the list or top of the list if necessary
+
+        UpdateTask();
+    }
+
+    private void UpdateTask()
+    {
+        _mediator.Send(new UpdateTaskCommand { Task = this.Map() });
+    }
 }

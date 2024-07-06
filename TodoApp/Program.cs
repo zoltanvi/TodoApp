@@ -22,6 +22,7 @@ using Modules.Settings.Views;
 using Modules.Settings.Views.Pages;
 using Modules.Settings.Views.Services;
 using Modules.Tasks.Repositories;
+using Modules.Tasks.Views.CqrsHandling;
 using Modules.Tasks.Views.Pages;
 using TodoApp.DefaultData;
 using TodoApp.Themes;
@@ -37,6 +38,7 @@ public static class Program
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<SettingsCqrsRegistration>());
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<PopupMessageCqrsRegistration>());
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<CategoriesCqrsRegistration>());
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<TasksCqrsRegistration>());
 
         services.AddSingleton<IUIScaler>(provider => UIScaler.Instance);
         services.AddSingleton<MaterialThemeManagerService>();

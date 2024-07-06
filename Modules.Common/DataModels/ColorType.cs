@@ -1,4 +1,4 @@
-﻿namespace Modules.PopupMessage.Views.Models;
+﻿namespace Modules.Common.DataModels;
 
 public enum ColorType
 {

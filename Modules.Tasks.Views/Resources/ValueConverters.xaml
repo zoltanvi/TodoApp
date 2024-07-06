@@ -1,7 +1,8 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:valueConverters="clr-namespace:Modules.Tasks.Views.ValueConverters">
+    xmlns:valueConverters="clr-namespace:Modules.Tasks.Views.ValueConverters"
+    xmlns:valueConverters1="clr-namespace:Modules.Common.Views.ValueConverters;assembly=Modules.Common.Views">
 
     <valueConverters:BoolToThicknessConverter
         x:Key="TaskPageTitleMarginConverter"
@@ -23,5 +24,9 @@
     <valueConverters:TaskItemBackgroundBrushMultiValueConverter x:Key="TaskItemBackgroundBrushMultiValueConverter"/>
     <valueConverters:TaskCheckboxMarginConverter x:Key="TaskCheckboxMarginConverter"/>
     <valueConverters:TaskSpacingToMarginConverter x:Key="TaskSpacingToMarginConverter"/>
+
+    <valueConverters1:TagColorConverter x:Key="TagForegroundConverter" ColorType="Foreground"/>
+    <valueConverters1:TagColorConverter x:Key="TagBackgroundConverter" ColorType="Background"/>
+    <valueConverters1:TagColorConverter x:Key="TagBorderConverter" ColorType="Border"/>
 
 </ResourceDictionary>

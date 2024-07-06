@@ -53,6 +53,7 @@
 		<ProjectReference Include="..\Modules.Settings.Views\Modules.Settings.Views.csproj" />
 		<ProjectReference Include="..\Modules.Tasks.Contracts\Modules.Tasks.Contracts.csproj" />
 		<ProjectReference Include="..\Modules.Tasks.Repositories\Modules.Tasks.Repositories.csproj" />
+		<ProjectReference Include="..\Modules.Tasks.Services\Modules.Tasks.Services.csproj" />
 		<ProjectReference Include="..\Modules.Tasks.TextEditor\Modules.Tasks.TextEditor.csproj" />
 		<ProjectReference Include="..\Modules.Tasks.Views\Modules.Tasks.Views.csproj" />
 	</ItemGroup>

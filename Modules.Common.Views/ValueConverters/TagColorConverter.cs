@@ -1,11 +1,9 @@
 ﻿using Modules.Common.DataModels;
-using Modules.Common.Views.ValueConverters;
-using Modules.PopupMessage.Views.Models;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Media;
 
-namespace Modules.PopupMessage.Views.ValueConverters;
+namespace Modules.Common.Views.ValueConverters;
 
 public class TagColorConverter : BaseValueConverter
 {
@@ -34,6 +32,10 @@ public class TagColorConverter : BaseValueConverter
             resourceName += "Border";
         }
 
-        return new SolidColorBrush((Color)Application.Current.TryFindResource(resourceName));
+        var resource = Application.Current.TryFindResource(resourceName);
+
+        ArgumentNullException.ThrowIfNull(resource);
+
+        return new SolidColorBrush((Color)resource);
     }
 }

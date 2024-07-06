@@ -5,9 +5,11 @@ using Modules.Common.DataBinding;
 using Modules.Common.ViewModel;
 using Modules.Settings.Contracts.ViewModels;
 using Modules.Tasks.Contracts;
+using Modules.Tasks.Contracts.Cqrs.Events;
 using Modules.Tasks.Contracts.Models;
 using Modules.Tasks.TextEditor.Controls;
 using Modules.Tasks.Views.Controls;
+using Modules.Tasks.Views.CqrsHandling.EventHandlers;
 using Modules.Tasks.Views.Mappings;
 using PropertyChanged;
 using System.Collections.ObjectModel;
@@ -47,10 +49,13 @@ public class TaskPageViewModel : BaseViewModel
         AddNewTaskTextEditorViewModel.OnQuickEditRequestedAction = OnQuickEditRequested;
 
         var tasks = _taskItemRepository.GetActiveTasksFromCategory(activeCategoryInfo.Id);
-        Items = new ObservableCollection<TaskItemViewModel>(tasks.MapToViewModelList());
+        Items = new ObservableCollection<TaskItemViewModel>(tasks.MapToViewModelList(_mediator));
         Items.CollectionChanged += ItemsOnCollectionChanged;
+
+        PinTaskItemRequestedEventHandler.PinTaskItemRequested += OnPinTaskItemRequested;
+        UnpinTaskItemRequestedEventHandler.UnpinTaskItemRequested += OnUnpinTaskItemRequested;
     }
-    
+
     public ObservableCollection<TaskItemViewModel> Items { get; }
 
     public RichTextEditorViewModel AddNewTaskTextEditorViewModel { get; }
@@ -100,10 +105,38 @@ public class TaskPageViewModel : BaseViewModel
 
             var addedTask = _taskItemRepository.AddTask(task);
 
-            Items.Add(addedTask.MapToViewModel());
+            Items.Add(addedTask.MapToViewModel(_mediator));
 
             AddNewTaskTextEditorViewModel.DocumentContent = string.Empty;
         }
+    }
+
+    private void OnPinTaskItemRequested(PinTaskItemRequestedEvent request)
+    {
+        var taskItem = Items.FirstOrDefault(x => x.Id == request.TaskId);
+        ArgumentNullException.ThrowIfNull(taskItem);
+
+        taskItem.Pinned = true;
+        taskItem.IsDone = false;
+
+        _taskItemRepository.UpdateTaskItem(taskItem.Map());
+
+        Items.Remove(taskItem);
+        Items.Insert(0, taskItem);
+    }
+
+    private void OnUnpinTaskItemRequested(UnpinTaskItemRequestedEvent request)
+    {
+        var taskItem = Items.FirstOrDefault(x => x.Id == request.TaskId);
+        ArgumentNullException.ThrowIfNull(taskItem);
+
+        taskItem.Pinned = false;
+        _taskItemRepository.UpdateTaskItem(taskItem.Map());
+
+        var pinnedItems = Items.Count(x => x.Id != request.TaskId && x.Pinned);
+
+        Items.Remove(taskItem);
+        Items.Insert(pinnedItems, taskItem);
     }
 
     private void OnQuickEditRequested()
@@ -138,6 +171,9 @@ public class TaskPageViewModel : BaseViewModel
     {
         AppSettings.Instance.PageTitleSettings.SettingsChanged -= OnPageTitleSettingsChanged;
         Items.CollectionChanged -= ItemsOnCollectionChanged;
+
+        PinTaskItemRequestedEventHandler.PinTaskItemRequested -= OnPinTaskItemRequested;
+        UnpinTaskItemRequestedEventHandler.UnpinTaskItemRequested -= OnUnpinTaskItemRequested;
     }
 
 

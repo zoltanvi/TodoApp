@@ -7,20 +7,19 @@ public class CurrentDateTimeFormatMultiConverter : BaseMultiValueConverter<Curre
     public override object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
     {
 
-        if (values.Length == 2 && 
-            values[0] is long ticks && 
-            values[1] is string dateFormat)
+        if (values.Length == 2 && values[1] is string dateFormat)
         {
-            try
+            if (values[0] is long ticks)
             {
                 return new DateTime(ticks).ToString(dateFormat);
             }
-            catch (Exception)
+
+            if (values[0] is DateTime dateTime)
             {
-                // Ignore
+                return dateTime.ToString(dateFormat);
             }
         }
-     
+
         return "INVALID CurrentDateTimeFormatMultiConverter";
     }
 }

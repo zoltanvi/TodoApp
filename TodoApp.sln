@@ -59,7 +59,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Modules.Tasks.Views", "Modu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Modules.Tasks.TextEditor", "Modules.Tasks.TextEditor\Modules.Tasks.TextEditor.csproj", "{BCC14EF5-5AA2-4059-AB70-3899962BB526}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoApp.Tests", "TodoApp.Tests\TodoApp.Tests.csproj", "{3396BB43-947C-477C-9428-6E1579A6285D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TodoApp.Tests", "TodoApp.Tests\TodoApp.Tests.csproj", "{3396BB43-947C-477C-9428-6E1579A6285D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Modules.Tasks.Services", "Modules.Tasks.Services\Modules.Tasks.Services.csproj", "{B6A87114-D18F-4746-B4BE-8651456026DB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -151,6 +153,10 @@ Global
 		{3396BB43-947C-477C-9428-6E1579A6285D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3396BB43-947C-477C-9428-6E1579A6285D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3396BB43-947C-477C-9428-6E1579A6285D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6A87114-D18F-4746-B4BE-8651456026DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6A87114-D18F-4746-B4BE-8651456026DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6A87114-D18F-4746-B4BE-8651456026DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6A87114-D18F-4746-B4BE-8651456026DB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -182,6 +188,7 @@ Global
 		{8E0A93BA-5F70-43B0-933F-B11EC500CD02} = {CD9EF1EA-9F35-4260-AD88-BF6FADFF7622}
 		{0BEA5DD0-A3CD-46E2-8F0E-58117F463FB9} = {CD9EF1EA-9F35-4260-AD88-BF6FADFF7622}
 		{BCC14EF5-5AA2-4059-AB70-3899962BB526} = {CD9EF1EA-9F35-4260-AD88-BF6FADFF7622}
+		{B6A87114-D18F-4746-B4BE-8651456026DB} = {CD9EF1EA-9F35-4260-AD88-BF6FADFF7622}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9D9BCECE-B112-4247-B0B5-EB19FFAF8C55}
