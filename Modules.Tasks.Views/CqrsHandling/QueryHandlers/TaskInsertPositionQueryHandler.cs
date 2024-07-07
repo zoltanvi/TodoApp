@@ -37,7 +37,7 @@ public class TaskInsertPositionQueryHandler : IRequestHandler<TaskInsertPosition
         var activeTaskCount = stats.ActiveTaskCount;
         var forcedOrder = AppSettings.Instance.TaskPageSettings.ForceTaskOrderByState;
 
-        var requestedPosition = request.PositionChangeReason switch
+        var newIndex = request.PositionChangeReason switch
         {
             PositionChangeReason.Pinned => 0,
             PositionChangeReason.Unpinned => pinnedItemsCount,
@@ -50,6 +50,6 @@ public class TaskInsertPositionQueryHandler : IRequestHandler<TaskInsertPosition
             _ => throw new ArgumentOutOfRangeException(nameof(PositionChangeReason))
         };
 
-        return Task.FromResult(requestedPosition);
+        return Task.FromResult(newIndex);
     }
 }

@@ -1,18 +1,13 @@
 ﻿using GongSolutions.Wpf.DragDrop;
 using GongSolutions.Wpf.DragDrop.Utilities;
 using System.Collections;
+using System.Windows;
 
 namespace Modules.Common.Views.DragDrop;
 
 public class CustomDropHandler : DefaultDropHandler
 {
-    private static readonly CustomDropHandler _instance = new();
-    public static CustomDropHandler Instance => _instance;
-
-    public bool AlterInsertIndex { get; set; }
-    public int NewInsertIndex { get; set; }
-
-    public event EventHandler<DragDropEventArgs> BeforeItemDropped;
+    public static CustomDropHandler Instance { get; } = new();
 
     public override void Drop(IDropInfo dropInfo)
     {
@@ -28,12 +23,15 @@ public class CustomDropHandler : DefaultDropHandler
             }
 
             object item = ExtractData(dropInfo.Data).OfType<object>().FirstOrDefault();
+            
+            ArgumentNullException.ThrowIfNull(item);
+
             int oldIndex = sourceList.IndexOf(item);
 
             // Decrement index because the item is going to be removed before it is inserted again
             newIndex--;
 
-            // Dropped above itself in the list, the previous decrementation was not necessary.
+            // Dropped above itself in the list, the decrementing was not necessary.
             if (newIndex + 1 <= oldIndex)
             {
                 newIndex++;
@@ -41,18 +39,12 @@ public class CustomDropHandler : DefaultDropHandler
 
             if (oldIndex != -1)
             {
-                // Notify clients to allow them to alter the insert index.
-                var args = new DragDropEventArgs { Item = item, OldIndex = oldIndex, NewIndex = newIndex };
-                BeforeItemDropped?.Invoke(this, args);
-
-                // Alter the insert index if the client requested it.
-                if (AlterInsertIndex)
-                {
-                    newIndex = NewInsertIndex;
-                    AlterInsertIndex = false;
-                }
-
                 sourceList.Remove(item);
+
+                if ((dropInfo.DragInfo.VisualSource as FrameworkElement)?.DataContext is IDropIndexModifier dropIndexModifier)
+                {
+                    newIndex = dropIndexModifier.GetModifiedDropIndex(newIndex, item);
+                }
 
                 // The list got smaller, check for over-indexing (inserting into last index)
                 newIndex = Math.Min(newIndex, sourceList.Count);

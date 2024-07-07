@@ -3,6 +3,7 @@ using Modules.Categories.Contracts.Cqrs.Commands;
 using Modules.Categories.Contracts.Cqrs.Queries;
 using Modules.Common.DataBinding;
 using Modules.Common.ViewModel;
+using Modules.Common.Views.DragDrop;
 using Modules.Settings.Contracts.ViewModels;
 using Modules.Tasks.Contracts;
 using Modules.Tasks.Contracts.Cqrs.Events;
@@ -20,7 +21,7 @@ using System.Windows.Input;
 namespace Modules.Tasks.Views.Pages;
 
 [AddINotifyPropertyChangedInterface]
-public class TaskPageViewModel : BaseViewModel
+public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
 {
     private readonly IMediator _mediator;
     private readonly ITaskItemRepository _taskItemRepository;
@@ -58,7 +59,7 @@ public class TaskPageViewModel : BaseViewModel
         FinishTaskItemRequestedEventHandler.FinishTaskItemRequested += OnFinishTaskItemRequested;
         UnfinishTaskItemRequestedEventHandler.UnfinishTaskItemRequested += OnUnfinishTaskItemRequested;
     }
-    
+
     public ObservableCollection<TaskItemViewModel> Items { get; }
 
     public RichTextEditorViewModel AddNewTaskTextEditorViewModel { get; }
@@ -126,14 +127,13 @@ public class TaskPageViewModel : BaseViewModel
 
         var query = new TaskInsertPositionQuery
         {
-            TaskId = request.TaskId, 
+            TaskId = request.TaskId,
             PositionChangeReason = PositionChangeReason.Pinned
         };
 
-        var result = _mediator.Send(query).Result;
+        var newIndex = _mediator.Send(query).Result;
 
-        Items.Remove(taskItem);
-        Items.Insert(result, taskItem);
+        MoveTaskItem(newIndex, taskItem);
     }
 
     private void OnUnpinTaskItemRequested(UnpinTaskItemRequestedEvent request)
@@ -150,10 +150,9 @@ public class TaskPageViewModel : BaseViewModel
             PositionChangeReason = PositionChangeReason.Unpinned
         };
 
-        var result = _mediator.Send(query).Result;
+        var newIndex = _mediator.Send(query).Result;
 
-        Items.Remove(taskItem);
-        Items.Insert(result, taskItem);
+        MoveTaskItem(newIndex, taskItem);
     }
 
     private void OnFinishTaskItemRequested(FinishTaskItemRequestedEvent request)
@@ -171,10 +170,9 @@ public class TaskPageViewModel : BaseViewModel
             PositionChangeReason = PositionChangeReason.Done
         };
 
-        var result = _mediator.Send(query).Result;
+        var newIndex = _mediator.Send(query).Result;
 
-        Items.Remove(taskItem);
-        Items.Insert(result, taskItem);
+        MoveTaskItem(newIndex, taskItem);
     }
 
     private void OnUnfinishTaskItemRequested(UnfinishTaskItemRequestedEvent request)
@@ -191,10 +189,9 @@ public class TaskPageViewModel : BaseViewModel
             PositionChangeReason = PositionChangeReason.Undone
         };
 
-        var result = _mediator.Send(query).Result;
+        var newIndex = _mediator.Send(query).Result;
 
-        Items.Remove(taskItem);
-        Items.Insert(result, taskItem);
+        MoveTaskItem(newIndex, taskItem);
     }
 
     private void OnQuickEditRequested()
@@ -244,5 +241,27 @@ public class TaskPageViewModel : BaseViewModel
         }
 
         _taskItemRepository.UpdateTaskListOrders(Items.MapList());
+    }
+
+    private void MoveTaskItem(int newIndex, TaskItemViewModel taskItem)
+    {
+        Items.Remove(taskItem);
+        Items.Insert(newIndex, taskItem);
+    }
+
+    public int GetModifiedDropIndex(int dropIndex, object droppedObject)
+    {
+        if (droppedObject is not TaskItemViewModel taskItem)
+        {
+            throw new ArgumentException($"{nameof(droppedObject)} is not a {nameof(TaskItemViewModel)}");
+        }
+
+        var query = new TaskExternalInsertPositionQuery
+        {
+            TaskId = taskItem.Id,
+            RequestedInsertPosition = dropIndex
+        };
+
+        return _mediator.Send(query).Result;
     }
 }
