@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Modules.Categories.Repositories;
@@ -41,7 +42,12 @@ public static class Program
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<CategoriesCqrsRegistration>());
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<TasksCqrsRegistration>());
 
-        services.AddSingleton<IUIScaler>(provider => UIScaler.Instance);
+        services.AddSingleton<IUIScaler>(provider =>
+        {
+            var mediator = provider.GetRequiredService<IMediator>();
+            UIScaler.Instance.Setup(mediator);
+            return UIScaler.Instance;
+        });
         services.AddSingleton<MaterialThemeManagerService>();
         services.AddSingleton<ThemeManager>();
         services.AddScoped<IWindowService, WindowService>();

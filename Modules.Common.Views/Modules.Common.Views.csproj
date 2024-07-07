@@ -39,6 +39,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Modules.Common.Navigation\Modules.Common.Navigation.csproj" />
     <ProjectReference Include="..\Modules.Common\Modules.Common.csproj" />
+    <ProjectReference Include="..\Modules.PopupMessage.Contracts\Modules.PopupMessage.Contracts.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -3,7 +3,7 @@ using Modules.Common.Cqrs.Events;
 using Modules.Common.Services;
 using Modules.Settings.Contracts.ViewModels;
 
-namespace Modules.Settings.Views.Cqrs.EventHandlers;
+namespace Modules.Settings.Services.CqrsHandling.EventHandlers;
 
 public class UiScaledEventHandler : INotificationHandler<UiScaledEvent>
 {

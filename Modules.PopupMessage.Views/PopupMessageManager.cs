@@ -1,6 +1,7 @@
 ﻿using Modules.Common.ViewModel;
 using Modules.Common.Views.Services;
 using Modules.PopupMessage.Views.Models;
+using Modules.Settings.Contracts.ViewModels;
 using PropertyChanged;
 
 namespace Modules.PopupMessage.Views;
@@ -20,6 +21,15 @@ public class PopupMessageManager : BaseViewModel
     {
         _timer = TimerService.Instance.CreateTimer(OnMessageDurationEnded);
         _messageQueue = new Queue<PopupMessage>();
+        AppSettings.Instance.ThemeSettings.SettingsChanged += OnThemeSettingsChanged;
+    }
+
+    private void OnThemeSettingsChanged(object? sender, SettingsChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(ThemeSettings.DarkMode))
+        {
+            OnPropertyChanged(nameof(MessageType));
+        }
     }
 
     public void ShowMessage(string message, MessageType messageType, TimeSpan duration)
@@ -73,6 +83,9 @@ public class PopupMessageManager : BaseViewModel
             _currentMessageDuration = (int)messageItem.Duration.TotalMilliseconds;
 
             Visible = true;
+
+            // Make sure to trigger ui update
+            OnPropertyChanged(nameof(MessageType));
         }
     }
 

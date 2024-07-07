@@ -1,4 +1,6 @@
-﻿namespace Modules.Common.Services;
+﻿using MediatR;
+
+namespace Modules.Common.Services;
 
 public interface IUIScaler
 {
@@ -21,6 +23,7 @@ public interface IUIScaler
     double NotePageBoxWidth { get; }
     double TaskProgressBarHeight { get; }
 
+    void Setup(IMediator mediator);
     void SetScaling(double value);
     void ZoomIn();
     void ZoomOut();

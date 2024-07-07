@@ -1,6 +1,8 @@
-﻿using Modules.Common.Cqrs.Events;
+﻿using MediatR;
+using Modules.Common.Cqrs.Events;
 using Modules.Common.Services;
 using Modules.Common.ViewModel;
+using Modules.PopupMessage.Contracts.Cqrs.Commands;
 using PropertyChanged;
 
 namespace Modules.Common.Views.Services;
@@ -19,16 +21,8 @@ public class UIScaler : BaseViewModel, IUIScaler
     private const double OriginalTaskProgressBarHeight = 5;
     private const int ColorPickerColumns = 9;
 
-    //private readonly IMediator _mediator;
     private double _scalingPercent = OriginalScalingPercent;
-
-    //public UIScaler(IMediator mediator)
-    //{
-    //    ArgumentNullException.ThrowIfNull(mediator);
-
-    //    _mediator = mediator;
-    //    FontSize = new ScaledFontSizeProvider(this);
-    //}
+    private IMediator? _mediator;
 
     public static IUIScaler Instance { get; } = new UIScaler();
 
@@ -59,7 +53,11 @@ public class UIScaler : BaseViewModel, IUIScaler
     public double NotePageBoxWidth => 17 * ScaleValue;
     public double TaskProgressBarHeight => OriginalTaskProgressBarHeight * ScaleValue;
 
-    public event EventHandler<UiScaledEvent> UiScaled;
+    public void Setup(IMediator mediator)
+    {
+        ArgumentNullException.ThrowIfNull(mediator);
+        _mediator = mediator;
+    }
 
     public void ZoomOut()
     {
@@ -84,16 +82,11 @@ public class UIScaler : BaseViewModel, IUIScaler
 
         if (zoomed)
         {
-            UiScaled?.Invoke(this, new UiScaledEvent
+            _mediator?.Publish(new UiScaledEvent
             {
                 OldScaleValue = oldScaleValue,
                 NewScaleValue = StaticScaleValue
             });
-            //_mediator.Publish(new UiScaledEvent
-            //{
-            //    OldScaleValue = oldScaleValue,
-            //    NewScaleValue = StaticScaleValue
-            //});
         }
     }
 
@@ -116,11 +109,11 @@ public class UIScaler : BaseViewModel, IUIScaler
 
         _scalingPercent += zoomOffset;
         SetScaling(_scalingPercent / OriginalScalingPercent);
-     
 
-        //_mediator.Send(new ShowMessageInfoCommand
-        //{
-        //    Message = $"{_scalingPercent} %"
-        //});
+
+        _mediator?.Send(new ShowMessageInfoCommand
+        {
+            Message = $"{_scalingPercent} %"
+        });
     }
 }
