@@ -34,7 +34,6 @@ public class TaskInsertPositionQueryHandler : IRequestHandler<TaskInsertPosition
             });
     
         var pinnedItemsCount = stats.PinnedItemsCount;
-        var doneItemsCount = stats.DoneItemsCount;
         var activeTaskCount = stats.ActiveTaskCount;
         var forcedOrder = AppSettings.Instance.TaskPageSettings.ForceTaskOrderByState;
 
@@ -43,7 +42,7 @@ public class TaskInsertPositionQueryHandler : IRequestHandler<TaskInsertPosition
             PositionChangeReason.Pinned => 0,
             PositionChangeReason.Unpinned => pinnedItemsCount,
             PositionChangeReason.Done => forcedOrder 
-                ? activeTaskCount - doneItemsCount 
+                ? activeTaskCount
                 : dbTask.ListOrder < pinnedItemsCount 
                     ? pinnedItemsCount 
                     : dbTask.ListOrder,

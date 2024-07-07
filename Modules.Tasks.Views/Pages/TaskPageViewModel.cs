@@ -236,7 +236,6 @@ public class TaskPageViewModel : BaseViewModel
         UnfinishTaskItemRequestedEventHandler.UnfinishTaskItemRequested -= OnUnfinishTaskItemRequested;
     }
 
-
     private void ItemsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
         for (var i = 0; i < Items.Count; i++)

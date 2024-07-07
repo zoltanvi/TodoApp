@@ -124,7 +124,6 @@ public class TaskItemViewModel
 
     private void UpdateTaskIsDone()
     {
-        // TODO: unpin, move to bottom of the list or top of the list if necessary
         if (IsDone)
         {
             _mediator.Publish(new FinishTaskItemRequestedEvent { TaskId = Id });
