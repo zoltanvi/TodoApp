@@ -67,6 +67,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         UnpinTaskItemRequestedEventHandler.UnpinTaskItemRequested += OnUnpinTaskItemRequested;
         FinishTaskItemRequestedEventHandler.FinishTaskItemRequested += OnFinishTaskItemRequested;
         UnfinishTaskItemRequestedEventHandler.UnfinishTaskItemRequested += OnUnfinishTaskItemRequested;
+        DeleteTaskItemRequestedEventHandler.DeleteTaskItemRequestedEvent += OnDeleteTaskItemRequestedEvent;
         _oneEditorOpenService.ChangedToDisplayMode += FocusAddNewTaskTextEditor;
     }
 
@@ -204,6 +205,16 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         MoveTaskItem(newIndex, taskItem);
     }
 
+    private void OnDeleteTaskItemRequestedEvent(DeleteTaskItemRequestedEvent request)
+    {
+        var taskItem = Items.FirstOrDefault(x => x.Id == request.TaskId);
+        ArgumentNullException.ThrowIfNull(taskItem);
+
+        Items.Remove(taskItem);
+
+        _taskItemRepository.DeleteTask(taskItem.Map());
+    }
+
     private void OnQuickEditRequested()
     {
         // TODO
@@ -243,6 +254,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         UnpinTaskItemRequestedEventHandler.UnpinTaskItemRequested -= OnUnpinTaskItemRequested;
         FinishTaskItemRequestedEventHandler.FinishTaskItemRequested -= OnFinishTaskItemRequested;
         UnfinishTaskItemRequestedEventHandler.UnfinishTaskItemRequested -= OnUnfinishTaskItemRequested;
+        DeleteTaskItemRequestedEventHandler.DeleteTaskItemRequestedEvent -= OnDeleteTaskItemRequestedEvent;
         _oneEditorOpenService.ChangedToDisplayMode -= FocusAddNewTaskTextEditor;
     }
 

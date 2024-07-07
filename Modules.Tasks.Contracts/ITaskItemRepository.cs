@@ -11,4 +11,5 @@ public interface ITaskItemRepository
     TaskItem? GetTaskById(int id);
     void UpdateTaskListOrders(List<TaskItem> taskItems);
     TaskItem UpdateTaskItem(TaskItem task);
+    void DeleteTask(TaskItem task);
 }

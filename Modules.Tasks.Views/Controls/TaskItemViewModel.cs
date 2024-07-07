@@ -39,8 +39,8 @@ public class TaskItemViewModel : BaseViewModel
         EnableQuickActionsCommand = new RelayCommand(() => IsQuickActionsEnabled = true);
         DisableQuickActionsCommand = new RelayCommand(() => IsQuickActionsEnabled = false);
         EditItemCommand = new RelayCommand(EditItem);
-        
-        
+        DeleteItemCommand = new RelayCommand(DeleteItem);
+
         ToggleIsDoneCommand = new RelayCommand(ToggleIsDone);
         PinItemCommand = new RelayCommand(PinItem);
         UnpinItemCommand = new RelayCommand(UnpinItem);
@@ -129,20 +129,16 @@ public class TaskItemViewModel : BaseViewModel
         _oneEditorOpenService.DisplayMode(this);
     }
 
+    private void DeleteItem() => _mediator.Publish(new DeleteTaskItemRequestedEvent { TaskId = Id });
+
     private void ToggleIsDone()
     {
         IsDone ^= true;
         UpdateTask();
     }
-    private void PinItem()
-    {
-        _mediator.Publish(new PinTaskItemRequestedEvent{ TaskId = Id });
-    }
+    private void PinItem() => _mediator.Publish(new PinTaskItemRequestedEvent{ TaskId = Id });
 
-    private void UnpinItem()
-    {
-        _mediator.Publish(new UnpinTaskItemRequestedEvent { TaskId = Id });
-    }
+    private void UnpinItem() => _mediator.Publish(new UnpinTaskItemRequestedEvent { TaskId = Id });
 
     private void UpdateTaskIsDone()
     {
@@ -156,8 +152,5 @@ public class TaskItemViewModel : BaseViewModel
         }
     }
 
-    private void UpdateTask()
-    {
-        _mediator.Send(new UpdateTaskCommand { Task = this.Map() });
-    }
+    private void UpdateTask() => _mediator.Send(new UpdateTaskCommand { Task = this.Map() });
 }

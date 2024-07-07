@@ -11,5 +11,5 @@ public class TaskPageSettings : SettingsBase
     public bool FormattedPasteEnabled { get; set; } = true;
     public bool ProgressBar { get; set; }
     public bool NumberOnProgressBar { get; set; } = true;
-    public bool SendButtonVisible { get; set; } = true;
+    public bool SendButtonVisible { get; set; }
 }

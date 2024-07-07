@@ -102,4 +102,16 @@ public class TaskItemRepository : ITaskItemRepository
 
         return dbTask;
     }
+
+    public void DeleteTask(TaskItem task)
+    {
+        var dbTask = _context.Tasks.Find(task.Id);
+        ArgumentNullException.ThrowIfNull(dbTask);
+
+        dbTask.DeletedDate = DateTime.Now;
+        dbTask.IsDeleted = true;
+        dbTask.ListOrder = -1;
+        
+        _context.SaveChanges();
+    }
 }
