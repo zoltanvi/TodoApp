@@ -13,6 +13,7 @@ using Modules.Tasks.TextEditor.Controls;
 using Modules.Tasks.Views.Controls;
 using Modules.Tasks.Views.CqrsHandling.EventHandlers;
 using Modules.Tasks.Views.Mappings;
+using Modules.Tasks.Views.Services;
 using PropertyChanged;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -25,14 +26,22 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
 {
     private readonly IMediator _mediator;
     private readonly ITaskItemRepository _taskItemRepository;
+    private readonly OneEditorOpenService _oneEditorOpenService;
 
-    public TaskPageViewModel(IMediator mediator, ITaskItemRepository taskItemRepository)
+    public event EventHandler? FocusAddNewTaskTextEditorRequested;
+
+    public TaskPageViewModel(
+        IMediator mediator, 
+        ITaskItemRepository taskItemRepository,
+        OneEditorOpenService oneEditorOpenService)
     {
         ArgumentNullException.ThrowIfNull(mediator);
         ArgumentNullException.ThrowIfNull(taskItemRepository);
+        ArgumentNullException.ThrowIfNull(oneEditorOpenService);
 
         _mediator = mediator;
         _taskItemRepository = taskItemRepository;
+        _oneEditorOpenService = oneEditorOpenService;
 
         AppSettings.Instance.PageTitleSettings.SettingsChanged += OnPageTitleSettingsChanged;
         var activeCategoryInfo = _mediator.Send(new GetActiveCategoryInfoQuery()).Result;
@@ -51,13 +60,14 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         AddNewTaskTextEditorViewModel.OnQuickEditRequestedAction = OnQuickEditRequested;
 
         var tasks = _taskItemRepository.GetActiveTasksFromCategory(activeCategoryInfo.Id);
-        Items = new ObservableCollection<TaskItemViewModel>(tasks.MapToViewModelList(_mediator));
+        Items = new ObservableCollection<TaskItemViewModel>(tasks.MapToViewModelList(_mediator, oneEditorOpenService));
         Items.CollectionChanged += ItemsOnCollectionChanged;
 
         PinTaskItemRequestedEventHandler.PinTaskItemRequested += OnPinTaskItemRequested;
         UnpinTaskItemRequestedEventHandler.UnpinTaskItemRequested += OnUnpinTaskItemRequested;
         FinishTaskItemRequestedEventHandler.FinishTaskItemRequested += OnFinishTaskItemRequested;
         UnfinishTaskItemRequestedEventHandler.UnfinishTaskItemRequested += OnUnfinishTaskItemRequested;
+        _oneEditorOpenService.ChangedToDisplayMode += FocusAddNewTaskTextEditor;
     }
 
     public ObservableCollection<TaskItemViewModel> Items { get; }
@@ -109,7 +119,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
 
             var addedTask = _taskItemRepository.AddTask(task);
 
-            Items.Add(addedTask.MapToViewModel(_mediator));
+            Items.Add(addedTask.MapToViewModel(_mediator, _oneEditorOpenService));
 
             AddNewTaskTextEditorViewModel.DocumentContent = string.Empty;
         }
@@ -222,6 +232,8 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         }
     }
 
+    private void FocusAddNewTaskTextEditor() => FocusAddNewTaskTextEditorRequested?.Invoke(this, EventArgs.Empty);
+
     protected override void OnDispose()
     {
         AppSettings.Instance.PageTitleSettings.SettingsChanged -= OnPageTitleSettingsChanged;
@@ -231,6 +243,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         UnpinTaskItemRequestedEventHandler.UnpinTaskItemRequested -= OnUnpinTaskItemRequested;
         FinishTaskItemRequestedEventHandler.FinishTaskItemRequested -= OnFinishTaskItemRequested;
         UnfinishTaskItemRequestedEventHandler.UnfinishTaskItemRequested -= OnUnfinishTaskItemRequested;
+        _oneEditorOpenService.ChangedToDisplayMode -= FocusAddNewTaskTextEditor;
     }
 
     private void ItemsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)

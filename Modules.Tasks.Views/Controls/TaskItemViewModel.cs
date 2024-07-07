@@ -1,24 +1,32 @@
 ﻿using MediatR;
 using Modules.Common.DataBinding;
+using Modules.Common.ViewModel;
 using Modules.Settings.Contracts.ViewModels;
 using Modules.Tasks.Contracts.Cqrs.Commands;
 using Modules.Tasks.Contracts.Cqrs.Events;
 using Modules.Tasks.TextEditor.Controls;
 using Modules.Tasks.Views.Mappings;
+using Modules.Tasks.Views.Services;
+using PropertyChanged;
 using System.Windows.Input;
 
 namespace Modules.Tasks.Views.Controls;
 
-public class TaskItemViewModel
+[AddINotifyPropertyChangedInterface]
+public class TaskItemViewModel : BaseViewModel
 {
     private readonly IMediator _mediator;
+    private readonly OneEditorOpenService _oneEditorOpenService;
     private string _contentRollback = string.Empty;
     private bool _isDone;
 
-    public TaskItemViewModel(IMediator mediator)
+    public TaskItemViewModel(IMediator mediator, OneEditorOpenService oneEditorOpenService)
     {
         ArgumentNullException.ThrowIfNull(mediator);
+        ArgumentNullException.ThrowIfNull(oneEditorOpenService);
+
         _mediator = mediator;
+        _oneEditorOpenService = oneEditorOpenService;
 
         // TODO: make it dynamic somehow
         TextEditorViewModel = new RichTextEditorViewModel(
@@ -26,6 +34,7 @@ public class TaskItemViewModel
             enterActionOnLostFocus: AppSettings.Instance.TaskPageSettings.ExitEditOnFocusLost,
             toolbarCloseOnLostFocus: false,
             acceptsTab: true);
+        TextEditorViewModel.EnterAction = ExitEditItem;
 
         EnableQuickActionsCommand = new RelayCommand(() => IsQuickActionsEnabled = true);
         DisableQuickActionsCommand = new RelayCommand(() => IsQuickActionsEnabled = false);
@@ -70,14 +79,8 @@ public class TaskItemViewModel
         }
     }
 
-    // IsReminderOn AND TextEditorViewModel.IsDisplayMode
     public bool IsAnyReminderOn { get; set; }
-
-    // Pinned AND TextEditorViewModel.IsDisplayMode
     public bool Pinned { get; set; }
-
-    // AppSettings.TaskQuickActionSettings.AnyEnabled AND TextEditorViewModel.IsDisplayMode
-    public bool IsHiddenButtonPanelVisible { get; set; } = true;
     public bool IsDeleted { get; set; }
     public DateTime? DeletedDate { get; set; }
 
@@ -104,7 +107,26 @@ public class TaskItemViewModel
 
         // Enable editing
         TextEditorViewModel.IsEditMode = true;
-        //IoC.OneEditorOpenService.EditMode(this);
+        _oneEditorOpenService.EditMode(this);
+    }
+
+    public void ExitEditItem()
+    {
+        if (TextEditorViewModel.IsContentEmpty)
+        {
+            // Empty content is rejected, roll back the previous content.
+            Content = _contentRollback;
+        }
+        else if (Content != _contentRollback)
+        {
+            //Modifications are accepted, update task
+            ModificationDate = DateTime.Now;
+            UpdateTask();
+        }
+
+        TextEditorViewModel.IsEditMode = false;
+        TextEditorViewModel.IsToolbarOpen = false;
+        _oneEditorOpenService.DisplayMode(this);
     }
 
     private void ToggleIsDone()

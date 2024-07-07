@@ -24,6 +24,7 @@ using Modules.Settings.Views.Services;
 using Modules.Tasks.Repositories;
 using Modules.Tasks.Views.CqrsHandling;
 using Modules.Tasks.Views.Pages;
+using Modules.Tasks.Views.Services;
 using TodoApp.DefaultData;
 using TodoApp.Themes;
 using TodoApp.WindowHandling;
@@ -58,6 +59,7 @@ public static class Program
         services.AddSingleton<IOverlayPageNavigationService, OverlayPageNavigationService>();
 
         services.AddSingleton<PopupMessageControl>();
+        services.AddSingleton<OneEditorOpenService>();
 
         AddDatabases(services);
         AddPages(services);

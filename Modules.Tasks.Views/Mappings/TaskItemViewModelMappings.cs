@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Modules.Tasks.Contracts.Models;
 using Modules.Tasks.Views.Controls;
+using Modules.Tasks.Views.Services;
 
 namespace Modules.Tasks.Views.Mappings;
 
@@ -30,9 +31,12 @@ public static class TaskItemViewModelMappings
     public static List<TaskItem> MapList(this IEnumerable<TaskItemViewModel> vmList) =>
         vmList.Select(x => x.Map()).ToList();
 
-    public static TaskItemViewModel MapToViewModel(this TaskItem taskItem, IMediator mediator)
+    public static TaskItemViewModel MapToViewModel(
+        this TaskItem taskItem, 
+        IMediator mediator,
+        OneEditorOpenService oneEditorOpenService)
     {
-        return new TaskItemViewModel(mediator)
+        return new TaskItemViewModel(mediator, oneEditorOpenService)
         {
             Id = taskItem.Id,
             CategoryId = taskItem.CategoryId,
@@ -50,6 +54,9 @@ public static class TaskItemViewModelMappings
         };
     }
 
-    public static List<TaskItemViewModel> MapToViewModelList(this IEnumerable<TaskItem> taskList, IMediator mediator) =>
-        taskList.Select(x => x.MapToViewModel(mediator)).ToList();
+    public static List<TaskItemViewModel> MapToViewModelList(
+        this IEnumerable<TaskItem> taskList, 
+        IMediator mediator,
+        OneEditorOpenService oneEditorOpenService) =>
+        taskList.Select(x => x.MapToViewModel(mediator, oneEditorOpenService)).ToList();
 }

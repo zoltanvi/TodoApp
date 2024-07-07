@@ -24,6 +24,7 @@
     <valueConverters:TaskItemBackgroundBrushMultiValueConverter x:Key="TaskItemBackgroundBrushMultiValueConverter"/>
     <valueConverters:TaskCheckboxMarginConverter x:Key="TaskCheckboxMarginConverter"/>
     <valueConverters:TaskSpacingToMarginConverter x:Key="TaskSpacingToMarginConverter"/>
+    <valueConverters:BoolToVisibilityAndConverter x:Key="BoolToVisibilityAndConverter"/>
 
     <valueConverters1:TagColorConverter x:Key="TagForegroundConverter" ColorType="Foreground"/>
     <valueConverters1:TagColorConverter x:Key="TagBackgroundConverter" ColorType="Background"/>

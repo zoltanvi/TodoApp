@@ -296,6 +296,7 @@
                         </Grid.RowDefinitions>
 
                         <textEditor:RichTextEditorControl
+                            x:Name="BottomTextEditor"
                             Grid.Row="0"
                             MaxHeight="{Binding UIScaler.TextBoxMaxHeight, Source={StaticResource UIScaler}}"
                             Padding="3 8"

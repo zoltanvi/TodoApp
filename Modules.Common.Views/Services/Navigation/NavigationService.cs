@@ -60,6 +60,13 @@ public abstract class NavigationService : INavigationService
             throw new ArgumentException("The type must be a class and implement IPage.", nameof(pageType));
         }
 
+        // Try to dispose page
+        if (Frame.Content is IDisposable disposablePage)
+        {
+            disposablePage.Dispose();
+        }
+
+        // Try to dispose viewModel
         if (Frame.Content is Page oldPage &&
             oldPage.DataContext is IDisposable disposableDataContext)
         {
