@@ -53,7 +53,7 @@ public class CategoryListPageViewModel : BaseViewModel
 
         var activeCategories = categoriesRepository.GetActiveCategories();
         var activeCategory = activeCategories.First(x => x.Id == AppSettings.Instance.SessionSettings.ActiveCategoryId);
-        SetActiveCategory(activeCategory.MapToViewModel(), initialization: true);
+        ActiveCategoryId = activeCategory.Id;
 
         Items = new ObservableCollection<CategoryViewModel>(activeCategories.MapToViewModelList());
         Items.CollectionChanged += ItemsOnCollectionChanged;
@@ -151,9 +151,7 @@ public class CategoryListPageViewModel : BaseViewModel
         }
     }
 
-    private void SetActiveCategory(CategoryViewModel? category) => SetActiveCategory(category, false);
-
-    private void SetActiveCategory(CategoryViewModel? category, bool initialization)
+    private void SetActiveCategory(CategoryViewModel? category)
     {
         if (string.IsNullOrWhiteSpace(category?.Name)) return;
 
@@ -161,18 +159,15 @@ public class CategoryListPageViewModel : BaseViewModel
         {
             ActiveCategoryId = category.Id;
 
-            if (!initialization)
+            AppSettings.Instance.SessionSettings.ActiveCategoryId = ActiveCategoryId;
+
+            _mediator.Publish(new ActiveCategoryChangedEvent
             {
-                AppSettings.Instance.SessionSettings.ActiveCategoryId = ActiveCategoryId;
+                CategoryId = category.Id,
+                CategoryName = category.Name
+            });
 
-                _mediator.Publish(new ActiveCategoryChangedEvent
-                {
-                    CategoryId = category.Id,
-                    CategoryName = category.Name
-                });
-
-                //IoC.NoteListService.ActiveNote = null;
-            }
+            //IoC.NoteListService.ActiveNote = null;
         }
     }
 

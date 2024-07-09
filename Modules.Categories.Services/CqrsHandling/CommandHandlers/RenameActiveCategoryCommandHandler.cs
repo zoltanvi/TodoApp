@@ -2,6 +2,7 @@
 using Modules.Categories.Contracts;
 using Modules.Categories.Contracts.Cqrs.Commands;
 using Modules.Categories.Contracts.Cqrs.Events;
+using Modules.PopupMessage.Contracts.Cqrs.Commands;
 using Modules.Settings.Contracts.ViewModels;
 
 namespace Modules.Categories.Services.CqrsHandling.CommandHandlers;
@@ -34,6 +35,19 @@ public class RenameActiveCategoryCommandHandler : IRequestHandler<RenameActiveCa
 
         ArgumentNullException.ThrowIfNull(category);
 
+        var duplicateCategory = _categoriesRepository.GetCategoryByName(request.Name);
+
+        // TODO: show "do you want to merge it?" message instead
+        if (duplicateCategory != null)
+        {
+            _mediator.Send(new ShowMessageErrorCommand
+            {
+                Message = $"[{request.Name}] category already exist!"
+            }, cancellationToken);
+
+            return Task.FromResult(category.Name);
+        }
+        
         category.Name = request.Name;
 
         var updatedCategory = _categoriesRepository.UpdateCategory(category);
