@@ -67,7 +67,11 @@ public class TaskItemViewModel : BaseViewModel
         set => TextEditorViewModel.DocumentContent = value;
     }
 
-    public string ContentPreview => TextEditorViewModel.DocumentContentPreview;
+    public string ContentPreview
+    {
+        get => TextEditorViewModel.DocumentContentPreview;
+        set => TextEditorViewModel.DocumentContentPreview = value;
+    }
 
     public bool IsDone
     {

@@ -8,7 +8,6 @@ using Modules.Categories.Views.Mappings;
 using Modules.Common;
 using Modules.Common.DataBinding;
 using Modules.Common.Navigation;
-using Modules.Common.OBSOLETE.Mediator;
 using Modules.Common.Services.Navigation;
 using Modules.Common.ViewModel;
 using Modules.PopupMessage.Contracts.Cqrs.Commands;
@@ -28,7 +27,6 @@ public class CategoryListPageViewModel : BaseViewModel
     private readonly IMainPageNavigationService _mainPageNavigationService;
     private readonly ISideMenuPageNavigationService _sideMenuPageNavigationService;
     private readonly IMediator _mediator;
-    private CategoryViewModel _activeCategory;
 
     public CategoryListPageViewModel(
         ICategoriesRepository categoriesRepository,
@@ -48,17 +46,14 @@ public class CategoryListPageViewModel : BaseViewModel
 
         AddCategoryCommand = new RelayCommand(AddCategory);
         DeleteCategoryCommand = new RelayParameterizedCommand<CategoryViewModel>(DeleteCategory);
-        ChangeCategoryCommand = new RelayParameterizedCommand<CategoryViewModel>(ChangeCategory);
+        ChangeCategoryCommand = new RelayParameterizedCommand<CategoryViewModel>(SetActiveCategory);
         OpenSettingsPageCommand = new RelayCommand(OpenSettingsPage);
         OpenNoteListPageCommand = new RelayCommand(OpenNoteListPage);
         OpenRecycleBinPageCommand = new RelayCommand(OpenRecycleBinPage);
 
         var activeCategories = categoriesRepository.GetActiveCategories();
-
-        var activeCategory = activeCategories
-            .First(x => x.Id == AppSettings.Instance.SessionSettings.ActiveCategoryId);
-
-        _activeCategory = activeCategory.MapToViewModel();
+        var activeCategory = activeCategories.First(x => x.Id == AppSettings.Instance.SessionSettings.ActiveCategoryId);
+        SetActiveCategory(activeCategory.MapToViewModel(), initialization: true);
 
         Items = new ObservableCollection<CategoryViewModel>(activeCategories.MapToViewModelList());
         Items.CollectionChanged += ItemsOnCollectionChanged;
@@ -74,62 +69,8 @@ public class CategoryListPageViewModel : BaseViewModel
     public ICommand OpenNoteListPageCommand { get; }
     public ICommand OpenRecycleBinPageCommand { get; }
     public ObservableCollection<CategoryViewModel> Items { get; set; }
-    public IEnumerable<CategoryViewModel> InactiveCategories => Items.Where(c => c.Id != ActiveCategory?.Id);
-
-    public CategoryViewModel ActiveCategory
-    {
-        get => _activeCategory;
-        set
-        {
-            var oldName = _activeCategory.Name;
-
-            _activeCategory = value;
-            AppSettings.Instance.SessionSettings.ActiveCategoryId = value.Id;
-
-            _mediator.Publish(new ActiveCategoryChangedEvent
-            {
-                OldName = oldName,
-                NewName = _activeCategory.Name
-            });
-        }
-    }
-
-    protected override void OnDispose()
-    {
-        Items.CollectionChanged -= ItemsOnCollectionChanged;
-        CategoryNameUpdatedEventHandler.CategoryNameUpdated -= OnCategoryNameUpdated;
-    }
-
-    private void ItemsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
-    {
-        for (var i = 0; i < Items.Count; i++)
-        {
-            Items[i].ListOrder = i;
-        }
-
-        _categoriesRepository.UpdateCategoryListOrders(Items.MapList());
-
-        // Trigger update to refresh move to category items context menu
-        OnPropertyChanged(nameof(InactiveCategories));
-    }
-
-    public void RestoreCategoryIfNeeded(int categoryId)
-    {
-        var existingCategory = _categoriesRepository.GetCategoryById(categoryId);
-
-        // Untrash category if exists
-        if (existingCategory?.IsDeleted ?? false)
-        {
-            RestoreCategory(existingCategory);
-        }
-    }
-
-    private void RestoreCategory(Category category)
-    {
-        _categoriesRepository.RestoreCategory(category, Items.Count);
-
-        Items.Add(category.MapToViewModel());
-    }
+    public IEnumerable<CategoryViewModel> InactiveCategories => Items.Where(c => c.Id != ActiveCategoryId);
+    public int ActiveCategoryId { get; private set; }
 
     private void AddCategory()
     {
@@ -178,23 +119,11 @@ public class CategoryListPageViewModel : BaseViewModel
         Items.Add(addedCategory.MapToViewModel());
     }
 
-    private void UntrashCategory(CategoryViewModel category)
+    private void RestoreCategory(Category category)
     {
-        //// First, persist trashed property
-        //category.Trashed = false;
-        //_context.Categories.UpdateFirst(category.Map());
+        _categoriesRepository.RestoreCategory(category, Items.Count);
 
-        //var tasksInCategory = _context.Tasks
-        //        .Where(x => x.CategoryId == category.Id)
-        //        .MapList();
-
-        //SetTrashedOnTasks(tasksInCategory, false);
-
-        //Items.Add(category);
-        //ReorderingHelperTemp.ReorderCategory(_context, category, Items.Count - 1);
-
-        //// Second, persist list order
-        //_context.Categories.UpdateFirst(category.Map());
+        Items.Add(category.MapToViewModel());
     }
 
     private void DeleteCategory(CategoryViewModel category)
@@ -203,10 +132,7 @@ public class CategoryListPageViewModel : BaseViewModel
         var activeCategories = _categoriesRepository.GetActiveCategories();
         if (activeCategories.Count <= 1)
         {
-            _mediator.Send(new ShowMessageErrorCommand
-            {
-                Message = "Cannot delete last category."
-            });
+            _mediator.Send(new ShowMessageErrorCommand { Message = "Cannot delete last category." });
 
             return;
         }
@@ -216,62 +142,37 @@ public class CategoryListPageViewModel : BaseViewModel
         Items.Remove(category);
         _categoriesRepository.DeleteCategory(category.Map());
 
+        _mediator.Send(new ShowMessageInfoCommand { Message = $"Deleted category: {category.Name}" });
+
         // Only if the current category was the deleted one, select a new category
-        if (category.Id == ActiveCategory.Id)
+        if (category.Id == ActiveCategoryId)
         {
             SetActiveCategory(Items.FirstOrDefault());
         }
     }
 
-    private void ChangeCategory(CategoryViewModel category)
-    {
-        //IoC.UndoManager.ClearHistory();
-        SetActiveCategory(category);
-    }
+    private void SetActiveCategory(CategoryViewModel? category) => SetActiveCategory(category, false);
 
-    private void OnCategoryNameUpdated(CategoryNameUpdatedEvent e)
-    {
-        var oldCategory = Items.FirstOrDefault(x => x.Id == e.Id);
-
-        if (oldCategory != null)
-        {
-            oldCategory.Name = e.CategoryName;
-            var index = Items.IndexOf(oldCategory);
-            Items.RemoveAt(index);
-            Items.Insert(index, oldCategory);
-        }
-    }
-
-    /// <summary>
-    /// Sets the current category to the specified one.
-    /// Ensures that always only one IsSelected property is set to true.
-    /// </summary>
-    /// <param name="category"></param>
-    private void SetActiveCategory(CategoryViewModel? category)
+    private void SetActiveCategory(CategoryViewModel? category, bool initialization)
     {
         if (string.IsNullOrWhiteSpace(category?.Name)) return;
 
-        if (ActiveCategory != category)
+        if (ActiveCategoryId != category.Id)
         {
-            ActiveCategory = category;
+            ActiveCategoryId = category.Id;
 
-            // Notify clients about the category change
-            MediatorOBSOLETE.NotifyClients(ViewModelMessages.CategoryChanged);
-            //IoC.NoteListService.ActiveNote = null;
-        }
+            if (!initialization)
+            {
+                AppSettings.Instance.SessionSettings.ActiveCategoryId = ActiveCategoryId;
 
-        if (AppSettings.Instance.ApplicationSettings.CloseSideMenuOnPageChange)
-        {
-            AppSettings.Instance.SessionSettings.SideMenuOpen = false;
-        }
+                _mediator.Publish(new ActiveCategoryChangedEvent
+                {
+                    CategoryId = category.Id,
+                    CategoryName = category.Name
+                });
 
-        if (category.Id == Constants.RecycleBinCategoryId)
-        {
-            _mainPageNavigationService.NavigateTo<IRecycleBinPage>();
-        }
-        else
-        {
-            _mainPageNavigationService.NavigateTo<ITaskPage>();
+                //IoC.NoteListService.ActiveNote = null;
+            }
         }
     }
 
@@ -295,5 +196,37 @@ public class CategoryListPageViewModel : BaseViewModel
         var recycleBinCategory = _categoriesRepository.GetCategoryById(Constants.RecycleBinCategoryId);
 
         SetActiveCategory(recycleBinCategory?.MapToViewModel());
+    }
+
+    private void ItemsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        for (var i = 0; i < Items.Count; i++)
+        {
+            Items[i].ListOrder = i;
+        }
+
+        _categoriesRepository.UpdateCategoryListOrders(Items.MapList());
+
+        // Trigger update to refresh move to category items context menu
+        OnPropertyChanged(nameof(InactiveCategories));
+    }
+
+    private void OnCategoryNameUpdated(CategoryNameUpdatedEvent e)
+    {
+        var oldCategory = Items.FirstOrDefault(x => x.Id == e.Id);
+
+        if (oldCategory != null)
+        {
+            oldCategory.Name = e.CategoryName;
+            var index = Items.IndexOf(oldCategory);
+            Items.RemoveAt(index);
+            Items.Insert(index, oldCategory);
+        }
+    }
+
+    protected override void OnDispose()
+    {
+        Items.CollectionChanged -= ItemsOnCollectionChanged;
+        CategoryNameUpdatedEventHandler.CategoryNameUpdated -= OnCategoryNameUpdated;
     }
 }

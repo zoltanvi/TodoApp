@@ -4,6 +4,6 @@ namespace Modules.Categories.Contracts.Cqrs.Events;
 
 public class ActiveCategoryChangedEvent : INotification
 {
-    public string OldName { get; set; }
-    public string NewName { get; set; }
+    public required int CategoryId { get; set; }
+    public required string CategoryName { get; set; }
 }

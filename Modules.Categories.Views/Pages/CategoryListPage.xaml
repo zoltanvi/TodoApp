@@ -79,7 +79,6 @@
                     dd:DragDrop.DropHandler="{Binding Handler, Source={StaticResource CustomDropHandler}}"
                     dd:DragDrop.IsDragSource="True"
                     dd:DragDrop.IsDropTarget="True"
-                    AutomationProperties.AutomationId="CategoryListListView"
                     Background="Transparent"
                     BorderThickness="0"
                     ItemsSource="{Binding Items}"
@@ -103,7 +102,7 @@
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <local:CategoryListItemControl 
-                                ActiveCategoryId="{Binding DataContext.ActiveCategory.Id, ElementName=CategoryListListView}" 
+                                ActiveCategoryId="{Binding DataContext.ActiveCategoryId, ElementName=CategoryListListView}" 
                                 Tag="{Binding DataContext, ElementName=CategoryListListView}" />
                         </DataTemplate>
                     </ListView.ItemTemplate>
@@ -173,7 +172,7 @@
                                                 <converters:EqualityConverter />
                                             </MultiBinding.Converter>
                                             <Binding Path="RecycleBinCategoryId" />
-                                            <Binding Path="ActiveCategory.Id" />
+                                            <Binding Path="ActiveCategoryId" />
                                         </MultiBinding>
                                     </DataTrigger.Binding>
                                     <Setter Property="Background" Value="{DynamicResource PrimaryContainer}" />
@@ -199,7 +198,7 @@
                                                     <converters:EqualityConverter />
                                                 </MultiBinding.Converter>
                                                 <Binding Path="RecycleBinCategoryId"  />
-                                                <Binding Path="ActiveCategory.Id"  />
+                                                <Binding Path="ActiveCategoryId"  />
                                             </MultiBinding>
                                         </DataTrigger.Binding>
                                         <Setter Property="Foreground" Value="{DynamicResource OnSecondaryContainer}" />

@@ -41,6 +41,7 @@ public static class TaskItemViewModelMappings
             Id = taskItem.Id,
             CategoryId = taskItem.CategoryId,
             Content = taskItem.Content,
+            ContentPreview = taskItem.ContentPreview,
             ListOrder = taskItem.ListOrder,
             Pinned = taskItem.Pinned,
             IsDone = taskItem.IsDone,

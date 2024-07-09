@@ -6,34 +6,9 @@
 public enum ViewModelMessages
 {
     /// <summary>
-    /// The selected category changed
-    /// </summary>
-    CategoryChanged,
-
-    /// <summary>
-    /// A category has been deleted
-    /// </summary>
-    CategoryDeleted,
-
-    /// <summary>
-    /// The application should flash (orange in windows taskbar)
-    /// </summary>
-    WindowFlashRequested,
-
-    /// <summary>
-    /// The opened notification closed
-    /// </summary>
-    NotificationClosed,
-
-    /// <summary>
     /// The Application theme changed
     /// </summary>
     ThemeChanged,
-
-    /// <summary>
-    /// The selected note changed
-    /// </summary>
-    NoteChanged,
 
     /// <summary>
     /// Ctrl + Shift + L has been pressed in a RichTextBox
@@ -43,8 +18,5 @@ public enum ViewModelMessages
     /// <summary>
     /// Task page's bottom text editor should be focused
     /// </summary>
-    FocusBottomTextEditor,
-    UpdateMainPage,
-
-    OpenSettingsPage
+    FocusBottomTextEditor
 }
