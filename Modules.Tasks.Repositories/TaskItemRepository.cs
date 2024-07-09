@@ -114,4 +114,22 @@ public class TaskItemRepository : ITaskItemRepository
         
         _context.SaveChanges();
     }
+
+    public void DeleteTasksInCategory(int categoryId)
+    {
+        var dbTasks = _context.Tasks
+            .Where(x => x.CategoryId == categoryId && !x.IsDeleted)
+            .ToList();
+
+        if (dbTasks.Count == 0) return;
+
+        foreach (TaskItem dbTask in dbTasks)
+        {
+            dbTask.DeletedDate = DateTime.Now;
+            dbTask.IsDeleted = true;
+            dbTask.ListOrder = -1;
+        }
+
+        _context.SaveChanges();
+    }
 }

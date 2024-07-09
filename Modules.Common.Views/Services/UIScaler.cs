@@ -110,7 +110,6 @@ public class UIScaler : BaseViewModel, IUIScaler
         _scalingPercent += zoomOffset;
         SetScaling(_scalingPercent / OriginalScalingPercent);
 
-
         _mediator?.Send(new ShowMessageInfoCommand
         {
             Message = $"{_scalingPercent} %"
