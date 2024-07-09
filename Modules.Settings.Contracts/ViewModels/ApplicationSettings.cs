@@ -8,7 +8,13 @@ public class ApplicationSettings : SettingsBase
     public bool AutoStart { get; set; }
     public bool RoundedWindowCorners { get; set; } = true;
     public bool ExitToTray { get; set; }
-    public bool CloseSideMenuOnPageChange { get; set; } = true;
+    public bool CloseSideMenuOnPageChange { get; set; }
+#if DEBUG
+    = false;
+    #else
+    = true;
+#endif
+
     public string AppBorderColor { get; set; } = "#BDBDBD";
 
     public double WindowMinimumWidth { get; set; } = 220;

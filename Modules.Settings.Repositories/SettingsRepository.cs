@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Modules.Settings.Contracts.Models;
+﻿using Modules.Settings.Contracts.Models;
 
 namespace Modules.Settings.Repositories;
 
@@ -25,10 +24,12 @@ public class SettingsRepository : ISettingsRepository
     {
         foreach (var setting in settings)
         {
-            _context.Settings
-                .Where(x => x.Key == setting.Key)
-                .ExecuteUpdate(x =>
-                    x.SetProperty(x => x.Value, setting.Value));
+            var dbSetting = _context.Settings.Find(setting.Key);
+            ArgumentNullException.ThrowIfNull(dbSetting);
+
+            dbSetting.Value = setting.Value;
         }
+
+        _context.SaveChanges();
     }
 }

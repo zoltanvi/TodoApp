@@ -46,17 +46,19 @@ public sealed class AppSettingsService : IAppSettingsService
 
         var settingsToUpdate = settings
             .Where(s => existingSettingsMap.ContainsKey(s.Key))
-            .Where(s => s.Value != existingSettingsMap[s.Key].Value);
+            .Where(s => s.Value != existingSettingsMap[s.Key].Value)
+            .ToList();
 
         var settingsToAdd = settings
-            .Where(s => !existingSettingsMap.ContainsKey(s.Key));
+            .Where(s => !existingSettingsMap.ContainsKey(s.Key))
+            .ToList();
 
-        if (settingsToAdd.Any())
+        if (settingsToAdd.Count != 0)
         {
             _settingsRepository.AddSettings(settingsToAdd);
         }
 
-        if (settingsToUpdate.Any())
+        if (settingsToUpdate.Count != 0)
         {
             _settingsRepository.UpdateSettings(settingsToUpdate);
         }
