@@ -62,6 +62,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         var tasks = _taskItemRepository.GetActiveTasksFromCategory(activeCategoryInfo.Id);
         Items = new ObservableCollection<TaskItemViewModel>(tasks.MapToViewModelList(_mediator, oneEditorOpenService));
         Items.CollectionChanged += ItemsOnCollectionChanged;
+        RecalculateProgress();
 
         PinTaskItemRequestedEventHandler.PinTaskItemRequested += OnPinTaskItemRequested;
         UnpinTaskItemRequestedEventHandler.UnpinTaskItemRequested += OnUnpinTaskItemRequested;
@@ -85,8 +86,8 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
     public bool IsCategoryNameTitleVisible => AppSettings.Instance.PageTitleSettings.Visible && !IsCategoryInEditMode;
     public bool IsCategoryNameTitleEditorVisible => AppSettings.Instance.PageTitleSettings.Visible && IsCategoryInEditMode;
 
-    public int TaskCount { get; } = 10;
-    public int FinishedTaskCount { get; } = 5;
+    public int TaskCount { get; private set; } = 1000;
+    public int FinishedTaskCount { get; private set; } = 555;
 
     public bool IsBottomPanelOpen { get; set; } = true;
 
@@ -121,7 +122,8 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
             var addedTask = _taskItemRepository.AddTask(task);
 
             Items.Add(addedTask.MapToViewModel(_mediator, _oneEditorOpenService));
-
+            RecalculateProgress();
+            
             AddNewTaskTextEditorViewModel.DocumentContent = string.Empty;
         }
     }
@@ -174,6 +176,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         taskItem.IsDone = true;
         taskItem.Pinned = false;
         _taskItemRepository.UpdateTaskItem(taskItem.Map());
+        RecalculateProgress();
 
         var query = new TaskInsertPositionQuery
         {
@@ -193,6 +196,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
 
         taskItem.IsDone = false;
         _taskItemRepository.UpdateTaskItem(taskItem.Map());
+        RecalculateProgress();
 
         var query = new TaskInsertPositionQuery
         {
@@ -211,6 +215,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         ArgumentNullException.ThrowIfNull(taskItem);
 
         Items.Remove(taskItem);
+        RecalculateProgress();
 
         _taskItemRepository.DeleteTask(taskItem.Map());
     }
@@ -232,6 +237,12 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         var newName = _mediator.Send(new RenameActiveCategoryCommand { Name = RenameCategoryContent }).Result;
         ActiveCategoryName = newName;
         IsCategoryInEditMode = false;
+    }
+
+    private void RecalculateProgress()
+    {
+        TaskCount = Items.Count;
+        FinishedTaskCount = Items.Count(x => x.IsDone);
     }
 
     private void OnPageTitleSettingsChanged(object? sender, SettingsChangedEventArgs e)
