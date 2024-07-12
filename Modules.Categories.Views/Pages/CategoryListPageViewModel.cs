@@ -52,8 +52,7 @@ public class CategoryListPageViewModel : BaseViewModel
         OpenRecycleBinPageCommand = new RelayCommand(OpenRecycleBinPage);
 
         var activeCategories = categoriesRepository.GetActiveCategories();
-        var activeCategory = activeCategories.First(x => x.Id == AppSettings.Instance.SessionSettings.ActiveCategoryId);
-        ActiveCategoryId = activeCategory.Id;
+        ActiveCategoryId = AppSettings.Instance.SessionSettings.ActiveCategoryId;
 
         Items = new ObservableCollection<CategoryViewModel>(activeCategories.MapToViewModelList());
         Items.CollectionChanged += ItemsOnCollectionChanged;

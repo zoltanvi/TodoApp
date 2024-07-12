@@ -130,10 +130,6 @@
 
             <!--  TASK LIST CONTROL  -->
 
-            <!--<controls:TaskListItemControl
-                Grid.Row="1"
-                DataContext="{Binding FirstItem}" />-->
-
             <ListView
                 Grid.Row="1" 
                 x:Name="TaskListListView"

@@ -1,0 +1,89 @@
+﻿<pages:GenericBasePage
+    x:Class="Modules.RecycleBin.Views.Pages.RecycleBinPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Modules.RecycleBin.Views.Pages"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:pages="clr-namespace:Modules.Common.Views.Pages;assembly=Modules.Common.Views"
+    xmlns:controls="clr-namespace:Modules.RecycleBin.Views.Controls"
+    Title="RecycleBinPage"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    x:TypeArguments="local:RecycleBinPageViewModel"
+    d:DataContext="{d:DesignInstance local:RecycleBinPageViewModel}"
+    mc:Ignorable="d">
+
+    <Border
+        Margin="0 10 0 0"
+        Background="{DynamicResource ApplicationBackgroundBrush}">
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <!--  Page title  -->
+                <RowDefinition Height="Auto" />
+
+                <!--  Task list  -->
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <TextBlock
+                Grid.Row="0"
+                Margin="0 1"
+                HorizontalAlignment="{Binding AppSettings.PageTitleSettings.HorizontalAlignment, Source={StaticResource AppSettings}, Converter={StaticResource HorizontalAlignmentConverter}}"
+                FontFamily="{Binding AppSettings.PageTitleSettings.FontFamily, Source={StaticResource AppSettings}, Converter={StaticResource EnumToFontFamilyConverter}}"
+                FontSize="{Binding AppSettings.PageTitleSettings.FontSize, Source={StaticResource AppSettings}, Converter={StaticResource FontSizeScaler}}"
+                Style="{StaticResource PageTitleTextBlockStyle}"
+                Text="Recycle Bin"
+                Visibility="{Binding AppSettings.PageTitleSettings.Visible, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
+
+
+            <ListView
+                Grid.Row="1" 
+                x:Name="GroupItemListView"
+                HorizontalContentAlignment="Stretch"
+                Background="Transparent"
+                BorderThickness="0"
+                ItemsSource="{Binding GroupItems}"
+                ScrollViewer.CanContentScroll="True"
+                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                ScrollViewer.VerticalScrollBarVisibility="Auto"
+                SelectionMode="Single"
+                Template="{StaticResource TaskListControlTemplate}"
+                VirtualizingPanel.IsContainerVirtualizable="True"
+                VirtualizingPanel.IsVirtualizing="True"
+                VirtualizingPanel.ScrollUnit="Pixel"
+                VirtualizingPanel.VirtualizationMode="Recycling">
+
+                <!--  Enabling virtualization is really important  -->
+                <!--  https://stackoverflow.com/questions/3724593/why-setting-scrollviewer-cancontentscroll-to-false-disable-virtualization  -->
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel />
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListViewItem">
+                                    <ContentPresenter />
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                    </Style>
+                </ListView.ItemContainerStyle>
+
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+
+                        <controls:RecycleBinGroupItemControl  />
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+        </Grid>
+    </Border>
+</pages:GenericBasePage>

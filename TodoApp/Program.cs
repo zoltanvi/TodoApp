@@ -15,6 +15,8 @@ using Modules.Common.Views.Services.Navigation;
 using Modules.Migration;
 using Modules.PopupMessage.Views;
 using Modules.PopupMessage.Views.CqrsHandling;
+using Modules.RecycleBin.Repositories;
+using Modules.RecycleBin.Views.Pages;
 using Modules.Settings.Contracts.ViewModels;
 using Modules.Settings.Repositories;
 using Modules.Settings.Services;
@@ -105,6 +107,7 @@ public static class Program
         services.AddSettingsRepository();
         services.AddCategoriesRepository();
         services.AddTaskItemRepository();
+        services.AddRecycleBinRepository();
         
         services.AddMigrationsService();
     }
@@ -119,10 +122,12 @@ public static class Program
 
         //services.AddScoped<INoteEditorPage, NotePage>();
         //services.AddScoped<INoteListPage, NoteListPage>();
-        //services.AddScoped<IRecycleBinPage, RecycleBinPage>();
         
         services.AddTransient<ITaskPage, TaskPage>();
         services.AddTransient<TaskPageViewModel>();
+
+        services.AddTransient<IRecycleBinPage, RecycleBinPage>();
+        services.AddTransient<RecycleBinPageViewModel>();
 
         services.AddSingleton<IEmptyPage, EmptyPage>();
         //services.AddScoped<ITaskNotificationPage, NotificationPage>();
@@ -131,7 +136,6 @@ public static class Program
 
         //services.AddScoped<NotePageViewModel>();
         //services.AddScoped<NoteListPageViewModel>();
-        //services.AddScoped<RecycleBinPageViewModel>();
 
         //services.AddScoped<NotificationPageViewModel>();
         //services.AddScoped<ReminderEditorPageViewModel>();

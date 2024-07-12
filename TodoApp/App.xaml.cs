@@ -2,10 +2,12 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Modules.Common;
 using Modules.Common.Cqrs.Events;
 using Modules.Common.Navigation;
 using Modules.Common.Services.Navigation;
 using Modules.PopupMessage.Views;
+using Modules.Settings.Contracts.ViewModels;
 using Modules.Settings.Views.Services;
 using System.Windows;
 using Application = System.Windows.Application;
@@ -82,7 +84,15 @@ public partial class App : Application
         //IoC.AppViewModel.UpdateMainPage();
         //IoC.AppViewModel.UpdateSideMenuPage();
 
-        mainPageNavigation.NavigateTo<ITaskPage>();
+        if (AppSettings.Instance.SessionSettings.ActiveCategoryId == Constants.RecycleBinCategoryId)
+        {
+            mainPageNavigation.NavigateTo<IRecycleBinPage>();
+        }
+        else
+        {
+            mainPageNavigation.NavigateTo<ITaskPage>();
+        }
+
         sideMenuPageNavigation.NavigateTo<ICategoryListPage>();
     }
 }
