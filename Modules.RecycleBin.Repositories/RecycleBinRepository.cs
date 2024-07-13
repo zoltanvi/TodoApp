@@ -14,9 +14,10 @@ public class RecycleBinRepository
         _context = context;
     }
 
-    public List<TaskItem> GetDeletedTasks()
+    public List<TaskItem> GetDeletedTasksFromCategory(int categoryId)
     {
         return _context.Tasks
+            .Where(x => x.CategoryId == categoryId)
             .Where(x => x.IsDeleted)
             .Include(x => x.Reminders)
             .ToList();

@@ -1,8 +1,10 @@
 ﻿using MediatR;
 using Modules.Categories.Contracts;
+using Modules.Categories.Contracts.Cqrs.Events;
 using Modules.Common.ViewModel;
 using Modules.RecycleBin.Repositories;
 using Modules.RecycleBin.Views.Controls;
+using Modules.RecycleBin.Views.Mappings;
 using Modules.Tasks.Contracts.Cqrs.Events;
 using Modules.Tasks.Contracts.Models;
 using PropertyChanged;
@@ -33,6 +35,7 @@ public class RecycleBinPageViewModel : BaseViewModel
         InitializeGroupItems();
 
         TaskRestoredEvent.TaskRestored += OnTaskRestored;
+        CategoryDeletedEvent.CategoryDeleted += OnCategoryDeleted;
     }
 
     public ObservableCollection<RecycleBinGroupItemViewModel> GroupItems { get; set; } = new();
@@ -53,6 +56,41 @@ public class RecycleBinPageViewModel : BaseViewModel
         }
     }
 
+    private void OnCategoryDeleted(CategoryDeletedEvent obj)
+    {
+        var deletedTasksFromCategory = _recycleBinRepository.GetDeletedTasksFromCategory(obj.CategoryId);
+       
+        var items = new ObservableCollection<RecycleBinTaskItemViewModel>();
+        foreach (TaskItem item in deletedTasksFromCategory)
+        {
+            items.Add(item.MapToRecycleBinTaskItem(_mediator));
+        }
+
+        var group = GroupItems.FirstOrDefault(x => x.CategoryId == obj.CategoryId);
+        if (group == null)
+        {
+            var category = _categoryRepository.GetCategoryById(obj.CategoryId);
+            ArgumentNullException.ThrowIfNull(category);
+            
+            
+
+            GroupItems.Add(new RecycleBinGroupItemViewModel
+            {
+                CategoryId = category.Id,
+                CategoryName = category.Name,
+                Items = items
+            });
+        }
+        else
+        {
+            group.Items.Clear();
+            foreach (var item in items)
+            {
+                group.Items.Add(item);
+            }   
+        }
+    }
+
     private void InitializeGroupItems()
     {
         var deletedTasksGroupByCategory = _recycleBinRepository.GetDeletedTasksGroupByCategory();
@@ -63,23 +101,7 @@ public class RecycleBinPageViewModel : BaseViewModel
 
             foreach (TaskItem item in grouping)
             {
-                items.Add(new RecycleBinTaskItemViewModel(_mediator)
-                {
-                    Id = item.Id,
-                    CategoryId = item.CategoryId,
-                    Content = item.Content,
-                    ContentPreview = item.ContentPreview,
-                    Pinned = item.Pinned,
-                    IsDone = item.IsDone,
-                    BackgroundColor = item.BackgroundColor,
-                    BorderColor = item.BorderColor,
-                    CreationDate = item.CreationDate,
-                    DeletedDate = item.DeletedDate,
-                    IsDeleted = item.IsDeleted,
-                    ListOrder = item.ListOrder,
-                    MarkerColor = item.MarkerColor,
-                    ModificationDate = item.ModificationDate
-                });
+                items.Add(item.MapToRecycleBinTaskItem(_mediator));
             }
 
             var category = _categoryRepository.GetCategoryById(grouping.Key);
@@ -97,5 +119,6 @@ public class RecycleBinPageViewModel : BaseViewModel
     protected override void OnDispose()
     {
         TaskRestoredEvent.TaskRestored -= OnTaskRestored;
+        CategoryDeletedEvent.CategoryDeleted -= OnCategoryDeleted;
     }
 }

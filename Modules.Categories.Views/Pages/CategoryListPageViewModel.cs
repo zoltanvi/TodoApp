@@ -150,6 +150,8 @@ public class CategoryListPageViewModel : BaseViewModel
         _categoriesRepository.DeleteCategory(category.Map());
 
         _mediator.Send(new ShowMessageInfoCommand { Message = $"Deleted category: {category.Name}" });
+        
+        CategoryDeletedEvent.Invoke(new CategoryDeletedEvent { CategoryId = category.Id });
 
         // Only if the current category was the deleted one, select a new category
         if (category.Id == ActiveCategoryId)
