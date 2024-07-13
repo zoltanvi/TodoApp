@@ -27,12 +27,14 @@
                 <!--CATEGORY GROUP TITLE-->
                 <Border Grid.Row="0" Background="{DynamicResource OnSecondary}" CornerRadius="6 6 0 0">
                     <TextBlock
-                        Grid.Row="0"
+                        TextTrimming="CharacterEllipsis"
                         Margin="14 8 6 6"
                         Foreground="{DynamicResource Secondary}"
                         FontSize="{Binding UIScaler.FontSize.Regular, Source={StaticResource UIScaler}}"
                         FontWeight="Bold"
-                        Text="{Binding CategoryName}" />
+                        Text="{Binding CategoryName}" 
+                        ToolTip="{Binding CategoryName}"
+                        />
                 </Border>
 
                 <ListView
