@@ -2,7 +2,6 @@
 using Modules.Categories.Contracts;
 using Modules.Categories.Contracts.Cqrs.Events;
 using Modules.Categories.Contracts.Models;
-using Modules.Categories.Services.CqrsHandling.EventHandlers;
 using Modules.Categories.Views.Controls;
 using Modules.Categories.Views.Mappings;
 using Modules.Common;
@@ -56,8 +55,8 @@ public class CategoryListPageViewModel : BaseViewModel
 
         Items = new ObservableCollection<CategoryViewModel>(activeCategories.MapToViewModelList());
         Items.CollectionChanged += ItemsOnCollectionChanged;
-        CategoryNameUpdatedEventHandler.CategoryNameUpdated += OnCategoryNameUpdated;
-        RestoreCategoryRequestedEventHandler.RestoreCategoryRequested += OnRestoreCategoryRequested;
+        CategoryNameUpdatedEvent.CategoryNameUpdated += OnCategoryNameUpdated;
+        RestoreCategoryRequestedEvent.RestoreCategoryRequested += OnRestoreCategoryRequested;
     }
 
     public int RecycleBinCategoryId => Constants.RecycleBinCategoryId;
@@ -230,7 +229,7 @@ public class CategoryListPageViewModel : BaseViewModel
     protected override void OnDispose()
     {
         Items.CollectionChanged -= ItemsOnCollectionChanged;
-        CategoryNameUpdatedEventHandler.CategoryNameUpdated -= OnCategoryNameUpdated;
-        RestoreCategoryRequestedEventHandler.RestoreCategoryRequested -= OnRestoreCategoryRequested;
+        CategoryNameUpdatedEvent.CategoryNameUpdated -= OnCategoryNameUpdated;
+        RestoreCategoryRequestedEvent.RestoreCategoryRequested -= OnRestoreCategoryRequested;
     }
 }

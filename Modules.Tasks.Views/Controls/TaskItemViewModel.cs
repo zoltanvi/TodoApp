@@ -133,26 +133,27 @@ public class TaskItemViewModel : BaseViewModel
         _oneEditorOpenService.DisplayMode(this);
     }
 
-    private void DeleteItem() => _mediator.Publish(new DeleteTaskItemRequestedEvent { TaskId = Id });
+    private void DeleteItem() => DeleteTaskItemRequestedEvent.Invoke(new DeleteTaskItemRequestedEvent { TaskId = Id });
 
     private void ToggleIsDone()
     {
         IsDone ^= true;
         UpdateTask();
     }
-    private void PinItem() => _mediator.Publish(new PinTaskItemRequestedEvent{ TaskId = Id });
 
-    private void UnpinItem() => _mediator.Publish(new UnpinTaskItemRequestedEvent { TaskId = Id });
+    private void PinItem() => PinTaskItemRequestedEvent.Invoke(new PinTaskItemRequestedEvent { TaskId = Id });
+    
+    private void UnpinItem() => UnpinTaskItemRequestedEvent.Invoke(new UnpinTaskItemRequestedEvent { TaskId = Id });
 
     private void UpdateTaskIsDone()
     {
         if (IsDone)
         {
-            _mediator.Publish(new FinishTaskItemRequestedEvent { TaskId = Id });
+            FinishTaskItemRequestedEvent.Invoke(new FinishTaskItemRequestedEvent { TaskId = Id });
         }
         else
         {
-            _mediator.Publish(new UnfinishTaskItemRequestedEvent { TaskId = Id });
+            UnfinishTaskItemRequestedEvent.Invoke(new UnfinishTaskItemRequestedEvent{TaskId = Id});
         }
     }
 

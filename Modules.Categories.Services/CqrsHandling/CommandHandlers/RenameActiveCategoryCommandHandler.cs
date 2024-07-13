@@ -52,13 +52,11 @@ public class RenameActiveCategoryCommandHandler : IRequestHandler<RenameActiveCa
 
         var updatedCategory = _categoriesRepository.UpdateCategory(category);
 
-        var categoryUpdatedEvent = new CategoryNameUpdatedEvent
+        CategoryNameUpdatedEvent.Invoke(new CategoryNameUpdatedEvent
         {
-            Id = activeCategoryId, 
+            Id = activeCategoryId,
             CategoryName = updatedCategory.Name
-        };
-
-        _mediator.Publish(categoryUpdatedEvent, cancellationToken);
+        });
 
         return Task.FromResult(updatedCategory.Name);
     }

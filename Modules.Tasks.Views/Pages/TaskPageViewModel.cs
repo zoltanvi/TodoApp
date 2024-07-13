@@ -11,7 +11,6 @@ using Modules.Tasks.Contracts.Cqrs.Queries;
 using Modules.Tasks.Contracts.Models;
 using Modules.Tasks.TextEditor.Controls;
 using Modules.Tasks.Views.Controls;
-using Modules.Tasks.Views.CqrsHandling.EventHandlers;
 using Modules.Tasks.Views.Mappings;
 using Modules.Tasks.Views.Services;
 using PropertyChanged;
@@ -64,11 +63,11 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         Items.CollectionChanged += ItemsOnCollectionChanged;
         RecalculateProgress();
 
-        PinTaskItemRequestedEventHandler.PinTaskItemRequested += OnPinTaskItemRequested;
-        UnpinTaskItemRequestedEventHandler.UnpinTaskItemRequested += OnUnpinTaskItemRequested;
-        FinishTaskItemRequestedEventHandler.FinishTaskItemRequested += OnFinishTaskItemRequested;
-        UnfinishTaskItemRequestedEventHandler.UnfinishTaskItemRequested += OnUnfinishTaskItemRequested;
-        DeleteTaskItemRequestedEventHandler.DeleteTaskItemRequestedEvent += OnDeleteTaskItemRequestedEvent;
+        PinTaskItemRequestedEvent.PinTaskItemRequested += OnPinTaskItemRequested;
+        UnpinTaskItemRequestedEvent.UnpinTaskItemRequested += OnUnpinTaskItemRequested;
+        FinishTaskItemRequestedEvent.FinishTaskItemRequested += OnFinishTaskItemRequested;
+        UnfinishTaskItemRequestedEvent.UnfinishTaskItemRequested += OnUnfinishTaskItemRequested;
+        DeleteTaskItemRequestedEvent.DeleteTaskItemRequested += OnDeleteTaskItemRequestedEvent;
         _oneEditorOpenService.ChangedToDisplayMode += FocusAddNewTaskTextEditor;
     }
 
@@ -261,11 +260,11 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         AppSettings.Instance.PageTitleSettings.SettingsChanged -= OnPageTitleSettingsChanged;
         Items.CollectionChanged -= ItemsOnCollectionChanged;
 
-        PinTaskItemRequestedEventHandler.PinTaskItemRequested -= OnPinTaskItemRequested;
-        UnpinTaskItemRequestedEventHandler.UnpinTaskItemRequested -= OnUnpinTaskItemRequested;
-        FinishTaskItemRequestedEventHandler.FinishTaskItemRequested -= OnFinishTaskItemRequested;
-        UnfinishTaskItemRequestedEventHandler.UnfinishTaskItemRequested -= OnUnfinishTaskItemRequested;
-        DeleteTaskItemRequestedEventHandler.DeleteTaskItemRequestedEvent -= OnDeleteTaskItemRequestedEvent;
+        PinTaskItemRequestedEvent.PinTaskItemRequested -= OnPinTaskItemRequested;
+        UnpinTaskItemRequestedEvent.UnpinTaskItemRequested -= OnUnpinTaskItemRequested;
+        FinishTaskItemRequestedEvent.FinishTaskItemRequested -= OnFinishTaskItemRequested;
+        UnfinishTaskItemRequestedEvent.UnfinishTaskItemRequested -= OnUnfinishTaskItemRequested;
+        DeleteTaskItemRequestedEvent.DeleteTaskItemRequested -= OnDeleteTaskItemRequestedEvent;
         _oneEditorOpenService.ChangedToDisplayMode -= FocusAddNewTaskTextEditor;
     }
 
