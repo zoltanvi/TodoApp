@@ -63,7 +63,7 @@ public class CategoriesRepository : ICategoriesRepository
         _context.SaveChanges();
     }
 
-    public void RestoreCategory(Category category, int newListOrder = 0)
+    public Category RestoreCategory(Category category, int newListOrder)
     {
         var dbCategory = _context.Categories.Find(category.Id);
         ArgumentNullException.ThrowIfNull(dbCategory);
@@ -72,6 +72,8 @@ public class CategoriesRepository : ICategoriesRepository
         dbCategory.ListOrder = newListOrder;
 
         _context.SaveChanges();
+
+        return dbCategory;
     }
 
     public void UpdateCategoryListOrders(List<Category> categories)

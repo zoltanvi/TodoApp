@@ -57,6 +57,7 @@ public class CategoryListPageViewModel : BaseViewModel
         Items = new ObservableCollection<CategoryViewModel>(activeCategories.MapToViewModelList());
         Items.CollectionChanged += ItemsOnCollectionChanged;
         CategoryNameUpdatedEventHandler.CategoryNameUpdated += OnCategoryNameUpdated;
+        RestoreCategoryRequestedEventHandler.RestoreCategoryRequested += OnRestoreCategoryRequested;
     }
 
     public int RecycleBinCategoryId => Constants.RecycleBinCategoryId;
@@ -123,6 +124,14 @@ public class CategoryListPageViewModel : BaseViewModel
         _categoriesRepository.RestoreCategory(category, Items.Count);
 
         Items.Add(category.MapToViewModel());
+    }
+
+    private void OnRestoreCategoryRequested(RestoreCategoryRequestedEvent e)
+    {
+        var dbCategory = _categoriesRepository.GetCategoryById(e.CategoryId);
+        ArgumentNullException.ThrowIfNull(dbCategory);
+
+        RestoreCategory(dbCategory);
     }
 
     private void DeleteCategory(CategoryViewModel category)
@@ -222,5 +231,6 @@ public class CategoryListPageViewModel : BaseViewModel
     {
         Items.CollectionChanged -= ItemsOnCollectionChanged;
         CategoryNameUpdatedEventHandler.CategoryNameUpdated -= OnCategoryNameUpdated;
+        RestoreCategoryRequestedEventHandler.RestoreCategoryRequested -= OnRestoreCategoryRequested;
     }
 }

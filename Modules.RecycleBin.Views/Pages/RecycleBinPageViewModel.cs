@@ -1,7 +1,9 @@
-﻿using Modules.Categories.Contracts;
+﻿using MediatR;
+using Modules.Categories.Contracts;
 using Modules.Common.DataBinding;
 using Modules.Common.ViewModel;
 using Modules.RecycleBin.Repositories;
+using Modules.Tasks.Contracts.Cqrs.Commands;
 using Modules.Tasks.Contracts.Models;
 using PropertyChanged;
 using System.Collections.ObjectModel;
@@ -12,16 +14,20 @@ namespace Modules.RecycleBin.Views.Pages;
 [AddINotifyPropertyChangedInterface]
 public class RecycleBinPageViewModel : BaseViewModel
 {
+    private readonly IMediator _mediator;
     private readonly ICategoriesRepository _categoryRepository;
     private readonly RecycleBinRepository _recycleBinRepository;
 
     public RecycleBinPageViewModel(
+        IMediator mediator,
         ICategoriesRepository categoryRepository,
         RecycleBinRepository recycleBinRepository)
     {
+        ArgumentNullException.ThrowIfNull(mediator);
         ArgumentNullException.ThrowIfNull(categoryRepository);
         ArgumentNullException.ThrowIfNull(recycleBinRepository);
-        
+
+        _mediator = mediator;
         _categoryRepository = categoryRepository;
         _recycleBinRepository = recycleBinRepository;
 
@@ -33,7 +39,7 @@ public class RecycleBinPageViewModel : BaseViewModel
 
             foreach (TaskItem item in grouping)
             {
-                items.Add(new RecycleBinTaskItemViewModel
+                items.Add(new RecycleBinTaskItemViewModel(_mediator)
                 {
                     Id = item.Id,
                     CategoryId = item.CategoryId,
@@ -60,7 +66,7 @@ public class RecycleBinPageViewModel : BaseViewModel
                 CategoryId = category.Id,
                 CategoryName = category.Name,
                 Items = items
-            });    
+            });
         }
     }
 
@@ -76,6 +82,7 @@ public class RecycleBinGroupItemViewModel : BaseViewModel
 
 public class RecycleBinTaskItemViewModel : BaseViewModel
 {
+    private readonly IMediator _mediator;
     public int Id { get; set; }
     public required int CategoryId { get; set; }
     public required string Content { get; set; }
@@ -92,9 +99,15 @@ public class RecycleBinTaskItemViewModel : BaseViewModel
     public DateTime? DeletedDate { get; set; }
     public bool DetailsVisible { get; set; }
     public ICommand ToggleDetailsCommand { get; }
+    public ICommand RestoreTaskItemCommand { get; }
 
-    public RecycleBinTaskItemViewModel()
+    public RecycleBinTaskItemViewModel(IMediator mediator)
     {
+        ArgumentNullException.ThrowIfNull(mediator);
+
+        _mediator = mediator;
+
         ToggleDetailsCommand = new RelayCommand(() => DetailsVisible ^= true);
+        RestoreTaskItemCommand = new RelayCommand(() => _mediator.Send(new RestoreTaskItemCommand { TaskId = Id }));
     }
 }

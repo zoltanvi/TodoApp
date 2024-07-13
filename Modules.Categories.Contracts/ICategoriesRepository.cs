@@ -9,7 +9,7 @@ public interface ICategoriesRepository
     List<Category> GetActiveCategories();
     Category? GetCategoryById(int id);
     Category? GetCategoryByName(string name);
-    void RestoreCategory(Category category, int newListOrder);
+    Category RestoreCategory(Category category, int newListOrder);
     Category UpdateCategory(Category category);
     void UpdateCategoryListOrders(List<Category> categories);
 }

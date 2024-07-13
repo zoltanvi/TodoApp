@@ -132,4 +132,20 @@ public class TaskItemRepository : ITaskItemRepository
 
         _context.SaveChanges();
     }
+
+    public TaskItem RestoreTask(TaskItem task, int newListOrder)
+    {
+        var dbTask = _context.Tasks.Find(task.Id);
+        ArgumentNullException.ThrowIfNull(dbTask);
+
+        dbTask.DeletedDate = null;
+        dbTask.IsDeleted = false;
+        dbTask.IsDone = false;
+        dbTask.Pinned = false;
+        dbTask.ListOrder = newListOrder;
+
+        _context.SaveChanges();
+
+        return dbTask;
+    }
 }

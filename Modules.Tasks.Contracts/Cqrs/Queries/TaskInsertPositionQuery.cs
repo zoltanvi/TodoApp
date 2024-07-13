@@ -14,4 +14,5 @@ public enum PositionChangeReason
     Unpinned,
     Done,
     Undone,
+    Restored
 }

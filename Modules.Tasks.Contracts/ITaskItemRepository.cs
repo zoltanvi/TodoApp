@@ -13,4 +13,5 @@ public interface ITaskItemRepository
     TaskItem UpdateTaskItem(TaskItem task);
     void DeleteTask(TaskItem task);
     void DeleteTasksInCategory(int categoryId);
+    TaskItem RestoreTask(TaskItem task, int newListOrder);
 }
