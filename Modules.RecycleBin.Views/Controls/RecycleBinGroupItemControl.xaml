@@ -13,10 +13,9 @@
     <Grid>
         <Border
             Margin="6"
-            Background="{DynamicResource Surface2}"
-            BorderBrush="{DynamicResource OutlineVariant}"
+            BorderBrush="{DynamicResource Tertiary}"
             BorderThickness="1"
-            CornerRadius="3">
+            CornerRadius="6">
 
             <Grid>
 
@@ -25,14 +24,16 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <!--CATEGORY GROUP TITLE--> 
-                <TextBlock
-                    Grid.Row="0"
-                    Margin="14 0 6 6"
-                    Foreground="{DynamicResource Secondary}"
-                    FontSize="{Binding UIScaler.FontSize.Regular, Source={StaticResource UIScaler}}"
-                    FontWeight="Bold"
-                    Text="{Binding CategoryName}" />
+                <!--CATEGORY GROUP TITLE-->
+                <Border Grid.Row="0" Background="{DynamicResource OnTertiary}" CornerRadius="6">
+                    <TextBlock
+                        Grid.Row="0"
+                        Margin="14 8 6 6"
+                        Foreground="{DynamicResource Secondary}"
+                        FontSize="{Binding UIScaler.FontSize.Regular, Source={StaticResource UIScaler}}"
+                        FontWeight="Bold"
+                        Text="{Binding CategoryName}" />
+                </Border>
 
                 <ListView
                     x:Name="GroupItemListView"

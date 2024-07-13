@@ -255,12 +255,12 @@
                             Margin="1 0"
                             Orientation="Horizontal">
 
-                            <local:TagControl
+                            <controls:TagControl
                                 Opacity="{Binding IsDone, Converter={StaticResource BoolToTaskOpacityConverter}}"
                                 TagColor="Geekblue"
                                 TagTitle="Created: "
                                 Visibility="{Binding AppSettings.TaskSettings.CreationDateVisible, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}">
-                                <local:TagControl.TagBody>
+                                <controls:TagControl.TagBody>
                                     <MultiBinding>
                                         <MultiBinding.Converter>
                                             <valueConverters1:CurrentDateTimeFormatMultiConverter />
@@ -270,15 +270,15 @@
                                             Path="AppSettings.DateTimeSettings.TaskCreationDateFormat"
                                             Source="{StaticResource AppSettings}" />
                                     </MultiBinding>
-                                </local:TagControl.TagBody>
-                            </local:TagControl>
+                                </controls:TagControl.TagBody>
+                            </controls:TagControl>
 
-                            <local:TagControl
+                            <controls:TagControl
                                 Opacity="{Binding IsDone, Converter={StaticResource BoolToTaskOpacityConverter}}"
                                 TagColor="Purple"
                                 TagTitle="Modified: "
                                 Visibility="{Binding AppSettings.TaskSettings.ModificationDateVisible, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}">
-                                <local:TagControl.TagBody>
+                                <controls:TagControl.TagBody>
                                     <MultiBinding>
                                         <MultiBinding.Converter>
                                             <valueConverters1:CurrentDateTimeFormatMultiConverter />
@@ -288,12 +288,13 @@
                                             Path="AppSettings.DateTimeSettings.TaskCreationDateFormat"
                                             Source="{StaticResource AppSettings}" />
                                     </MultiBinding>
-                                </local:TagControl.TagBody>
+                                </controls:TagControl.TagBody>
 
-                            </local:TagControl>
+                            </controls:TagControl>
                         </WrapPanel>
 
                     </Grid>
+
                 </Border>
 
 
@@ -309,7 +310,9 @@
                     Opacity="0">
                     <Border.Visibility>
                         <MultiBinding Converter="{StaticResource BoolToVisibilityAndConverter}">
-                            <Binding Path="AppSettings.TaskQuickActionSettings.AnyEnabled" Source="{StaticResource AppSettings}" />
+                            <Binding
+                                Path="AppSettings.TaskQuickActionSettings.AnyEnabled"
+                                Source="{StaticResource AppSettings}" />
                             <Binding Path="TextEditorViewModel.IsDisplayMode" />
                         </MultiBinding>
                     </Border.Visibility>

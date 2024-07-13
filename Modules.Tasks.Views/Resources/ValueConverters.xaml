@@ -16,18 +16,27 @@
         Left="15"
         Right="15" />
 
-    <valueConverters:BoolToDoubleConverter x:Key="BoolToTaskOpacityConverter"/>
+    <valueConverters:BoolToDoubleConverter
+        x:Key="BoolToTaskOpacityConverter"
+        NegativeValue="1.0"
+        PositiveValue="0.8" />
 
     <valueConverters:HorizontalAlignmentConverter x:Key="HorizontalAlignmentConverter" />
     <valueConverters:HorizontalAlignmentInvertedConverter x:Key="HorizontalAlignmentInvertedConverter" />
-    <valueConverters:TaskBorderBrushConverter x:Key="TaskBorderBrushConverter"/>
-    <valueConverters:TaskItemBackgroundBrushMultiValueConverter x:Key="TaskItemBackgroundBrushMultiValueConverter"/>
-    <valueConverters:TaskCheckboxMarginConverter x:Key="TaskCheckboxMarginConverter"/>
-    <valueConverters:TaskSpacingToMarginConverter x:Key="TaskSpacingToMarginConverter"/>
-    <valueConverters:BoolToVisibilityAndConverter x:Key="BoolToVisibilityAndConverter"/>
+    <valueConverters:TaskBorderBrushConverter x:Key="TaskBorderBrushConverter" />
+    <valueConverters:TaskItemBackgroundBrushMultiValueConverter x:Key="TaskItemBackgroundBrushMultiValueConverter" />
+    <valueConverters:TaskCheckboxMarginConverter x:Key="TaskCheckboxMarginConverter" />
+    <valueConverters:TaskSpacingToMarginConverter x:Key="TaskSpacingToMarginConverter" />
+    <valueConverters:BoolToVisibilityAndConverter x:Key="BoolToVisibilityAndConverter" />
 
-    <valueConverters1:TagColorConverter x:Key="TagForegroundConverter" ColorType="Foreground"/>
-    <valueConverters1:TagColorConverter x:Key="TagBackgroundConverter" ColorType="Background"/>
-    <valueConverters1:TagColorConverter x:Key="TagBorderConverter" ColorType="Border"/>
+    <valueConverters1:TagColorConverter
+        x:Key="TagForegroundConverter"
+        ColorType="Foreground" />
+    <valueConverters1:TagColorConverter
+        x:Key="TagBackgroundConverter"
+        ColorType="Background" />
+    <valueConverters1:TagColorConverter
+        x:Key="TagBorderConverter"
+        ColorType="Border" />
 
 </ResourceDictionary>

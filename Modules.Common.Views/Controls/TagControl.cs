@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Modules.Tasks.Views.Controls;
+namespace Modules.Common.Views.Controls;
 
 public class TagControl : Label
 {
