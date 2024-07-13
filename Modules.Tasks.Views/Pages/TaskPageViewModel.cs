@@ -105,10 +105,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
     public ICommand TextBoxFocusedCommand { get; }
 
 
-    private void OnTextBoxFocused()
-    {
-        //IoC.OneEditorOpenService.EditMode(null);
-    }
+    private void OnTextBoxFocused() => _oneEditorOpenService.EditModeWithoutTask();
 
     private void AddTaskItem()
     {

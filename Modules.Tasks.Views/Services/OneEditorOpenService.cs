@@ -44,4 +44,15 @@ public class OneEditorOpenService
 
         _editModeRequested = false;
     }
+
+    public void EditModeWithoutTask()
+    {
+        _editModeRequested = true;
+
+        // Save changes and close editor for old task
+        _editorOpenTask?.ExitEditItem();
+        _editorOpenTask = null;
+
+        _editModeRequested = false;
+    }
 }
