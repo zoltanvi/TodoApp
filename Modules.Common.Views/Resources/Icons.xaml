@@ -55,7 +55,8 @@
     <system:String x:Key="IconWordWrap">&#xE8E4;</system:String>
     <system:String x:Key="IconClock">&#xE121;</system:String>
     <system:String x:Key="IconRestore">&#xE777;</system:String>
-
+    <system:String x:Key="IconInfo">&#xE946;</system:String>
+    
 
 
 </ResourceDictionary>

@@ -29,7 +29,7 @@
 
             <TextBlock
                 Grid.Row="0"
-                Margin="0 1"
+                Margin="20 0"
                 HorizontalAlignment="{Binding AppSettings.PageTitleSettings.HorizontalAlignment, Source={StaticResource AppSettings}, Converter={StaticResource HorizontalAlignmentConverter}}"
                 FontFamily="{Binding AppSettings.PageTitleSettings.FontFamily, Source={StaticResource AppSettings}, Converter={StaticResource EnumToFontFamilyConverter}}"
                 FontSize="{Binding AppSettings.PageTitleSettings.FontSize, Source={StaticResource AppSettings}, Converter={StaticResource FontSizeScaler}}"

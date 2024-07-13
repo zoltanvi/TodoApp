@@ -16,14 +16,15 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
 
         <!--  MARKER  -->
         <Border
             Grid.Column="1"
-            HorizontalAlignment="Left"
             Width="7"
+            HorizontalAlignment="Left"
             Panel.ZIndex="1000"
             Background="{Binding MarkerColor, Converter={StaticResource StringRgbToBrushConverter}}"
             CornerRadius="3 0 0 3" />
@@ -43,18 +44,26 @@
                     CornerRadius="3"
                     Opacity="0.3" />
 
-                <!--  CONTENT  -->
-                <!--<Label Content="{Binding ContentPreview}" Padding="20"></Label>-->
-                <controls:BasicTextEditorBox
-                    Padding="7 0 0 0"
-                    Margin="{Binding AppSettings.TaskSettings.Spacing, Source={StaticResource AppSettings}, Converter={StaticResource TaskSpacingToMarginConverter}}"
-                    Background="Transparent"
-                    Style="{StaticResource BaseRichTextBoxStyle}"
-                    DocumentContent="{Binding Content}"
-                    ScrollViewer.CanContentScroll="False"
-                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                    ScrollViewer.VerticalScrollBarVisibility="Auto"
-                    IsReadOnly="True" />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!--  CONTENT  -->
+                    <controls:BasicTextEditorBox
+                        Grid.Column="0"
+                        Margin="{Binding AppSettings.TaskSettings.Spacing, Source={StaticResource AppSettings}, Converter={StaticResource TaskSpacingToMarginConverter}}"
+                        Padding="7 0 0 0"
+                        Background="Transparent"
+                        DocumentContent="{Binding Content}"
+                        IsReadOnly="True"
+                        ScrollViewer.CanContentScroll="False"
+                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                        ScrollViewer.VerticalScrollBarVisibility="Auto"
+                        Style="{StaticResource BaseRichTextBoxStyle}" />
+                </Grid>
+
             </Grid>
         </Border>
 
@@ -62,11 +71,19 @@
             Grid.Column="2"
             Margin="4 0 0 0"
             AutomationProperties.AutomationId="TaskListItemPinButton"
+            Command="{Binding ToggleDetailsCommand}"
+            Content="{StaticResource IconInfo}"
+            Style="{StaticResource ButtonQuickActionStyle}"
+            ToolTip="Details" />
+
+        <Button
+            Grid.Column="3"
+            Margin="4 0 0 0"
+            AutomationProperties.AutomationId="TaskListItemPinButton"
             Command="{Binding RestoreTaskItemCommand}"
             Content="{StaticResource IconRestore}"
             Style="{StaticResource ButtonQuickActionStyle}"
-            ToolTip="Restore task"
-             />
+            ToolTip="Restore task" />
 
     </Grid>
 </UserControl>
