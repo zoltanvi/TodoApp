@@ -41,13 +41,14 @@
                     ItemsSource="{Binding Items}"
                     ScrollViewer.CanContentScroll="False"
                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                    ScrollViewer.VerticalScrollBarVisibility="Auto"
+                    ScrollViewer.VerticalScrollBarVisibility="Disabled"
                     SelectionMode="Single"
-                    Template="{StaticResource TaskListControlTemplate}"
+                    Template="{StaticResource RecycleBinGroupListBoxTemplate}"
                     VirtualizingPanel.IsContainerVirtualizable="True"
                     VirtualizingPanel.IsVirtualizing="True"
                     VirtualizingPanel.ScrollUnit="Pixel"
-                    VirtualizingPanel.VirtualizationMode="Recycling">
+                    VirtualizingPanel.VirtualizationMode="Recycling"
+                    >
 
                     <!--  Enabling virtualization is really important  -->
                     <!--  https://stackoverflow.com/questions/3724593/why-setting-scrollviewer-cancontentscroll-to-false-disable-virtualization  -->

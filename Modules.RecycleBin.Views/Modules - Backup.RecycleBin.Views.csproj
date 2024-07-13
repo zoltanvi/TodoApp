@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Fody" Version="6.8.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Modules.Categories.Contracts\Modules.Categories.Contracts.csproj" />
+    <ProjectReference Include="..\Modules.Common.Navigation\Modules.Common.Navigation.csproj" />
+    <ProjectReference Include="..\Modules.Common.Views\Modules.Common.Views.csproj" />
+    <ProjectReference Include="..\Modules.RecycleBin.Repositories\Modules.RecycleBin.Repositories.csproj" />
+    <ProjectReference Include="..\Modules.Tasks.TextEditor\Modules.Tasks.TextEditor.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="NewFolder\" />
+  </ItemGroup>
+
+</Project>
