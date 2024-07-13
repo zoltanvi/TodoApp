@@ -33,10 +33,10 @@
 
 
         <!--  BORDER  -->
-            <!--BorderBrush="{Binding BorderColor, Converter={StaticResource TaskBorderBrushConverter}}"-->
+        <!--  BorderBrush="{Binding BorderColor, Converter={StaticResource TaskBorderBrushConverter}}"  -->
         <Border
-            BorderBrush="{DynamicResource OutlineVariant}"
             Grid.Column="1"
+            BorderBrush="{DynamicResource OutlineVariant}"
             BorderThickness="1"
             CornerRadius="3">
 
@@ -55,7 +55,7 @@
                     </Grid.RowDefinitions>
 
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
@@ -70,7 +70,7 @@
                                 VerticalAlignment="Center"
                                 IsChecked="{Binding IsDone}"
                                 IsEnabled="False"
-                                Style="{StaticResource TaskCheckBoxStyle}"/>
+                                Style="{StaticResource TaskCheckBoxStyle}" />
                         </Border>
 
                         <Border Visibility="{Binding AppSettings.TaskSettings.CircularCheckbox, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityNegatedConverter}}">
@@ -80,7 +80,7 @@
                                 VerticalAlignment="Center"
                                 IsChecked="{Binding IsDone}"
                                 IsEnabled="False"
-                                Style="{StaticResource TaskCheckBoxSquareStyle}"/>
+                                Style="{StaticResource TaskCheckBoxSquareStyle}" />
                         </Border>
                     </Grid>
 
@@ -99,16 +99,16 @@
                         ScrollViewer.VerticalScrollBarVisibility="Auto"
                         Style="{StaticResource BaseRichTextBoxStyle}" />
 
+                    <!--  INFO TAGS  -->
                     <WrapPanel
-                        Visibility="{Binding DetailsVisible, Converter={StaticResource BoolToVisibilityConverter}}"
                         Grid.Row="1"
                         Grid.Column="0"
                         Grid.ColumnSpan="2"
                         Margin="8 0 8 6"
-                        Orientation="Horizontal">
+                        Orientation="Horizontal"
+                        Visibility="{Binding DetailsVisible, Converter={StaticResource BoolToVisibilityConverter}}">
 
                         <controls1:TagControl
-                            Opacity="{Binding IsDone, Converter={StaticResource BoolToTaskOpacityConverter}}"
                             TagColor="Blue"
                             TagTitle="Created: ">
                             <controls1:TagControl.TagBody>
@@ -125,7 +125,6 @@
                         </controls1:TagControl>
 
                         <controls1:TagControl
-                            Opacity="{Binding IsDone, Converter={StaticResource BoolToTaskOpacityConverter}}"
                             TagColor="Cyan"
                             TagTitle="Modified: ">
                             <controls1:TagControl.TagBody>
@@ -142,7 +141,6 @@
                         </controls1:TagControl>
 
                         <controls1:TagControl
-                            Opacity="{Binding IsDone, Converter={StaticResource BoolToTaskOpacityConverter}}"
                             TagColor="Volcano"
                             TagTitle="Deleted: ">
                             <controls1:TagControl.TagBody>
@@ -150,7 +148,7 @@
                                     <MultiBinding.Converter>
                                         <valueConverters:CurrentDateTimeFormatMultiConverter />
                                     </MultiBinding.Converter>
-                                    <Binding Path="ModificationDate" />
+                                    <Binding Path="DeletedDate" />
                                     <Binding
                                         Path="AppSettings.DateTimeSettings.TaskCreationDateFormat"
                                         Source="{StaticResource AppSettings}" />
@@ -164,23 +162,22 @@
         </Border>
 
         <Button
-            Visibility="{Binding DetailsVisible, Converter={StaticResource BoolToVisibilityNegatedConverter}}"
             Grid.Column="2"
             Margin="4 0 0 0"
             Command="{Binding ToggleDetailsCommand}"
             Content="{StaticResource IconInfo}"
             Style="{StaticResource ButtonQuickActionStyle}"
-            ToolTip="Show details" />
+            ToolTip="Show details"
+            Visibility="{Binding DetailsVisible, Converter={StaticResource BoolToVisibilityNegatedConverter}}" />
 
         <Button
-            Visibility="{Binding DetailsVisible, Converter={StaticResource BoolToVisibilityConverter}}"
             Grid.Column="2"
             Margin="4 0 0 0"
             Command="{Binding ToggleDetailsCommand}"
             Content="{StaticResource IconHideInfo}"
             Style="{StaticResource ButtonQuickActionStyle}"
-            ToolTip="Hide details" >
-        </Button>
+            ToolTip="Hide details"
+            Visibility="{Binding DetailsVisible, Converter={StaticResource BoolToVisibilityConverter}}" />
 
         <Button
             Grid.Column="3"
