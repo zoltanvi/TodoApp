@@ -1,13 +1,12 @@
 ﻿using MediatR;
 using Modules.Categories.Contracts;
-using Modules.Common.DataBinding;
 using Modules.Common.ViewModel;
 using Modules.RecycleBin.Repositories;
-using Modules.Tasks.Contracts.Cqrs.Commands;
+using Modules.RecycleBin.Views.Controls;
+using Modules.Tasks.Contracts.Cqrs.Events;
 using Modules.Tasks.Contracts.Models;
 using PropertyChanged;
 using System.Collections.ObjectModel;
-using System.Windows.Input;
 
 namespace Modules.RecycleBin.Views.Pages;
 
@@ -31,6 +30,31 @@ public class RecycleBinPageViewModel : BaseViewModel
         _categoryRepository = categoryRepository;
         _recycleBinRepository = recycleBinRepository;
 
+        InitializeGroupItems();
+
+        TaskRestoredEvent.TaskRestored += OnTaskRestored;
+    }
+
+    public ObservableCollection<RecycleBinGroupItemViewModel> GroupItems { get; set; } = new();
+
+    private void OnTaskRestored(TaskRestoredEvent obj)
+    {
+        var group = GroupItems.FirstOrDefault(x => x.CategoryId == obj.CategoryId);
+        ArgumentNullException.ThrowIfNull(group);
+
+        var task = group.Items.First(x => x.Id == obj.TaskId);
+        ArgumentNullException.ThrowIfNull(group);
+
+        group.Items.Remove(task);
+
+        if (group.Items.Count == 0)
+        {
+            GroupItems.Remove(group);
+        }
+    }
+
+    private void InitializeGroupItems()
+    {
         var deletedTasksGroupByCategory = _recycleBinRepository.GetDeletedTasksGroupByCategory();
 
         foreach (IGrouping<int, TaskItem> grouping in deletedTasksGroupByCategory)
@@ -70,44 +94,8 @@ public class RecycleBinPageViewModel : BaseViewModel
         }
     }
 
-    public ObservableCollection<RecycleBinGroupItemViewModel> GroupItems { get; set; } = new();
-}
-
-public class RecycleBinGroupItemViewModel : BaseViewModel
-{
-    public int CategoryId { get; set; }
-    public string CategoryName { get; set; }
-    public ObservableCollection<RecycleBinTaskItemViewModel> Items { get; set; }
-}
-
-public class RecycleBinTaskItemViewModel : BaseViewModel
-{
-    private readonly IMediator _mediator;
-    public int Id { get; set; }
-    public required int CategoryId { get; set; }
-    public required string Content { get; set; }
-    public required string ContentPreview { get; set; }
-    public int ListOrder { get; set; }
-    public bool Pinned { get; set; }
-    public bool IsDone { get; set; }
-    public DateTime CreationDate { get; set; }
-    public DateTime ModificationDate { get; set; }
-    public string? MarkerColor { get; set; }
-    public string? BorderColor { get; set; }
-    public string? BackgroundColor { get; set; }
-    public bool IsDeleted { get; set; }
-    public DateTime? DeletedDate { get; set; }
-    public bool DetailsVisible { get; set; }
-    public ICommand ToggleDetailsCommand { get; }
-    public ICommand RestoreTaskItemCommand { get; }
-
-    public RecycleBinTaskItemViewModel(IMediator mediator)
+    protected override void OnDispose()
     {
-        ArgumentNullException.ThrowIfNull(mediator);
-
-        _mediator = mediator;
-
-        ToggleDetailsCommand = new RelayCommand(() => DetailsVisible ^= true);
-        RestoreTaskItemCommand = new RelayCommand(() => _mediator.Send(new RestoreTaskItemCommand { TaskId = Id }));
+        TaskRestoredEvent.TaskRestored -= OnTaskRestored;
     }
 }

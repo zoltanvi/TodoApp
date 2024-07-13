@@ -9,7 +9,7 @@ public class TaskSettings : SettingsBase
     public bool BackgroundVisible { get; set; } = true;
     public bool CreationDateVisible { get; set; }
     public bool ModificationDateVisible { get; set; }
-    public bool CircularCheckbox { get; set; } = true;
+    public bool CircularCheckbox { get; set; }
     public Thickness ColorBarThickness { get; set; } = Thickness.Thick;
     public FontFamily FontFamily { get; set; } = FontFamily.SegoeUI;
     public double FontSize { get; set; } = 16;

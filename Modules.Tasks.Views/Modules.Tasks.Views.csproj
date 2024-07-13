@@ -24,8 +24,4 @@
     <ProjectReference Include="..\Modules.Tasks.TextEditor\Modules.Tasks.TextEditor.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="CqrsHandling\EventHandlers\" />
-  </ItemGroup>
-
 </Project>

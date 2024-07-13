@@ -3,6 +3,7 @@ using Modules.Categories.Contracts;
 using Modules.Categories.Contracts.Cqrs.Events;
 using Modules.Tasks.Contracts;
 using Modules.Tasks.Contracts.Cqrs.Commands;
+using Modules.Tasks.Contracts.Cqrs.Events;
 using Modules.Tasks.Contracts.Cqrs.Queries;
 using Modules.Tasks.Contracts.Models;
 
@@ -38,7 +39,7 @@ public class RestoreTaskItemCommandHandler : IRequestHandler<RestoreTaskItemComm
 
         if (dbCategory.IsDeleted)
         {
-            _mediator.Publish(new RestoreCategoryRequestedEvent { CategoryId = dbCategory.Id }, cancellationToken);
+            RestoreCategoryRequestedEvent.Invoke(new RestoreCategoryRequestedEvent { CategoryId = dbCategory.Id });
         }
 
         var query = new TaskInsertPositionQuery
@@ -53,6 +54,8 @@ public class RestoreTaskItemCommandHandler : IRequestHandler<RestoreTaskItemComm
         
         InsertAndFixListOrders(dbTask.Id, dbCategory.Id, newIndex, dbTask);
         
+        TaskRestoredEvent.Invoke(new TaskRestoredEvent{ TaskId = dbTask.Id, CategoryId = dbCategory.Id });
+
         return Task.CompletedTask;
     }
 
