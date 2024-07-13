@@ -16,7 +16,6 @@ using Modules.Tasks.Views.Services;
 using PropertyChanged;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace Modules.Tasks.Views.Pages;
@@ -29,9 +28,10 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
     private readonly OneEditorOpenService _oneEditorOpenService;
 
     public event EventHandler? FocusAddNewTaskTextEditorRequested;
+    public event Action<int>? ScrollIntoViewRequested;
 
     public TaskPageViewModel(
-        IMediator mediator, 
+        IMediator mediator,
         ITaskItemRepository taskItemRepository,
         OneEditorOpenService oneEditorOpenService)
     {
@@ -60,10 +60,10 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         AddNewTaskTextEditorViewModel.OnQuickEditRequestedAction = OnQuickEditRequested;
 
         var tasks = _taskItemRepository.GetActiveTasksFromCategory(activeCategoryInfo.Id);
-        
+
         // Fixes list orders if necessary, when the task page opens
-        var orderedTasks = AppSettings.Instance.TaskPageSettings.ForceTaskOrderByState 
-            ? OrderTasksByState(tasks) 
+        var orderedTasks = AppSettings.Instance.TaskPageSettings.ForceTaskOrderByState
+            ? OrderTasksByState(tasks)
             : tasks;
 
         Items = new ObservableCollection<TaskItemViewModel>(orderedTasks.MapToViewModelList(_mediator, oneEditorOpenService));
@@ -104,7 +104,6 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
     public ICommand AddTaskItemCommand { get; }
     public ICommand TextBoxFocusedCommand { get; }
 
-
     private void OnTextBoxFocused() => _oneEditorOpenService.EditModeWithoutTask();
 
     private void AddTaskItem()
@@ -123,10 +122,11 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
             };
 
             var addedTask = _taskItemRepository.AddTask(task);
+            _oneEditorOpenService.LastEditedTaskId = addedTask.Id;
 
             Items.Add(addedTask.MapToViewModel(_mediator, _oneEditorOpenService));
             RecalculateProgress();
-            
+
             AddNewTaskTextEditorViewModel.DocumentContent = string.Empty;
         }
     }
@@ -225,7 +225,14 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
 
     private void OnQuickEditRequested()
     {
-        // TODO
+        var lastAddedTaskItem = Items.FirstOrDefault(x => x.Id == _oneEditorOpenService.LastEditedTaskId);
+
+        if (lastAddedTaskItem != null)
+        {
+            int index = Items.IndexOf(lastAddedTaskItem);
+            lastAddedTaskItem.EditItemCommand.Execute(null);
+            ScrollIntoViewRequested?.Invoke(index);
+        }
     }
 
     private void EditCategory()

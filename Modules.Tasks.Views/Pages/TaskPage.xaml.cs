@@ -10,6 +10,16 @@ public partial class TaskPage : GenericBasePage<TaskPageViewModel>, ITaskPage, I
         InitializeComponent();
         
         viewModel.FocusAddNewTaskTextEditorRequested += OnFocusAddNewTaskTextEditor;
+        viewModel.ScrollIntoViewRequested += OnScrollIntoViewRequested;
+    }
+
+    private void OnScrollIntoViewRequested(int index)
+    {
+        var itemToScrollTo = TaskListListView.Items.GetItemAt(index);
+        if (itemToScrollTo != null)
+        {
+            TaskListListView.ScrollIntoView(itemToScrollTo);
+        }
     }
 
     private void OnFocusAddNewTaskTextEditor(object? sender, EventArgs e)
