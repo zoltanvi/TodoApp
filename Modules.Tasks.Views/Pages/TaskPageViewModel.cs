@@ -16,6 +16,7 @@ using Modules.Tasks.Views.Services;
 using PropertyChanged;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace Modules.Tasks.Views.Pages;
@@ -59,7 +60,13 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         AddNewTaskTextEditorViewModel.OnQuickEditRequestedAction = OnQuickEditRequested;
 
         var tasks = _taskItemRepository.GetActiveTasksFromCategory(activeCategoryInfo.Id);
-        Items = new ObservableCollection<TaskItemViewModel>(tasks.MapToViewModelList(_mediator, oneEditorOpenService));
+        
+        // Fixes list orders if necessary, when the task page opens
+        var orderedTasks = AppSettings.Instance.TaskPageSettings.ForceTaskOrderByState 
+            ? OrderTasksByState(tasks) 
+            : tasks;
+
+        Items = new ObservableCollection<TaskItemViewModel>(orderedTasks.MapToViewModelList(_mediator, oneEditorOpenService));
         Items.CollectionChanged += ItemsOnCollectionChanged;
         RecalculateProgress();
 
@@ -276,6 +283,28 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         }
 
         _taskItemRepository.UpdateTaskListOrders(Items.MapList());
+    }
+
+    private List<TaskItem> OrderTasksByState(List<TaskItem> tasks)
+    {
+        List<TaskItem> orderedTasks = new List<TaskItem>();
+
+        var pinnedItems = tasks.Where(x => x.Pinned);
+        var activeItems = tasks.Where(x => !x.IsDone && !x.Pinned);
+        var doneItems = tasks.Where(x => x.IsDone);
+
+        orderedTasks.AddRange(pinnedItems);
+        orderedTasks.AddRange(activeItems);
+        orderedTasks.AddRange(doneItems);
+
+        for (var i = 0; i < orderedTasks.Count; i++)
+        {
+            orderedTasks[i].ListOrder = i;
+        }
+
+        _taskItemRepository.UpdateTaskListOrders(orderedTasks);
+
+        return orderedTasks;
     }
 
     private void MoveTaskItem(int newIndex, TaskItemViewModel taskItem)
