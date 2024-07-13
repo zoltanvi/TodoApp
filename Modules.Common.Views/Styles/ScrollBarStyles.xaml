@@ -39,7 +39,7 @@
                         <Border
                             x:Name="PART_top"
                             Grid.Row="0"
-                            Width="14"
+                            Width="{Binding UIScaler.ScrollbarWidth, Source={StaticResource UIScaler}}"
                             Height="{TemplateBinding Height}"
                             Margin="0"
                             Background="{DynamicResource InversePrimary}"
@@ -48,7 +48,7 @@
                         <Border
                             x:Name="PART_middle"
                             Grid.Row="1"
-                            Width="14"
+                            Width="{Binding UIScaler.ScrollbarWidth, Source={StaticResource UIScaler}}"
                             Height="{TemplateBinding Height}"
                             Margin="0"
                             Background="{DynamicResource InversePrimary}"
@@ -57,7 +57,7 @@
                         <Border
                             x:Name="PART_bottom"
                             Grid.Row="2"
-                            Width="14"
+                            Width="{Binding UIScaler.ScrollbarWidth, Source={StaticResource UIScaler}}"
                             Height="{TemplateBinding Height}"
                             Margin="0"
                             Background="{DynamicResource InversePrimary}"

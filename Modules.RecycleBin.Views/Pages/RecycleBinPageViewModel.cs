@@ -1,9 +1,11 @@
 ﻿using Modules.Categories.Contracts;
+using Modules.Common.DataBinding;
 using Modules.Common.ViewModel;
 using Modules.RecycleBin.Repositories;
 using Modules.Tasks.Contracts.Models;
 using PropertyChanged;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 namespace Modules.RecycleBin.Views.Pages;
 
@@ -69,7 +71,6 @@ public class RecycleBinGroupItemViewModel : BaseViewModel
 {
     public int CategoryId { get; set; }
     public string CategoryName { get; set; }
-
     public ObservableCollection<RecycleBinTaskItemViewModel> Items { get; set; }
 }
 
@@ -84,9 +85,16 @@ public class RecycleBinTaskItemViewModel : BaseViewModel
     public bool IsDone { get; set; }
     public DateTime CreationDate { get; set; }
     public DateTime ModificationDate { get; set; }
-    public string MarkerColor { get; set; }
-    public string BorderColor { get; set; }
-    public string BackgroundColor { get; set; }
+    public string? MarkerColor { get; set; }
+    public string? BorderColor { get; set; }
+    public string? BackgroundColor { get; set; }
     public bool IsDeleted { get; set; }
     public DateTime? DeletedDate { get; set; }
+    public bool DetailsVisible { get; set; }
+    public ICommand ToggleDetailsCommand { get; }
+
+    public RecycleBinTaskItemViewModel()
+    {
+        ToggleDetailsCommand = new RelayCommand(() => DetailsVisible ^= true);
+    }
 }

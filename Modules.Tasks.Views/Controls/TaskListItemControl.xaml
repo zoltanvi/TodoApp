@@ -25,7 +25,6 @@
             Margin="4 2"
             HorizontalAlignment="Left"
             Panel.ZIndex="1000"
-            AutomationProperties.AutomationId="TaskListItemColorBar"
             Background="{Binding MarkerColor, Converter={StaticResource StringRgbToBrushConverter}}"
             CornerRadius="3 0 0 3">
             <Border.Width>
@@ -304,7 +303,6 @@
                     Grid.Column="2"
                     Padding="0"
                     HorizontalAlignment="Right"
-                    AutomationProperties.AutomationId="TaskListItemHiddenPanel"
                     Background="Transparent"
                     IsEnabled="{Binding AppSettings.TaskQuickActionSettings.Enabled, Source={StaticResource AppSettings}}"
                     Opacity="0">
@@ -370,7 +368,6 @@
                             <!--  Calendar empty button  -->
                             <Grid Visibility="{Binding IsAnyReminderOn, Converter={StaticResource BoolToVisibilityNegatedConverter}}">
                                 <Button
-                                    AutomationProperties.AutomationId="TaskListItemCalendarEmptyButton"
                                     Command="{Binding OpenReminderCommand}"
                                     Content="{StaticResource IconCalendar}"
                                     IsEnabled="{Binding IsQuickActionsEnabled}"
@@ -382,7 +379,6 @@
                             <!--  Calendar active button  -->
                             <Grid Visibility="{Binding IsAnyReminderOn, Converter={StaticResource BoolToVisibilityConverter}}">
                                 <Button
-                                    AutomationProperties.AutomationId="TaskListItemCalendarActiveButton"
                                     Command="{Binding OpenReminderCommand}"
                                     Content="{StaticResource IconDateTime}"
                                     IsEnabled="{Binding IsQuickActionsEnabled}"
@@ -439,7 +435,6 @@
                             <Grid Visibility="{Binding Pinned, Converter={StaticResource BoolToVisibilityNegatedConverter}}">
                                 <Button
                                     Margin="4 0 0 0"
-                                    AutomationProperties.AutomationId="TaskListItemPinButton"
                                     Command="{Binding PinItemCommand}"
                                     Content="{StaticResource IconPin}"
                                     Style="{StaticResource ButtonQuickActionStyle}"
@@ -450,7 +445,6 @@
                             <Grid Visibility="{Binding Pinned, Converter={StaticResource BoolToVisibilityConverter}}">
                                 <Button
                                     Margin="4 0 0 0"
-                                    AutomationProperties.AutomationId="TaskListItemUnpinButton"
                                     Command="{Binding UnpinItemCommand}"
                                     Content="{StaticResource IconUnpin}"
                                     Style="{StaticResource ButtonQuickActionStyle}"
@@ -460,7 +454,6 @@
                             <!--  Trash button  -->
                             <Button
                                 Margin="4 0 0 0"
-                                AutomationProperties.AutomationId="TaskListItemTrashBinButton"
                                 Command="{Binding DeleteItemCommand}"
                                 Content="{StaticResource IconTrash}"
                                 Cursor="Hand"

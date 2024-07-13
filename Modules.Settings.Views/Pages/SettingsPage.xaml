@@ -39,7 +39,6 @@
                 <!--  BACK button  -->
                 <Button
                     Grid.Column="1"
-                    AutomationProperties.AutomationId="SettingsButton"
                     Command="{Binding GoBackCommand}"
                     Content="{StaticResource IconArrowLeft}"
                     Style="{StaticResource ButtonIconHoverRectangleStyle}"

@@ -55,14 +55,40 @@
                     </Grid.RowDefinitions>
 
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
+                    <Grid
+                        Grid.Row="0"
+                        Grid.Column="0">
+                        <Border Visibility="{Binding AppSettings.TaskSettings.CircularCheckbox, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <CheckBox
+                                Margin="{Binding UIScaler.TaskCheckBoxWidth, Source={StaticResource UIScaler}, Converter={StaticResource TaskCheckboxMarginConverter}}"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                IsChecked="{Binding IsDone}"
+                                IsEnabled="False"
+                                Style="{StaticResource TaskCheckBoxStyle}"/>
+                        </Border>
+
+                        <Border Visibility="{Binding AppSettings.TaskSettings.CircularCheckbox, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityNegatedConverter}}">
+                            <CheckBox
+                                Margin="{Binding UIScaler.TaskCheckBoxWidth, Source={StaticResource UIScaler}, Converter={StaticResource TaskCheckboxMarginConverter}}"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                IsChecked="{Binding IsDone}"
+                                IsEnabled="False"
+                                Style="{StaticResource TaskCheckBoxSquareStyle}"/>
+                        </Border>
+                    </Grid>
+
+
                     <!--  CONTENT  -->
                     <controls:BasicTextEditorBox
                         Grid.Row="0"
-                        Grid.Column="0"
+                        Grid.Column="1"
                         Margin="0 6"
                         Padding="7 0 0 0"
                         Background="Transparent"
@@ -74,6 +100,7 @@
                         Style="{StaticResource BaseRichTextBoxStyle}" />
 
                     <WrapPanel
+                        Visibility="{Binding DetailsVisible, Converter={StaticResource BoolToVisibilityConverter}}"
                         Grid.Row="1"
                         Grid.Column="0"
                         Grid.ColumnSpan="2"
@@ -83,8 +110,7 @@
                         <controls1:TagControl
                             Opacity="{Binding IsDone, Converter={StaticResource BoolToTaskOpacityConverter}}"
                             TagColor="Blue"
-                            TagTitle="Created: "
-                            Visibility="{Binding AppSettings.TaskSettings.CreationDateVisible, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}">
+                            TagTitle="Created: ">
                             <controls1:TagControl.TagBody>
                                 <MultiBinding>
                                     <MultiBinding.Converter>
@@ -101,8 +127,7 @@
                         <controls1:TagControl
                             Opacity="{Binding IsDone, Converter={StaticResource BoolToTaskOpacityConverter}}"
                             TagColor="Cyan"
-                            TagTitle="Modified: "
-                            Visibility="{Binding AppSettings.TaskSettings.ModificationDateVisible, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}">
+                            TagTitle="Modified: ">
                             <controls1:TagControl.TagBody>
                                 <MultiBinding>
                                     <MultiBinding.Converter>
@@ -119,8 +144,7 @@
                         <controls1:TagControl
                             Opacity="{Binding IsDone, Converter={StaticResource BoolToTaskOpacityConverter}}"
                             TagColor="Volcano"
-                            TagTitle="Deleted: "
-                            Visibility="{Binding AppSettings.TaskSettings.ModificationDateVisible, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}">
+                            TagTitle="Deleted: ">
                             <controls1:TagControl.TagBody>
                                 <MultiBinding>
                                     <MultiBinding.Converter>
@@ -140,18 +164,27 @@
         </Border>
 
         <Button
+            Visibility="{Binding DetailsVisible, Converter={StaticResource BoolToVisibilityNegatedConverter}}"
             Grid.Column="2"
             Margin="4 0 0 0"
-            AutomationProperties.AutomationId="TaskListItemPinButton"
             Command="{Binding ToggleDetailsCommand}"
             Content="{StaticResource IconInfo}"
             Style="{StaticResource ButtonQuickActionStyle}"
-            ToolTip="Details" />
+            ToolTip="Show details" />
+
+        <Button
+            Visibility="{Binding DetailsVisible, Converter={StaticResource BoolToVisibilityConverter}}"
+            Grid.Column="2"
+            Margin="4 0 0 0"
+            Command="{Binding ToggleDetailsCommand}"
+            Content="{StaticResource IconHideInfo}"
+            Style="{StaticResource ButtonQuickActionStyle}"
+            ToolTip="Hide details" >
+        </Button>
 
         <Button
             Grid.Column="3"
             Margin="4 0 0 0"
-            AutomationProperties.AutomationId="TaskListItemPinButton"
             Command="{Binding RestoreTaskItemCommand}"
             Content="{StaticResource IconRestore}"
             Style="{StaticResource ButtonQuickActionStyle}"

@@ -11,7 +11,6 @@
     x:Name="CategoryListItem"
     d:DesignHeight="60"
     d:DesignWidth="350"
-    AutomationProperties.AutomationId="CategoryListItem"
     mc:Ignorable="d">
 
     <UserControl.ContextMenu>
@@ -110,7 +109,6 @@
         </Button.Style>
 
         <TextBlock
-            AutomationProperties.AutomationId="CategoryListItemText"
             FontSize="{Binding UIScaler.FontSize.Medium, Source={StaticResource UIScaler}}"
             Text="{Binding Name}">
 

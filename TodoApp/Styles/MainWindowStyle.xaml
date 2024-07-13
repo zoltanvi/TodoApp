@@ -87,7 +87,6 @@
                                                 <!--  Side menu button  -->
                                                 <Button
                                                     Grid.Column="0"
-                                                    AutomationProperties.AutomationId="SideMenuButton"
                                                     Command="{Binding ToggleSideMenuCommand}"
                                                     Style="{StaticResource ButtonTitleBarStyle}">
                                                     <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
