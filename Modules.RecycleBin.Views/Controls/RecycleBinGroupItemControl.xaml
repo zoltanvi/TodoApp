@@ -12,10 +12,11 @@
     mc:Ignorable="d">
     <Grid>
         <Border
-            Margin="2"
+            Margin="6"
             Background="{DynamicResource Surface2}"
-            BorderBrush="{DynamicResource Outline}"
-            BorderThickness="1">
+            BorderBrush="{DynamicResource OutlineVariant}"
+            BorderThickness="1"
+            CornerRadius="3">
 
             <Grid>
 
@@ -26,9 +27,9 @@
 
                 <TextBlock
                     Grid.Row="0"
+                    Margin="6 0"
                     FontSize="{Binding UIScaler.FontSize.Regular, Source={StaticResource UIScaler}}"
                     FontWeight="Bold"
-                    Margin="6 0"
                     Text="{Binding CategoryName}" />
 
                 <ListView
@@ -38,7 +39,7 @@
                     Background="Transparent"
                     BorderThickness="0"
                     ItemsSource="{Binding Items}"
-                    ScrollViewer.CanContentScroll="True"
+                    ScrollViewer.CanContentScroll="False"
                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                     ScrollViewer.VerticalScrollBarVisibility="Auto"
                     SelectionMode="Single"

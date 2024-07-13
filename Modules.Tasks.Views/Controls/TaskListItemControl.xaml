@@ -112,7 +112,6 @@
                     Opacity="0.3" />
 
                 <!--  Task Checkbox  -->
-
                 <Grid Grid.Column="1">
                     <Border Visibility="{Binding AppSettings.TaskSettings.CircularCheckbox, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}">
                         <CheckBox

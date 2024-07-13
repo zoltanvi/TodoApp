@@ -11,30 +11,62 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <Grid Margin="0 3">
+    <Grid Margin="3 3">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
+
+        <!--  MARKER  -->
         <Border
-            Width="5"
+            Grid.Column="1"
+            HorizontalAlignment="Left"
+            Width="7"
+            Panel.ZIndex="1000"
             Background="{Binding MarkerColor, Converter={StaticResource StringRgbToBrushConverter}}"
             CornerRadius="3 0 0 3" />
+
+
+        <!--  BORDER  -->
         <Border
             Grid.Column="1"
             BorderBrush="{Binding BorderColor, Converter={StaticResource TaskBorderBrushConverter}}"
-            BorderThickness="1">
-            
+            BorderThickness="1"
+            CornerRadius="3">
+
             <Grid>
-                <Border Background="{Binding BackgroundColor, Converter={StaticResource StringRgbToBrushConverter}}" Opacity="0.3" CornerRadius="3"></Border>
-                
+                <!--  BACKGROUND  -->
+                <Border
+                    Background="{Binding BackgroundColor, Converter={StaticResource StringRgbToBrushConverter}}"
+                    CornerRadius="3"
+                    Opacity="0.3" />
+
+                <!--  CONTENT  -->
+                <!--<Label Content="{Binding ContentPreview}" Padding="20"></Label>-->
                 <controls:BasicTextEditorBox
+                    Padding="7 0 0 0"
+                    Margin="{Binding AppSettings.TaskSettings.Spacing, Source={StaticResource AppSettings}, Converter={StaticResource TaskSpacingToMarginConverter}}"
                     Background="Transparent"
-                    BorderThickness="0"
+                    Style="{StaticResource BaseRichTextBoxStyle}"
                     DocumentContent="{Binding Content}"
+                    ScrollViewer.CanContentScroll="False"
+                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                    ScrollViewer.VerticalScrollBarVisibility="Auto"
                     IsReadOnly="True" />
             </Grid>
         </Border>
+
+        <Button
+            Grid.Column="2"
+            Margin="4 0 0 0"
+            AutomationProperties.AutomationId="TaskListItemPinButton"
+            Command="{Binding RestoreTaskItemCommand}"
+            Content="{StaticResource IconRestore}"
+            Style="{StaticResource ButtonQuickActionStyle}"
+            ToolTip="Restore task"
+             />
+
     </Grid>
 </UserControl>
