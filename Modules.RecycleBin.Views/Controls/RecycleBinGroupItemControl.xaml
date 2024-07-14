@@ -18,26 +18,28 @@
             CornerRadius="6">
 
             <Grid>
-
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <!--CATEGORY GROUP TITLE-->
-                <Border Grid.Row="0" Background="{DynamicResource OnSecondary}" CornerRadius="6 6 0 0">
-                    <TextBlock
-                        TextTrimming="CharacterEllipsis"
-                        Margin="14 8 6 6"
-                        Foreground="{DynamicResource Secondary}"
-                        FontSize="{Binding UIScaler.FontSize.Regular, Source={StaticResource UIScaler}}"
-                        FontWeight="Bold"
-                        Text="{Binding CategoryName}" 
+                <!--  CATEGORY GROUP TITLE  -->
+                <Border
+                    Grid.Row="0"
+                    Background="{DynamicResource OnSecondary}"
+                    CornerRadius="6">
+
+                    <Button
+                        Padding="14 8 6 6"
+                        Content="{Binding CategoryName}"
+                        Style="{StaticResource GroupItemTitleButtonStyle}"
                         ToolTip="{Binding CategoryName}"
+                        Command="{Binding ToggleGroupIsOpen}"
                         />
+
                 </Border>
 
-                <ListView
+                <ListView Visibility="{Binding IsOpen, Converter={StaticResource BoolToVisibilityConverter}}"
                     x:Name="GroupItemListView"
                     Grid.Row="1"
                     HorizontalContentAlignment="Stretch"
@@ -52,8 +54,7 @@
                     VirtualizingPanel.IsContainerVirtualizable="True"
                     VirtualizingPanel.IsVirtualizing="True"
                     VirtualizingPanel.ScrollUnit="Pixel"
-                    VirtualizingPanel.VirtualizationMode="Recycling"
-                    >
+                    VirtualizingPanel.VirtualizationMode="Recycling">
 
                     <!--  Enabling virtualization is really important  -->
                     <!--  https://stackoverflow.com/questions/3724593/why-setting-scrollviewer-cancontentscroll-to-false-disable-virtualization  -->
