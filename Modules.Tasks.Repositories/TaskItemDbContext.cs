@@ -9,6 +9,7 @@ namespace Modules.Tasks.Repositories;
 public class TaskItemDbContext : DbContext
 {
     public DbSet<TaskItem> Tasks { get; set; }
+    public DbSet<TaskItemVersion> TaskItemVersions { get; set; }
     public DbSet<Reminder> Reminders { get; set; }
     public DbSet<TaskItemsDbInfo> TasksDbInfo { get; set; }
 
@@ -45,6 +46,11 @@ public class TaskItemDbContext : DbContext
                 .IsRequired();
 
             entity
+                .HasMany(e => e.Versions)
+                .WithOne(e => e.TaskItem)
+                .HasForeignKey(e => e.TaskId);
+
+            entity
                 .Property(e => e.ListOrder)
                 .HasDefaultValue(0);
 
@@ -66,6 +72,29 @@ public class TaskItemDbContext : DbContext
                 .HasForeignKey(e => e.TaskId);
         });
 
+
+        modelBuilder.Entity<TaskItemVersion>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+
+            entity
+                .Property(e => e.Content)
+                .IsRequired();
+
+            entity
+                .Property(e => e.ContentPreview)
+                .IsRequired();
+
+            entity
+                .Property(e => e.VersionDate)
+                .HasConversion(dateTimeConverter)
+                .IsRequired();
+
+            entity
+                .HasOne(e => e.TaskItem)
+                .WithMany(e => e.Versions)
+                .HasForeignKey(e => e.TaskId);
+        });
 
         modelBuilder.Entity<Reminder>(entity =>
         {

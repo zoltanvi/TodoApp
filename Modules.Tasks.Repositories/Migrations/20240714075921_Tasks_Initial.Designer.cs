@@ -10,7 +10,7 @@ using Modules.Tasks.Repositories;
 namespace Modules.Tasks.Repositories.Migrations
 {
     [DbContext(typeof(TaskItemDbContext))]
-    [Migration("20240704170203_Tasks_Initial")]
+    [Migration("20240714075921_Tasks_Initial")]
     partial class Tasks_Initial
     {
         /// <inheritdoc />
@@ -103,6 +103,34 @@ namespace Modules.Tasks.Repositories.Migrations
                     b.ToTable("Tasks");
                 });
 
+            modelBuilder.Entity("Modules.Tasks.Contracts.Models.TaskItemVersion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ContentPreview")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("TaskId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("VersionDate")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TaskId");
+
+                    b.ToTable("TaskItemVersions");
+                });
+
             modelBuilder.Entity("Modules.Tasks.Contracts.Models.TaskItemsDbInfo", b =>
                 {
                     b.Property<int>("Id")
@@ -130,9 +158,22 @@ namespace Modules.Tasks.Repositories.Migrations
                     b.Navigation("TaskItem");
                 });
 
+            modelBuilder.Entity("Modules.Tasks.Contracts.Models.TaskItemVersion", b =>
+                {
+                    b.HasOne("Modules.Tasks.Contracts.Models.TaskItem", "TaskItem")
+                        .WithMany("Versions")
+                        .HasForeignKey("TaskId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TaskItem");
+                });
+
             modelBuilder.Entity("Modules.Tasks.Contracts.Models.TaskItem", b =>
                 {
                     b.Navigation("Reminders");
+
+                    b.Navigation("Versions");
                 });
 #pragma warning restore 612, 618
         }

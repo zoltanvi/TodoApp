@@ -69,9 +69,36 @@ namespace Modules.Tasks.Repositories.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "TaskItemVersions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    TaskId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Content = table.Column<string>(type: "TEXT", nullable: false),
+                    ContentPreview = table.Column<string>(type: "TEXT", nullable: false),
+                    VersionDate = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TaskItemVersions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TaskItemVersions_Tasks_TaskId",
+                        column: x => x.TaskId,
+                        principalTable: "Tasks",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Reminders_TaskId",
                 table: "Reminders",
+                column: "TaskId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TaskItemVersions_TaskId",
+                table: "TaskItemVersions",
                 column: "TaskId");
 
             migrationBuilder.CreateIndex(
@@ -85,6 +112,9 @@ namespace Modules.Tasks.Repositories.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Reminders");
+
+            migrationBuilder.DropTable(
+                name: "TaskItemVersions");
 
             migrationBuilder.DropTable(
                 name: "TasksDbInfo");

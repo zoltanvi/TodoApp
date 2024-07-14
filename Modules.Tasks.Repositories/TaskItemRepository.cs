@@ -56,6 +56,7 @@ public class TaskItemRepository : ITaskItemRepository
         return _context.Tasks
             .Where(x => !x.IsDeleted)
             .Include(x => x.Reminders)
+            .Include(x => x.Versions)
             .OrderBy(x => x.ListOrder)
             .ToList();
     }
@@ -66,6 +67,7 @@ public class TaskItemRepository : ITaskItemRepository
             .Where(x => x.CategoryId == categoryId)
             .Where(x => !x.IsDeleted)
             .Include(x => x.Reminders)
+            .Include(x => x.Versions)
             .OrderBy(x => x.ListOrder)
             .ToList();
     }
@@ -88,15 +90,29 @@ public class TaskItemRepository : ITaskItemRepository
         var dbTask = _context.Tasks.Find(task.Id);
         ArgumentNullException.ThrowIfNull(dbTask);
 
-        dbTask.Content = task.Content;
-        dbTask.ContentPreview = task.ContentPreview;
         dbTask.ListOrder = task.ListOrder;
         dbTask.Pinned = task.Pinned;
         dbTask.IsDone = task.IsDone;
-        dbTask.ModificationDate = DateTime.Now;
         dbTask.MarkerColor = task.MarkerColor;
         dbTask.BorderColor = task.BorderColor;
         dbTask.BackgroundColor = task.BackgroundColor;
+
+        if (!dbTask.Content.Equals(task.Content))
+        {
+            var oldVersion = new TaskItemVersion
+            {
+                TaskId = dbTask.Id,
+                Content = dbTask.Content,
+                ContentPreview = dbTask.ContentPreview,
+                VersionDate = dbTask.ModificationDate
+            };
+
+            _context.TaskItemVersions.Add(oldVersion);
+        }
+
+        dbTask.Content = task.Content;
+        dbTask.ContentPreview = task.ContentPreview;
+        dbTask.ModificationDate = DateTime.Now;
 
         _context.SaveChanges();
 
@@ -111,7 +127,7 @@ public class TaskItemRepository : ITaskItemRepository
         dbTask.DeletedDate = DateTime.Now;
         dbTask.IsDeleted = true;
         dbTask.ListOrder = -1;
-        
+
         _context.SaveChanges();
     }
 

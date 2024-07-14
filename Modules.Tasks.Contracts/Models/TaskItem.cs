@@ -6,7 +6,7 @@ public class TaskItem
 {
     public int Id { get; set; }
     public required int CategoryId { get; set; }
-    public required string Content { get; set; }
+    public required string Content { get; set; } // Keep current content here
     public required string ContentPreview { get; set; }
     public int ListOrder { get; set; }
     public bool Pinned { get; set; }
@@ -19,6 +19,7 @@ public class TaskItem
     public bool IsDeleted { get; set; }
     public DateTime? DeletedDate { get; set; }
 
-    // Navigation property to hold the related reminders
+    // Navigation properties
+    public ICollection<TaskItemVersion> Versions { get; set; } = new List<TaskItemVersion>();
     public ICollection<Reminder> Reminders { get; set; } = new List<Reminder>();
 }
