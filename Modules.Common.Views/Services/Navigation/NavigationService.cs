@@ -75,7 +75,7 @@ public abstract class NavigationService : INavigationService
 
         if (_serviceProvider.GetService(pageType) is Page page)
         {
-            if (CurrentPageType != null)
+            if (CurrentPageType != null && pageType != CurrentPageType)
             {
                 PreviousPageType = CurrentPageType;
             }
