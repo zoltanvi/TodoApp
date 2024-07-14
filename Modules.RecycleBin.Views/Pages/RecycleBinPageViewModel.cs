@@ -39,6 +39,7 @@ public class RecycleBinPageViewModel : BaseViewModel
     }
 
     public ObservableCollection<RecycleBinGroupItemViewModel> GroupItems { get; set; } = new();
+    public bool IsEmpty => GroupItems.Count == 0;
 
     private void OnTaskRestored(TaskRestoredEvent obj)
     {
@@ -54,12 +55,16 @@ public class RecycleBinPageViewModel : BaseViewModel
         {
             GroupItems.Remove(group);
         }
+
+        OnPropertyChanged(nameof(IsEmpty));
     }
 
     private void OnCategoryDeleted(CategoryDeletedEvent obj)
     {
         var deletedTasksFromCategory = _recycleBinRepository.GetDeletedTasksFromCategory(obj.CategoryId);
-       
+
+        if (deletedTasksFromCategory.Count == 0) return;
+
         var items = new ObservableCollection<RecycleBinTaskItemViewModel>();
         foreach (TaskItem item in deletedTasksFromCategory)
         {
@@ -71,8 +76,6 @@ public class RecycleBinPageViewModel : BaseViewModel
         {
             var category = _categoryRepository.GetCategoryById(obj.CategoryId);
             ArgumentNullException.ThrowIfNull(category);
-            
-            
 
             GroupItems.Add(new RecycleBinGroupItemViewModel
             {
@@ -89,6 +92,8 @@ public class RecycleBinPageViewModel : BaseViewModel
                 group.Items.Add(item);
             }   
         }
+
+        OnPropertyChanged(nameof(IsEmpty));
     }
 
     private void InitializeGroupItems()
@@ -114,6 +119,8 @@ public class RecycleBinPageViewModel : BaseViewModel
                 Items = items
             });
         }
+
+        OnPropertyChanged(nameof(IsEmpty));
     }
 
     protected override void OnDispose()
