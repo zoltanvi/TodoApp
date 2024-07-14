@@ -59,36 +59,6 @@
                     Description="Close side menu on page change"
                     IsChecked="{Binding AppSettings.ApplicationSettings.CloseSideMenuOnPageChange, Source={StaticResource AppSettings}, Mode=TwoWay}" />
 
-                <!--  App border color  -->
-                <Border Style="{StaticResource SettingsItemStyle}">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="auto" />
-                        </Grid.ColumnDefinitions>
-                        <Label
-                            Grid.Column="0"
-                            Content="{StaticResource IconPalette}"
-                            Style="{StaticResource SettingsIconLabelStyle}" />
-                        <TextBlock
-                            Grid.Column="1"
-                            Style="{StaticResource SettingsDescriptionStyle}"
-                            Text="App border color" />
-
-                        <Border
-                            Grid.Column="2"
-                            Padding="20 0 0 0"
-                            HorizontalAlignment="Right">
-
-                            <commonControls:SingletonColorPicker
-                                SelectedColorString="{Binding AppSettings.ApplicationSettings.AppBorderColor, Source={StaticResource AppSettings}, Mode=TwoWay}"
-                                Width="{Binding UIScaler.ColorPickerWidth, Source={StaticResource UIScaler}}"
-                                Height="{Binding UIScaler.ColorPickerHeight, Source={StaticResource UIScaler}}" />
-                        </Border>
-
-                    </Grid>
-                </Border>
 
                 <!--  TitleBarHeight  -->
                 <Border Style="{StaticResource SettingsItemStyle}">

@@ -1,12 +1,12 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:attachedProperties="clr-namespace:Modules.Common.Views.AttachedProperties;assembly=Modules.Common.Views"
-    xmlns:valueConverters1="clr-namespace:Modules.Common.Views.ValueConverters;assembly=Modules.Common.Views"
-    xmlns:local="clr-namespace:TodoApp"
     xmlns:animation="clr-namespace:TodoApp.Animation"
+    xmlns:attachedProperties="clr-namespace:Modules.Common.Views.AttachedProperties;assembly=Modules.Common.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:TodoApp"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:valueConverters1="clr-namespace:Modules.Common.Views.ValueConverters;assembly=Modules.Common.Views"
     mc:Ignorable="d">
 
     <Style TargetType="{x:Type local:MainWindow}">
@@ -45,11 +45,12 @@
                             <!--  Main window outline  -->
                             <Grid>
 
-                                <!--  Outer dragging border  -->
+                                <!--  APP BORDER  -->
                                 <Border
+                                    Margin="-1"
                                     Panel.ZIndex="2"
-                                    BorderBrush="{Binding AppSettings.ApplicationSettings.AppBorderColor, Source={StaticResource AppSettings}, Converter={StaticResource AppBorderBrushConverter}}"
-                                    BorderThickness="0.4"
+                                    BorderBrush="{Binding AppSettings.ThemeSettings.AppBorderColor, Source={StaticResource AppSettings}, Converter={StaticResource AppBorderBrushConverter}}"
+                                    BorderThickness="{Binding AppSettings.ThemeSettings.AppBorderThickness, Source={StaticResource AppSettings}, Converter={StaticResource AppBorderThicknessConverter}}"
                                     CornerRadius="{Binding IsRoundedCornersAllowed, Converter={StaticResource BoolToRoundedCornerRadiusConverter}}"
                                     Opacity="1">
                                     <!--  animation:AnimateDimInProperty.Value="{Binding Active}"  -->
@@ -57,7 +58,10 @@
                                 </Border>
 
                                 <!--  Window border and drop shadow  -->
-                                <Border Background="{DynamicResource Background}" CornerRadius="{Binding IsRoundedCornersAllowed, Converter={StaticResource BoolToRoundedCornerRadiusConverter}}">
+                                <Border
+                                    Margin="{Binding AppSettings.ThemeSettings.AppBorderThickness, Source={StaticResource AppSettings}, Converter={StaticResource AppBorderThicknessToMarginConverter}}"
+                                    Background="{DynamicResource Background}"
+                                    CornerRadius="{Binding IsRoundedCornersAllowed, Converter={StaticResource BoolToRoundedCornerRadiusConverter}}">
 
                                     <Grid>
                                         <Grid.RowDefinitions>
@@ -73,7 +77,8 @@
                                         <Border
                                             Grid.Column="0"
                                             Panel.ZIndex="0"
-                                            Background="{DynamicResource Surface2}">
+                                            Background="{DynamicResource Surface2}"
+                                            CornerRadius="{Binding IsRoundedCornersAllowed, Converter={StaticResource BoolToRoundedCornerRadiusTopConverter}}">
 
                                             <Grid>
                                                 <Grid.ColumnDefinitions>
@@ -88,8 +93,11 @@
                                                 <Button
                                                     Grid.Column="0"
                                                     Command="{Binding ToggleSideMenuCommand}"
-                                                    Style="{StaticResource ButtonTitleBarStyle}">
-                                                    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                    Style="{StaticResource ButtonTitleBarLeftStyle}"
+                                                    Tag="{Binding IsRoundedCornersAllowed}">
+                                                    <Grid
+                                                        HorizontalAlignment="Center"
+                                                        VerticalAlignment="Center">
                                                         <Grid.RowDefinitions>
                                                             <RowDefinition Height="1" />
                                                             <RowDefinition Height="3" />
@@ -129,7 +137,9 @@
                                                     Style="{StaticResource IconLabelStyle}" />
 
                                                 <!--  Title bar date  -->
-                                                <Grid Grid.Column="1" Grid.ColumnSpan="2">
+                                                <Grid
+                                                    Grid.Column="1"
+                                                    Grid.ColumnSpan="2">
 
                                                     <Viewbox>
                                                         <Border
@@ -150,7 +160,9 @@
                                                                             <valueConverters1:CurrentDateTimeFormatMultiConverter />
                                                                         </MultiBinding.Converter>
                                                                         <Binding Path="CurrentTime" />
-                                                                        <Binding Path="AppSettings.DateTimeSettings.TitleBarDateFormat" Source="{StaticResource AppSettings}" />
+                                                                        <Binding
+                                                                            Path="AppSettings.DateTimeSettings.TitleBarDateFormat"
+                                                                            Source="{StaticResource AppSettings}" />
                                                                     </MultiBinding>
                                                                 </Label.Content>
                                                             </Label>
@@ -159,14 +171,18 @@
                                                 </Grid>
 
                                                 <!--  Window buttons  -->
-                                                <StackPanel Grid.Column="3" Orientation="Horizontal">
+                                                <StackPanel
+                                                    Grid.Column="3"
+                                                    Orientation="Horizontal">
 
                                                     <!--  MINIMIZE  -->
                                                     <Button
                                                         Name="MinimizeWindow"
                                                         Command="{Binding MinimizeCommand}"
                                                         Style="{StaticResource ButtonTitleBarStyle}">
-                                                        <Viewbox Width="11" Height="12">
+                                                        <Viewbox
+                                                            Width="11"
+                                                            Height="12">
                                                             <Path
                                                                 Data="M -1 1 L 11 1 M 0 0 Z"
                                                                 Stroke="{DynamicResource OnSurface}"
@@ -175,7 +191,9 @@
                                                     </Button>
 
                                                     <!--  MAXIMIZE  -->
-                                                    <Button Command="{Binding MaximizeCommand}" Style="{DynamicResource ButtonTitleBarStyle}">
+                                                    <Button
+                                                        Command="{Binding MaximizeCommand}"
+                                                        Style="{DynamicResource ButtonTitleBarStyle}">
                                                         <Grid>
                                                             <Viewbox
                                                                 Width="11"
@@ -203,8 +221,11 @@
                                                     <Button
                                                         Name="CloseWindow"
                                                         Command="{Binding CloseCommand}"
-                                                        Style="{StaticResource ButtonTitleBarCloseWindowStyle}">
-                                                        <Viewbox Width="11" Height="11">
+                                                        Style="{StaticResource ButtonTitleBarCloseWindowStyle}"
+                                                        Tag="{Binding IsRoundedCornersAllowed}">
+                                                        <Viewbox
+                                                            Width="11"
+                                                            Height="11">
                                                             <Path
                                                                 Data="M 0 0 L 10 10 M 10 0 L 0 10 M 0 0 Z"
                                                                 Stroke="{DynamicResource OnSurface}"

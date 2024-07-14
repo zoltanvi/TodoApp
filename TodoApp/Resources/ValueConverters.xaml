@@ -6,7 +6,14 @@
     <valueConverters:AppBorderBrushConverter x:Key="AppBorderBrushConverter"/>
     <valueConverters:TitleBarHeightConverter x:Key="TitleBarHeightConverter"/>
     <valueConverters:TitleBarHeightToGridLengthConverter x:Key="TitleBarHeightToGridLengthConverter"/>
-    <valueConverters:BoolToRoundedCornerRadiusConverter x:Key="BoolToRoundedCornerRadiusConverter"/>
+
+    <valueConverters:BoolToRoundedCornerRadiusConverter x:Key="BoolToRoundedCornerRadiusConverter" TopLeft="True" TopRight="True" BottomLeft="True" BottomRight="True"/>
+    <valueConverters:BoolToRoundedCornerRadiusConverter x:Key="BoolToRoundedCornerRadiusTopConverter" TopLeft="True" TopRight="True"/>
+    <valueConverters:BoolToRoundedCornerRadiusConverter x:Key="BoolToRoundedCornerRadiusTopLeftConverter" TopLeft="True" />
+    <valueConverters:BoolToRoundedCornerRadiusConverter x:Key="BoolToRoundedCornerRadiusTopRightConverter" TopRight="True"/>
+
     <valueConverters:BoolToRoundedCornerRadiusDoubleConverter x:Key="BoolToRoundedCornerRadiusDoubleConverter"/>
+    <valueConverters:AppBorderThicknessConverter x:Key="AppBorderThicknessConverter" Offset="1"/>
+    <valueConverters:AppBorderThicknessConverter x:Key="AppBorderThicknessToMarginConverter" Offset="-0.5"/>
 
 </ResourceDictionary>

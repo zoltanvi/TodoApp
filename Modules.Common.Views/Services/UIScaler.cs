@@ -14,6 +14,7 @@ public class UIScaler : BaseViewModel, IUIScaler
     private const double OriginalSideMenuWidth = 220;
     private const double OriginalSideMenuMinimumWidth = 180;
     private const double OriginalTextBoxMaxHeight = 400;
+    private const double OriginalPortableColorPickerWidth = 26;
     private const double OriginalColorPickerHeight = 31;
     private const double OriginalColorPickerWidth = 56;
     private const double OriginalColorPickerItemSize = 21;
@@ -39,6 +40,7 @@ public class UIScaler : BaseViewModel, IUIScaler
     public double SideMenuWidth => OriginalSideMenuWidth * ScaleValue;
     public double SideMenuMinimumWidth => OriginalSideMenuMinimumWidth * ScaleValue;
     public double TextBoxMaxHeight => OriginalTextBoxMaxHeight * ScaleValue;
+    public double PortableColorPickerWidth => OriginalPortableColorPickerWidth * ScaleValue;
     public double ColorPickerHeight => OriginalColorPickerHeight * ScaleValue;
     public double ColorPickerWidth => OriginalColorPickerWidth * ScaleValue;
     public double ColorPickerHalfWidth => (OriginalColorPickerWidth * ScaleValue) / 2;

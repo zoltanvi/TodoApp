@@ -15,8 +15,6 @@ public class ApplicationSettings : SettingsBase
     = true;
 #endif
 
-    public string AppBorderColor { get; set; } = "#BDBDBD";
-
     public double WindowMinimumWidth { get; set; } = 220;
     public double WindowMinimumHeight { get; set; } = 200;
     public int ResizeBorderSize { get; set; } = 9;

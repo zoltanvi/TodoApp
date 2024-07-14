@@ -30,7 +30,7 @@
                 <ResourceDictionary Source="pack://application:,,,/Modules.Tasks.TextEditor;component/Resources/ValueConverters.xaml" />
                 <ResourceDictionary Source="Resources/ValueConverters.xaml"/>
 
-
+                <ResourceDictionary Source="pack://application:,,,/ColorPicker;component/Styles/DefaultColorPickerStyle.xaml" />
                 <ResourceDictionary Source="Themes/BaseTheme.xaml" />
                 <ResourceDictionary Source="Themes/DarkTheme.xaml" />
 

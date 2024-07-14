@@ -7,4 +7,6 @@ public class ThemeSettings : SettingsBase
     public bool DarkMode { get; set; } = true;
     public MaterialThemeStyle ThemeStyle { get; set; } = MaterialThemeStyle.TonalSpot;
     public string SeedColor { get; set; } = "#1D64DD";
+    public string AppBorderColor { get; set; } = "#BDBDBD";
+    public Thickness AppBorderThickness { get; set; } = Thickness.Thin;
 }
