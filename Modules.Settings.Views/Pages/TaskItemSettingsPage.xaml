@@ -66,18 +66,6 @@
                     Description="Task background visible"
                     IsChecked="{Binding AppSettings.TaskSettings.BackgroundVisible, Source={StaticResource AppSettings}, Mode=TwoWay}" />
 
-                <!--  Creation date  -->
-                <controls:ToggleButtonSettingControl
-                    Icon="{StaticResource IconCalendar}"
-                    Description="Creation date visible"
-                    IsChecked="{Binding AppSettings.TaskSettings.CreationDateVisible, Source={StaticResource AppSettings}, Mode=TwoWay}" />
-
-                <!--  Modification date  -->
-                <controls:ToggleButtonSettingControl
-                    Icon="{StaticResource IconCalendar}"
-                    Description="Modification date visible"
-                    IsChecked="{Binding AppSettings.TaskSettings.ModificationDateVisible, Source={StaticResource AppSettings}, Mode=TwoWay}" />
-
                 <!--  Circular checkbox  -->
                 <controls:ToggleButtonSettingControl
                     Icon="{StaticResource IconCheckbox}"

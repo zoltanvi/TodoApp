@@ -36,6 +36,7 @@ public class TaskItemViewModel : BaseViewModel
             acceptsTab: true);
         TextEditorViewModel.EnterAction = ExitEditItem;
 
+        ToggleDetailsCommand = new RelayCommand(() => DetailsVisible ^= true);
         EnableQuickActionsCommand = new RelayCommand(() => IsQuickActionsEnabled = true);
         DisableQuickActionsCommand = new RelayCommand(() => IsQuickActionsEnabled = false);
         EditItemCommand = new RelayCommand(EditItem);
@@ -90,6 +91,8 @@ public class TaskItemViewModel : BaseViewModel
 
     public bool IsQuickActionsEnabled { get; set; }
 
+    public bool DetailsVisible { get; set; }
+
     // Commands
     public ICommand IsDoneModifiedCommand { get; }
     public ICommand EditItemCommand { get; }
@@ -103,6 +106,8 @@ public class TaskItemViewModel : BaseViewModel
     public ICommand DisableQuickActionsCommand { get; }
 
     public INotifiableObject ColorChangedNotification { get; }
+    public ICommand ToggleDetailsCommand { get; }
+
 
     private void EditItem()
     {

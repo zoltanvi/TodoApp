@@ -66,6 +66,12 @@
                     Icon="{StaticResource IconPin}"
                     IsChecked="{Binding AppSettings.TaskQuickActionSettings.PinEnabled, Source={StaticResource AppSettings}, Mode=TwoWay}" />
 
+                <!--  Details button  -->
+                <controls:ToggleButtonSettingControl
+                    Description="Details button"
+                    Icon="{StaticResource IconInfo}"
+                    IsChecked="{Binding AppSettings.TaskQuickActionSettings.DetailsEnabled, Source={StaticResource AppSettings}, Mode=TwoWay}" />
+
                 <!--  Delete button  -->
                 <controls:ToggleButtonSettingControl
                     Description="Delete button"

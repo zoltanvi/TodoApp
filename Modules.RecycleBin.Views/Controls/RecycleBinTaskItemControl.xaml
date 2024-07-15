@@ -206,62 +206,6 @@
 
                     </Grid>
 
-                    <!--<WrapPanel
-                        Grid.Row="1"
-                        Grid.Column="0"
-                        Grid.ColumnSpan="2"
-                        Margin="8 0 8 6"
-                        Orientation="Horizontal"
-                        Visibility="{Binding DetailsVisible, Converter={StaticResource BoolToVisibilityConverter}}">
-
-                        <controls1:TagControl
-                            TagColor="Blue"
-                            TagTitle="Created: ">
-                            <controls1:TagControl.TagBody>
-                                <MultiBinding>
-                                    <MultiBinding.Converter>
-                                        <valueConverters:CurrentDateTimeFormatMultiConverter />
-                                    </MultiBinding.Converter>
-                                    <Binding Path="CreationDate" />
-                                    <Binding
-                                        Path="AppSettings.DateTimeSettings.TaskCreationDateFormat"
-                                        Source="{StaticResource AppSettings}" />
-                                </MultiBinding>
-                            </controls1:TagControl.TagBody>
-                        </controls1:TagControl>
-
-                        <controls1:TagControl
-                            TagColor="Cyan"
-                            TagTitle="Modified: ">
-                            <controls1:TagControl.TagBody>
-                                <MultiBinding>
-                                    <MultiBinding.Converter>
-                                        <valueConverters:CurrentDateTimeFormatMultiConverter />
-                                    </MultiBinding.Converter>
-                                    <Binding Path="ModificationDate" />
-                                    <Binding
-                                        Path="AppSettings.DateTimeSettings.TaskCreationDateFormat"
-                                        Source="{StaticResource AppSettings}" />
-                                </MultiBinding>
-                            </controls1:TagControl.TagBody>
-                        </controls1:TagControl>
-
-                        <controls1:TagControl
-                            TagColor="Volcano"
-                            TagTitle="Deleted: ">
-                            <controls1:TagControl.TagBody>
-                                <MultiBinding>
-                                    <MultiBinding.Converter>
-                                        <valueConverters:CurrentDateTimeFormatMultiConverter />
-                                    </MultiBinding.Converter>
-                                    <Binding Path="DeletedDate" />
-                                    <Binding
-                                        Path="AppSettings.DateTimeSettings.TaskCreationDateFormat"
-                                        Source="{StaticResource AppSettings}" />
-                                </MultiBinding>
-                            </controls1:TagControl.TagBody>
-                        </controls1:TagControl>
-                    </WrapPanel>-->
                 </Grid>
 
             </Grid>
