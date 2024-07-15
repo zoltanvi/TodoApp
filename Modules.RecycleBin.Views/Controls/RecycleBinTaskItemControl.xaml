@@ -99,8 +99,114 @@
                         ScrollViewer.VerticalScrollBarVisibility="Auto"
                         Style="{StaticResource BaseRichTextBoxStyle}" />
 
-                    <!--  INFO TAGS  -->
-                    <WrapPanel
+                    <!--  INFO  -->
+                    <Grid
+                        Background="{DynamicResource Surface1}"
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        Visibility="{Binding DetailsVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+
+                        <Border
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="2"
+                            Height="1"
+                            Background="{DynamicResource OutlineVariant}" />
+
+
+                        <!--  LEFT COLUMN  -->
+                        <!--  CREATED  -->
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Content="Created:"
+                            Style="{StaticResource TaskPropertyLabelLeftStyle}" />
+
+                        <!--  MODIFIED  -->
+                        <Label
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            Content="Modified:"
+                            Style="{StaticResource TaskPropertyLabelLeftStyle}" />
+
+                        <!--  DELETED  -->
+                        <Label
+                            Grid.Row="3"
+                            Grid.Column="0"
+                            Content="Deleted:"
+                            Style="{StaticResource TaskPropertyLabelLeftStyle}" />
+
+
+                        <!--  RIGHT COLUMN  -->
+                        <!--  CREATION DATE  -->
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Style="{StaticResource TaskPropertyLabelRightStyle}">
+                            <Label.Content>
+                                <MultiBinding>
+                                    <MultiBinding.Converter>
+                                        <valueConverters:CurrentDateTimeFormatMultiConverter />
+                                    </MultiBinding.Converter>
+                                    <Binding Path="CreationDate" />
+                                    <Binding
+                                        Path="AppSettings.DateTimeSettings.TaskCreationDateFormat"
+                                        Source="{StaticResource AppSettings}" />
+                                </MultiBinding>
+                            </Label.Content>
+                        </Label>
+
+                        <!--  MODIFICATION DATE  -->
+                        <Label
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            Style="{StaticResource TaskPropertyLabelRightStyle}">
+                            <Label.Content>
+                                <MultiBinding>
+                                    <MultiBinding.Converter>
+                                        <valueConverters:CurrentDateTimeFormatMultiConverter />
+                                    </MultiBinding.Converter>
+                                    <Binding Path="ModificationDate" />
+                                    <Binding
+                                        Path="AppSettings.DateTimeSettings.TaskCreationDateFormat"
+                                        Source="{StaticResource AppSettings}" />
+                                </MultiBinding>
+                            </Label.Content>
+                        </Label>
+
+                        <!--  DELETION DATE  -->
+                        <Label
+                            Grid.Row="3"
+                            Grid.Column="1"
+                            Style="{StaticResource TaskPropertyLabelRightStyle}">
+                            <Label.Content>
+                                <MultiBinding>
+                                    <MultiBinding.Converter>
+                                        <valueConverters:CurrentDateTimeFormatMultiConverter />
+                                    </MultiBinding.Converter>
+                                    <Binding Path="DeletedDate" />
+                                    <Binding
+                                        Path="AppSettings.DateTimeSettings.TaskCreationDateFormat"
+                                        Source="{StaticResource AppSettings}" />
+                                </MultiBinding>
+                            </Label.Content>
+                        </Label>
+
+                    </Grid>
+
+                    <!--<WrapPanel
                         Grid.Row="1"
                         Grid.Column="0"
                         Grid.ColumnSpan="2"
@@ -155,7 +261,7 @@
                                 </MultiBinding>
                             </controls1:TagControl.TagBody>
                         </controls1:TagControl>
-                    </WrapPanel>
+                    </WrapPanel>-->
                 </Grid>
 
             </Grid>

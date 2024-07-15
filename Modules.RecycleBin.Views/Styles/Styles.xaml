@@ -1,0 +1,14 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Style x:Key="TaskPropertyLabelLeftStyle" TargetType="Label" BasedOn="{StaticResource BaseLabelClearTypeStyle}">
+        <Setter Property="Margin" Value="8 0"/>
+        <Setter Property="FontSize" Value="{Binding UIScaler.FontSize.Smaller, Source={StaticResource UIScaler}}" />
+    </Style>
+
+    <Style x:Key="TaskPropertyLabelRightStyle" TargetType="Label" BasedOn="{StaticResource BaseLabelClearTypeStyle}">
+        <Setter Property="Margin" Value="8 0"/>
+        <Setter Property="FontSize" Value="{Binding UIScaler.FontSize.Smaller, Source={StaticResource UIScaler}}" />
+    </Style>
+
+</ResourceDictionary>

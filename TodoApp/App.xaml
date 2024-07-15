@@ -56,6 +56,7 @@
                 <ResourceDictionary Source="pack://application:,,,/Modules.Categories.Views;component/Styles/Styles.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Modules.Tasks.Views;component/Styles/Styles.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Modules.Tasks.TextEditor;component/Styles/Styles.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Modules.RecycleBin.Views;component/Styles/Styles.xaml" />
 
 
                 <ResourceDictionary Source="pack://application:,,,/Modules.Common.Views;component/Styles/ListBoxStyles.xaml" />
