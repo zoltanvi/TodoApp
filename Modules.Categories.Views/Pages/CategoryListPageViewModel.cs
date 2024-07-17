@@ -192,7 +192,8 @@ public class CategoryListPageViewModel : BaseViewModel
 
     private void OpenNoteListPage()
     {
-        _sideMenuPageNavigationService.NavigateTo<INoteListPage>();
+        // TODO:
+        //_sideMenuPageNavigationService.NavigateTo<INoteListPage>();
     }
 
     private void OpenRecycleBinPage()

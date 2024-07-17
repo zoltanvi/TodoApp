@@ -244,8 +244,12 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
 
     private void FinishCategoryEdit()
     {
-        var newName = _mediator.Send(new RenameActiveCategoryCommand { Name = RenameCategoryContent }).Result;
-        ActiveCategoryName = newName;
+        if (ActiveCategoryName != RenameCategoryContent)
+        {
+            var newName = _mediator.Send(new RenameActiveCategoryCommand { Name = RenameCategoryContent }).Result;
+            ActiveCategoryName = newName;
+        }
+
         IsCategoryInEditMode = false;
     }
 
