@@ -111,6 +111,7 @@
                             <RowDefinition />
                             <RowDefinition />
                             <RowDefinition />
+                            <RowDefinition />
                         </Grid.RowDefinitions>
 
                         <Grid.ColumnDefinitions>
@@ -148,6 +149,12 @@
                             Content="Deleted:"
                             Style="{StaticResource TaskPropertyLabelLeftStyle}" />
 
+                        <!--  EDITED  -->
+                        <Label
+                            Grid.Row="4"
+                            Grid.Column="0"
+                            Content="Edited:"
+                            Style="{StaticResource TaskPropertyLabelLeftStyle}" />
 
                         <!--  RIGHT COLUMN  -->
                         <!--  CREATION DATE  -->
@@ -203,6 +210,18 @@
                                 </MultiBinding>
                             </Label.Content>
                         </Label>
+
+                        <!--  EDITED X TIMES  -->
+                        <StackPanel
+                            Grid.Row="4"
+                            Grid.Column="1" 
+                            Orientation="Horizontal">
+
+                            <Label Content="{Binding VersionCount}" Style="{StaticResource TaskPropertyLabelRightStyle}" Margin="8 0 0 0" Padding="5 5 0 0" />
+                            <Label Content=" times" Style="{StaticResource TaskPropertyLabelRightStyle}" Margin="0" />
+
+                        </StackPanel>
+
 
                     </Grid>
 

@@ -9,6 +9,7 @@ public interface ITaskItemRepository
     List<TaskItem> GetActiveTasks();
     List<TaskItem> GetActiveTasksFromCategory(int categoryId);
     TaskItem? GetTaskById(int id);
+    List<TaskItemVersion> GetTaskItemVersions(int taskId);
     void UpdateTaskListOrders(List<TaskItem> taskItems);
     TaskItem UpdateTaskItem(TaskItem task);
     void DeleteTask(TaskItem task);

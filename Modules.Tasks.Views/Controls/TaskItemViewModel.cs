@@ -4,6 +4,7 @@ using Modules.Common.ViewModel;
 using Modules.Settings.Contracts.ViewModels;
 using Modules.Tasks.Contracts.Cqrs.Commands;
 using Modules.Tasks.Contracts.Cqrs.Events;
+using Modules.Tasks.Contracts.Cqrs.Queries;
 using Modules.Tasks.TextEditor.Controls;
 using Modules.Tasks.Views.Mappings;
 using Modules.Tasks.Views.Services;
@@ -93,6 +94,10 @@ public class TaskItemViewModel : BaseViewModel
 
     public bool DetailsVisible { get; set; }
 
+    public List<TaskItemVersionViewModel> Versions { get; set; }
+
+    public int VersionCount => Versions.Count;
+
     // Commands
     public ICommand IsDoneModifiedCommand { get; }
     public ICommand EditItemCommand { get; }
@@ -131,6 +136,12 @@ public class TaskItemViewModel : BaseViewModel
             //Modifications are accepted, update task
             ModificationDate = DateTime.Now;
             UpdateTask();
+
+            var versionList = _mediator.Send(new TaskItemVersionsQuery { TaskId = Id }).Result;
+            Versions = versionList.MapToViewModelList();
+
+            OnPropertyChanged(nameof(Versions));
+            OnPropertyChanged(nameof(VersionCount));
         }
 
         TextEditorViewModel.IsEditMode = false;

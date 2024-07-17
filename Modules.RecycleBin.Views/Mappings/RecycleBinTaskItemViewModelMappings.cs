@@ -23,7 +23,8 @@ public static class RecycleBinTaskItemViewModelMappings
             IsDeleted = taskItem.IsDeleted,
             ListOrder = taskItem.ListOrder,
             MarkerColor = taskItem.MarkerColor,
-            ModificationDate = taskItem.ModificationDate
+            ModificationDate = taskItem.ModificationDate,
+            Versions = taskItem.Versions.MapToViewModelList()
         };
     }
 }

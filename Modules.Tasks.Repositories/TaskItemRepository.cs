@@ -28,6 +28,16 @@ public class TaskItemRepository : ITaskItemRepository
 
     public TaskItem? GetTaskById(int id) => _context.Tasks.Find(id);
 
+    public List<TaskItemVersion> GetTaskItemVersions(int taskId)
+    {
+        var dbTask = _context.Tasks.Find(taskId);
+        ArgumentNullException.ThrowIfNull(dbTask);
+
+        return _context.TaskItemVersions
+            .Where(x => x.TaskId == taskId)
+            .ToList();
+    }
+
     public bool AddReminderToTask(TaskItem task, Reminder reminder)
     {
         if (task == null) return false;

@@ -6,15 +6,15 @@
     xmlns:controls="clr-namespace:Modules.Common.Views.Controls;assembly=Modules.Common.Views"
     xmlns:controls1="clr-namespace:Modules.Tasks.TextEditor.Controls;assembly=Modules.Tasks.TextEditor"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dd="urn:gong-wpf-dragdrop"
     xmlns:local="clr-namespace:Modules.Tasks.Views.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:valueConverters="clr-namespace:Modules.Tasks.Views.ValueConverters"
     xmlns:valueConverters1="clr-namespace:Modules.Common.Views.ValueConverters;assembly=Modules.Common.Views"
-    xmlns:dd="urn:gong-wpf-dragdrop"
-    dd:DragDrop.IsDragSource="{Binding TextEditorViewModel.IsEditMode}"
     d:DataContext="{d:DesignInstance local:TaskItemViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
+    dd:DragDrop.IsDragSource="{Binding TextEditorViewModel.IsEditMode}"
     mc:Ignorable="d">
 
     <Grid
@@ -465,8 +465,8 @@
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
 
-                    <!--Placeholder border to shift the info panel as much as the ColorBar's width-->
-                    <Border Width="{Binding Width, ElementName=ColorBarBorder}"></Border>
+                    <!--  Placeholder border to shift the info panel as much as the ColorBar's width  -->
+                    <Border Width="{Binding Width, ElementName=ColorBarBorder}" />
 
                     <Grid Grid.Column="1">
                         <Grid.RowDefinitions>
@@ -490,6 +490,7 @@
 
 
                         <!--  LEFT COLUMN  -->
+
                         <!--  CREATED  -->
                         <Label
                             Grid.Row="1"
@@ -504,8 +505,15 @@
                             Content="Modified:"
                             Style="{StaticResource TaskPropertyLabelLeftStyle}" />
 
+                        <!--  EDITED  -->
+                        <Label
+                            Grid.Row="3"
+                            Grid.Column="0"
+                            Content="Edited:"
+                            Style="{StaticResource TaskPropertyLabelLeftStyle}" />
 
                         <!--  RIGHT COLUMN  -->
+
                         <!--  CREATION DATE  -->
                         <Label
                             Grid.Row="1"
@@ -541,6 +549,24 @@
                                 </MultiBinding>
                             </Label.Content>
                         </Label>
+
+                        <!--  EDITED X TIMES  -->
+                        <StackPanel
+                            Grid.Row="3"
+                            Grid.Column="1"
+                            Orientation="Horizontal">
+
+                            <Label
+                                Margin="8 0 0 0"
+                                Padding="5 5 0 0"
+                                Content="{Binding VersionCount}"
+                                Style="{StaticResource TaskPropertyLabelRightStyle}" />
+                            <Label
+                                Margin="0"
+                                Content=" times"
+                                Style="{StaticResource TaskPropertyLabelRightStyle}" />
+
+                        </StackPanel>
 
                     </Grid>
                 </Grid>

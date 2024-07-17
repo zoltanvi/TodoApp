@@ -23,6 +23,10 @@ public class RecycleBinTaskItemViewModel : BaseViewModel
     public bool IsDeleted { get; set; }
     public DateTime? DeletedDate { get; set; }
     public bool DetailsVisible { get; set; }
+
+    public List<RecycleBinTaskItemVersionViewModel> Versions { get; set; }
+    public int VersionCount => Versions.Count;
+
     public ICommand ToggleDetailsCommand { get; }
     public ICommand RestoreTaskItemCommand { get; }
 
