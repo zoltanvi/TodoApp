@@ -167,7 +167,8 @@
                         Margin="10"
                         BorderBrush="{DynamicResource Outline}"
                         BorderThickness="1"
-                        CornerRadius="6">
+                        CornerRadius="6"
+                        Background="{DynamicResource Background}">
                         <Frame
                             x:Name="OverlayFrame"
                             Grid.Column="1"
