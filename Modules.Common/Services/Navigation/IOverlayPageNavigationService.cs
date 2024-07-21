@@ -2,4 +2,5 @@
 
 public interface IOverlayPageNavigationService : INavigationService
 {
+    void InitializeOverlayElements(object background, object grid);
 }

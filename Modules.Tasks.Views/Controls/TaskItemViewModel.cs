@@ -48,6 +48,8 @@ public class TaskItemViewModel : BaseViewModel
         UnpinItemCommand = new RelayCommand(UnpinItem);
         IsDoneModifiedCommand = new RelayCommand(UpdateTaskIsDone);
 
+        ShowTagSelectorCommand = new RelayCommand(() => _mediator.Send(new OpenTagSelectorCommand { TaskId = Id }));
+
         // CheckBox and Combobox changes the viewmodel properties directly, only need to persist the changes
         ColorChangedNotification = new NotifiableObject(UpdateTask);
     }

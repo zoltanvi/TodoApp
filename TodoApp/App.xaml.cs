@@ -20,7 +20,7 @@ namespace TodoApp;
 /// 
 public partial class App : Application
 {
-    private IHost _host;
+    private readonly IHost _host;
     private IServiceProvider ServiceProvider => _host.Services;
 
     public App()
@@ -53,7 +53,7 @@ public partial class App : Application
 
     private void PublishApplicationOpeningEvent()
     {
-        var mediator = ServiceProvider.GetService<IMediator>();
+        var mediator = ServiceProvider.GetRequiredService<IMediator>();
         mediator.Publish(new ApplicationOpeningEvent());
     }
 
@@ -70,19 +70,15 @@ public partial class App : Application
         mainWindow.Show();
         Current.MainWindow = mainWindow;
 
-        var mainPageNavigation = ServiceProvider.GetService<IMainPageNavigationService>();
-        ArgumentNullException.ThrowIfNull(mainPageNavigation);
+        var mainPageNavigation = ServiceProvider.GetRequiredService<IMainPageNavigationService>();
         mainPageNavigation.Initialize(mainWindow.MainFrame);
 
-        var sideMenuPageNavigation = ServiceProvider.GetService<ISideMenuPageNavigationService>();
-        ArgumentNullException.ThrowIfNull(sideMenuPageNavigation);
+        var sideMenuPageNavigation = ServiceProvider.GetRequiredService<ISideMenuPageNavigationService>();
         sideMenuPageNavigation.Initialize(mainWindow.SideMenuFrame);
 
-        //var overlayPageNavigation = ServiceProvider.GetService<IOverlayPageNavigationService>();
-        //overlayPageNavigation.Initialize(mainWindow.OverlayBackground.OverlayFrame);
-
-        //IoC.AppViewModel.UpdateMainPage();
-        //IoC.AppViewModel.UpdateSideMenuPage();
+        var overlayPageNavigation = ServiceProvider.GetRequiredService<IOverlayPageNavigationService>();
+        overlayPageNavigation.Initialize(mainWindow.OverlayFrame);
+        overlayPageNavigation.InitializeOverlayElements(mainWindow.OverlayBackground, mainWindow.OverlayFrameGrid);
 
         if (AppSettings.Instance.SessionSettings.ActiveCategoryId == Constants.RecycleBinCategoryId)
         {

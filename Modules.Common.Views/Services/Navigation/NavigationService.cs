@@ -48,6 +48,13 @@ public abstract class NavigationService : INavigationService
         return true;
     }
 
+    /// <summary>
+    /// Override to add extra functionality before opening a page
+    /// </summary>
+    protected virtual void BeforeNavigateToPage()
+    {
+    }
+
     private void NavigateTo(Type pageType)
     {
         if (Frame == null)
@@ -81,6 +88,8 @@ public abstract class NavigationService : INavigationService
             }
 
             CurrentPageType = pageType;
+
+            BeforeNavigateToPage();
 
             Frame.Navigate(page);
         }
