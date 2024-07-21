@@ -150,7 +150,7 @@ public class CategoryListPageViewModel : BaseViewModel
         _categoriesRepository.DeleteCategory(category.Map());
 
         _mediator.Send(new ShowMessageInfoCommand { Message = $"Deleted category: {category.Name}" });
-        
+
         CategoryDeletedEvent.Invoke(new CategoryDeletedEvent { CategoryId = category.Id });
 
         // Only if the current category was the deleted one, select a new category
@@ -170,14 +170,14 @@ public class CategoryListPageViewModel : BaseViewModel
 
             AppSettings.Instance.SessionSettings.ActiveCategoryId = ActiveCategoryId;
 
-            _mediator.Publish(new ActiveCategoryChangedEvent
-            {
-                CategoryId = category.Id,
-                CategoryName = category.Name
-            });
-
             //IoC.NoteListService.ActiveNote = null;
         }
+
+        _mediator.Publish(new ActiveCategoryChangedEvent
+        {
+            CategoryId = category.Id,
+            CategoryName = category.Name
+        });
     }
 
     private void OpenSettingsPage()
