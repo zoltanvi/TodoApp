@@ -93,7 +93,7 @@
                                 Padding="0"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
-                                Content="{TemplateBinding TagBody}"
+                                Content="{TemplateBinding Content}"
                                 FontFamily="{Binding AppSettings.TaskSettings.FontFamily, Source={StaticResource AppSettings}, Converter={StaticResource EnumToFontFamilyConverter}}"
                                 FontSize="{Binding UIScaler.FontSize.Smaller, Source={StaticResource UIScaler}}"
                                 Foreground="{TemplateBinding TagColor,

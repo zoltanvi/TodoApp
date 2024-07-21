@@ -219,34 +219,34 @@
                             </Border>
 
                         </Grid>
-
-
                     </Border>
-
 
                     <!--  Main content  -->
                     <Border
                         Grid.Column="2"
                         Margin="{Binding AppSettings.TaskSettings.Spacing, Source={StaticResource AppSettings}, Converter={StaticResource TaskSpacingToMarginConverter}}">
                         <Grid Margin="0 2 10 2">
-                            <Grid.RowDefinitions>
-                                <!--  Task description row  -->
-                                <RowDefinition Height="*" />
-                                <!--  Timestamp row  -->
-                                <RowDefinition Height="Auto" />
-                                <!--  Category row  -->
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!--Task tag-->
+                            <WrapPanel Grid.Column="0" VerticalAlignment="Center" Orientation="Vertical">
+                                <!--<controls:TagControl TagBody="GET" TagColor="Gold"></controls:TagControl>-->
+                                <!--<controls:TagControl TagColor="Green" TagTitle="POST"></controls:TagControl>-->
+                            </WrapPanel>
 
                             <!--  Task description  -->
                             <controls1:RichTextEditorControl
-                                Grid.Row="0"
+                                Grid.Column="1"
                                 DataContext="{Binding TextEditorViewModel}"
                                 IsReadOnly="False" />
 
                             <!--  Catch double click to change to edit mode  -->
                             <Border
-                                Grid.Row="0"
+                                Grid.Column="0"
+                                Grid.ColumnSpan="2"
                                 Background="Transparent"
                                 Visibility="{Binding TextEditorViewModel.IsEditMode, Converter={StaticResource BoolToVisibilityNegatedConverter}}">
                                 <Border.InputBindings>
@@ -258,6 +258,7 @@
                                         Gesture="MiddleDoubleClick" />
                                 </Border.InputBindings>
                             </Border>
+
                         </Grid>
 
                     </Border>

@@ -122,6 +122,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
             };
 
             var addedTask = _taskItemRepository.AddTask(task);
+
             _oneEditorOpenService.LastEditedTaskId = addedTask.Id;
 
             Items.Add(addedTask.MapToViewModel(_mediator, _oneEditorOpenService));

@@ -39,6 +39,25 @@ namespace Modules.Tasks.Repositories.Migrations
                     b.ToTable("Reminders");
                 });
 
+            modelBuilder.Entity("Modules.Tasks.Contracts.Models.TagItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Color")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tags");
+                });
+
             modelBuilder.Entity("Modules.Tasks.Contracts.Models.TaskItem", b =>
                 {
                     b.Property<int>("Id")
@@ -144,6 +163,21 @@ namespace Modules.Tasks.Repositories.Migrations
                     b.ToTable("TasksDbInfo");
                 });
 
+            modelBuilder.Entity("TagItemTaskItem", b =>
+                {
+                    b.Property<int>("TagsId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("TaskItemsId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("TagsId", "TaskItemsId");
+
+                    b.HasIndex("TaskItemsId");
+
+                    b.ToTable("TagItemTaskItem");
+                });
+
             modelBuilder.Entity("Modules.Tasks.Contracts.Models.Reminder", b =>
                 {
                     b.HasOne("Modules.Tasks.Contracts.Models.TaskItem", "TaskItem")
@@ -164,6 +198,21 @@ namespace Modules.Tasks.Repositories.Migrations
                         .IsRequired();
 
                     b.Navigation("TaskItem");
+                });
+
+            modelBuilder.Entity("TagItemTaskItem", b =>
+                {
+                    b.HasOne("Modules.Tasks.Contracts.Models.TagItem", null)
+                        .WithMany()
+                        .HasForeignKey("TagsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Modules.Tasks.Contracts.Models.TaskItem", null)
+                        .WithMany()
+                        .HasForeignKey("TaskItemsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Modules.Tasks.Contracts.Models.TaskItem", b =>

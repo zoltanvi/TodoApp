@@ -10,7 +10,7 @@ using Modules.Tasks.Repositories;
 namespace Modules.Tasks.Repositories.Migrations
 {
     [DbContext(typeof(TaskItemDbContext))]
-    [Migration("20240714075921_Tasks_Initial")]
+    [Migration("20240721080119_Tasks_Initial")]
     partial class Tasks_Initial
     {
         /// <inheritdoc />
@@ -40,6 +40,25 @@ namespace Modules.Tasks.Repositories.Migrations
                     b.HasIndex("TaskId");
 
                     b.ToTable("Reminders");
+                });
+
+            modelBuilder.Entity("Modules.Tasks.Contracts.Models.TagItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Color")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tags");
                 });
 
             modelBuilder.Entity("Modules.Tasks.Contracts.Models.TaskItem", b =>
@@ -147,6 +166,21 @@ namespace Modules.Tasks.Repositories.Migrations
                     b.ToTable("TasksDbInfo");
                 });
 
+            modelBuilder.Entity("TagItemTaskItem", b =>
+                {
+                    b.Property<int>("TagsId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("TaskItemsId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("TagsId", "TaskItemsId");
+
+                    b.HasIndex("TaskItemsId");
+
+                    b.ToTable("TagItemTaskItem");
+                });
+
             modelBuilder.Entity("Modules.Tasks.Contracts.Models.Reminder", b =>
                 {
                     b.HasOne("Modules.Tasks.Contracts.Models.TaskItem", "TaskItem")
@@ -167,6 +201,21 @@ namespace Modules.Tasks.Repositories.Migrations
                         .IsRequired();
 
                     b.Navigation("TaskItem");
+                });
+
+            modelBuilder.Entity("TagItemTaskItem", b =>
+                {
+                    b.HasOne("Modules.Tasks.Contracts.Models.TagItem", null)
+                        .WithMany()
+                        .HasForeignKey("TagsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Modules.Tasks.Contracts.Models.TaskItem", null)
+                        .WithMany()
+                        .HasForeignKey("TaskItemsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Modules.Tasks.Contracts.Models.TaskItem", b =>

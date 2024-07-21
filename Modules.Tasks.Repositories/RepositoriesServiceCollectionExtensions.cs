@@ -9,6 +9,7 @@ public static class RepositoriesServiceCollectionExtensions
     {
         services.AddDbContext<TaskItemDbContext>();
         services.AddScoped<ITaskItemRepository, TaskItemRepository>();
+        services.AddScoped<ITagItemRepository, TagItemRepository>();
 
         return services;
     }

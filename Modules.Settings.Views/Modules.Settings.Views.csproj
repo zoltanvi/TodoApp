@@ -23,6 +23,7 @@
 		<ProjectReference Include="..\Modules.PopupMessage.Contracts\Modules.PopupMessage.Contracts.csproj" />
 		<ProjectReference Include="..\Modules.Settings.Contracts\Modules.Settings.Contracts.csproj" />
 		<ProjectReference Include="..\Modules.Settings.Services\Modules.Settings.Services.csproj" />
+		<ProjectReference Include="..\Modules.Tasks.Contracts\Modules.Tasks.Contracts.csproj" />
 	</ItemGroup>
 
 </Project>

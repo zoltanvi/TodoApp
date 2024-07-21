@@ -22,4 +22,5 @@ public class TaskItem
     // Navigation properties
     public ICollection<TaskItemVersion> Versions { get; set; } = new List<TaskItemVersion>();
     public ICollection<Reminder> Reminders { get; set; } = new List<Reminder>();
+    public ICollection<TagItem> Tags { get; set; } = new List<TagItem>();
 }

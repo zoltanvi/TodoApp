@@ -11,6 +11,8 @@ public class TaskItemDbContext : DbContext
     public DbSet<TaskItem> Tasks { get; set; }
     public DbSet<TaskItemVersion> TaskItemVersions { get; set; }
     public DbSet<Reminder> Reminders { get; set; }
+    public DbSet<TagItem> Tags { get; set; }
+
     public DbSet<TaskItemsDbInfo> TasksDbInfo { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -96,6 +98,7 @@ public class TaskItemDbContext : DbContext
                 .HasForeignKey(e => e.TaskId);
         });
 
+
         modelBuilder.Entity<Reminder>(entity =>
         {
             entity.HasKey(e => e.Id);
@@ -118,6 +121,20 @@ public class TaskItemDbContext : DbContext
             entity
                 .Property(e => e.Initialized)
                 .HasDefaultValue(false);
+        });
+
+
+        modelBuilder.Entity<TagItem>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+
+            entity
+                .Property(e => e.Name)
+                .IsRequired();
+
+            entity
+                .Property(e => e.Color)
+                .IsRequired();
         });
     }
 }

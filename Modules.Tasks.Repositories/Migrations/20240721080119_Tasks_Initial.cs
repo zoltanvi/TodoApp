@@ -11,6 +11,20 @@ namespace Modules.Tasks.Repositories.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Tags",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Color = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tags", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Tasks",
                 columns: table => new
                 {
@@ -70,6 +84,30 @@ namespace Modules.Tasks.Repositories.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "TagItemTaskItem",
+                columns: table => new
+                {
+                    TagsId = table.Column<int>(type: "INTEGER", nullable: false),
+                    TaskItemsId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TagItemTaskItem", x => new { x.TagsId, x.TaskItemsId });
+                    table.ForeignKey(
+                        name: "FK_TagItemTaskItem_Tags_TagsId",
+                        column: x => x.TagsId,
+                        principalTable: "Tags",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TagItemTaskItem_Tasks_TaskItemsId",
+                        column: x => x.TaskItemsId,
+                        principalTable: "Tasks",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "TaskItemVersions",
                 columns: table => new
                 {
@@ -97,6 +135,11 @@ namespace Modules.Tasks.Repositories.Migrations
                 column: "TaskId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_TagItemTaskItem_TaskItemsId",
+                table: "TagItemTaskItem",
+                column: "TaskItemsId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_TaskItemVersions_TaskId",
                 table: "TaskItemVersions",
                 column: "TaskId");
@@ -114,10 +157,16 @@ namespace Modules.Tasks.Repositories.Migrations
                 name: "Reminders");
 
             migrationBuilder.DropTable(
+                name: "TagItemTaskItem");
+
+            migrationBuilder.DropTable(
                 name: "TaskItemVersions");
 
             migrationBuilder.DropTable(
                 name: "TasksDbInfo");
+
+            migrationBuilder.DropTable(
+                name: "Tags");
 
             migrationBuilder.DropTable(
                 name: "Tasks");

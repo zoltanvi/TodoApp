@@ -1,7 +1,10 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <Style x:Key="ButtonBaseStyle" TargetType="{x:Type Button}">
+    <Style
+        x:Key="ButtonBaseStyle"
+        TargetType="{x:Type Button}">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Foreground" Value="{DynamicResource OnBackground}" />
@@ -38,7 +41,7 @@
         x:Key="ButtonHoverStyle"
         BasedOn="{StaticResource ButtonBaseStyle}"
         TargetType="{x:Type Button}">
-        <Setter Property="Foreground" Value="{DynamicResource OnSecondaryContainer}"/>
+        <Setter Property="Foreground" Value="{DynamicResource OnSecondaryContainer}" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="{DynamicResource Surface3}" />
@@ -76,18 +79,24 @@
     </Style>
 
 
-    <Style x:Key="BaseLabelClearTypeStyle" TargetType="Label">
+    <Style
+        x:Key="BaseLabelClearTypeStyle"
+        TargetType="Label">
         <Setter Property="FontFamily" Value="{DynamicResource UIFont}" />
         <Setter Property="Foreground" Value="{DynamicResource OnBackground}" />
     </Style>
 
-    <Style x:Key="BaseTextBlockClearTypeStyle" TargetType="TextBlock">
+    <Style
+        x:Key="BaseTextBlockClearTypeStyle"
+        TargetType="TextBlock">
         <Setter Property="FontFamily" Value="{DynamicResource UIFont}" />
         <Setter Property="Foreground" Value="{DynamicResource OnBackground}" />
     </Style>
 
 
-    <Style x:Key="BaseInputTextBoxStyle" TargetType="TextBox">
+    <Style
+        x:Key="BaseInputTextBoxStyle"
+        TargetType="TextBox">
         <Setter Property="FontFamily" Value="{DynamicResource UIFont}" />
         <Setter Property="FontSize" Value="{Binding UIScaler.FontSize.Regular, Source={StaticResource UIScaler}}" />
         <Setter Property="Foreground" Value="{DynamicResource OnBackground}" />
@@ -103,16 +112,17 @@
 
                     <Grid>
                         <Border
-                        x:Name="border"
-                        Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        SnapsToDevicePixels="True">
+                            x:Name="border"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="6"
+                            SnapsToDevicePixels="True">
                             <ScrollViewer
-                            x:Name="PART_ContentHost"
-                            Focusable="False"
-                            HorizontalScrollBarVisibility="Hidden"
-                            VerticalScrollBarVisibility="Hidden">
+                                x:Name="PART_ContentHost"
+                                Focusable="False"
+                                HorizontalScrollBarVisibility="Hidden"
+                                VerticalScrollBarVisibility="Hidden">
                                 <!--<ScrollViewer.ContentTemplate>
                                 <DataTemplate>
                                     <Grid Background="{Binding Background, ElementName=PART_ContentHost}" RenderOptions.ClearTypeHint="Enabled">
@@ -124,19 +134,23 @@
                         </Border>
 
                         <TextBlock
-                        x:Name="placeholder"
-                        Margin="2 0 0 0"
-                        Padding="{TemplateBinding Padding}"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Foreground="{DynamicResource Outline}"
-                        IsHitTestVisible="False"
-                        Text="{TemplateBinding Tag}">
+                            x:Name="placeholder"
+                            Margin="2 0 0 0"
+                            Padding="{TemplateBinding Padding}"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Foreground="{DynamicResource Outline}"
+                            IsHitTestVisible="False"
+                            Text="{TemplateBinding Tag}">
                             <TextBlock.Style>
-                                <Style BasedOn="{StaticResource BaseTextBlockClearTypeStyle}" TargetType="{x:Type TextBlock}">
+                                <Style
+                                    BasedOn="{StaticResource BaseTextBlockClearTypeStyle}"
+                                    TargetType="{x:Type TextBlock}">
                                     <Setter Property="Visibility" Value="Collapsed" />
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}" Value="">
+                                        <DataTrigger
+                                            Binding="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}"
+                                            Value="">
                                             <Setter Property="Visibility" Value="Visible" />
                                         </DataTrigger>
                                     </Style.Triggers>

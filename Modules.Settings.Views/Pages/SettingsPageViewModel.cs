@@ -37,11 +37,12 @@ public class SettingsPageViewModel : BaseViewModel
             new() { Id = 3, Name = "PAGE TITLE", PageType = typeof(PageTitleSettingsPage) },
             new() { Id = 4, Name = "TASK PAGE", PageType = typeof(TaskPageSettingsPage) },
             new() { Id = 5, Name = "TASKS", PageType = typeof(TaskItemSettingsPage) },
-            new() { Id = 6, Name = "QUICK ACTIONS", PageType = typeof(TaskQuickActionsSettingsPage) },
-            new() { Id = 7, Name = "EDITOR", PageType = typeof(TextEditorQuickActionsSettingsPage) },
-            new() { Id = 8, Name = "NOTES", PageType = typeof(NotePageSettingsPage) },
-            new() { Id = 9, Name = "DATE TIME", PageType = typeof(DateTimeSettingsPage) },
-            new() { Id = 10, Name = "SHORTCUTS", PageType = typeof(ShortcutsPage) }
+            new() { Id = 6, Name = "TAGS", PageType = typeof(TagSettingsPage) },
+            new() { Id = 7, Name = "QUICK ACTIONS", PageType = typeof(TaskQuickActionsSettingsPage) },
+            new() { Id = 8, Name = "EDITOR", PageType = typeof(TextEditorQuickActionsSettingsPage) },
+            new() { Id = 9, Name = "NOTES", PageType = typeof(NotePageSettingsPage) },
+            new() { Id = 10, Name = "DATE TIME", PageType = typeof(DateTimeSettingsPage) },
+            new() { Id = 11, Name = "SHORTCUTS", PageType = typeof(ShortcutsPage) }
         };
 
         // Open ApplicationSettingsPage by default

@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Modules.Settings.Views.Pages;
-using System.Windows;
 
 namespace Modules.Settings.Views;
 
@@ -8,27 +7,29 @@ public static class SettingsViewsServiceCollectionExtensions
 {
     public static IServiceCollection AddSettingsViews(this IServiceCollection services)
     {
-        services.AddScoped<NotePageSettingsPageViewModel>();
-        services.AddScoped<TaskItemSettingsPageViewModel>();
-        services.AddScoped<TaskPageSettingsPageViewModel>();
-        services.AddScoped<TaskQuickActionsSettingsPageViewModel>();
-        services.AddScoped<TextEditorQuickActionsSettingsPageViewModel>();
-        services.AddScoped<ThemeSettingsPageViewModel>();
-        services.AddScoped<ApplicationSettingsPageViewModel>();
-        services.AddScoped<PageTitleSettingsPageViewModel>();
-        services.AddScoped<DateTimeSettingsPageViewModel>();
-        services.AddScoped<ShortcutsPageViewModel>();
+        services.AddTransient<NotePageSettingsPageViewModel>();
+        services.AddTransient<TaskItemSettingsPageViewModel>();
+        services.AddTransient<TagSettingsPageViewModel>();
+        services.AddTransient<TaskPageSettingsPageViewModel>();
+        services.AddTransient<TaskQuickActionsSettingsPageViewModel>();
+        services.AddTransient<TextEditorQuickActionsSettingsPageViewModel>();
+        services.AddTransient<ThemeSettingsPageViewModel>();
+        services.AddTransient<ApplicationSettingsPageViewModel>();
+        services.AddTransient<PageTitleSettingsPageViewModel>();
+        services.AddTransient<DateTimeSettingsPageViewModel>();
+        services.AddTransient<ShortcutsPageViewModel>();
 
-        services.AddScoped<NotePageSettingsPage>();
-        services.AddScoped<TaskItemSettingsPage>();
-        services.AddScoped<TaskPageSettingsPage>();
-        services.AddScoped<TaskQuickActionsSettingsPage>();
-        services.AddScoped<TextEditorQuickActionsSettingsPage>();
-        services.AddScoped<ThemeSettingsPage>();
-        services.AddScoped<ApplicationSettingsPage>();
-        services.AddScoped<PageTitleSettingsPage>();
-        services.AddScoped<DateTimeSettingsPage>();
-        services.AddScoped<ShortcutsPage>();
+        services.AddTransient<NotePageSettingsPage>();
+        services.AddTransient<TaskItemSettingsPage>();
+        services.AddTransient<TagSettingsPage>();
+        services.AddTransient<TaskPageSettingsPage>();
+        services.AddTransient<TaskQuickActionsSettingsPage>();
+        services.AddTransient<TextEditorQuickActionsSettingsPage>();
+        services.AddTransient<ThemeSettingsPage>();
+        services.AddTransient<ApplicationSettingsPage>();
+        services.AddTransient<PageTitleSettingsPage>();
+        services.AddTransient<DateTimeSettingsPage>();
+        services.AddTransient<ShortcutsPage>();
 
         return services;
     }

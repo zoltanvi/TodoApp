@@ -65,9 +65,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Modules.Tasks.Services", "M
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RecycleBin", "RecycleBin", "{D6E3B855-900B-4AE2-A00C-94C656303362}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Modules.RecycleBin.Repositories", "Modules.RecycleBin.Repositories\Modules.RecycleBin.Repositories.csproj", "{CAC9DD1F-411A-4702-9FA7-FBF66D525DF4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Modules.RecycleBin.Repositories", "Modules.RecycleBin.Repositories\Modules.RecycleBin.Repositories.csproj", "{CAC9DD1F-411A-4702-9FA7-FBF66D525DF4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Modules.RecycleBin.Views", "Modules.RecycleBin.Views\Modules.RecycleBin.Views.csproj", "{7C69EBF7-7717-4F1B-98CE-9D7BADAACC34}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Modules.RecycleBin.Views", "Modules.RecycleBin.Views\Modules.RecycleBin.Views.csproj", "{7C69EBF7-7717-4F1B-98CE-9D7BADAACC34}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

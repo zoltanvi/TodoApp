@@ -26,6 +26,28 @@ public class TaskItemRepository : ITaskItemRepository
         return task;
     }
 
+    public TaskItem AddTagToTask(TaskItem task, TagItem tag)
+    {
+        var dbTask = _context.Tasks
+            .Include(x => x.Tags)
+            .FirstOrDefault(x => x.Id == task.Id);
+        ArgumentNullException.ThrowIfNull(dbTask);
+
+        var dbTag = _context.Tags.Find(tag.Id);
+        ArgumentNullException.ThrowIfNull(dbTag);
+
+        if (dbTask.Tags.Contains(tag))
+        {
+            throw new ArgumentException($"Task is already tagged with {tag.Name}");
+        }
+
+        dbTask.Tags.Add(tag);
+
+        _context.SaveChanges();
+
+        return dbTask;
+    }
+
     public TaskItem? GetTaskById(int id) => _context.Tasks.Find(id);
 
     public List<TaskItemVersion> GetTaskItemVersions(int taskId)
@@ -67,6 +89,7 @@ public class TaskItemRepository : ITaskItemRepository
             .Where(x => !x.IsDeleted)
             .Include(x => x.Reminders)
             .Include(x => x.Versions)
+            .Include(x => x.Tags)
             .OrderBy(x => x.ListOrder)
             .ToList();
     }
@@ -78,6 +101,7 @@ public class TaskItemRepository : ITaskItemRepository
             .Where(x => !x.IsDeleted)
             .Include(x => x.Reminders)
             .Include(x => x.Versions)
+            .Include(x => x.Tags)
             .OrderBy(x => x.ListOrder)
             .ToList();
     }

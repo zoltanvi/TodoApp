@@ -2,7 +2,7 @@
 
 public enum TagPresetColor
 {
-    Magenta,
+    Magenta = 0,
     Red,
     Volcano,
     Orange,
