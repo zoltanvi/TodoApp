@@ -51,7 +51,7 @@ public abstract class NavigationService : INavigationService
     /// <summary>
     /// Override to add extra functionality before opening a page
     /// </summary>
-    protected virtual void BeforeNavigateToPage()
+    protected virtual void BeforeNavigateToPage(Type pageType)
     {
     }
 
@@ -89,7 +89,7 @@ public abstract class NavigationService : INavigationService
 
             CurrentPageType = pageType;
 
-            BeforeNavigateToPage();
+            BeforeNavigateToPage(pageType);
 
             Frame.Navigate(page);
         }
