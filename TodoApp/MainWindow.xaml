@@ -139,20 +139,12 @@
                     Name="OverlayBackground"
                     Background="{DynamicResource Background}"
                     Opacity="0.5"
-                    Visibility="Collapsed">
-                    <!--<Behaviors:Interaction.Triggers>
-                        <Behaviors:EventTrigger EventName="MouseDown">
-                            <Behaviors:InvokeCommandAction Command="{Binding OverlayPageService.BackgroundClickedCommand, Source={x:Static local:VML.Instance}}" />
-                        </Behaviors:EventTrigger>
-                    </Behaviors:Interaction.Triggers>-->
-                </Border>
+                    Visibility="Collapsed"/>
 
-                <!--  Overlay page is in front of the background  -->
-                <!--
+                <!--  Overlay page is in front of the background.
                     This is important since we only want to handle the
                     mousedown event if the background is clicked and not the content area
                 -->
-
                 <Grid
                     Name="OverlayFrameGrid"
                     Visibility="Collapsed">
@@ -171,7 +163,6 @@
                         Background="{DynamicResource Background}">
                         <Frame
                             x:Name="OverlayFrame"
-                            Grid.Column="1"
                             attached:NoFrameHistory.Value="True" />
                     </Border>
 

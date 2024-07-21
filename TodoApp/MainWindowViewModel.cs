@@ -3,6 +3,7 @@ using Modules.Common.Cqrs.Events;
 using Modules.Common.DataBinding;
 using Modules.Common.OBSOLETE.Mediator;
 using Modules.Common.Services;
+using Modules.Common.Services.Navigation;
 using Modules.Common.ViewModel;
 using Modules.Common.Views.Services;
 using Modules.Settings.Contracts.ViewModels;
@@ -28,6 +29,7 @@ public class MainWindowViewModel : BaseViewModel
     private readonly IMediator _mediator;
     private readonly IUIScaler _uiScaler;
     private readonly ThemeManager _themeManager;
+    private readonly IOverlayPageNavigationService _overlayPageNavigationService;
     private readonly TrayIconModule _trayIconModule;
     private double _myWidth;
     private double _myHeight;
@@ -38,23 +40,32 @@ public class MainWindowViewModel : BaseViewModel
         IWindowService windowService,
         IMediator mediator,
         IUIScaler uiScaler,
-        ThemeManager themeManager)
+        ThemeManager themeManager,
+        IOverlayPageNavigationService overlayPageNavigationService)
     {
         ArgumentNullException.ThrowIfNull(windowService);
         ArgumentNullException.ThrowIfNull(mediator);
         ArgumentNullException.ThrowIfNull(uiScaler);
         ArgumentNullException.ThrowIfNull(themeManager);
-
+        ArgumentNullException.ThrowIfNull(overlayPageNavigationService);
+        
         _windowService = windowService;
         _mediator = mediator;
         _uiScaler = uiScaler;
         // ThemeManager is injected so it is being created
         _themeManager = themeManager;
+        _overlayPageNavigationService = overlayPageNavigationService;
 
         MinimizeCommand = new RelayCommand(() => _windowService.Minimize());
         MaximizeCommand = new RelayCommand(() => _windowService.Maximize());
         CloseCommand = new RelayCommand(CloseWindow);
-        ToggleSideMenuCommand = new RelayCommand(() => AppSettings.Instance.SessionSettings.SideMenuOpen ^= true);
+        ToggleSideMenuCommand = new RelayCommand(() =>
+        {
+            if (!overlayPageNavigationService.PageVisible)
+            {
+                AppSettings.Instance.SessionSettings.SideMenuOpen ^= true;
+            }
+        });
 
         _windowService.Deactivated += (s, e) => _windowService.Topmost = ApplicationSettings.AlwaysOnTop;
         _windowService.Resized += (s, e) =>

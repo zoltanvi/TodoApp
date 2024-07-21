@@ -13,6 +13,8 @@ public class OverlayPageNavigationService : NavigationService, IOverlayPageNavig
     private UIElement? Background { get; set; }
     private UIElement? Grid { get; set; }
     private ICommand CloseCommand { get; }
+    
+    public bool PageVisible { get; set; }
 
     public OverlayPageNavigationService(IServiceProvider serviceProvider) : base(serviceProvider)
     {
@@ -30,6 +32,7 @@ public class OverlayPageNavigationService : NavigationService, IOverlayPageNavig
         {
             Background.Visibility = Visibility.Visible;
             Grid.Visibility = Visibility.Visible;
+            PageVisible = true;
         }
     }
 
@@ -49,6 +52,7 @@ public class OverlayPageNavigationService : NavigationService, IOverlayPageNavig
         Interaction.GetTriggers(Background).Add(eventTrigger);
     }
 
+
     private void ClosePage()
     {
         if (Background == null || Grid == null)
@@ -58,6 +62,7 @@ public class OverlayPageNavigationService : NavigationService, IOverlayPageNavig
 
         Background.Visibility = Visibility.Collapsed;
         Grid.Visibility = Visibility.Collapsed;
+        PageVisible = false;
 
         NavigateTo<IEmptyPage>();
     }
