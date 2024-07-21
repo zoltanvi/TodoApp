@@ -128,7 +128,7 @@
                         ScrollViewer.CanContentScroll="False"
                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                         ScrollViewer.VerticalScrollBarVisibility="Auto"
-                        Template="{DynamicResource ListBoxControlTemplate}">
+                        Template="{DynamicResource NonScrollableListBoxControlTemplate}">
 
                         <ListView.ItemContainerStyle>
                             <Style TargetType="ListViewItem">

@@ -32,4 +32,32 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
+    <!--  Template for lists that does not need a ScrollViewer. Scrolling should be handled on the parent control.  -->
+    <ControlTemplate
+        x:Key="NonScrollableListBoxControlTemplate"
+        TargetType="{x:Type ListBox}">
+        <Border
+            x:Name="Bd"
+            Padding="1"
+            Background="{TemplateBinding Background}"
+            BorderBrush="{TemplateBinding BorderBrush}"
+            BorderThickness="{TemplateBinding BorderThickness}"
+            SnapsToDevicePixels="True">
+            <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter TargetName="Bd" Property="Background" Value="White" />
+                <Setter TargetName="Bd" Property="BorderBrush" Value="#FFD9D9D9" />
+            </Trigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsGrouping" Value="True" />
+                    <Condition Property="VirtualizingPanel.IsVirtualizingWhenGrouping" Value="False" />
+                </MultiTrigger.Conditions>
+                <Setter Property="ScrollViewer.CanContentScroll" Value="False" />
+            </MultiTrigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
 </ResourceDictionary>

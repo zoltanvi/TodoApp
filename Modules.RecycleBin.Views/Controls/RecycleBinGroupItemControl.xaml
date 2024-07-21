@@ -50,7 +50,7 @@
                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                     ScrollViewer.VerticalScrollBarVisibility="Disabled"
                     SelectionMode="Single"
-                    Template="{StaticResource RecycleBinGroupListBoxTemplate}"
+                    Template="{StaticResource NonScrollableListBoxControlTemplate}"
                     VirtualizingPanel.IsContainerVirtualizable="True"
                     VirtualizingPanel.IsVirtualizing="True"
                     VirtualizingPanel.ScrollUnit="Pixel"
