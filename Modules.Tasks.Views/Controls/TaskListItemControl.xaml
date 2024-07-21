@@ -397,6 +397,15 @@
                                     ToolTip="Border color"
                                     Visibility="{Binding AppSettings.TaskQuickActionSettings.BorderColorEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
 
+                                <Grid Visibility="{Binding AppSettings.TaskQuickActionSettings.TagEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}">
+                                    <Button
+                                        Margin="4 0 0 0"
+                                        Command="{Binding ShowTagSelectorCommand}"
+                                        Content="{StaticResource IconTag}"
+                                        Style="{StaticResource ButtonQuickActionStyle}"
+                                        ToolTip="Select tag" />
+                                </Grid>
+
                                 <!--  Pin button  -->
                                 <Grid Visibility="{Binding Pinned, Converter={StaticResource BoolToVisibilityNegatedConverter}}">
                                     <Button

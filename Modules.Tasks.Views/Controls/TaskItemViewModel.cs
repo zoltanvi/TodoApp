@@ -112,6 +112,7 @@ public class TaskItemViewModel : BaseViewModel
 
     public INotifiableObject ColorChangedNotification { get; }
     public ICommand ToggleDetailsCommand { get; }
+    public ICommand ShowTagSelectorCommand { get; }
 
 
     private void EditItem()

@@ -8,6 +8,7 @@ public class TaskQuickActionSettings : SettingsBase
         ColorEnabled ||
         BackgroundColorEnabled ||
         BorderColorEnabled ||
+        TagEnabled ||
         PinEnabled ||
         DetailsEnabled ||
         TrashEnabled);
@@ -17,6 +18,7 @@ public class TaskQuickActionSettings : SettingsBase
     public bool ColorEnabled { get; set; } = true;
     public bool BackgroundColorEnabled { get; set; }
     public bool BorderColorEnabled { get; set; }
+    public bool TagEnabled { get; set; } = true;
     public bool PinEnabled { get; set; } = true;
     public bool DetailsEnabled { get; set; } = true;
     public bool TrashEnabled { get; set; } = true;
