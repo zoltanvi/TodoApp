@@ -1,8 +1,10 @@
 ﻿using MediatR;
 using Modules.Common.Cqrs.Events;
+using Modules.Common.Events;
 using Modules.Common.Services;
 using Modules.Common.ViewModel;
 using Modules.PopupMessage.Contracts.Cqrs.Commands;
+using Prism.Events;
 using PropertyChanged;
 
 namespace Modules.Common.Views.Services;
@@ -24,6 +26,7 @@ public class UIScaler : BaseViewModel, IUIScaler
 
     private double _scalingPercent = OriginalScalingPercent;
     private IMediator? _mediator;
+    private IEventAggregator? _eventAggregator;
 
     public static IUIScaler Instance { get; } = new UIScaler();
 
@@ -55,10 +58,13 @@ public class UIScaler : BaseViewModel, IUIScaler
     public double NotePageBoxWidth => 17 * ScaleValue;
     public double TaskProgressBarHeight => OriginalTaskProgressBarHeight * ScaleValue;
 
-    public void Setup(IMediator mediator)
+    public void Setup(IMediator mediator, IEventAggregator eventAggregator)
     {
         ArgumentNullException.ThrowIfNull(mediator);
+        ArgumentNullException.ThrowIfNull(eventAggregator);
+
         _mediator = mediator;
+        _eventAggregator = eventAggregator;
     }
 
     public void ZoomOut()
@@ -79,12 +85,18 @@ public class UIScaler : BaseViewModel, IUIScaler
 
         StaticScaleValue = value;
         _scalingPercent = Math.Round(StaticScaleValue * OriginalScalingPercent, 3);
-        
+
         OnPropertyChanged(string.Empty);
 
         if (zoomed)
         {
             _mediator?.Publish(new UiScaledEvent
+            {
+                OldScaleValue = oldScaleValue,
+                NewScaleValue = StaticScaleValue
+            });
+
+            _eventAggregator?.GetEvent<UiScaledViewEvent>().Publish(new UiScaledViewPayload 
             {
                 OldScaleValue = oldScaleValue,
                 NewScaleValue = StaticScaleValue

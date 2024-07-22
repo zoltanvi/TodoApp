@@ -3,6 +3,7 @@ using Modules.Common.DataModels;
 using Modules.Tasks.Contracts.Models;
 using Modules.Tasks.Views.Controls;
 using Modules.Tasks.Views.Services;
+using Prism.Events;
 
 namespace Modules.Tasks.Views.Mappings;
 
@@ -36,9 +37,10 @@ public static class TaskItemViewModelMappings
     public static TaskItemViewModel MapToViewModel(
         this TaskItem taskItem, 
         IMediator mediator,
-        OneEditorOpenService oneEditorOpenService)
+        OneEditorOpenService oneEditorOpenService,
+        IEventAggregator eventAggregator)
     {
-        return new TaskItemViewModel(mediator, oneEditorOpenService)
+        return new TaskItemViewModel(mediator, oneEditorOpenService, eventAggregator)
         {
             Id = taskItem.Id,
             CategoryId = taskItem.CategoryId,
@@ -62,8 +64,9 @@ public static class TaskItemViewModelMappings
     public static List<TaskItemViewModel> MapToViewModelList(
         this IEnumerable<TaskItem> taskList, 
         IMediator mediator,
-        OneEditorOpenService oneEditorOpenService) =>
-        taskList.Select(x => x.MapToViewModel(mediator, oneEditorOpenService)).ToList();
+        OneEditorOpenService oneEditorOpenService,
+        IEventAggregator eventAggregator) =>
+        taskList.Select(x => x.MapToViewModel(mediator, oneEditorOpenService, eventAggregator)).ToList();
 
     private static TagItemOnTaskViewModel MapTagItem(this TagItem tag)
     {

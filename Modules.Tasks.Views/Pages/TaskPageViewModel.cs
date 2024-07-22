@@ -6,13 +6,14 @@ using Modules.Common.ViewModel;
 using Modules.Common.Views.DragDrop;
 using Modules.Settings.Contracts.ViewModels;
 using Modules.Tasks.Contracts;
-using Modules.Tasks.Contracts.Cqrs.Events;
 using Modules.Tasks.Contracts.Cqrs.Queries;
 using Modules.Tasks.Contracts.Models;
 using Modules.Tasks.TextEditor.Controls;
 using Modules.Tasks.Views.Controls;
+using Modules.Tasks.Views.Events;
 using Modules.Tasks.Views.Mappings;
 using Modules.Tasks.Views.Services;
+using Prism.Events;
 using PropertyChanged;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -26,6 +27,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
     private readonly IMediator _mediator;
     private readonly ITaskItemRepository _taskItemRepository;
     private readonly OneEditorOpenService _oneEditorOpenService;
+    private readonly IEventAggregator _eventAggregator;
 
     public event EventHandler? FocusAddNewTaskTextEditorRequested;
     public event Action<int>? ScrollIntoViewRequested;
@@ -33,15 +35,18 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
     public TaskPageViewModel(
         IMediator mediator,
         ITaskItemRepository taskItemRepository,
-        OneEditorOpenService oneEditorOpenService)
+        OneEditorOpenService oneEditorOpenService,
+        IEventAggregator eventAggregator)
     {
         ArgumentNullException.ThrowIfNull(mediator);
         ArgumentNullException.ThrowIfNull(taskItemRepository);
         ArgumentNullException.ThrowIfNull(oneEditorOpenService);
+        ArgumentNullException.ThrowIfNull(eventAggregator);
 
         _mediator = mediator;
         _taskItemRepository = taskItemRepository;
         _oneEditorOpenService = oneEditorOpenService;
+        _eventAggregator = eventAggregator;
 
         AppSettings.Instance.PageTitleSettings.SettingsChanged += OnPageTitleSettingsChanged;
         var activeCategoryInfo = _mediator.Send(new GetActiveCategoryInfoQuery()).Result;
@@ -66,15 +71,17 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
             ? OrderTasksByState(tasks)
             : tasks;
 
-        Items = new ObservableCollection<TaskItemViewModel>(orderedTasks.MapToViewModelList(_mediator, oneEditorOpenService));
+        Items = new ObservableCollection<TaskItemViewModel>(orderedTasks.MapToViewModelList(_mediator, oneEditorOpenService, _eventAggregator));
         Items.CollectionChanged += ItemsOnCollectionChanged;
         RecalculateProgress();
 
-        PinTaskItemRequestedEvent.PinTaskItemRequested += OnPinTaskItemRequested;
-        UnpinTaskItemRequestedEvent.UnpinTaskItemRequested += OnUnpinTaskItemRequested;
-        FinishTaskItemRequestedEvent.FinishTaskItemRequested += OnFinishTaskItemRequested;
-        UnfinishTaskItemRequestedEvent.UnfinishTaskItemRequested += OnUnfinishTaskItemRequested;
-        DeleteTaskItemRequestedEvent.DeleteTaskItemRequested += OnDeleteTaskItemRequestedEvent;
+        _eventAggregator.GetEvent<TaskItemDeleteClickedEvent>().Subscribe(OnDeleteTaskItemRequestedEvent);
+        _eventAggregator.GetEvent<TaskItemPinClickedEvent>().Subscribe(OnPinTaskItemRequested);
+        _eventAggregator.GetEvent<TaskItemUnpinClickedEvent>().Subscribe(OnUnpinTaskItemRequested);
+        _eventAggregator.GetEvent<TaskItemCheckedEvent>().Subscribe(OnFinishTaskItemRequested);
+        _eventAggregator.GetEvent<TaskItemUncheckedEvent>().Subscribe(OnUnfinishTaskItemRequested);
+
+
         _oneEditorOpenService.ChangedToDisplayMode += FocusAddNewTaskTextEditor;
     }
 
@@ -125,16 +132,16 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
 
             _oneEditorOpenService.LastEditedTaskId = addedTask.Id;
 
-            Items.Add(addedTask.MapToViewModel(_mediator, _oneEditorOpenService));
+            Items.Add(addedTask.MapToViewModel(_mediator, _oneEditorOpenService, _eventAggregator));
             RecalculateProgress();
 
             AddNewTaskTextEditorViewModel.DocumentContent = string.Empty;
         }
     }
 
-    private void OnPinTaskItemRequested(PinTaskItemRequestedEvent request)
+    private void OnPinTaskItemRequested(int taskId)
     {
-        var taskItem = Items.FirstOrDefault(x => x.Id == request.TaskId);
+        var taskItem = Items.FirstOrDefault(x => x.Id == taskId);
         ArgumentNullException.ThrowIfNull(taskItem);
 
         taskItem.Pinned = true;
@@ -144,7 +151,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
 
         var query = new TaskInsertPositionQuery
         {
-            TaskId = request.TaskId,
+            TaskId = taskId,
             PositionChangeReason = PositionChangeReason.Pinned
         };
 
@@ -153,9 +160,9 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         MoveTaskItem(newIndex, taskItem);
     }
 
-    private void OnUnpinTaskItemRequested(UnpinTaskItemRequestedEvent request)
+    private void OnUnpinTaskItemRequested(int taskId)
     {
-        var taskItem = Items.FirstOrDefault(x => x.Id == request.TaskId);
+        var taskItem = Items.FirstOrDefault(x => x.Id == taskId);
         ArgumentNullException.ThrowIfNull(taskItem);
 
         taskItem.Pinned = false;
@@ -163,7 +170,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
 
         var query = new TaskInsertPositionQuery
         {
-            TaskId = request.TaskId,
+            TaskId = taskId,
             PositionChangeReason = PositionChangeReason.Unpinned
         };
 
@@ -172,9 +179,9 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         MoveTaskItem(newIndex, taskItem);
     }
 
-    private void OnFinishTaskItemRequested(FinishTaskItemRequestedEvent request)
+    private void OnFinishTaskItemRequested(int taskId)
     {
-        var taskItem = Items.FirstOrDefault(x => x.Id == request.TaskId);
+        var taskItem = Items.FirstOrDefault(x => x.Id == taskId);
         ArgumentNullException.ThrowIfNull(taskItem);
 
         taskItem.IsDone = true;
@@ -184,7 +191,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
 
         var query = new TaskInsertPositionQuery
         {
-            TaskId = request.TaskId,
+            TaskId = taskId,
             PositionChangeReason = PositionChangeReason.Done
         };
 
@@ -193,9 +200,9 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         MoveTaskItem(newIndex, taskItem);
     }
 
-    private void OnUnfinishTaskItemRequested(UnfinishTaskItemRequestedEvent request)
+    private void OnUnfinishTaskItemRequested(int taskId)
     {
-        var taskItem = Items.FirstOrDefault(x => x.Id == request.TaskId);
+        var taskItem = Items.FirstOrDefault(x => x.Id == taskId);
         ArgumentNullException.ThrowIfNull(taskItem);
 
         taskItem.IsDone = false;
@@ -204,7 +211,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
 
         var query = new TaskInsertPositionQuery
         {
-            TaskId = request.TaskId,
+            TaskId = taskId,
             PositionChangeReason = PositionChangeReason.Undone
         };
 
@@ -213,9 +220,9 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         MoveTaskItem(newIndex, taskItem);
     }
 
-    private void OnDeleteTaskItemRequestedEvent(DeleteTaskItemRequestedEvent request)
+    private void OnDeleteTaskItemRequestedEvent(int taskId)
     {
-        var taskItem = Items.FirstOrDefault(x => x.Id == request.TaskId);
+        var taskItem = Items.FirstOrDefault(x => x.Id == taskId);
         ArgumentNullException.ThrowIfNull(taskItem);
 
         Items.Remove(taskItem);
@@ -276,11 +283,12 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         AppSettings.Instance.PageTitleSettings.SettingsChanged -= OnPageTitleSettingsChanged;
         Items.CollectionChanged -= ItemsOnCollectionChanged;
 
-        PinTaskItemRequestedEvent.PinTaskItemRequested -= OnPinTaskItemRequested;
-        UnpinTaskItemRequestedEvent.UnpinTaskItemRequested -= OnUnpinTaskItemRequested;
-        FinishTaskItemRequestedEvent.FinishTaskItemRequested -= OnFinishTaskItemRequested;
-        UnfinishTaskItemRequestedEvent.UnfinishTaskItemRequested -= OnUnfinishTaskItemRequested;
-        DeleteTaskItemRequestedEvent.DeleteTaskItemRequested -= OnDeleteTaskItemRequestedEvent;
+        _eventAggregator.GetEvent<TaskItemPinClickedEvent>().Unsubscribe(OnPinTaskItemRequested);
+        _eventAggregator.GetEvent<TaskItemUnpinClickedEvent>().Unsubscribe(OnUnpinTaskItemRequested);
+        _eventAggregator.GetEvent<TaskItemCheckedEvent>().Unsubscribe(OnFinishTaskItemRequested);
+        _eventAggregator.GetEvent<TaskItemUncheckedEvent>().Unsubscribe(OnUnfinishTaskItemRequested);
+        _eventAggregator.GetEvent<TaskItemDeleteClickedEvent>().Unsubscribe(OnDeleteTaskItemRequestedEvent);
+
         _oneEditorOpenService.ChangedToDisplayMode -= FocusAddNewTaskTextEditor;
     }
 

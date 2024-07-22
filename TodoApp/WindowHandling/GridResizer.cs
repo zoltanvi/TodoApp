@@ -1,12 +1,12 @@
-﻿using Modules.Common.Cqrs.Events;
+﻿using Modules.Common.Events;
 using Modules.Common.Services;
 using Modules.Common.Views.Services;
 using Modules.Settings.Contracts.ViewModels;
+using Prism.Events;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
-using TodoApp.CqrsHandling.EventHandlers;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 using Window = System.Windows.Window;
 
@@ -86,13 +86,15 @@ public class GridResizer
         Grid grid, 
         GridSplitter resizer, 
         Window window, 
-        IUIScaler uiScaler)
+        IUIScaler uiScaler,
+        IEventAggregator eventAggregator)
     {
         ArgumentNullException.ThrowIfNull(grid);
         ArgumentNullException.ThrowIfNull(resizer);
         ArgumentNullException.ThrowIfNull(window);
         ArgumentNullException.ThrowIfNull(uiScaler);
-
+        ArgumentNullException.ThrowIfNull(eventAggregator);
+        
         _grid = grid;
         _resizer = resizer;
         _window = window;
@@ -110,7 +112,7 @@ public class GridResizer
         _window.SizeChanged += WindowSizeChanged;
         _window.StateChanged += OnWindowStateChanged;
 
-        UiScaledEventSecondHandler.UiScaled += OnUiScaled;
+        eventAggregator.GetEvent<UiScaledViewEvent>().Subscribe(OnUiScaled);
         SessionSettings.SettingsChanged += OnSessionSettingsChanged;
     }
 
@@ -129,10 +131,10 @@ public class GridResizer
         }
     }
 
-    private void OnUiScaled(UiScaledEvent notification)
+    private void OnUiScaled(UiScaledViewPayload payload)
     {
-        var originalWidth = LeftColumnWidth / notification.OldScaleValue;
-        var newWidth = originalWidth * notification.NewScaleValue;
+        var originalWidth = LeftColumnWidth / payload.OldScaleValue;
+        var newWidth = originalWidth * payload.NewScaleValue;
         LeftColumnWidth = newWidth;
     }
 

@@ -1,30 +1,35 @@
 ﻿using MediatR;
 using Modules.Categories.Contracts;
-using Modules.Categories.Contracts.Cqrs.Events;
+using Modules.Categories.Contracts.Events;
 using Modules.Tasks.Contracts;
 using Modules.Tasks.Contracts.Cqrs.Commands;
-using Modules.Tasks.Contracts.Cqrs.Events;
 using Modules.Tasks.Contracts.Cqrs.Queries;
+using Modules.Tasks.Contracts.Events;
 using Modules.Tasks.Contracts.Models;
+using Prism.Events;
 
 namespace Modules.Tasks.Views.CqrsHandling.CommandHandlers;
 
 public class RestoreTaskItemCommandHandler : IRequestHandler<RestoreTaskItemCommand>
 {
     private readonly IMediator _mediator;
+    private readonly IEventAggregator _eventAggregator;
     private readonly ITaskItemRepository _taskItemRepository;
     private readonly ICategoriesRepository _categoriesRepository;
 
     public RestoreTaskItemCommandHandler(
         IMediator mediator,
+        IEventAggregator eventAggregator,
         ITaskItemRepository taskItemRepository,
         ICategoriesRepository categoriesRepository)
     {
         ArgumentNullException.ThrowIfNull(mediator);
+        ArgumentNullException.ThrowIfNull(eventAggregator);
         ArgumentNullException.ThrowIfNull(taskItemRepository);
         ArgumentNullException.ThrowIfNull(categoriesRepository);
 
         _mediator = mediator;
+        _eventAggregator = eventAggregator;
         _taskItemRepository = taskItemRepository;
         _categoriesRepository = categoriesRepository;
     }
@@ -39,7 +44,7 @@ public class RestoreTaskItemCommandHandler : IRequestHandler<RestoreTaskItemComm
 
         if (dbCategory.IsDeleted)
         {
-            RestoreCategoryRequestedEvent.Invoke(new RestoreCategoryRequestedEvent { CategoryId = dbCategory.Id });
+            _eventAggregator.GetEvent<RestoreCategoryRequestedEvent>().Publish(dbCategory.Id);
         }
 
         var query = new TaskInsertPositionQuery
@@ -53,8 +58,12 @@ public class RestoreTaskItemCommandHandler : IRequestHandler<RestoreTaskItemComm
         _taskItemRepository.RestoreTask(dbTask, newIndex);
         
         InsertAndFixListOrders(dbTask.Id, dbCategory.Id, newIndex, dbTask);
-        
-        TaskRestoredEvent.Invoke(new TaskRestoredEvent{ TaskId = dbTask.Id, CategoryId = dbCategory.Id });
+
+        _eventAggregator.GetEvent<TaskRestoredEvent>().Publish(new TaskRestoredPayload
+        {
+            TaskId = dbTask.Id,
+            CategoryId = dbCategory.Id
+        });
 
         return Task.CompletedTask;
     }

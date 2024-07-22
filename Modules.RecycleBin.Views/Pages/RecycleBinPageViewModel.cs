@@ -1,12 +1,13 @@
 ﻿using MediatR;
 using Modules.Categories.Contracts;
-using Modules.Categories.Contracts.Cqrs.Events;
+using Modules.Categories.Contracts.Events;
 using Modules.Common.ViewModel;
 using Modules.RecycleBin.Repositories;
 using Modules.RecycleBin.Views.Controls;
 using Modules.RecycleBin.Views.Mappings;
-using Modules.Tasks.Contracts.Cqrs.Events;
+using Modules.Tasks.Contracts.Events;
 using Modules.Tasks.Contracts.Models;
+using Prism.Events;
 using PropertyChanged;
 using System.Collections.ObjectModel;
 
@@ -16,37 +17,41 @@ namespace Modules.RecycleBin.Views.Pages;
 public class RecycleBinPageViewModel : BaseViewModel
 {
     private readonly IMediator _mediator;
+    private readonly IEventAggregator _eventAggregator;
     private readonly ICategoriesRepository _categoryRepository;
     private readonly RecycleBinRepository _recycleBinRepository;
 
     public RecycleBinPageViewModel(
         IMediator mediator,
+        IEventAggregator eventAggregator,
         ICategoriesRepository categoryRepository,
         RecycleBinRepository recycleBinRepository)
     {
         ArgumentNullException.ThrowIfNull(mediator);
+        ArgumentNullException.ThrowIfNull(eventAggregator);
         ArgumentNullException.ThrowIfNull(categoryRepository);
         ArgumentNullException.ThrowIfNull(recycleBinRepository);
 
         _mediator = mediator;
+        _eventAggregator = eventAggregator;
         _categoryRepository = categoryRepository;
         _recycleBinRepository = recycleBinRepository;
 
         InitializeGroupItems();
 
-        TaskRestoredEvent.TaskRestored += OnTaskRestored;
-        CategoryDeletedEvent.CategoryDeleted += OnCategoryDeleted;
+        _eventAggregator.GetEvent<CategoryDeletedEvent>().Subscribe(OnCategoryDeleted);
+        _eventAggregator.GetEvent<TaskRestoredEvent>().Subscribe(OnTaskRestored);
     }
 
-    public ObservableCollection<RecycleBinGroupItemViewModel> GroupItems { get; set; } = new();
+    public ObservableCollection<RecycleBinGroupItemViewModel> GroupItems { get; } = new();
     public bool IsEmpty => GroupItems.Count == 0;
 
-    private void OnTaskRestored(TaskRestoredEvent obj)
+    private void OnTaskRestored(TaskRestoredPayload payload)
     {
-        var group = GroupItems.FirstOrDefault(x => x.CategoryId == obj.CategoryId);
+        var group = GroupItems.FirstOrDefault(x => x.CategoryId == payload.CategoryId);
         ArgumentNullException.ThrowIfNull(group);
 
-        var task = group.Items.First(x => x.Id == obj.TaskId);
+        var task = group.Items.First(x => x.Id == payload.TaskId);
         ArgumentNullException.ThrowIfNull(group);
 
         group.Items.Remove(task);
@@ -59,9 +64,9 @@ public class RecycleBinPageViewModel : BaseViewModel
         OnPropertyChanged(nameof(IsEmpty));
     }
 
-    private void OnCategoryDeleted(CategoryDeletedEvent obj)
+    private void OnCategoryDeleted(int categoryId)
     {
-        var deletedTasksFromCategory = _recycleBinRepository.GetDeletedTasksFromCategory(obj.CategoryId);
+        var deletedTasksFromCategory = _recycleBinRepository.GetDeletedTasksFromCategory(categoryId);
 
         if (deletedTasksFromCategory.Count == 0) return;
 
@@ -71,10 +76,10 @@ public class RecycleBinPageViewModel : BaseViewModel
             items.Add(item.MapToRecycleBinTaskItem(_mediator));
         }
 
-        var group = GroupItems.FirstOrDefault(x => x.CategoryId == obj.CategoryId);
+        var group = GroupItems.FirstOrDefault(x => x.CategoryId == categoryId);
         if (group == null)
         {
-            var category = _categoryRepository.GetCategoryById(obj.CategoryId);
+            var category = _categoryRepository.GetCategoryById(categoryId);
             ArgumentNullException.ThrowIfNull(category);
 
             GroupItems.Add(new RecycleBinGroupItemViewModel
@@ -125,7 +130,7 @@ public class RecycleBinPageViewModel : BaseViewModel
 
     protected override void OnDispose()
     {
-        TaskRestoredEvent.TaskRestored -= OnTaskRestored;
-        CategoryDeletedEvent.CategoryDeleted -= OnCategoryDeleted;
+        _eventAggregator.GetEvent<TaskRestoredEvent>().Unsubscribe(OnTaskRestored);
+        _eventAggregator.GetEvent<CategoryDeletedEvent>().Unsubscribe(OnCategoryDeleted);
     }
 }

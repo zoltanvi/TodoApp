@@ -6,8 +6,9 @@ using Modules.PopupMessage.Contracts.Cqrs.Commands;
 using Modules.Settings.Views.Mappings;
 using Modules.Settings.Views.Tag;
 using Modules.Tasks.Contracts;
-using Modules.Tasks.Contracts.Cqrs.Events;
+using Modules.Tasks.Contracts.Events;
 using Modules.Tasks.Contracts.Models;
+using Prism.Events;
 using PropertyChanged;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -19,23 +20,27 @@ public class TagSettingsPageViewModel : BaseViewModel
 {
     private readonly IMediator _mediator;
     private readonly ITagItemRepository _tagItemRepository;
+    private readonly IEventAggregator _eventAggregator;
 
     public TagSettingsPageViewModel(
         IMediator mediator,
-        ITagItemRepository tagItemRepository)
+        ITagItemRepository tagItemRepository,
+        IEventAggregator eventAggregator)
     {
         ArgumentNullException.ThrowIfNull(mediator);
         ArgumentNullException.ThrowIfNull(tagItemRepository);
-        
+        ArgumentNullException.ThrowIfNull(eventAggregator);
+
         _mediator = mediator;
         _tagItemRepository = tagItemRepository;
+        _eventAggregator = eventAggregator;
 
         AddNewTagCommand = new RelayCommand(AddTag);
 
         var tags = _tagItemRepository.GetTags();
         Items = new ObservableCollection<TagItemViewModel>(tags.MapToViewModelList(_mediator));
 
-        DeleteTagItemRequestedEvent.DeleteTagItemRequested += OnDeleteTagItemRequested;
+        _eventAggregator.GetEvent<DeleteTagItemRequestedEvent>().Subscribe(OnDeleteTagItemRequested);
     }
 
     public TagPresetColor SelectedColor { get; set; }
@@ -68,9 +73,9 @@ public class TagSettingsPageViewModel : BaseViewModel
         PendingAddNewTagText = string.Empty;
     }
 
-    private void OnDeleteTagItemRequested(DeleteTagItemRequestedEvent obj)
+    private void OnDeleteTagItemRequested(int tagId)
     {
-        var tag = Items.FirstOrDefault(x => x.Id == obj.TagId);
+        var tag = Items.FirstOrDefault(x => x.Id == tagId);
         ArgumentNullException.ThrowIfNull(tag);
         
         Items.Remove(tag);
@@ -78,6 +83,6 @@ public class TagSettingsPageViewModel : BaseViewModel
 
     protected override void OnDispose()
     {
-        DeleteTagItemRequestedEvent.DeleteTagItemRequested -= OnDeleteTagItemRequested;
+        _eventAggregator.GetEvent<DeleteTagItemRequestedEvent>().Unsubscribe(OnDeleteTagItemRequested);
     }
 }

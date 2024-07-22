@@ -80,10 +80,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="CqrsHandling\CommandHandlers\" />
-	</ItemGroup>
-
-	<ItemGroup>
 	  <Page Update="Resources\FontResources.xaml">
 	    <SubType>Designer</SubType>
 	  </Page>

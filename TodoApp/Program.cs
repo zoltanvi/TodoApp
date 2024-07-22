@@ -52,7 +52,9 @@ public static class Program
         services.AddSingleton<IUIScaler>(provider =>
         {
             var mediator = provider.GetRequiredService<IMediator>();
-            UIScaler.Instance.Setup(mediator);
+            var eventAggregator = provider.GetRequiredService<IEventAggregator>();
+            UIScaler.Instance.Setup(mediator, eventAggregator);
+
             return UIScaler.Instance;
         });
         services.AddSingleton<MaterialThemeManagerService>();

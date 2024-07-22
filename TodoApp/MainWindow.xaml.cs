@@ -1,21 +1,21 @@
 ﻿using Modules.Common.Services;
+using Prism.Events;
 using System.Windows;
 using TodoApp.WindowHandling;
 
 namespace TodoApp;
-/// <summary>
-/// Interaction logic for MainWindow.xaml
-/// </summary>
+
 public partial class MainWindow : Window
 {
     private GridResizer _gridResizer;
 
-    public MainWindow(IUIScaler uiScaler)
+    public MainWindow(IUIScaler uiScaler, IEventAggregator eventAggregator)
     {
         ArgumentNullException.ThrowIfNull(uiScaler);
+        ArgumentNullException.ThrowIfNull(eventAggregator);
 
         InitializeComponent();
 
-        _gridResizer = new GridResizer(Grid, Resizer, this, uiScaler);
+        _gridResizer = new GridResizer(Grid, Resizer, this, uiScaler, eventAggregator);
     }
 }

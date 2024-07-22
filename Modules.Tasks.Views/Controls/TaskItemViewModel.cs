@@ -3,11 +3,12 @@ using Modules.Common.DataBinding;
 using Modules.Common.ViewModel;
 using Modules.Settings.Contracts.ViewModels;
 using Modules.Tasks.Contracts.Cqrs.Commands;
-using Modules.Tasks.Contracts.Cqrs.Events;
 using Modules.Tasks.Contracts.Cqrs.Queries;
 using Modules.Tasks.TextEditor.Controls;
+using Modules.Tasks.Views.Events;
 using Modules.Tasks.Views.Mappings;
 using Modules.Tasks.Views.Services;
+using Prism.Events;
 using PropertyChanged;
 using System.Windows.Input;
 
@@ -21,10 +22,14 @@ public class TaskItemViewModel : BaseViewModel
     private string _contentRollback = string.Empty;
     private bool _isDone;
 
-    public TaskItemViewModel(IMediator mediator, OneEditorOpenService oneEditorOpenService)
+    public TaskItemViewModel(
+        IMediator mediator, 
+        OneEditorOpenService oneEditorOpenService,
+        IEventAggregator eventAggregator)
     {
         ArgumentNullException.ThrowIfNull(mediator);
         ArgumentNullException.ThrowIfNull(oneEditorOpenService);
+        ArgumentNullException.ThrowIfNull(eventAggregator);
 
         _mediator = mediator;
         _oneEditorOpenService = oneEditorOpenService;
@@ -41,12 +46,27 @@ public class TaskItemViewModel : BaseViewModel
         EnableQuickActionsCommand = new RelayCommand(() => IsQuickActionsEnabled = true);
         DisableQuickActionsCommand = new RelayCommand(() => IsQuickActionsEnabled = false);
         EditItemCommand = new RelayCommand(EditItem);
-        DeleteItemCommand = new RelayCommand(DeleteItem);
+        DeleteItemCommand = new RelayCommand(() => eventAggregator.GetEvent<TaskItemDeleteClickedEvent>().Publish(Id));
 
-        ToggleIsDoneCommand = new RelayCommand(ToggleIsDone);
-        PinItemCommand = new RelayCommand(PinItem);
-        UnpinItemCommand = new RelayCommand(UnpinItem);
-        IsDoneModifiedCommand = new RelayCommand(UpdateTaskIsDone);
+        ToggleIsDoneCommand = new RelayCommand(() =>
+        {
+            IsDone ^= true;
+            UpdateTask();
+        });
+
+        PinItemCommand = new RelayCommand(() => eventAggregator.GetEvent<TaskItemPinClickedEvent>().Publish(Id));
+        UnpinItemCommand = new RelayCommand(() => eventAggregator.GetEvent<TaskItemUnpinClickedEvent>().Publish(Id));
+        IsDoneModifiedCommand = new RelayCommand(() =>
+        {
+            if (IsDone)
+            {
+                eventAggregator.GetEvent<TaskItemCheckedEvent>().Publish(Id);
+            }
+            else
+            {
+                eventAggregator.GetEvent<TaskItemUncheckedEvent>().Publish(Id);
+            }
+        });
 
         ShowTagSelectorCommand = new RelayCommand(() => _mediator.Send(new OpenTagSelectorCommand { TaskId = Id }));
 
@@ -153,30 +173,6 @@ public class TaskItemViewModel : BaseViewModel
         TextEditorViewModel.IsEditMode = false;
         TextEditorViewModel.IsToolbarOpen = false;
         _oneEditorOpenService.DisplayMode(this);
-    }
-
-    private void DeleteItem() => DeleteTaskItemRequestedEvent.Invoke(new DeleteTaskItemRequestedEvent { TaskId = Id });
-
-    private void ToggleIsDone()
-    {
-        IsDone ^= true;
-        UpdateTask();
-    }
-
-    private void PinItem() => PinTaskItemRequestedEvent.Invoke(new PinTaskItemRequestedEvent { TaskId = Id });
-    
-    private void UnpinItem() => UnpinTaskItemRequestedEvent.Invoke(new UnpinTaskItemRequestedEvent { TaskId = Id });
-
-    private void UpdateTaskIsDone()
-    {
-        if (IsDone)
-        {
-            FinishTaskItemRequestedEvent.Invoke(new FinishTaskItemRequestedEvent { TaskId = Id });
-        }
-        else
-        {
-            UnfinishTaskItemRequestedEvent.Invoke(new UnfinishTaskItemRequestedEvent{TaskId = Id});
-        }
     }
 
     private void UpdateTask() => _mediator.Send(new UpdateTaskCommand { Task = this.Map() });

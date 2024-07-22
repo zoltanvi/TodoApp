@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Prism.Events;
 
 namespace Modules.Common.Services;
 
@@ -24,7 +25,7 @@ public interface IUIScaler
     double NotePageBoxWidth { get; }
     double TaskProgressBarHeight { get; }
 
-    void Setup(IMediator mediator);
+    void Setup(IMediator mediator, IEventAggregator eventAggregator);
     void SetScaling(double value);
     void ZoomIn();
     void ZoomOut();

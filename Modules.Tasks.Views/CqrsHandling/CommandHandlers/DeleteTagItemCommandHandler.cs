@@ -1,17 +1,24 @@
 ﻿using MediatR;
 using Modules.Tasks.Contracts;
 using Modules.Tasks.Contracts.Cqrs.Commands;
-using Modules.Tasks.Contracts.Cqrs.Events;
+using Modules.Tasks.Contracts.Events;
+using Prism.Events;
 
 namespace Modules.Tasks.Views.CqrsHandling.CommandHandlers;
 
 public class DeleteTagItemCommandHandler : IRequestHandler<DeleteTagItemCommand>
 {
+    private readonly IEventAggregator _eventAggregator;
     private readonly ITagItemRepository _tagItemRepository;
 
-    public DeleteTagItemCommandHandler(ITagItemRepository tagItemRepository)
+    public DeleteTagItemCommandHandler(
+        IEventAggregator eventAggregator,
+        ITagItemRepository tagItemRepository)
     {
+        ArgumentNullException.ThrowIfNull(eventAggregator);
         ArgumentNullException.ThrowIfNull(tagItemRepository);
+        
+        _eventAggregator = eventAggregator;
         _tagItemRepository = tagItemRepository;
     }
 
@@ -28,7 +35,7 @@ public class DeleteTagItemCommandHandler : IRequestHandler<DeleteTagItemCommand>
 
         _tagItemRepository.DeleteTag(dbTag);
 
-        DeleteTagItemRequestedEvent.Invoke(new DeleteTagItemRequestedEvent { TagId = request.TagId });
+        _eventAggregator.GetEvent<DeleteTagItemRequestedEvent>().Publish(request.TagId);
 
         return Task.CompletedTask;
     }

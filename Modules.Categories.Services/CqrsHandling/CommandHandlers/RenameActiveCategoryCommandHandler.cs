@@ -1,9 +1,10 @@
 ﻿using MediatR;
 using Modules.Categories.Contracts;
 using Modules.Categories.Contracts.Cqrs.Commands;
-using Modules.Categories.Contracts.Cqrs.Events;
+using Modules.Categories.Contracts.Events;
 using Modules.PopupMessage.Contracts.Cqrs.Commands;
 using Modules.Settings.Contracts.ViewModels;
+using Prism.Events;
 
 namespace Modules.Categories.Services.CqrsHandling.CommandHandlers;
 
@@ -11,16 +12,20 @@ public class RenameActiveCategoryCommandHandler : IRequestHandler<RenameActiveCa
 {
     private readonly ICategoriesRepository _categoriesRepository;
     private readonly IMediator _mediator;
+    private readonly IEventAggregator _eventAggregator;
 
     public RenameActiveCategoryCommandHandler(
         ICategoriesRepository categoriesRepository,
-        IMediator mediator)
+        IMediator mediator,
+        IEventAggregator eventAggregator)
     {
         ArgumentNullException.ThrowIfNull(categoriesRepository);
         ArgumentNullException.ThrowIfNull(mediator);
-
+        ArgumentNullException.ThrowIfNull(eventAggregator);
+        
         _categoriesRepository = categoriesRepository;
         _mediator = mediator;
+        _eventAggregator = eventAggregator;
     }
 
     public Task<string> Handle(RenameActiveCategoryCommand request, CancellationToken cancellationToken)
@@ -52,11 +57,12 @@ public class RenameActiveCategoryCommandHandler : IRequestHandler<RenameActiveCa
 
         var updatedCategory = _categoriesRepository.UpdateCategory(category);
 
-        CategoryNameUpdatedEvent.Invoke(new CategoryNameUpdatedEvent
-        {
-            Id = activeCategoryId,
-            CategoryName = updatedCategory.Name
-        });
+        _eventAggregator.GetEvent<CategoryNameUpdatedEvent>().Publish(
+            new CategoryNameUpdatedPayload
+            {
+                CategoryId = activeCategoryId,
+                CategoryName = updatedCategory.Name
+            });
 
         return Task.FromResult(updatedCategory.Name);
     }
