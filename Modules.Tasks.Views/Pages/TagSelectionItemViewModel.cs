@@ -2,7 +2,6 @@
 using Modules.Common.DataModels;
 using Modules.Common.ViewModel;
 using Modules.Tasks.Views.Events;
-using Prism.Commands;
 using Prism.Events;
 using PropertyChanged;
 using System.Windows.Input;
@@ -14,7 +13,17 @@ public class TagSelectionItemViewModel : BaseViewModel
 {
     public TagSelectionItemViewModel(IEventAggregator eventAggregator)
     {
-        SelectTagCommand = new RelayCommand(() => eventAggregator.GetEvent<TagSelectionItemClickedEvent>().Publish(Id));
+        SelectTagCommand = new RelayCommand(() =>
+        {
+            if (IsSelected)
+            {
+                eventAggregator.GetEvent<TagSelectedEvent>().Publish(Id);
+            }
+            else
+            {
+                eventAggregator.GetEvent<TagDeselectedEvent>().Publish(Id);
+            }
+        });
     }
 
     public int Id { get; init; }

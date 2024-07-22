@@ -118,9 +118,8 @@ public class TaskItemViewModel : BaseViewModel
 
     public List<TaskItemVersionViewModel> Versions { get; set; }
 
-    public TagItemOnTaskViewModel? Tag { get; set; }
-    public bool HasAnyTags => Tag != null;
-
+    public List<TagItemOnTaskViewModel> Tags { get; set; }
+    public bool HasAnyTags => Tags.Count != 0;
     public int VersionCount => Versions.Count;
 
     // Commands

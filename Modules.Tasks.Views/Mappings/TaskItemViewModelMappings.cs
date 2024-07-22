@@ -57,7 +57,7 @@ public static class TaskItemViewModelMappings
             IsDeleted = taskItem.IsDeleted,
             DeletedDate = taskItem.DeletedDate,
             Versions = taskItem.Versions.MapToViewModelList(),
-            Tag = taskItem.Tags.Count != 0 ? taskItem.Tags.First().MapTagItem() : null
+            Tags = taskItem.Tags.MapTagItems()
         };
     }
 
@@ -68,13 +68,11 @@ public static class TaskItemViewModelMappings
         IEventAggregator eventAggregator) =>
         taskList.Select(x => x.MapToViewModel(mediator, oneEditorOpenService, eventAggregator)).ToList();
 
-    private static TagItemOnTaskViewModel MapTagItem(this TagItem tag)
+    private static List<TagItemOnTaskViewModel> MapTagItems(this IEnumerable<TagItem> tags)
     {
-        return new TagItemOnTaskViewModel
+        return tags.Select(x => new TagItemOnTaskViewModel
         {
-            Id = tag.Id,
-            Color = (TagPresetColor)Enum.Parse(typeof(TagPresetColor), tag.Color),
-            Name = tag.Name
-        };
+            Id = x.Id, Color = (TagPresetColor)Enum.Parse(typeof(TagPresetColor), x.Color), Name = x.Name
+        }).ToList();
     }
 }

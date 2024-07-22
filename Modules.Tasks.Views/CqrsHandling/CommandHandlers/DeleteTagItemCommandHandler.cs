@@ -27,12 +27,6 @@ public class DeleteTagItemCommandHandler : IRequestHandler<DeleteTagItemCommand>
         var dbTag = _tagItemRepository.GetTagById(request.TagId);
         ArgumentNullException.ThrowIfNull(dbTag);
 
-        // Remove
-        //foreach (TaskItem taskItem in dbTag.TaskItems)
-        //{
-        //    taskItem.Tags.Remove(dbTag);
-        //}
-
         _tagItemRepository.DeleteTag(dbTag);
 
         _eventAggregator.GetEvent<DeleteTagItemRequestedEvent>().Publish(request.TagId);

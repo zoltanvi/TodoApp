@@ -2,4 +2,4 @@
 
 namespace Modules.Tasks.Views.Events;
 
-public class TagSelectionItemClickedEvent : PubSubEvent<int>;
+public class TagSelectedEvent : PubSubEvent<int>;

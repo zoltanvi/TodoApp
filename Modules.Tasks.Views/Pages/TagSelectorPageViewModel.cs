@@ -12,7 +12,7 @@ public class TagSelectorPageViewModel : BaseViewModel, IParameterReceiver
 {
     private readonly ITaskItemRepository _taskItemRepository;
     private readonly ITagItemRepository _tagItemRepository;
-    private int _selectedTagId;
+    private readonly IEventAggregator _eventAggregator;
     private int _taskId;
 
     public TagSelectorPageViewModel(
@@ -26,50 +26,60 @@ public class TagSelectorPageViewModel : BaseViewModel, IParameterReceiver
 
         _taskItemRepository = taskItemRepository;
         _tagItemRepository = tagItemRepository;
+        _eventAggregator = eventAggregator;
 
         List<TagItem> tags = _tagItemRepository.GetTags();
         Items = new List<TagSelectionItemViewModel>(tags.MapToViewModelList(eventAggregator));
-        eventAggregator.GetEvent<TagSelectionItemClickedEvent>().Subscribe(SelectTag);
+        _eventAggregator.GetEvent<TagSelectedEvent>().Subscribe(SelectTag);
+        _eventAggregator.GetEvent<TagDeselectedEvent>().Subscribe(DeselectTag);
     }
 
     public List<TagSelectionItemViewModel> Items { get; }
-
-    public int SelectedTagId
-    {
-        get => _selectedTagId;
-        set
-        {
-            _selectedTagId = value;
-
-            var dbTask = _taskItemRepository.GetTaskById(_taskId);
-            ArgumentNullException.ThrowIfNull(dbTask);
-
-            var dbTag = _tagItemRepository.GetTagById(_selectedTagId);
-            ArgumentNullException.ThrowIfNull(dbTag);
-
-            _taskItemRepository.RemoveTagsFromTask(dbTask);
-            _taskItemRepository.AddTagToTask(dbTask, dbTag);
-        }
-    }
 
     public void ReceiveParameter(object parameter)
     {
         if (parameter is int taskId)
         {
             _taskId = taskId;
+            var dbTask = _taskItemRepository.GetTaskById(_taskId);
+            ArgumentNullException.ThrowIfNull(dbTask);
+
+            // Set tags that are already on the task to selected
+            foreach (var tagItem in dbTask.Tags)
+            {
+                var tag = Items.First(x => x.Id == tagItem.Id);
+                tag.IsSelected = true;
+            }
         }
     }
 
-    private void SelectTag(int id)
+    private void SelectTag(int tagId)
     {
-        SelectedTagId = id;
+        var dbTask = _taskItemRepository.GetTaskById(_taskId);
+        ArgumentNullException.ThrowIfNull(dbTask);
 
-        foreach (var tagVm in Items)
-        {
-            if (tagVm.Id != id)
-            {
-                tagVm.IsSelected = false;
-            }
-        }
+        var tag = Items.First(x => x.Id == tagId);
+
+        _taskItemRepository.AddTagToTask(dbTask, tag.Map());
+
+        _eventAggregator.GetEvent<TagsChangedOnTaskItemEvent>().Publish(_taskId);
+    }
+
+    private void DeselectTag(int tagId)
+    {
+        var dbTask = _taskItemRepository.GetTaskById(_taskId);
+        ArgumentNullException.ThrowIfNull(dbTask);
+
+        var tag = Items.First(x => x.Id == tagId);
+
+        _taskItemRepository.RemoveTagFromTask(dbTask, tag.Map());
+
+        _eventAggregator.GetEvent<TagsChangedOnTaskItemEvent>().Publish(_taskId);
+    }
+
+    protected override void OnDispose()
+    {
+        _eventAggregator.GetEvent<TagSelectedEvent>().Unsubscribe(SelectTag);
+        _eventAggregator.GetEvent<TagDeselectedEvent>().Unsubscribe(DeselectTag);
     }
 }

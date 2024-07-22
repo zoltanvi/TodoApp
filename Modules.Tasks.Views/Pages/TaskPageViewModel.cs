@@ -80,7 +80,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         _eventAggregator.GetEvent<TaskItemUnpinClickedEvent>().Subscribe(OnUnpinTaskItemRequested);
         _eventAggregator.GetEvent<TaskItemCheckedEvent>().Subscribe(OnFinishTaskItemRequested);
         _eventAggregator.GetEvent<TaskItemUncheckedEvent>().Subscribe(OnUnfinishTaskItemRequested);
-
+        _eventAggregator.GetEvent<TagsChangedOnTaskItemEvent>().Subscribe(OnTagsChangedOnTaskItem);
 
         _oneEditorOpenService.ChangedToDisplayMode += FocusAddNewTaskTextEditor;
     }
@@ -240,6 +240,20 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
             int index = Items.IndexOf(lastAddedTaskItem);
             lastAddedTaskItem.EditItemCommand.Execute(null);
             ScrollIntoViewRequested?.Invoke(index);
+        }
+    }
+
+    private void OnTagsChangedOnTaskItem(int taskId)
+    {
+        var task = Items.FirstOrDefault(x => x.Id == taskId);
+        if (task != null)
+        {
+            var index = Items.IndexOf(task);
+            var updatedTask = _taskItemRepository.GetTaskById(taskId);
+            ArgumentNullException.ThrowIfNull(updatedTask);
+
+            Items.RemoveAt(index);
+            Items.Insert(index, updatedTask.MapToViewModel(_mediator, _oneEditorOpenService, _eventAggregator));
         }
     }
 

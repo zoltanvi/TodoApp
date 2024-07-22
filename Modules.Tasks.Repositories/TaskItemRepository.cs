@@ -41,7 +41,25 @@ public class TaskItemRepository : ITaskItemRepository
             throw new ArgumentException($"Task is already tagged with {tag.Name}");
         }
 
-        dbTask.Tags.Add(tag);
+        dbTask.Tags.Add(dbTag);
+
+        _context.SaveChanges();
+
+        return dbTask;
+    }
+
+    public TaskItem RemoveTagFromTask(TaskItem task, TagItem tag)
+    {
+        var dbTask = _context.Tasks
+            .Include(x => x.Tags)
+            .FirstOrDefault(x => x.Id == task.Id);
+
+        ArgumentNullException.ThrowIfNull(dbTask);
+
+        var dbTag = dbTask.Tags.FirstOrDefault(x => x.Id == tag.Id);
+        ArgumentNullException.ThrowIfNull(dbTag);
+
+        dbTask.Tags.Remove(dbTag);
 
         _context.SaveChanges();
 
