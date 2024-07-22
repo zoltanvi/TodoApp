@@ -5,10 +5,9 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:Modules.Categories.Views.Controls"
-    xmlns:pages="clr-namespace:Modules.Categories.Views.Pages"
     xmlns:converters="clr-namespace:Modules.Common.Views.ValueConverters;assembly=Modules.Common.Views"
-    d:DataContext="{d:DesignInstance Type=local:CategoryViewModel}"
     x:Name="CategoryListItem"
+    d:DataContext="{d:DesignInstance Type=local:CategoryViewModel}"
     d:DesignHeight="60"
     d:DesignWidth="350"
     mc:Ignorable="d">
@@ -16,19 +15,20 @@
     <UserControl.ContextMenu>
         <ContextMenu>
             <MenuItem
-                Command="{Binding Path=PlacementTarget.Tag.DeleteCategoryCommand, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
-                CommandParameter="{Binding Path=PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
+                Command="{Binding Path=PlacementTarget.DataContext.DeleteCategoryCommand, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
                 Header="Delete" />
         </ContextMenu>
     </UserControl.ContextMenu>
 
     <Button
         Padding="0 2 10 2"
-        Command="{Binding Path=Tag.ChangeCategoryCommand, ElementName=CategoryListItem}"
+        Command="{Binding Path=ChangeCategoryCommand}"
         CommandParameter="{Binding DataContext, ElementName=CategoryListItem}"
         ToolTip="{Binding Name}">
         <Button.Style>
-            <Style BasedOn="{StaticResource ButtonHoverStyle}" TargetType="Button">
+            <Style
+                BasedOn="{StaticResource ButtonHoverStyle}"
+                TargetType="Button">
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type Button}">
@@ -47,29 +47,30 @@
                                     </Grid.ColumnDefinitions>
 
                                     <Label
-                                        Style="{StaticResource IconLabelStyle}"
-                                        Content="{StaticResource IconList}"
-                                        FontSize="{Binding UIScaler.FontSize.Small, Source={StaticResource UIScaler}}"
+                                        Grid.Column="0"
                                         Margin="6 0"
                                         Padding="0"
+                                        HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
-                                        HorizontalAlignment="Center" />
+                                        Content="{StaticResource IconList}"
+                                        FontSize="{Binding UIScaler.FontSize.Small, Source={StaticResource UIScaler}}"
+                                        Style="{StaticResource IconLabelStyle}" />
 
                                     <ContentPresenter
+                                        Grid.Column="1"
                                         HorizontalAlignment="Stretch"
-                                        VerticalAlignment="Center"
-                                        Grid.Column="1" />
+                                        VerticalAlignment="Center" />
 
                                     <Button
                                         x:Name="PART_DeleteButton"
                                         Grid.Column="2"
-                                        Visibility="Hidden"
-                                        Command="{Binding Path=Tag.DeleteCategoryCommand, ElementName=CategoryListItem}"
+                                        Command="{Binding Path=DeleteCategoryCommand}"
                                         CommandParameter="{Binding DataContext, ElementName=CategoryListItem}"
-                                        Style="{StaticResource ButtonIconHoverCategoryDeleteStyle}"
                                         Content="{StaticResource IconDeleteX}"
+                                        Cursor="Hand"
                                         FontSize="{Binding UIScaler.FontSize.Small, Source={StaticResource UIScaler}}"
-                                        Cursor="Hand" />
+                                        Style="{StaticResource ButtonIconHoverCategoryDeleteStyle}"
+                                        Visibility="Hidden" />
 
                                 </Grid>
                             </Border>
@@ -98,7 +99,9 @@
                                     <converters:EqualityConverter />
                                 </MultiBinding.Converter>
                                 <Binding Path="Id" />
-                                <Binding Path="ActiveCategoryId" RelativeSource="{RelativeSource AncestorType={x:Type local:CategoryListItemControl}}" />
+                                <Binding
+                                    Path="ActiveCategoryId"
+                                    RelativeSource="{RelativeSource AncestorType={x:Type local:CategoryListItemControl}}" />
                             </MultiBinding>
                         </DataTrigger.Binding>
                         <Setter Property="Background" Value="{DynamicResource PrimaryContainer}" />
@@ -113,7 +116,9 @@
             Text="{Binding Name}">
 
             <TextBlock.Style>
-                <Style BasedOn="{StaticResource CategoryTextBlockStyle}" TargetType="TextBlock">
+                <Style
+                    BasedOn="{StaticResource CategoryTextBlockStyle}"
+                    TargetType="TextBlock">
                     <Style.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Foreground" Value="{DynamicResource OnSecondaryContainer}" />
@@ -126,12 +131,14 @@
                                         <converters:EqualityConverter />
                                     </MultiBinding.Converter>
                                     <Binding Path="Id" />
-                                    <Binding Path="ActiveCategoryId" RelativeSource="{RelativeSource AncestorType={x:Type local:CategoryListItemControl}}" />
+                                    <Binding
+                                        Path="ActiveCategoryId"
+                                        RelativeSource="{RelativeSource AncestorType={x:Type local:CategoryListItemControl}}" />
                                 </MultiBinding>
                             </DataTrigger.Binding>
                             <Setter Property="Foreground" Value="{DynamicResource OnSecondaryContainer}" />
                         </DataTrigger>
-                        
+
                     </Style.Triggers>
                     <Setter Property="Foreground" Value="{DynamicResource OnSecondaryContainer}" />
 

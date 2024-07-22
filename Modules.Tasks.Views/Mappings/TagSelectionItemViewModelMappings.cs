@@ -1,6 +1,7 @@
 ﻿using Modules.Common.DataModels;
 using Modules.Tasks.Contracts.Models;
 using Modules.Tasks.Views.Pages;
+using Prism.Events;
 
 namespace Modules.Tasks.Views.Mappings;
 
@@ -20,9 +21,9 @@ public static class TagSelectionItemViewModelMappings
         vmList.Select(x => x.Map()).ToList();
 
     public static TagSelectionItemViewModel MapToViewModel(this TagItem tagItem,
-        TagSelectorPageViewModel tagSelectorPageViewModel)
+        IEventAggregator eventAggregator)
     {
-        return new TagSelectionItemViewModel (tagSelectorPageViewModel) {
+        return new TagSelectionItemViewModel(eventAggregator) {
             Id = tagItem.Id,
             Name = tagItem.Name,
             Color = (TagPresetColor)Enum.Parse(typeof(TagPresetColor), tagItem.Color),
@@ -30,8 +31,8 @@ public static class TagSelectionItemViewModelMappings
     }
 
     public static List<TagSelectionItemViewModel> MapToViewModelList(this IEnumerable<TagItem> tagList,
-        TagSelectorPageViewModel tagSelectorPageViewModel)
+        IEventAggregator eventAggregator)
     {
-        return tagList.Select(x => x.MapToViewModel(tagSelectorPageViewModel)).ToList();
+        return tagList.Select(x => x.MapToViewModel(eventAggregator)).ToList();
     }
 }

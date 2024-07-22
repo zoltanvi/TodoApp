@@ -116,6 +116,7 @@
 
                 <!--  RECYCLE BIN BUTTON  -->
                 <Button
+                    Grid.Column="0"
                     Grid.Row="2"
                     Padding="0 2 10 2"
                     Command="{Binding Path=OpenRecycleBinPageCommand}"

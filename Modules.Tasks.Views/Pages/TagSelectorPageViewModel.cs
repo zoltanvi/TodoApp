@@ -2,7 +2,9 @@
 using Modules.Common.ViewModel;
 using Modules.Tasks.Contracts;
 using Modules.Tasks.Contracts.Models;
+using Modules.Tasks.Views.Events;
 using Modules.Tasks.Views.Mappings;
+using Prism.Events;
 
 namespace Modules.Tasks.Views.Pages;
 
@@ -15,16 +17,19 @@ public class TagSelectorPageViewModel : BaseViewModel, IParameterReceiver
 
     public TagSelectorPageViewModel(
         ITaskItemRepository taskItemRepository,
-        ITagItemRepository tagItemRepository)
+        ITagItemRepository tagItemRepository,
+        IEventAggregator eventAggregator)
     {
         ArgumentNullException.ThrowIfNull(taskItemRepository);
         ArgumentNullException.ThrowIfNull(tagItemRepository);
+        ArgumentNullException.ThrowIfNull(eventAggregator);
 
         _taskItemRepository = taskItemRepository;
         _tagItemRepository = tagItemRepository;
 
         List<TagItem> tags = _tagItemRepository.GetTags();
-        Items = new List<TagSelectionItemViewModel>(tags.MapToViewModelList(this));
+        Items = new List<TagSelectionItemViewModel>(tags.MapToViewModelList(eventAggregator));
+        eventAggregator.GetEvent<TagSelectionItemClickedEvent>().Subscribe(SelectTag);
     }
 
     public List<TagSelectionItemViewModel> Items { get; }
@@ -55,7 +60,7 @@ public class TagSelectorPageViewModel : BaseViewModel, IParameterReceiver
         }
     }
 
-    public void SelectTag(int id)
+    private void SelectTag(int id)
     {
         SelectedTagId = id;
 

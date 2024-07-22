@@ -1,5 +1,6 @@
 ﻿using Modules.Categories.Contracts.Models;
 using Modules.Categories.Views.Controls;
+using Prism.Events;
 
 namespace Modules.Categories.Views.Mappings;
 
@@ -21,9 +22,9 @@ public static class CategoryViewModelMappings
     public static List<Category> MapList(this IEnumerable<CategoryViewModel> vmList) =>
         vmList.Select(x => x.Map()).ToList();
 
-    public static CategoryViewModel MapToViewModel(this Category category)
+    public static CategoryViewModel MapToViewModel(this Category category, IEventAggregator eventAggregator)
     {
-        return new CategoryViewModel
+        return new CategoryViewModel(eventAggregator)
         {
             Id = category.Id,
             Name = category.Name,
@@ -34,6 +35,8 @@ public static class CategoryViewModelMappings
         };
     }
 
-    public static List<CategoryViewModel> MapToViewModelList(this IEnumerable<Category> categoryList) =>
-        categoryList.Select(x => x.MapToViewModel()).ToList();
+    public static List<CategoryViewModel> MapToViewModelList(
+        this IEnumerable<Category> categoryList,
+        IEventAggregator eventAggregator) =>
+        categoryList.Select(x => x.MapToViewModel(eventAggregator)).ToList();
 }

@@ -28,6 +28,7 @@ using Modules.Tasks.Repositories;
 using Modules.Tasks.Views.CqrsHandling;
 using Modules.Tasks.Views.Pages;
 using Modules.Tasks.Views.Services;
+using Prism.Events;
 using TodoApp.DefaultData;
 using TodoApp.Themes;
 using TodoApp.WindowHandling;
@@ -38,11 +39,15 @@ public static class Program
 {
     public static IServiceCollection ConfigureAppServices(this IServiceCollection services)
     {
+        // MediatR
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<App>());
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<SettingsCqrsRegistration>());
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<PopupMessageCqrsRegistration>());
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<CategoriesCqrsRegistration>());
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<TasksCqrsRegistration>());
+
+        // Prism.Core
+        services.AddSingleton<IEventAggregator, EventAggregator>();
 
         services.AddSingleton<IUIScaler>(provider =>
         {

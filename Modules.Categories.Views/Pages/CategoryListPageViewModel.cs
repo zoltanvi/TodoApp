@@ -3,6 +3,7 @@ using Modules.Categories.Contracts;
 using Modules.Categories.Contracts.Cqrs.Events;
 using Modules.Categories.Contracts.Models;
 using Modules.Categories.Views.Controls;
+using Modules.Categories.Views.Events;
 using Modules.Categories.Views.Mappings;
 using Modules.Common;
 using Modules.Common.DataBinding;
@@ -12,6 +13,7 @@ using Modules.Common.ViewModel;
 using Modules.PopupMessage.Contracts.Cqrs.Commands;
 using Modules.Settings.Contracts.ViewModels;
 using Modules.Tasks.Contracts.Cqrs.Commands;
+using Prism.Events;
 using PropertyChanged;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -26,26 +28,28 @@ public class CategoryListPageViewModel : BaseViewModel
     private readonly IMainPageNavigationService _mainPageNavigationService;
     private readonly ISideMenuPageNavigationService _sideMenuPageNavigationService;
     private readonly IMediator _mediator;
+    private readonly IEventAggregator _eventAggregator;
 
     public CategoryListPageViewModel(
         ICategoriesRepository categoriesRepository,
         IMainPageNavigationService mainPageNavigationService,
         ISideMenuPageNavigationService sideMenuPageNavigationService,
-        IMediator mediator)
+        IMediator mediator,
+        IEventAggregator eventAggregator)
     {
         ArgumentNullException.ThrowIfNull(categoriesRepository);
         ArgumentNullException.ThrowIfNull(mainPageNavigationService);
         ArgumentNullException.ThrowIfNull(sideMenuPageNavigationService);
         ArgumentNullException.ThrowIfNull(mediator);
-
+        ArgumentNullException.ThrowIfNull(eventAggregator);
+        
         _categoriesRepository = categoriesRepository;
         _mainPageNavigationService = mainPageNavigationService;
         _sideMenuPageNavigationService = sideMenuPageNavigationService;
         _mediator = mediator;
+        _eventAggregator = eventAggregator;
 
         AddCategoryCommand = new RelayCommand(AddCategory);
-        DeleteCategoryCommand = new RelayParameterizedCommand<CategoryViewModel>(DeleteCategory);
-        ChangeCategoryCommand = new RelayParameterizedCommand<CategoryViewModel>(SetActiveCategory);
         OpenSettingsPageCommand = new RelayCommand(OpenSettingsPage);
         OpenNoteListPageCommand = new RelayCommand(OpenNoteListPage);
         OpenRecycleBinPageCommand = new RelayCommand(OpenRecycleBinPage);
@@ -53,17 +57,17 @@ public class CategoryListPageViewModel : BaseViewModel
         var activeCategories = categoriesRepository.GetActiveCategories();
         ActiveCategoryId = AppSettings.Instance.SessionSettings.ActiveCategoryId;
 
-        Items = new ObservableCollection<CategoryViewModel>(activeCategories.MapToViewModelList());
+        Items = new ObservableCollection<CategoryViewModel>(activeCategories.MapToViewModelList(_eventAggregator));
         Items.CollectionChanged += ItemsOnCollectionChanged;
         CategoryNameUpdatedEvent.CategoryNameUpdated += OnCategoryNameUpdated;
         RestoreCategoryRequestedEvent.RestoreCategoryRequested += OnRestoreCategoryRequested;
+        eventAggregator.GetEvent<CategoryDeleteClickedEvent>().Subscribe(DeleteCategory);
+        eventAggregator.GetEvent<CategoryClickedEvent>().Subscribe(SetActiveCategory);
     }
 
     public int RecycleBinCategoryId => Constants.RecycleBinCategoryId;
     public string? PendingAddNewCategoryText { get; set; }
     public ICommand AddCategoryCommand { get; }
-    public ICommand DeleteCategoryCommand { get; }
-    public ICommand ChangeCategoryCommand { get; }
     public ICommand OpenSettingsPageCommand { get; }
     public ICommand OpenNoteListPageCommand { get; }
     public ICommand OpenRecycleBinPageCommand { get; }
@@ -115,14 +119,14 @@ public class CategoryListPageViewModel : BaseViewModel
                 ListOrder = lastListOrder + 1
             });
 
-        Items.Add(addedCategory.MapToViewModel());
+        Items.Add(addedCategory.MapToViewModel(_eventAggregator));
     }
 
     private void RestoreCategory(Category category)
     {
         _categoriesRepository.RestoreCategory(category, Items.Count);
 
-        Items.Add(category.MapToViewModel());
+        Items.Add(category.MapToViewModel(_eventAggregator));
     }
 
     private void OnRestoreCategoryRequested(RestoreCategoryRequestedEvent e)
@@ -133,14 +137,16 @@ public class CategoryListPageViewModel : BaseViewModel
         RestoreCategory(dbCategory);
     }
 
-    private void DeleteCategory(CategoryViewModel category)
+    private void DeleteCategory(int categoryId)
     {
+        var category = Items.FirstOrDefault(x => x.Id == categoryId);
+        ArgumentNullException.ThrowIfNull(category);
+
         // At least one category is required
         var activeCategories = _categoriesRepository.GetActiveCategories();
         if (activeCategories.Count <= 1)
         {
             _mediator.Send(new ShowMessageErrorCommand { Message = "Cannot delete last category." });
-
             return;
         }
 
@@ -156,13 +162,24 @@ public class CategoryListPageViewModel : BaseViewModel
         // Only if the current category was the deleted one, select a new category
         if (category.Id == ActiveCategoryId)
         {
-            SetActiveCategory(Items.FirstOrDefault());
+            SetActiveCategory(Items.First().Id);
         }
     }
 
-    private void SetActiveCategory(CategoryViewModel? category)
+    private void SetActiveCategory(int categoryId)
     {
-        if (string.IsNullOrWhiteSpace(category?.Name)) return;
+        CategoryViewModel? category;
+        if (categoryId == Constants.RecycleBinCategoryId)
+        {
+            var recycleBinCategory = _categoriesRepository.GetCategoryById(categoryId);
+            ArgumentNullException.ThrowIfNull(recycleBinCategory);
+            category = recycleBinCategory.MapToViewModel(_eventAggregator);
+        }
+        else
+        {
+            category = Items.FirstOrDefault(x => x.Id == categoryId);
+            ArgumentNullException.ThrowIfNull(category);
+        }
 
         if (ActiveCategoryId != category.Id)
         {
@@ -198,9 +215,7 @@ public class CategoryListPageViewModel : BaseViewModel
 
     private void OpenRecycleBinPage()
     {
-        var recycleBinCategory = _categoriesRepository.GetCategoryById(Constants.RecycleBinCategoryId);
-
-        SetActiveCategory(recycleBinCategory?.MapToViewModel());
+        SetActiveCategory(Constants.RecycleBinCategoryId);
     }
 
     private void ItemsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
