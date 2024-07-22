@@ -24,7 +24,7 @@ public abstract class NavigationService : INavigationService
         Frame = frame as Frame;
     }
 
-    public void NavigateTo<T>() where T : class, IPage => NavigateTo(typeof(T));
+    public void NavigateTo<T>(object? parameter = null) where T : class, IPage => NavigateTo(typeof(T), parameter);
 
     public bool GoBackToPreviousPage()
     {
@@ -55,7 +55,7 @@ public abstract class NavigationService : INavigationService
     {
     }
 
-    private void NavigateTo(Type pageType)
+    private void NavigateTo(Type pageType, object? parameter = null)
     {
         if (Frame == null)
         {
@@ -90,6 +90,11 @@ public abstract class NavigationService : INavigationService
             CurrentPageType = pageType;
 
             BeforeNavigateToPage(pageType);
+
+            if (parameter != null && page.DataContext is IParameterReceiver parameterReceiver)
+            {
+                parameterReceiver.ReceiveParameter(parameter);
+            }
 
             Frame.Navigate(page);
         }

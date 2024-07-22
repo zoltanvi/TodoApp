@@ -18,7 +18,7 @@ public class OpenTagSelectorCommandHandler : IRequestHandler<OpenTagSelectorComm
 
     public Task Handle(OpenTagSelectorCommand request, CancellationToken cancellationToken)
     {
-        _navigationService.NavigateTo<IRecycleBinPage>();
+        _navigationService.NavigateTo<ITagSelectorPage>(request.TaskId);
 
         return Task.CompletedTask;
     }

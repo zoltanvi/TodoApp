@@ -98,6 +98,9 @@ public class TaskItemViewModel : BaseViewModel
 
     public List<TaskItemVersionViewModel> Versions { get; set; }
 
+    public TagItemOnTaskViewModel? Tag { get; set; }
+    public bool HasAnyTags => Tag != null;
+
     public int VersionCount => Versions.Count;
 
     // Commands

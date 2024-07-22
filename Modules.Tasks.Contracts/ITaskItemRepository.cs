@@ -8,6 +8,7 @@ public interface ITaskItemRepository
     TaskItem AddTask(TaskItem task);
 
     TaskItem AddTagToTask(TaskItem task, TagItem tag);
+    TaskItem RemoveTagsFromTask(TaskItem task);
     List<TaskItem> GetActiveTasks();
     List<TaskItem> GetActiveTasksFromCategory(int categoryId);
     TaskItem? GetTaskById(int id);

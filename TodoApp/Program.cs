@@ -120,16 +120,20 @@ public static class Program
         services.AddTransient<ICategoryListPage, CategoryListPage>();
         services.AddTransient<CategoryListPageViewModel>();
 
-        //services.AddScoped<INoteEditorPage, NotePage>();
-        //services.AddScoped<INoteListPage, NoteListPage>();
-        
         services.AddTransient<ITaskPage, TaskPage>();
         services.AddTransient<TaskPageViewModel>();
 
         services.AddTransient<IRecycleBinPage, RecycleBinPage>();
         services.AddTransient<RecycleBinPageViewModel>();
 
+        services.AddTransient<ITagSelectorPage, TagSelectorPage>();
+        services.AddTransient<TagSelectorPageViewModel>();
+
         services.AddSingleton<IEmptyPage, EmptyPage>();
+        
+        //services.AddScoped<INoteEditorPage, NotePage>();
+        //services.AddScoped<INoteListPage, NoteListPage>();
+        
         //services.AddScoped<ITaskNotificationPage, NotificationPage>();
         //services.AddScoped<ITaskReminderEditorPage, ReminderEditorPage>();
         //services.AddScoped<ITaskReminderPage, TaskReminderPage>();

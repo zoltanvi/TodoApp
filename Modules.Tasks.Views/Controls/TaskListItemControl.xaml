@@ -232,9 +232,8 @@
                             </Grid.ColumnDefinitions>
 
                             <!--Task tag-->
-                            <WrapPanel Grid.Column="0" VerticalAlignment="Center" Orientation="Vertical">
-                                <!--<controls:TagControl TagBody="GET" TagColor="Gold"></controls:TagControl>-->
-                                <!--<controls:TagControl TagColor="Green" TagTitle="POST"></controls:TagControl>-->
+                            <WrapPanel Grid.Column="0" VerticalAlignment="Center" Orientation="Vertical" Visibility="{Binding HasAnyTags, Converter={StaticResource BoolToVisibilityConverter}}">
+                                <controls:TagControl Content="{Binding Tag.Name}" TagColor="{Binding Tag.Color}"/>
                             </WrapPanel>
 
                             <!--  Task description  -->

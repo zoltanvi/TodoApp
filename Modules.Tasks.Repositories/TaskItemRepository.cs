@@ -48,6 +48,23 @@ public class TaskItemRepository : ITaskItemRepository
         return dbTask;
     }
 
+    public TaskItem RemoveTagsFromTask(TaskItem task)
+    {
+        var dbTask = _context.Tasks
+            .Include(x => x.Tags)
+            .FirstOrDefault(x => x.Id == task.Id);
+        ArgumentNullException.ThrowIfNull(dbTask);
+
+        if (dbTask.Tags.Count != 0)
+        {
+            dbTask.Tags.Clear();
+        }
+
+        _context.SaveChanges();
+
+        return dbTask;
+    }
+
     public TaskItem? GetTaskById(int id) => _context.Tasks.Find(id);
 
     public List<TaskItemVersion> GetTaskItemVersions(int taskId)

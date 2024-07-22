@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Modules.Common.DataModels;
 using Modules.Tasks.Contracts.Models;
 using Modules.Tasks.Views.Controls;
 using Modules.Tasks.Views.Services;
@@ -53,7 +54,8 @@ public static class TaskItemViewModelMappings
             BackgroundColor = taskItem.BackgroundColor,
             IsDeleted = taskItem.IsDeleted,
             DeletedDate = taskItem.DeletedDate,
-            Versions = taskItem.Versions.MapToViewModelList()
+            Versions = taskItem.Versions.MapToViewModelList(),
+            Tag = taskItem.Tags.Count != 0 ? taskItem.Tags.First().MapTagItem() : null
         };
     }
 
@@ -62,4 +64,14 @@ public static class TaskItemViewModelMappings
         IMediator mediator,
         OneEditorOpenService oneEditorOpenService) =>
         taskList.Select(x => x.MapToViewModel(mediator, oneEditorOpenService)).ToList();
+
+    private static TagItemOnTaskViewModel MapTagItem(this TagItem tag)
+    {
+        return new TagItemOnTaskViewModel
+        {
+            Id = tag.Id,
+            Color = (TagPresetColor)Enum.Parse(typeof(TagPresetColor), tag.Color),
+            Name = tag.Name
+        };
+    }
 }
