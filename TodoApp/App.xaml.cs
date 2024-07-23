@@ -4,12 +4,16 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Modules.Common;
 using Modules.Common.Cqrs.Events;
+using Modules.Common.Database;
 using Modules.Common.Navigation;
 using Modules.Common.Services.Navigation;
 using Modules.PopupMessage.Views;
 using Modules.Settings.Contracts.ViewModels;
 using Modules.Settings.Views.Services;
+using System.IO;
+using System.Text;
 using System.Windows;
+using System.Windows.Threading;
 using Application = System.Windows.Application;
 
 namespace TodoApp;
@@ -25,6 +29,10 @@ public partial class App : Application
 
     public App()
     {
+        DispatcherUnhandledException += App_DispatcherUnhandledException;
+        AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+        TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
+
         _host = Host.CreateDefaultBuilder()
             .ConfigureAppConfiguration((context, config) =>
             {
@@ -66,7 +74,7 @@ public partial class App : Application
 
         var messageControl = ServiceProvider.GetRequiredService<PopupMessageControl>();
         mainWindow.MessageLineGrid.Children.Add(messageControl);
-        
+
         mainWindow.Show();
         Current.MainWindow = mainWindow;
 
@@ -91,6 +99,39 @@ public partial class App : Application
 
         sideMenuPageNavigation.NavigateTo<ICategoryListPage>();
     }
+
+    private void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e) => LogException(e.Exception);
+    private void TaskScheduler_UnobservedTaskException(object? sender, UnobservedTaskExceptionEventArgs e) => LogException(e.Exception.InnerException);
+    private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e) => LogException(e.ExceptionObject as Exception);
+
+    private void LogException(Exception? ex)
+    {
+        if (ex == null) return;
+
+        var dbFolder = Path.GetDirectoryName(DbConfiguration.DatabasePath);
+        var reportFolder = Path.Combine(dbFolder, "CrashReports");
+        Directory.CreateDirectory(reportFolder);
+
+        var fileName = $"{DateTime.Now:yyyy-MM-dd__HH_mm_ss_ffff}.txt";
+        var reportFilePath = Path.Combine(reportFolder, fileName);
+
+        StringBuilder sb = new StringBuilder();
+        while (ex != null)
+        {
+            sb.Append(DateTime.Now.ToLongDateString() + "  ");
+            sb.AppendLine(DateTime.Now.ToLongTimeString());
+            sb.AppendLine(ex.Message);
+            sb.AppendLine();
+            sb.AppendLine(ex.StackTrace);
+            sb.AppendLine();
+            sb.AppendLine();
+
+            ex = ex.InnerException;
+        }
+
+        File.AppendAllText(reportFilePath, sb.ToString());
+    }
+
 }
 
 // Class to jump to for quick navigation with resharper
