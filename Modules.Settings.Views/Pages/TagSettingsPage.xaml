@@ -30,67 +30,69 @@
                 Grid.Row="1"
                 Orientation="Vertical">
 
-                <Border Name="OuterBorder" Height="0" Margin="20 0"></Border>
+                <Border
+                    Name="OuterBorder"
+                    Height="0"
+                    Margin="20 0" />
 
-                <!--  TAG NAME  -->
-                <Border Style="{StaticResource SettingsItemStyle}">
-                    <commonControls:TagControl TagColor="{Binding SelectedColor}">
-                        <TextBox
-                            Width="{Binding ElementName=OuterBorder, Path=ActualWidth}"
-                            Padding="0"
-                            VerticalAlignment="Stretch"
-                            BorderBrush="{DynamicResource Outline}"
-                            MaxLength="15"
-                            HorizontalContentAlignment="Center"
-                            Style="{StaticResource SidePageAddNewTextBoxStyle}"
-                            Foreground="{Binding SelectedColor, Converter={StaticResource TagForegroundConverter}}"
-                            Tag="Tag name"
-                            Text="{Binding PendingAddNewTagText, UpdateSourceTrigger=PropertyChanged}"
-                            TextWrapping="NoWrap">
-                            <TextBox.InputBindings>
-                                <KeyBinding
-                                    Key="Return"
-                                    Command="{Binding AddNewTagCommand}" />
-                            </TextBox.InputBindings>
-                        </TextBox>
-                    </commonControls:TagControl>
-                    
-                </Border>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
 
-                <Border Style="{StaticResource SettingsItemStyle}">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="auto" />
-                        </Grid.ColumnDefinitions>
-                        <Label
-                            Grid.Column="0"
-                            Content="{StaticResource IconPalette}"
-                            Style="{StaticResource SettingsIconLabelStyle}" />
-                        <TextBlock
-                            Grid.Column="1"
-                            Style="{StaticResource SettingsDescriptionStyle}"
-                            Text="Style" />
-                        <ComboBox
-                            Grid.Column="2"
-                            HorizontalAlignment="Right"
-                            FontSize="{Binding UIScaler.FontSize.Small, Source={StaticResource UIScaler}}"
-                            ItemsSource="{Binding Source={StaticResource TagColorProvider}}"
-                            SelectedItem="{Binding SelectedColor, Mode=TwoWay}">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <commonControls:TagControl
-                                        Content="{Binding}"
-                                        TagColor="{Binding}" />
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
-                    </Grid>
-                </Border>
+                    <!--  TAG NAME  -->
+                    <Border
+                        Grid.Column="0"
+                        Margin="0 0 0 5">
+                        <commonControls:TagControl TagColor="{Binding SelectedColor}">
+                            <TextBox
+                                Width="{Binding ElementName=OuterBorder, Path=ActualWidth}"
+                                Padding="0"
+                                VerticalAlignment="Stretch"
+                                HorizontalContentAlignment="Center"
+                                BorderBrush="{DynamicResource Outline}"
+                                Foreground="{Binding SelectedColor, Converter={StaticResource TagForegroundConverter}}"
+                                MaxLength="15"
+                                Style="{StaticResource SidePageAddNewTextBoxStyle}"
+                                Tag="Tag name"
+                                Text="{Binding PendingAddNewTagText, UpdateSourceTrigger=PropertyChanged}"
+                                TextWrapping="NoWrap">
+                                <TextBox.InputBindings>
+                                    <KeyBinding
+                                        Key="Return"
+                                        Command="{Binding AddNewTagCommand}" />
+                                </TextBox.InputBindings>
+                            </TextBox>
+                        </commonControls:TagControl>
+                    </Border>
+
+                    <ComboBox
+                        Grid.Column="1"
+                        Margin="4 0 0 7"
+                        ItemsSource="{Binding Source={StaticResource TagColorProvider}}"
+                        SelectedItem="{Binding SelectedColor, Mode=TwoWay}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border
+                                    Width="{Binding UIScaler.ColorPickerItemSize, Source={StaticResource UIScaler}}"
+                                    Height="{Binding UIScaler.ColorPickerItemSize, Source={StaticResource UIScaler}}"
+                                    Background="{Binding ., Converter={StaticResource TagBackgroundConverter}}"
+                                    BorderBrush="{Binding ., Converter={StaticResource TagBorderConverter}}"
+                                    BorderThickness="1"
+                                    CornerRadius="4" />
+                                <!--<commonControls:TagControl
+                                    Content="{Binding}"
+                                    TagColor="{Binding}" />-->
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+
+                </Grid>
+
 
                 <!--  Add tag  -->
-                <Border Style="{StaticResource SettingsItemStyle}">
+                <Border>
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
@@ -108,7 +110,7 @@
                             ToolTip="Add tag" />
                     </Grid>
                 </Border>
-                
+
                 <Label
                     Margin="0 10 0 0"
                     Content="Your tags"
@@ -118,7 +120,7 @@
                 <Border Height="{Binding UIScaler.FontSize.Smallest, Source={StaticResource UIScaler}}" />
 
 
-                <Border Style="{StaticResource SettingsItemStyle}">
+                <Border>
                     <ListView
                         x:Name="TagListListView"
                         HorizontalContentAlignment="Stretch"
@@ -144,36 +146,66 @@
 
                         <ListView.ItemTemplate>
                             <DataTemplate>
-                                <Border BorderBrush="{DynamicResource Outline}" BorderThickness="1" Margin="2" Padding="2" CornerRadius="3">
+                                <Border
+                                    Margin="2"
+                                    Padding="2"
+                                    Background="{DynamicResource Surface2}"
+                                    BorderThickness="1"
+                                    CornerRadius="3">
                                     <Grid>
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
 
-                                        <WrapPanel Grid.Column="0" HorizontalAlignment="Center">
-                                            <commonControls:TagControl
-                                                Content="{Binding Name}"
-                                                TagColor="{Binding Color}" />
+                                        <WrapPanel
+                                            Grid.Column="0"
+                                            HorizontalAlignment="Center">
+
+                                            <commonControls:TagControl TagColor="{Binding Color}">
+                                                <TextBox
+                                                    Padding="0"
+                                                    VerticalAlignment="Stretch"
+                                                    HorizontalContentAlignment="Center"
+                                                    BorderBrush="{DynamicResource Outline}"
+                                                    FontSize="{Binding UIScaler.FontSize.Smaller, Source={StaticResource UIScaler}}"
+                                                    Foreground="{Binding Color, Converter={StaticResource TagForegroundConverter}}"
+                                                    MaxLength="15"
+                                                    Style="{StaticResource SidePageAddNewTextBoxStyle}"
+                                                    Text="{Binding EditableName, UpdateSourceTrigger=PropertyChanged}"
+                                                    TextWrapping="NoWrap">
+                                                    <TextBox.InputBindings>
+                                                        <KeyBinding
+                                                            Key="Return"
+                                                            Command="{Binding SaveModificationsCommand}" />
+                                                    </TextBox.InputBindings>
+                                                </TextBox>
+                                            </commonControls:TagControl>
                                         </WrapPanel>
 
                                         <Button
                                             Grid.Column="1"
+                                            Command="{Binding SaveModificationsCommand}"
+                                            Content="{StaticResource IconSave}"
+                                            Style="{StaticResource ButtonQuickActionStyle}"
+                                            ToolTip="Save changes"
+                                            Visibility="{Binding NotSaved, Converter={StaticResource BoolToVisibilityConverter}}" />
+
+                                        <Button
+                                            Grid.Column="2"
+                                            Margin="4 0 0 0"
                                             Command="{Binding DeleteTagCommand}"
                                             Content="{StaticResource IconTrash}"
                                             Style="{StaticResource ButtonQuickActionStyle}"
-                                            ToolTip="Delete tag"
-                                            />
+                                            ToolTip="Delete tag" />
                                     </Grid>
 
                                 </Border>
-                                <!--<local:CategoryListItemControl
-                                    ActiveCategoryId="{Binding DataContext.ActiveCategoryId, ElementName=CategoryListListView}"
-                                    Tag="{Binding DataContext, ElementName=CategoryListListView}" />-->
+
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
-
 
 
                 </Border>

@@ -29,6 +29,7 @@ public static class TagItemViewModelMappings
         {
             Id = tagItem.Id,
             Name = tagItem.Name,
+            EditableName = tagItem.Name,
             Color = (TagPresetColor)Enum.Parse(typeof(TagPresetColor), tagItem.Color),
         };
     }

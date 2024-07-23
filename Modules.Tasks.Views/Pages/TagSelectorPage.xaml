@@ -28,7 +28,7 @@
             FontFamily="{Binding AppSettings.PageTitleSettings.FontFamily, Source={StaticResource AppSettings}, Converter={StaticResource EnumToFontFamilyConverter}}"
             FontSize="{Binding AppSettings.PageTitleSettings.FontSize, Source={StaticResource AppSettings}, Converter={StaticResource FontSizeScaler}}"
             Style="{StaticResource PageTitleTextBlockStyle}"
-            Text="Select a tag"
+            Text="Select tags"
             Visibility="{Binding AppSettings.PageTitleSettings.Visible, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
 
         <ListView
@@ -59,7 +59,7 @@
                 <DataTemplate>
                     <Border
                         Margin="2"
-                        Padding="2"
+                        Padding="0"
                         BorderBrush="{DynamicResource Outline}"
                         BorderThickness="0"
                         CornerRadius="3">
@@ -80,11 +80,11 @@
                                                         x:Name="border"
                                                         Background="{TemplateBinding Background}"
                                                         BorderBrush="{TemplateBinding BorderBrush}"
-                                                        BorderThickness="4"
-                                                        CornerRadius="4">
+                                                        BorderThickness="2"
+                                                        CornerRadius="4"
+                                                        Padding="0">
                                                         <Border
                                                             x:Name="innerBorder"
-                                                            Padding="2"
                                                             BorderThickness="2"
                                                             CornerRadius="4">
                                                             <ContentPresenter

@@ -41,6 +41,7 @@ public class TagSettingsPageViewModel : BaseViewModel
         Items = new ObservableCollection<TagItemViewModel>(tags.MapToViewModelList(_mediator));
 
         _eventAggregator.GetEvent<DeleteTagItemRequestedEvent>().Subscribe(OnDeleteTagItemRequested);
+        _eventAggregator.GetEvent<TagItemUpdatedEvent>().Subscribe(OnTagItemUpdated);
     }
 
     public TagPresetColor SelectedColor { get; set; }
@@ -81,8 +82,22 @@ public class TagSettingsPageViewModel : BaseViewModel
         Items.Remove(tag);
     }
 
+    private void OnTagItemUpdated(int tagId)
+    {
+        var tag = Items.FirstOrDefault(x => x.Id == tagId);
+        ArgumentNullException.ThrowIfNull(tag);
+
+        var dbTag = _tagItemRepository.GetTagById(tagId);
+        ArgumentNullException.ThrowIfNull(dbTag);
+        
+        var index = Items.IndexOf(tag);
+        Items.RemoveAt(index);
+        Items.Insert(index, dbTag.MapToViewModel(_mediator));
+    }
+
     protected override void OnDispose()
     {
         _eventAggregator.GetEvent<DeleteTagItemRequestedEvent>().Unsubscribe(OnDeleteTagItemRequested);
+        _eventAggregator.GetEvent<TagItemUpdatedEvent>().Unsubscribe(OnTagItemUpdated);
     }
 }

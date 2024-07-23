@@ -43,4 +43,17 @@ public class TagItemRepository : ITagItemRepository
         _context.Tags.Remove(tag);
         _context.SaveChanges();
     }
+
+    public TagItem UpdateTag(TagItem tagItem)
+    {
+        var dbTag = _context.Tags.Find(tagItem.Id);
+        ArgumentNullException.ThrowIfNull(dbTag);
+
+        dbTag.Name = tagItem.Name;
+        dbTag.Color = tagItem.Color;
+
+        _context.SaveChanges();
+
+        return dbTag;
+    }
 }

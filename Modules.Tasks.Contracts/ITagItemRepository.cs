@@ -9,4 +9,5 @@ public interface ITagItemRepository
     TagItem? GetTagById(int id);
     TagItem? GetTagByName(string name);
     void DeleteTag(TagItem tag);
+    TagItem UpdateTag(TagItem dbTag);
 }
