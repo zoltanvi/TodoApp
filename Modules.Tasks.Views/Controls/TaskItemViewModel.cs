@@ -103,7 +103,7 @@ public class TaskItemViewModel : BaseViewModel
         set
         {
             _isDone = value;
-            TextEditorViewModel.TextOpacity = IsDone ? 0.25 : 1.0;
+            TextEditorViewModel.TextOpacity = IsDone ? 0.3 : 1.0;
         }
     }
 

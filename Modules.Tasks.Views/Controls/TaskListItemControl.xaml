@@ -232,9 +232,7 @@
                             </Grid.ColumnDefinitions>
 
                             <!--  Task tag  -->
-
                             <ListView
-                                x:Name="TagListListView"
                                 Grid.Column="0"
                                 HorizontalContentAlignment="Stretch"
                                 Background="Transparent"
@@ -243,6 +241,7 @@
                                 ScrollViewer.CanContentScroll="False"
                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                 ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                Opacity="{Binding TextEditorViewModel.TextOpacity}"
                                 Template="{DynamicResource NonScrollableListBoxControlTemplate}">
 
                                 <ListView.ItemContainerStyle>
