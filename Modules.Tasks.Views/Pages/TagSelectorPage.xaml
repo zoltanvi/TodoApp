@@ -34,6 +34,7 @@
         <ListView
             x:Name="TagListListView"
             Grid.Row="1"
+            Margin="10"
             HorizontalContentAlignment="Stretch"
             Background="Transparent"
             BorderThickness="0"

@@ -154,16 +154,24 @@
                                     CornerRadius="3">
                                     <Grid>
                                         <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
                                             <ColumnDefinition Width="*" />
                                             <ColumnDefinition Width="Auto" />
                                             <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
 
-                                        <WrapPanel
+                                        <Border
+                                            Name="Placeholder"
                                             Grid.Column="0"
+                                            Width="{Binding ElementName=SaveButton, Path=Width}"
+                                            Height="10"
+                                             />
+
+                                        <WrapPanel
+                                            Grid.Column="1"
                                             HorizontalAlignment="Center">
 
-                                            <commonControls:TagControl TagColor="{Binding Color}">
+                                            <commonControls:TagControl TagColor="{Binding Color}" MinWidth="30">
                                                 <TextBox
                                                     Padding="0"
                                                     VerticalAlignment="Stretch"
@@ -185,15 +193,17 @@
                                         </WrapPanel>
 
                                         <Button
-                                            Grid.Column="1"
+                                            x:Name="SaveButton"
+                                            Grid.Column="2"
                                             Command="{Binding SaveModificationsCommand}"
                                             Content="{StaticResource IconSave}"
                                             Style="{StaticResource ButtonQuickActionStyle}"
                                             ToolTip="Save changes"
-                                            Visibility="{Binding NotSaved, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                            Visibility="{Binding NotSaved, Converter={StaticResource BoolToVisibilityHiddenConverter}}" />
+
 
                                         <Button
-                                            Grid.Column="2"
+                                            Grid.Column="3"
                                             Margin="4 0 0 0"
                                             Command="{Binding DeleteTagCommand}"
                                             Content="{StaticResource IconTrash}"
