@@ -30,5 +30,6 @@ public partial class TaskPage : GenericBasePage<TaskPageViewModel>, ITaskPage, I
     public void Dispose()
     {
         ViewModel.FocusAddNewTaskTextEditorRequested -= OnFocusAddNewTaskTextEditor;
+        ViewModel.ScrollIntoViewRequested -= OnScrollIntoViewRequested;
     }
 }

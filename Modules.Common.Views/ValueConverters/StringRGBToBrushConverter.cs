@@ -8,7 +8,11 @@ namespace Modules.Common.Views.ValueConverters;
 /// </summary>
 public class StringRGBToBrushConverter : BaseValueConverter
 {
+    private static StringRGBToBrushConverter? _instance;
+
     private readonly BrushConverter _brushConverter = new();
+
+    public static StringRGBToBrushConverter Instance => _instance ??= new StringRGBToBrushConverter();
 
     public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {

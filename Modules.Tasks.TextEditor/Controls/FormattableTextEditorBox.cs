@@ -16,8 +16,7 @@ namespace Modules.Tasks.TextEditor.Controls;
 public class FormattableTextEditorBox : BasicTextEditorBox
 {
     private bool _executing;
-    private readonly StringRGBToBrushConverter _colorConverter;
-
+ 
     public static readonly DependencyProperty IsSelectionBoldProperty = DependencyProperty.Register(nameof(IsSelectionBold), typeof(bool), typeof(FormattableTextEditorBox), new PropertyMetadata());
     public static readonly DependencyProperty IsSelectionItalicProperty = DependencyProperty.Register(nameof(IsSelectionItalic), typeof(bool), typeof(FormattableTextEditorBox), new PropertyMetadata());
     public static readonly DependencyProperty IsSelectionUnderlinedProperty = DependencyProperty.Register(nameof(IsSelectionUnderlined), typeof(bool), typeof(FormattableTextEditorBox), new PropertyMetadata());
@@ -101,14 +100,6 @@ public class FormattableTextEditorBox : BasicTextEditorBox
 
     public FormattableTextEditorBox()
     {
-        _colorConverter = new StringRGBToBrushConverter();
-
-        CommandManager.AddPreviewExecutedHandler(this, OnExecuted);
-        SelectionChanged += OnSelectionChanged;
-        PreviewKeyDown += OnPrevKeyDown;
-        PreviewKeyUp += OnPrevKeyUp;
-        KeyDown += OnKeyDown;
-
         SetBoldCommand = new RelayCommand(() => EditingCommands.ToggleBold.Execute(null, this));
         SetItalicCommand = new RelayCommand(() => EditingCommands.ToggleItalic.Execute(null, this));
         SetUnderlinedCommand = new RelayCommand(() => EditingCommands.ToggleUnderline.Execute(null, this));
@@ -131,10 +122,32 @@ public class FormattableTextEditorBox : BasicTextEditorBox
         AlignCenterCommand = new RelayCommand(() => EditingCommands.AlignCenter.Execute(null, this));
         AlignRightCommand = new RelayCommand(() => EditingCommands.AlignRight.Execute(null, this));
         AlignJustifyCommand = new RelayCommand(() => EditingCommands.AlignJustify.Execute(null, this));
+    }
 
+    protected override void OnGotFocus(RoutedEventArgs e)
+    {
+        base.OnGotFocus(e);
+
+        CommandManager.AddPreviewExecutedHandler(this, OnExecuted);
+        SelectionChanged += OnSelectionChanged;
+        PreviewKeyDown += OnPrevKeyDown;
+        PreviewKeyUp += OnPrevKeyUp;
+        KeyDown += OnKeyDown;
         PreviewKeyDown += FormattableTextEditorBox_PreviewKeyDown;
-
         DataObject.AddPastingHandler(this, OnPaste);
+    }
+
+    protected override void OnLostFocus(RoutedEventArgs e)
+    {
+        base.OnLostFocus(e);
+
+        CommandManager.RemovePreviewExecutedHandler(this, OnExecuted);
+        SelectionChanged -= OnSelectionChanged;
+        PreviewKeyDown -= OnPrevKeyDown;
+        PreviewKeyUp -= OnPrevKeyUp;
+        KeyDown -= OnKeyDown;
+        PreviewKeyDown -= FormattableTextEditorBox_PreviewKeyDown;
+        DataObject.RemovePastingHandler(this, OnPaste);
     }
 
     private void OnPrevKeyDown(object sender, KeyEventArgs e)
@@ -337,7 +350,11 @@ public class FormattableTextEditorBox : BasicTextEditorBox
 
         if (foreground != DependencyProperty.UnsetValue)
         {
-            color = (string)_colorConverter.ConvertBack(foreground, typeof(string), null, CultureInfo.InvariantCulture);
+            color = (string)StringRGBToBrushConverter.Instance.ConvertBack(
+                foreground, 
+                typeof(string), 
+                parameter: null, 
+                CultureInfo.InvariantCulture);
         }
 
         SelectedColor = color;
@@ -405,10 +422,10 @@ public class FormattableTextEditorBox : BasicTextEditorBox
 
     private void ApplyColor(string newColor)
     {
-        var color = _colorConverter.Convert(
+        var color = StringRGBToBrushConverter.Instance.Convert(
             newColor,
             typeof(SolidColorBrush),
-            null,
+            parameter: null,
             CultureInfo.InvariantCulture) as SolidColorBrush;
 
         if (color?.Color.A != 0)

@@ -66,11 +66,24 @@ public class BasicTextEditorBox : RichTextBox
     public BasicTextEditorBox()
     {
         SetIsEmpty(true);
+        
+        WeakEventManager<RichTextBox, RoutedEventArgs>.AddHandler(this, nameof(LostFocus), OnLostFocus);
+    }
 
-        LostFocus += OnLostFocus;
+    protected override void OnGotFocus(RoutedEventArgs e)
+    {
+        base.OnGotFocus(e);
+
         TextChanged += OnTextChanged;
-
         DataObject.AddPastingHandler(this, OnPaste);
+    }
+
+    protected override void OnLostFocus(RoutedEventArgs e)
+    {
+        base.OnLostFocus(e);
+
+        TextChanged -= OnTextChanged;
+        DataObject.RemovePastingHandler(this, OnPaste);
     }
 
     public void UpdateContent()
@@ -93,12 +106,12 @@ public class BasicTextEditorBox : RichTextBox
         }
     }
 
-    private void OnLostFocus(object sender, RoutedEventArgs e)
+    private void OnLostFocus(object? sender, RoutedEventArgs e)
     {
         UpdateContent();
     }
 
-    private void OnTextChanged(object sender, TextChangedEventArgs e)
+    private void OnTextChanged(object? sender, TextChangedEventArgs e)
     {
         bool isEmpty = IsRichTextBoxEmpty();
         SetIsEmpty(isEmpty);
