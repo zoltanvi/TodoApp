@@ -13,7 +13,7 @@ public class RichTextEditorViewModel : BaseViewModel
     private bool _isEditMode;
     private bool _enterActionOnLostFocus;
     private bool _toolbarCloseOnLostFocus;
-    private string _documentContentPreview;
+    private string _documentContentPreview = "EMPTY";
     private string _documentContent;
 
     public bool Focusable { get; set; }
@@ -47,7 +47,7 @@ public class RichTextEditorViewModel : BaseViewModel
     public string DocumentContentPreview
     {
         get => _documentContentPreview;
-        set => _documentContentPreview = value;
+        set => _documentContentPreview = string.IsNullOrEmpty(value) ? _documentContentPreview : value;
     }
 
     public bool IsToolbarOpen { get; set; }
