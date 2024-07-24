@@ -71,6 +71,7 @@ public class TaskItemRepository : ITaskItemRepository
         var dbTask = _context.Tasks
             .Include(x => x.Tags)
             .FirstOrDefault(x => x.Id == task.Id);
+
         ArgumentNullException.ThrowIfNull(dbTask);
 
         if (dbTask.Tags.Count != 0)

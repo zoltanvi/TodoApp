@@ -25,13 +25,11 @@ public static class TagItemViewModelMappings
         this TagItem tagItem,
         IMediator mediator)
     {
-        return new TagItemViewModel(mediator)
-        {
-            Id = tagItem.Id,
-            Name = tagItem.Name,
-            EditableName = tagItem.Name,
-            Color = (TagPresetColor)Enum.Parse(typeof(TagPresetColor), tagItem.Color),
-        };
+        return new TagItemViewModel(
+            mediator, 
+            tagItem.Id, 
+            tagItem.Name,
+            (TagPresetColor)Enum.Parse(typeof(TagPresetColor), tagItem.Color));
     }
 
     public static List<TagItemViewModel> MapToViewModelList(

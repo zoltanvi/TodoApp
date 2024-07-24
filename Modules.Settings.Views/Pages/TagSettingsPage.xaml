@@ -81,9 +81,6 @@
                                     BorderBrush="{Binding ., Converter={StaticResource TagBorderConverter}}"
                                     BorderThickness="1"
                                     CornerRadius="4" />
-                                <!--<commonControls:TagControl
-                                    Content="{Binding}"
-                                    TagColor="{Binding}" />-->
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
@@ -158,14 +155,17 @@
                                             <ColumnDefinition Width="*" />
                                             <ColumnDefinition Width="Auto" />
                                             <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
 
-                                        <Border
-                                            Name="Placeholder"
+                                        <Button
+                                            x:Name="SaveButton"
                                             Grid.Column="0"
-                                            Width="{Binding ElementName=SaveButton, Path=Width}"
-                                            Height="10"
-                                             />
+                                            Command="{Binding SaveModificationsCommand}"
+                                            Content="{StaticResource IconSave}"
+                                            Style="{StaticResource ButtonQuickActionStyle}"
+                                            ToolTip="Save changes"
+                                            Visibility="{Binding NotSaved, Converter={StaticResource BoolToVisibilityHiddenConverter}}" />
 
                                         <WrapPanel
                                             Grid.Column="1"
@@ -181,7 +181,7 @@
                                                     Foreground="{Binding Color, Converter={StaticResource TagForegroundConverter}}"
                                                     MaxLength="15"
                                                     Style="{StaticResource SidePageAddNewTextBoxStyle}"
-                                                    Text="{Binding EditableName, UpdateSourceTrigger=PropertyChanged}"
+                                                    Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
                                                     TextWrapping="NoWrap">
                                                     <TextBox.InputBindings>
                                                         <KeyBinding
@@ -192,15 +192,24 @@
                                             </commonControls:TagControl>
                                         </WrapPanel>
 
-                                        <Button
-                                            x:Name="SaveButton"
+                                        <ComboBox
                                             Grid.Column="2"
-                                            Command="{Binding SaveModificationsCommand}"
-                                            Content="{StaticResource IconSave}"
-                                            Style="{StaticResource ButtonQuickActionStyle}"
-                                            ToolTip="Save changes"
-                                            Visibility="{Binding NotSaved, Converter={StaticResource BoolToVisibilityHiddenConverter}}" />
-
+                                            Margin="4 0"
+                                            ItemsSource="{Binding Source={StaticResource TagColorProvider}}"
+                                            SelectedItem="{Binding Color, Mode=TwoWay}"
+                                            >
+                                            <ComboBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Border
+                                                        Width="{Binding UIScaler.ColorPickerItemSize, Source={StaticResource UIScaler}}"
+                                                        Height="{Binding UIScaler.ColorPickerItemSize, Source={StaticResource UIScaler}}"
+                                                        Background="{Binding ., Converter={StaticResource TagBackgroundConverter}}"
+                                                        BorderBrush="{Binding ., Converter={StaticResource TagBorderConverter}}"
+                                                        BorderThickness="1"
+                                                        CornerRadius="4" />
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
+                                        </ComboBox>
 
                                         <Button
                                             Grid.Column="3"

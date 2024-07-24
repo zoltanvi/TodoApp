@@ -9,6 +9,7 @@ public interface ITaskItemRepository
 
     TaskItem AddTagToTask(TaskItem task, TagItem tag);
     TaskItem RemoveTagsFromTask(TaskItem task);
+    TaskItem RemoveTagFromTask(TaskItem task, TagItem tag);
     List<TaskItem> GetActiveTasks();
     List<TaskItem> GetActiveTasksFromCategory(int categoryId);
     TaskItem? GetTaskById(int id);
@@ -18,5 +19,4 @@ public interface ITaskItemRepository
     void DeleteTask(TaskItem task);
     void DeleteTasksInCategory(int categoryId);
     TaskItem RestoreTask(TaskItem task, int newListOrder);
-    TaskItem RemoveTagFromTask(TaskItem task, TagItem tag);
 }

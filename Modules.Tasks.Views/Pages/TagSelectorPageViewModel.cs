@@ -1,10 +1,12 @@
-﻿using Modules.Common.Navigation;
+﻿using Modules.Common.DataBinding;
+using Modules.Common.Navigation;
 using Modules.Common.ViewModel;
 using Modules.Tasks.Contracts;
 using Modules.Tasks.Contracts.Models;
 using Modules.Tasks.Views.Events;
 using Modules.Tasks.Views.Mappings;
 using Prism.Events;
+using System.Windows.Input;
 
 namespace Modules.Tasks.Views.Pages;
 
@@ -30,11 +32,31 @@ public class TagSelectorPageViewModel : BaseViewModel, IParameterReceiver
 
         List<TagItem> tags = _tagItemRepository.GetTags();
         Items = new List<TagSelectionItemViewModel>(tags.MapToViewModelList(eventAggregator));
+
+        DeselectAllTagsCommand = new RelayCommand(DeselectAllTags);
+
         _eventAggregator.GetEvent<TagSelectedEvent>().Subscribe(SelectTag);
         _eventAggregator.GetEvent<TagDeselectedEvent>().Subscribe(DeselectTag);
     }
 
+    private void DeselectAllTags()
+    {
+        var dbTask = _taskItemRepository.GetTaskById(_taskId);
+        ArgumentNullException.ThrowIfNull(dbTask);
+
+        _taskItemRepository.RemoveTagsFromTask(dbTask);
+
+        foreach (var item in Items)
+        {
+            item.IsSelected = false;
+        }
+
+        _eventAggregator.GetEvent<TagsChangedOnTaskItemEvent>().Publish(_taskId);
+    }
+
     public List<TagSelectionItemViewModel> Items { get; }
+
+    public ICommand DeselectAllTagsCommand { get; set; }
 
     public void ReceiveParameter(object parameter)
     {
