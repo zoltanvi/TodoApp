@@ -1,5 +1,5 @@
 ﻿<UserControl
-    x:Class="Modules.Categories.Views.Controls.CategoryListItemControl"
+    x:Class="Modules.Categories.Views.Controls.CategoryItemControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -7,7 +7,7 @@
     xmlns:local="clr-namespace:Modules.Categories.Views.Controls"
     xmlns:converters="clr-namespace:Modules.Common.Views.ValueConverters;assembly=Modules.Common.Views"
     x:Name="CategoryListItem"
-    d:DataContext="{d:DesignInstance Type=local:CategoryViewModel}"
+    d:DataContext="{d:DesignInstance Type=local:CategoryItemViewModel}"
     d:DesignHeight="60"
     d:DesignWidth="350"
     mc:Ignorable="d">
@@ -101,7 +101,7 @@
                                 <Binding Path="Id" />
                                 <Binding
                                     Path="ActiveCategoryId"
-                                    RelativeSource="{RelativeSource AncestorType={x:Type local:CategoryListItemControl}}" />
+                                    RelativeSource="{RelativeSource AncestorType={x:Type local:CategoryItemControl}}" />
                             </MultiBinding>
                         </DataTrigger.Binding>
                         <Setter Property="Background" Value="{DynamicResource PrimaryContainer}" />
@@ -133,7 +133,7 @@
                                     <Binding Path="Id" />
                                     <Binding
                                         Path="ActiveCategoryId"
-                                        RelativeSource="{RelativeSource AncestorType={x:Type local:CategoryListItemControl}}" />
+                                        RelativeSource="{RelativeSource AncestorType={x:Type local:CategoryItemControl}}" />
                                 </MultiBinding>
                             </DataTrigger.Binding>
                             <Setter Property="Foreground" Value="{DynamicResource OnSecondaryContainer}" />

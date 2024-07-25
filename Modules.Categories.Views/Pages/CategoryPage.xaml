@@ -1,5 +1,5 @@
 ﻿<commonPages:GenericBasePage
-    x:Class="Modules.Categories.Views.Pages.CategoryListPage"
+    x:Class="Modules.Categories.Views.Pages.CategoryPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -9,8 +9,8 @@
     xmlns:commonPages="clr-namespace:Modules.Common.Views.Pages;assembly=Modules.Common.Views"
     xmlns:converters="clr-namespace:Modules.Common.Views.ValueConverters;assembly=Modules.Common.Views"
     xmlns:dd="urn:gong-wpf-dragdrop"
-    d:DataContext="{d:DesignInstance Type=pages:CategoryListPageViewModel}"
-    x:TypeArguments="pages:CategoryListPageViewModel"
+    d:DataContext="{d:DesignInstance Type=pages:CategoryPageViewModel}"
+    x:TypeArguments="pages:CategoryPageViewModel"
     mc:Ignorable="d">
 
     <Grid>
@@ -100,7 +100,7 @@
 
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <local:CategoryListItemControl 
+                            <local:CategoryItemControl 
                                 ActiveCategoryId="{Binding DataContext.ActiveCategoryId, ElementName=CategoryListListView}" 
                                 Tag="{Binding DataContext, ElementName=CategoryListListView}" />
                         </DataTemplate>

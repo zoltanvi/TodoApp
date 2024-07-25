@@ -176,7 +176,7 @@
 
                         <!--  Task Item  -->
                         <!--  Tag property is set because the context menu data binding is tricky  -->
-                        <controls:TaskListItemControl Tag="{Binding DataContext, ElementName=TaskListListView}" />
+                        <controls:TaskItemControl Tag="{Binding DataContext, ElementName=TaskListListView}" />
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>

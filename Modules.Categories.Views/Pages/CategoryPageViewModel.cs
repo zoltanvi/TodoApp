@@ -23,7 +23,7 @@ using System.Windows.Input;
 namespace Modules.Categories.Views.Pages;
 
 [AddINotifyPropertyChangedInterface]
-public class CategoryListPageViewModel : BaseViewModel
+public class CategoryPageViewModel : BaseViewModel
 {
     private readonly ICategoriesRepository _categoriesRepository;
     private readonly IMainPageNavigationService _mainPageNavigationService;
@@ -31,7 +31,7 @@ public class CategoryListPageViewModel : BaseViewModel
     private readonly IMediator _mediator;
     private readonly IEventAggregator _eventAggregator;
 
-    public CategoryListPageViewModel(
+    public CategoryPageViewModel(
         ICategoriesRepository categoriesRepository,
         IMainPageNavigationService mainPageNavigationService,
         ISideMenuPageNavigationService sideMenuPageNavigationService,
@@ -58,7 +58,7 @@ public class CategoryListPageViewModel : BaseViewModel
         var activeCategories = categoriesRepository.GetActiveCategories();
         ActiveCategoryId = AppSettings.Instance.SessionSettings.ActiveCategoryId;
 
-        Items = new ObservableCollection<CategoryViewModel>(activeCategories.MapToViewModelList(_eventAggregator));
+        Items = new ObservableCollection<CategoryItemViewModel>(activeCategories.MapToViewModelList(_eventAggregator));
         Items.CollectionChanged += ItemsOnCollectionChanged;
 
         eventAggregator.GetEvent<CategoryDeleteClickedEvent>().Subscribe(DeleteCategory);
@@ -73,8 +73,8 @@ public class CategoryListPageViewModel : BaseViewModel
     public ICommand OpenSettingsPageCommand { get; }
     public ICommand OpenNoteListPageCommand { get; }
     public ICommand OpenRecycleBinPageCommand { get; }
-    public ObservableCollection<CategoryViewModel> Items { get; }
-    public IEnumerable<CategoryViewModel> InactiveCategories => Items.Where(c => c.Id != ActiveCategoryId);
+    public ObservableCollection<CategoryItemViewModel> Items { get; }
+    public IEnumerable<CategoryItemViewModel> InactiveCategories => Items.Where(c => c.Id != ActiveCategoryId);
     public int ActiveCategoryId { get; private set; }
 
     private void AddCategory()
@@ -170,7 +170,7 @@ public class CategoryListPageViewModel : BaseViewModel
 
     private void SetActiveCategory(int categoryId)
     {
-        CategoryViewModel? category;
+        CategoryItemViewModel? category;
         if (categoryId == Constants.RecycleBinCategoryId)
         {
             var recycleBinCategory = _categoriesRepository.GetCategoryById(categoryId);

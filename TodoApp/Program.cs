@@ -124,8 +124,8 @@ public static class Program
         services.AddSingleton<ISettingsPage, SettingsPage>();
         services.AddSingleton<SettingsPageViewModel>();
         
-        services.AddTransient<ICategoryListPage, CategoryListPage>();
-        services.AddTransient<CategoryListPageViewModel>();
+        services.AddTransient<ICategoryListPage, CategoryPage>();
+        services.AddTransient<CategoryPageViewModel>();
 
         services.AddTransient<ITaskPage, TaskPage>();
         services.AddTransient<TaskPageViewModel>();

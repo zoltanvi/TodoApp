@@ -6,10 +6,10 @@ namespace Modules.Categories.Views.Controls;
 /// <summary>
 /// Interaction logic for CategoryListItemControl.xaml
 /// </summary>
-public partial class CategoryListItemControl : UserControl
+public partial class CategoryItemControl : UserControl
 {
     public static readonly DependencyProperty ActiveCategoryIdProperty =
-       DependencyProperty.Register(nameof(ActiveCategoryId), typeof(int), typeof(CategoryListItemControl), new PropertyMetadata(-1));
+       DependencyProperty.Register(nameof(ActiveCategoryId), typeof(int), typeof(CategoryItemControl), new PropertyMetadata(-1));
 
     public int ActiveCategoryId
     {
@@ -17,7 +17,7 @@ public partial class CategoryListItemControl : UserControl
         set => SetValue(ActiveCategoryIdProperty, value);
     }
 
-    public CategoryListItemControl()
+    public CategoryItemControl()
     {
         InitializeComponent();
     }

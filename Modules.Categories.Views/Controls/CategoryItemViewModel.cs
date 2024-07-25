@@ -8,9 +8,9 @@ using System.Windows.Input;
 namespace Modules.Categories.Views.Controls;
 
 [AddINotifyPropertyChangedInterface]
-public class CategoryViewModel : BaseViewModel, IEquatable<CategoryViewModel>
+public class CategoryItemViewModel : BaseViewModel, IEquatable<CategoryItemViewModel>
 {
-    public CategoryViewModel(IEventAggregator eventAggregator)
+    public CategoryItemViewModel(IEventAggregator eventAggregator)
     {
         ArgumentNullException.ThrowIfNull(eventAggregator);
 
@@ -27,7 +27,7 @@ public class CategoryViewModel : BaseViewModel, IEquatable<CategoryViewModel>
     public ICommand DeleteCategoryCommand { get; }
     public ICommand ChangeCategoryCommand { get; }
 
-    public bool Equals(CategoryViewModel? other)
+    public bool Equals(CategoryItemViewModel? other)
     {
         return other != null && other.Id == Id;
     }
