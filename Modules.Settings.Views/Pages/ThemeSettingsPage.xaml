@@ -167,6 +167,494 @@
                     </Grid>
                 </Border>
 
+
+                <!--  PALETTE  -->
+                <!--  DEV SETTINGS  -->
+                <StackPanel
+                    IsEnabled="False"
+                    Visibility="Collapsed"
+                    Orientation="Vertical">
+
+                    <Border Style="{StaticResource SettingsItemStyle}">
+                        <Button
+                            Grid.Column="0"
+                            Command="{Binding DumpColorsCommand}"
+                            Content="Dump colors to txt"
+                            Cursor="Hand"
+                            FontSize="{Binding UIScaler.FontSize.Regular, Source={StaticResource UIScaler}}"
+                            Style="{StaticResource ButtonSettingItemStyle}" />
+                    </Border>
+
+
+                    <Border Style="{StaticResource SettingsItemStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock
+                                Style="{StaticResource SettingsDescriptionStyle}"
+                                Text="Primary" />
+                            <colorpicker:PortableColorPicker
+                                Width="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                Height="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                HorizontalAlignment="Right"
+                                Cursor="Hand"
+                                SelectedColor="{Binding Primary, Mode=TwoWay}" />
+                        </StackPanel>
+                    </Border>
+
+
+                    <Border Style="{StaticResource SettingsItemStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock
+                                Style="{StaticResource SettingsDescriptionStyle}"
+                                Text="OnPrimary" />
+                            <colorpicker:PortableColorPicker
+                                Width="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                Height="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                HorizontalAlignment="Right"
+                                Cursor="Hand"
+                                SelectedColor="{Binding OnPrimary, Mode=TwoWay}" />
+                        </StackPanel>
+                    </Border>
+
+
+                    <Border Style="{StaticResource SettingsItemStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock
+                                Style="{StaticResource SettingsDescriptionStyle}"
+                                Text="PrimaryContainer" />
+                            <colorpicker:PortableColorPicker
+                                Width="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                Height="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                HorizontalAlignment="Right"
+                                Cursor="Hand"
+                                SelectedColor="{Binding PrimaryContainer, Mode=TwoWay}" />
+                        </StackPanel>
+                    </Border>
+
+
+                    <Border Style="{StaticResource SettingsItemStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock
+                                Style="{StaticResource SettingsDescriptionStyle}"
+                                Text="OnPrimaryContainer" />
+                            <colorpicker:PortableColorPicker
+                                Width="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                Height="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                HorizontalAlignment="Right"
+                                Cursor="Hand"
+                                SelectedColor="{Binding OnPrimaryContainer, Mode=TwoWay}" />
+                        </StackPanel>
+                    </Border>
+
+
+                    <Border Style="{StaticResource SettingsItemStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock
+                                Style="{StaticResource SettingsDescriptionStyle}"
+                                Text="Secondary" />
+                            <colorpicker:PortableColorPicker
+                                Width="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                Height="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                HorizontalAlignment="Right"
+                                Cursor="Hand"
+                                SelectedColor="{Binding Secondary, Mode=TwoWay}" />
+                        </StackPanel>
+                    </Border>
+
+
+                    <Border Style="{StaticResource SettingsItemStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock
+                                Style="{StaticResource SettingsDescriptionStyle}"
+                                Text="OnSecondary" />
+                            <colorpicker:PortableColorPicker
+                                Width="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                Height="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                HorizontalAlignment="Right"
+                                Cursor="Hand"
+                                SelectedColor="{Binding OnSecondary, Mode=TwoWay}" />
+                        </StackPanel>
+                    </Border>
+
+
+                    <Border Style="{StaticResource SettingsItemStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock
+                                Style="{StaticResource SettingsDescriptionStyle}"
+                                Text="SecondaryContainer" />
+                            <colorpicker:PortableColorPicker
+                                Width="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                Height="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                HorizontalAlignment="Right"
+                                Cursor="Hand"
+                                SelectedColor="{Binding SecondaryContainer, Mode=TwoWay}" />
+                        </StackPanel>
+                    </Border>
+
+
+                    <Border Style="{StaticResource SettingsItemStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock
+                                Style="{StaticResource SettingsDescriptionStyle}"
+                                Text="Tertiary" />
+                            <colorpicker:PortableColorPicker
+                                Width="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                Height="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                HorizontalAlignment="Right"
+                                Cursor="Hand"
+                                SelectedColor="{Binding Tertiary, Mode=TwoWay}" />
+                        </StackPanel>
+                    </Border>
+
+
+                    <Border Style="{StaticResource SettingsItemStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock
+                                Style="{StaticResource SettingsDescriptionStyle}"
+                                Text="OnTertiary" />
+                            <colorpicker:PortableColorPicker
+                                Width="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                Height="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                HorizontalAlignment="Right"
+                                Cursor="Hand"
+                                SelectedColor="{Binding OnTertiary, Mode=TwoWay}" />
+                        </StackPanel>
+                    </Border>
+
+
+                    <Border Style="{StaticResource SettingsItemStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock
+                                Style="{StaticResource SettingsDescriptionStyle}"
+                                Text="TertiaryContainer" />
+                            <colorpicker:PortableColorPicker
+                                Width="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                Height="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                HorizontalAlignment="Right"
+                                Cursor="Hand"
+                                SelectedColor="{Binding TertiaryContainer, Mode=TwoWay}" />
+                        </StackPanel>
+                    </Border>
+
+
+                    <Border Style="{StaticResource SettingsItemStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock
+                                Style="{StaticResource SettingsDescriptionStyle}"
+                                Text="OnTertiaryContainer" />
+                            <colorpicker:PortableColorPicker
+                                Width="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                Height="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                HorizontalAlignment="Right"
+                                Cursor="Hand"
+                                SelectedColor="{Binding OnTertiaryContainer, Mode=TwoWay}" />
+                        </StackPanel>
+                    </Border>
+
+
+                    <Border Style="{StaticResource SettingsItemStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock
+                                Style="{StaticResource SettingsDescriptionStyle}"
+                                Text="Background" />
+                            <colorpicker:PortableColorPicker
+                                Width="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                Height="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                HorizontalAlignment="Right"
+                                Cursor="Hand"
+                                SelectedColor="{Binding Background, Mode=TwoWay}" />
+                        </StackPanel>
+                    </Border>
+
+
+                    <Border Style="{StaticResource SettingsItemStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock
+                                Style="{StaticResource SettingsDescriptionStyle}"
+                                Text="OnBackground" />
+                            <colorpicker:PortableColorPicker
+                                Width="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                Height="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                HorizontalAlignment="Right"
+                                Cursor="Hand"
+                                SelectedColor="{Binding OnBackground, Mode=TwoWay}" />
+                        </StackPanel>
+                    </Border>
+
+
+                    <Border Style="{StaticResource SettingsItemStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock
+                                Style="{StaticResource SettingsDescriptionStyle}"
+                                Text="Surface" />
+                            <colorpicker:PortableColorPicker
+                                Width="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                Height="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                HorizontalAlignment="Right"
+                                Cursor="Hand"
+                                SelectedColor="{Binding Surface, Mode=TwoWay}" />
+                        </StackPanel>
+                    </Border>
+
+
+                    <Border Style="{StaticResource SettingsItemStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock
+                                Style="{StaticResource SettingsDescriptionStyle}"
+                                Text="OnSurface" />
+                            <colorpicker:PortableColorPicker
+                                Width="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                Height="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                HorizontalAlignment="Right"
+                                Cursor="Hand"
+                                SelectedColor="{Binding OnSurface, Mode=TwoWay}" />
+                        </StackPanel>
+                    </Border>
+
+
+                    <Border Style="{StaticResource SettingsItemStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock
+                                Style="{StaticResource SettingsDescriptionStyle}"
+                                Text="SurfaceVariant" />
+                            <colorpicker:PortableColorPicker
+                                Width="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                Height="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                HorizontalAlignment="Right"
+                                Cursor="Hand"
+                                SelectedColor="{Binding SurfaceVariant, Mode=TwoWay}" />
+                        </StackPanel>
+                    </Border>
+
+
+
+                    <Border Style="{StaticResource SettingsItemStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock
+                                Style="{StaticResource SettingsDescriptionStyle}"
+                                Text="OnSurfaceVariant" />
+                            <colorpicker:PortableColorPicker
+                                Width="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                Height="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                HorizontalAlignment="Right"
+                                Cursor="Hand"
+                                SelectedColor="{Binding OnSurfaceVariant, Mode=TwoWay}" />
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource SettingsItemStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock
+                                Style="{StaticResource SettingsDescriptionStyle}"
+                                Text="Outline" />
+                            <colorpicker:PortableColorPicker
+                                Width="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                Height="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                HorizontalAlignment="Right"
+                                Cursor="Hand"
+                                SelectedColor="{Binding Outline, Mode=TwoWay}" />
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource SettingsItemStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock
+                                Style="{StaticResource SettingsDescriptionStyle}"
+                                Text="Shadow" />
+                            <colorpicker:PortableColorPicker
+                                Width="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                Height="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                HorizontalAlignment="Right"
+                                Cursor="Hand"
+                                SelectedColor="{Binding Shadow, Mode=TwoWay}" />
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource SettingsItemStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock
+                                Style="{StaticResource SettingsDescriptionStyle}"
+                                Text="InverseSurface" />
+                            <colorpicker:PortableColorPicker
+                                Width="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                Height="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                HorizontalAlignment="Right"
+                                Cursor="Hand"
+                                SelectedColor="{Binding InverseSurface, Mode=TwoWay}" />
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource SettingsItemStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock
+                                Style="{StaticResource SettingsDescriptionStyle}"
+                                Text="InverseOnSurface" />
+                            <colorpicker:PortableColorPicker
+                                Width="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                Height="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                HorizontalAlignment="Right"
+                                Cursor="Hand"
+                                SelectedColor="{Binding InverseOnSurface, Mode=TwoWay}" />
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource SettingsItemStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock
+                                Style="{StaticResource SettingsDescriptionStyle}"
+                                Text="InversePrimary" />
+                            <colorpicker:PortableColorPicker
+                                Width="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                Height="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                HorizontalAlignment="Right"
+                                Cursor="Hand"
+                                SelectedColor="{Binding InversePrimary, Mode=TwoWay}" />
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource SettingsItemStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock
+                                Style="{StaticResource SettingsDescriptionStyle}"
+                                Text="Surface1" />
+                            <colorpicker:PortableColorPicker
+                                Width="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                Height="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                HorizontalAlignment="Right"
+                                Cursor="Hand"
+                                SelectedColor="{Binding Surface1, Mode=TwoWay}" />
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource SettingsItemStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock
+                                Style="{StaticResource SettingsDescriptionStyle}"
+                                Text="Surface2" />
+                            <colorpicker:PortableColorPicker
+                                Width="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                Height="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                HorizontalAlignment="Right"
+                                Cursor="Hand"
+                                SelectedColor="{Binding Surface2, Mode=TwoWay}" />
+                        </StackPanel>
+                    </Border>
+
+
+
+                    <Border Style="{StaticResource SettingsItemStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock
+                                Style="{StaticResource SettingsDescriptionStyle}"
+                                Text="Surface3" />
+                            <colorpicker:PortableColorPicker
+                                Width="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                Height="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                HorizontalAlignment="Right"
+                                Cursor="Hand"
+                                SelectedColor="{Binding Surface3, Mode=TwoWay}" />
+                        </StackPanel>
+                    </Border>
+
+
+
+                    <Border Style="{StaticResource SettingsItemStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock
+                                Style="{StaticResource SettingsDescriptionStyle}"
+                                Text="Surface4" />
+                            <colorpicker:PortableColorPicker
+                                Width="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                Height="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                HorizontalAlignment="Right"
+                                Cursor="Hand"
+                                SelectedColor="{Binding Surface4, Mode=TwoWay}" />
+                        </StackPanel>
+                    </Border>
+
+
+
+                    <Border Style="{StaticResource SettingsItemStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock
+                                Style="{StaticResource SettingsDescriptionStyle}"
+                                Text="Surface5" />
+                            <colorpicker:PortableColorPicker
+                                Width="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                Height="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                HorizontalAlignment="Right"
+                                Cursor="Hand"
+                                SelectedColor="{Binding Surface5, Mode=TwoWay}" />
+                        </StackPanel>
+                    </Border>
+
+
+
+                    <Border Style="{StaticResource SettingsItemStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock
+                                Style="{StaticResource SettingsDescriptionStyle}"
+                                Text="OutlineVariant" />
+                            <colorpicker:PortableColorPicker
+                                Width="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                Height="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                HorizontalAlignment="Right"
+                                Cursor="Hand"
+                                SelectedColor="{Binding OutlineVariant, Mode=TwoWay}" />
+                        </StackPanel>
+                    </Border>
+
+
+
+                    <Border Style="{StaticResource SettingsItemStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock
+                                Style="{StaticResource SettingsDescriptionStyle}"
+                                Text="SurfaceContainerHighest" />
+                            <colorpicker:PortableColorPicker
+                                Width="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                Height="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                HorizontalAlignment="Right"
+                                Cursor="Hand"
+                                SelectedColor="{Binding SurfaceContainerHighest, Mode=TwoWay}" />
+                        </StackPanel>
+                    </Border>
+
+
+
+                    <Border Style="{StaticResource SettingsItemStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock
+                                Style="{StaticResource SettingsDescriptionStyle}"
+                                Text="SurfaceDim" />
+                            <colorpicker:PortableColorPicker
+                                Width="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                Height="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                HorizontalAlignment="Right"
+                                Cursor="Hand"
+                                SelectedColor="{Binding Surface2, Mode=TwoWay}" />
+                        </StackPanel>
+                    </Border>
+
+
+
+                    <Border Style="{StaticResource SettingsItemStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock
+                                Style="{StaticResource SettingsDescriptionStyle}"
+                                Text="SurfaceBright" />
+                            <colorpicker:PortableColorPicker
+                                Width="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                Height="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                HorizontalAlignment="Right"
+                                Cursor="Hand"
+                                SelectedColor="{Binding Surface2, Mode=TwoWay}" />
+                        </StackPanel>
+                    </Border>
+
+                </StackPanel>
+
+
+
             </StackPanel>
 
         </Grid>

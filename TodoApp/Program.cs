@@ -17,6 +17,7 @@ using Modules.PopupMessage.Views;
 using Modules.PopupMessage.Views.CqrsHandling;
 using Modules.RecycleBin.Repositories;
 using Modules.RecycleBin.Views.Pages;
+using Modules.Settings.Contracts;
 using Modules.Settings.Contracts.ViewModels;
 using Modules.Settings.Repositories;
 using Modules.Settings.Services;
@@ -57,6 +58,8 @@ public static class Program
 
             return UIScaler.Instance;
         });
+
+        services.AddSingleton<IThemeEditorService, ThemeEditorService>();
         services.AddSingleton<MaterialThemeManagerService>();
         services.AddSingleton<ThemeManager>();
         services.AddScoped<IWindowService, WindowService>();
