@@ -42,7 +42,7 @@
                                 Margin="0"
                                 HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                 VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                BorderBrush="{DynamicResource OutlineVariant}"
+                                BorderBrush="{DynamicResource Outline}"
                                 BorderThickness="1.5"
                                 CornerRadius="30" />
                         </Grid>
@@ -55,12 +55,12 @@
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="true">
                             <Setter TargetName="checkMarkIcon" Property="Opacity" Value="1" />
-                            <Setter TargetName="checkMarkBorder" Property="BorderBrush" Value="{DynamicResource OutlineVariant}" />
-                            <Setter TargetName="checkMarkIcon" Property="Fill" Value="{DynamicResource OutlineVariant}" />
+                            <Setter TargetName="checkMarkBorder" Property="BorderBrush" Value="{DynamicResource Outline}" />
+                            <Setter TargetName="checkMarkIcon" Property="Fill" Value="{DynamicResource Outline}" />
                         </Trigger>
                         <Trigger Property="IsChecked" Value="true">
                             <Setter TargetName="checkMarkIcon" Property="Opacity" Value="1" />
-                            <Setter TargetName="checkMarkIcon" Property="Fill" Value="{DynamicResource OutlineVariant}" />
+                            <Setter TargetName="checkMarkIcon" Property="Fill" Value="{DynamicResource Outline}" />
                             <!--<Setter TargetName="checkMarkParentBorder" Property="Background" Value="{DynamicResource OutlineVariant}" />-->
                         </Trigger>
 

@@ -73,6 +73,11 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
 
         Items = new ObservableCollection<TaskItemViewModel>(orderedTasks.MapToViewModelList(_mediator, oneEditorOpenService, _eventAggregator));
         Items.CollectionChanged += ItemsOnCollectionChanged;
+        var firstItem = Items.FirstOrDefault();
+        if (firstItem != null)
+        {
+            firstItem.IsFirstItem = true;
+        }
         RecalculateProgress();
 
         _eventAggregator.GetEvent<TaskItemDeleteClickedEvent>().Subscribe(OnDeleteTaskItemRequestedEvent);
@@ -311,6 +316,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         for (var i = 0; i < Items.Count; i++)
         {
             Items[i].ListOrder = i;
+            Items[i].IsFirstItem = i == 0;
         }
 
         _taskItemRepository.UpdateTaskListOrders(Items.MapList());

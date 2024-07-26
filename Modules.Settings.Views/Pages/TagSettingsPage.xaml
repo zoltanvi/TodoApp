@@ -80,7 +80,15 @@
                                     Background="{Binding ., Converter={StaticResource TagBackgroundConverter}}"
                                     BorderBrush="{Binding ., Converter={StaticResource TagBorderConverter}}"
                                     BorderThickness="1"
-                                    CornerRadius="4" />
+                                    CornerRadius="4">
+                                    <Label
+                                        Padding="0"
+                                        Margin="0"
+                                        Content="A"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Foreground="{Binding ., Converter={StaticResource TagForegroundConverter}}" />
+                                </Border>
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
@@ -171,7 +179,9 @@
                                             Grid.Column="1"
                                             HorizontalAlignment="Center">
 
-                                            <commonControls:TagControl TagColor="{Binding Color}" MinWidth="30">
+                                            <commonControls:TagControl
+                                                MinWidth="30"
+                                                TagColor="{Binding Color}">
                                                 <TextBox
                                                     Padding="0"
                                                     VerticalAlignment="Stretch"
@@ -196,8 +206,7 @@
                                             Grid.Column="2"
                                             Margin="4 0"
                                             ItemsSource="{Binding Source={StaticResource TagColorProvider}}"
-                                            SelectedItem="{Binding Color, Mode=TwoWay}"
-                                            >
+                                            SelectedItem="{Binding Color, Mode=TwoWay}">
                                             <ComboBox.ItemTemplate>
                                                 <DataTemplate>
                                                     <Border
@@ -206,7 +215,15 @@
                                                         Background="{Binding ., Converter={StaticResource TagBackgroundConverter}}"
                                                         BorderBrush="{Binding ., Converter={StaticResource TagBorderConverter}}"
                                                         BorderThickness="1"
-                                                        CornerRadius="4" />
+                                                        CornerRadius="4">
+                                                        <Label
+                                                            Padding="0"
+                                                            Margin="0"
+                                                            Content="A"
+                                                            HorizontalAlignment="Center"
+                                                            VerticalAlignment="Center"
+                                                            Foreground="{Binding ., Converter={StaticResource TagForegroundConverter}}" />
+                                                    </Border>
                                                 </DataTemplate>
                                             </ComboBox.ItemTemplate>
                                         </ComboBox>

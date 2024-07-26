@@ -17,346 +17,392 @@
     dd:DragDrop.IsDragSource="{Binding TextEditorViewModel.IsEditMode}"
     mc:Ignorable="d">
 
-    <Grid
-        Margin="{Binding AppSettings.TaskPageSettings.TaskListMargin, Source={StaticResource AppSettings}, Converter={StaticResource TaskListItemMarginConverter}}"
-        Background="Transparent">
+    <Grid Margin="{Binding IsFirstItem, Converter={StaticResource TaskItemBoolToMarginConverter}}">
+        <Grid
+            Margin="{Binding AppSettings.TaskPageSettings.TaskListMargin, Source={StaticResource AppSettings}, Converter={StaticResource TaskListItemMarginConverter}}"
+            Background="Transparent">
 
-        <!--  COLOR BAR  -->
-        <!--  CornerRadius="{Binding Path=AppSettings.IsColorBarRounded, Source={StaticResource AppSettings}, Converter={StaticResource boolToCornerRadiusConverter}}">  -->
-        <Border
-            Name="ColorBarBorder"
-            Margin="4 2"
-            HorizontalAlignment="Left"
-            Panel.ZIndex="1000"
-            Background="{Binding MarkerColor, Converter={StaticResource StringRgbToBrushConverter}}"
-            CornerRadius="3 0 0 3">
-            <Border.Width>
-                <MultiBinding>
-                    <MultiBinding.Converter>
-                        <valueConverters:ColorBarWidthMultiValueConverter />
-                    </MultiBinding.Converter>
-                    <Binding
-                        Path="AppSettings.TaskSettings.ColorBarThickness"
-                        Source="{StaticResource AppSettings}" />
-                    <Binding
-                        Path="UIScaler.ScaleValue"
-                        Source="{StaticResource UIScaler}" />
-                </MultiBinding>
-            </Border.Width>
-        </Border>
+            <!--  COLOR BAR  -->
+            <!--  CornerRadius="{Binding Path=AppSettings.IsColorBarRounded, Source={StaticResource AppSettings}, Converter={StaticResource boolToCornerRadiusConverter}}">  -->
+            <Border
+                Name="ColorBarBorder"
+                Margin="4 2"
+                HorizontalAlignment="Left"
+                Panel.ZIndex="1000"
+                Background="{Binding MarkerColor, Converter={StaticResource StringRgbToBrushConverter}}"
+                CornerRadius="3 0 0 3">
+                <Border.Width>
+                    <MultiBinding>
+                        <MultiBinding.Converter>
+                            <valueConverters:ColorBarWidthMultiValueConverter />
+                        </MultiBinding.Converter>
+                        <Binding
+                            Path="AppSettings.TaskSettings.ColorBarThickness"
+                            Source="{StaticResource AppSettings}" />
+                        <Binding
+                            Path="UIScaler.ScaleValue"
+                            Source="{StaticResource UIScaler}" />
+                    </MultiBinding>
+                </Border.Width>
+            </Border>
 
-        <!--  ITEM BORDER  -->
-        <Border
-            Margin="4 2"
-            BorderBrush="{Binding BorderColor, Converter={StaticResource TaskBorderBrushConverter}}"
-            BorderThickness="1"
-            CornerRadius="3"
-            Visibility="{Binding AppSettings.TaskSettings.BorderVisible, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
+            <!--  ITEM BORDER  -->
+            <Border
+                Margin="4 2"
+                BorderBrush="{Binding BorderColor, Converter={StaticResource TaskBorderBrushConverter}}"
+                BorderThickness="1"
+                CornerRadius="3"
+                Visibility="{Binding AppSettings.TaskSettings.BorderVisible, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
 
-        <!--  Editor indicator  -->
-        <Border
-            Margin="2 0"
-            BorderBrush="{DynamicResource Tertiary}"
-            BorderThickness="1.5"
-            CornerRadius="3"
-            Visibility="{Binding TextEditorViewModel.IsEditMode, Converter={StaticResource BoolToVisibilityConverter}}" />
+            <!--  Editor indicator  -->
+            <Border
+                Margin="2 0"
+                BorderBrush="{DynamicResource Tertiary}"
+                BorderThickness="1.5"
+                CornerRadius="3"
+                Visibility="{Binding TextEditorViewModel.IsEditMode, Converter={StaticResource BoolToVisibilityConverter}}" />
 
+            <!--  ITEM CONTENT  -->
+            <Border
+                x:Name="TaskListItemBackground"
+                Margin="4 2"
+                BorderBrush="Transparent"
+                BorderThickness="1"
+                CornerRadius="3">
+                <Border.Background>
+                    <MultiBinding
+                        Converter="{valueConverters:TaskItemBackgroundBrushMultiValueConverter}"
+                        UpdateSourceTrigger="PropertyChanged">
+                        <Binding Path="IsDone" />
+                        <Binding
+                            Path="AppSettings.TaskSettings.BackgroundVisible"
+                            Source="{StaticResource AppSettings}" />
+                    </MultiBinding>
+                </Border.Background>
 
-        <!--  ITEM CONTENT  -->
-        <Border
-            x:Name="TaskListItemBackground"
-            Margin="4 2"
-            BorderBrush="Transparent"
-            BorderThickness="1"
-            CornerRadius="3">
-            <Border.Background>
-                <MultiBinding
-                    Converter="{valueConverters:TaskItemBackgroundBrushMultiValueConverter}"
-                    UpdateSourceTrigger="PropertyChanged">
-                    <Binding Path="IsDone" />
-                    <Binding
-                        Path="AppSettings.TaskSettings.BackgroundVisible"
-                        Source="{StaticResource AppSettings}" />
-                </MultiBinding>
-            </Border.Background>
+                <b:Interaction.Triggers>
+                    <b:EventTrigger EventName="MouseEnter">
+                        <b:InvokeCommandAction Command="{Binding EnableQuickActionsCommand}" />
+                    </b:EventTrigger>
 
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
+                    <b:EventTrigger EventName="MouseLeave">
+                        <b:InvokeCommandAction Command="{Binding DisableQuickActionsCommand}" />
+                    </b:EventTrigger>
+                </b:Interaction.Triggers>
 
-                <Grid Grid.Row="0">
-                    <Grid.ColumnDefinitions>
-                        <!--  Color bar column  -->
-                        <ColumnDefinition>
-                            <ColumnDefinition.Width>
-                                <MultiBinding>
-                                    <MultiBinding.Converter>
-                                        <valueConverters:ColorBarGridWidthMultiValueConverter />
-                                    </MultiBinding.Converter>
-                                    <Binding
-                                        Path="AppSettings.TaskSettings.ColorBarThickness"
-                                        Source="{StaticResource AppSettings}" />
-                                    <Binding
-                                        Path="UIScaler.ScaleValue"
-                                        Source="{StaticResource UIScaler}" />
-                                </MultiBinding>
-                            </ColumnDefinition.Width>
-                        </ColumnDefinition>
+                <Border.Triggers>
+                    <EventTrigger RoutedEvent="Border.MouseEnter">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation
+                                    Storyboard.TargetName="HoverButtonBorder"
+                                    Storyboard.TargetProperty="(Opacity)"
+                                    From="0"
+                                    To="1"
+                                    Duration="0:0:0.1" />
+                                <DoubleAnimation
+                                    Storyboard.TargetName="MouseOverBackground"
+                                    Storyboard.TargetProperty="(Opacity)"
+                                    From="0"
+                                    To="1"
+                                    Duration="0:0:0.1" />
 
-                        <!--  Checkbox column  -->
-                        <ColumnDefinition Width="auto" />
-                        <!--  Main content column, also the hidden buttons column  -->
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
+                                <BooleanAnimationUsingKeyFrames 
+                                    Storyboard.TargetName="HoverButtonBorder" 
+                                    Storyboard.TargetProperty="IsHitTestVisible"
+                                    Duration="0:0:0.1" FillBehavior="HoldEnd">
+                                    <DiscreteBooleanKeyFrame Value="False" KeyTime="0:0:0" />
+                                    <DiscreteBooleanKeyFrame Value="True" KeyTime="0:0:0" />
+                                </BooleanAnimationUsingKeyFrames>
 
-                    <!--  ITEM BACKGROUND  -->
-                    <Border
-                        Grid.ColumnSpan="3"
-                        Background="{Binding BackgroundColor, Converter={StaticResource StringRgbToBrushConverter}}"
-                        BorderBrush="Transparent"
-                        BorderThickness="0"
-                        CornerRadius="3"
-                        Opacity="0.3" />
+                            </Storyboard>
+                        </BeginStoryboard>
 
-                    <!--  Task Checkbox  -->
-                    <Grid Grid.Column="1">
-                        <Border Visibility="{Binding AppSettings.TaskSettings.CircularCheckbox, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}">
-                            <CheckBox
-                                Margin="{Binding UIScaler.TaskCheckBoxWidth, Source={StaticResource UIScaler}, Converter={StaticResource TaskCheckboxMarginConverter}}"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Command="{Binding IsDoneModifiedCommand}"
-                                IsChecked="{Binding IsDone}"
-                                IsEnabled="{Binding TextEditorViewModel.IsDisplayMode}"
-                                Style="{StaticResource TaskCheckBoxStyle}"
-                                Visibility="{Binding AppSettings.TaskQuickActionSettings.CheckboxEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
-                        </Border>
+                    </EventTrigger>
 
-                        <Border Visibility="{Binding AppSettings.TaskSettings.CircularCheckbox, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityNegatedConverter}}">
-                            <CheckBox
-                                Margin="{Binding UIScaler.TaskCheckBoxWidth, Source={StaticResource UIScaler}, Converter={StaticResource TaskCheckboxMarginConverter}}"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Command="{Binding IsDoneModifiedCommand}"
-                                IsChecked="{Binding IsDone}"
-                                IsEnabled="{Binding TextEditorViewModel.IsDisplayMode}"
-                                Style="{StaticResource TaskCheckBoxSquareStyle}"
-                                Visibility="{Binding AppSettings.TaskQuickActionSettings.CheckboxEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
-                        </Border>
-                    </Grid>
+                    <EventTrigger RoutedEvent="Border.MouseLeave">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation
+                                    Storyboard.TargetName="HoverButtonBorder"
+                                    Storyboard.TargetProperty="(Opacity)"
+                                    From="1"
+                                    To="0"
+                                    Duration="0:0:0.1" />
+                                <DoubleAnimation
+                                    Storyboard.TargetName="MouseOverBackground"
+                                    Storyboard.TargetProperty="(Opacity)"
+                                    From="1"
+                                    To="0"
+                                    Duration="0:0:0.1" />
 
+                                <BooleanAnimationUsingKeyFrames 
+                                    Storyboard.TargetName="HoverButtonBorder" 
+                                    Storyboard.TargetProperty="IsHitTestVisible"
+                                    Duration="0:0:0.1" FillBehavior="HoldEnd">
+                                    <DiscreteBooleanKeyFrame Value="True" KeyTime="0:0:0" />
+                                    <DiscreteBooleanKeyFrame Value="False" KeyTime="0:0:0" />
+                                </BooleanAnimationUsingKeyFrames>
 
-                    <!--  Clock and Pin icon  -->
-                    <Border
-                        Grid.Column="2"
-                        Margin="0"
-                        HorizontalAlignment="Right"
-                        Background="Transparent">
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </Border.Triggers>
 
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="auto" />
-                                <ColumnDefinition Width="auto" />
-                            </Grid.ColumnDefinitions>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
 
-                            <!--  CLOCK ICON  -->
-                            <Border
-                                Grid.Column="0"
-                                Margin="0"
-                                HorizontalAlignment="Right"
-                                Background="Transparent">
-                                <Border.Visibility>
-                                    <MultiBinding Converter="{StaticResource BoolToVisibilityAndConverter}">
-                                        <Binding Path="IsAnyReminderOn" />
-                                        <Binding Path="TextEditorViewModel.IsDisplayMode" />
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <!--  Color bar column  -->
+                            <ColumnDefinition>
+                                <ColumnDefinition.Width>
+                                    <MultiBinding>
+                                        <MultiBinding.Converter>
+                                            <valueConverters:ColorBarGridWidthMultiValueConverter />
+                                        </MultiBinding.Converter>
+                                        <Binding
+                                            Path="AppSettings.TaskSettings.ColorBarThickness"
+                                            Source="{StaticResource AppSettings}" />
+                                        <Binding
+                                            Path="UIScaler.ScaleValue"
+                                            Source="{StaticResource UIScaler}" />
                                     </MultiBinding>
-                                </Border.Visibility>
+                                </ColumnDefinition.Width>
+                            </ColumnDefinition>
 
-                                <Grid>
-                                    <Label
-                                        Padding="2"
-                                        Content="{StaticResource IconClock}"
-                                        FontFamily="{StaticResource IconFont}"
-                                        Foreground="{DynamicResource Tertiary}" />
-                                    <Grid.LayoutTransform>
-                                        <!--  -1 to mirror it  -->
-                                        <ScaleTransform ScaleX="{Binding Source={StaticResource UIScaler}, Path=UIScaler.ScaleValue}" ScaleY="{Binding Source={StaticResource UIScaler}, Path=UIScaler.ScaleValue}" />
-                                    </Grid.LayoutTransform>
-                                </Grid>
-                            </Border>
+                            <!--  Checkbox column  -->
+                            <ColumnDefinition Width="auto" />
+                            <!--  Main content column, also the hidden buttons column  -->
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
 
-                            <!--  PIN ICON  -->
-                            <Border
-                                Grid.Column="1"
-                                Margin="0"
-                                HorizontalAlignment="Right"
-                                Background="Transparent">
-                                <Border.Visibility>
-                                    <MultiBinding Converter="{StaticResource BoolToVisibilityAndConverter}">
-                                        <Binding Path="Pinned" />
-                                        <Binding Path="TextEditorViewModel.IsDisplayMode" />
-                                    </MultiBinding>
-                                </Border.Visibility>
-
-                                <Grid>
-                                    <Label
-                                        Padding="2"
-                                        Content="{StaticResource IconPinFilled}"
-                                        FontFamily="{StaticResource IconFont}"
-                                        Foreground="{DynamicResource Tertiary}" />
-                                    <Label
-                                        Padding="2"
-                                        Content="{StaticResource IconPin}"
-                                        FontFamily="{StaticResource IconFont}"
-                                        Foreground="{DynamicResource Tertiary}" />
-                                    <Grid.LayoutTransform>
-                                        <!--  -1 to mirror it  -->
-                                        <ScaleTransform ScaleX="{Binding Source={StaticResource UIScaler}, Path=UIScaler.ScaleValue}" ScaleY="{Binding Source={StaticResource UIScaler}, Path=UIScaler.ScaleValue}" />
-                                    </Grid.LayoutTransform>
-                                </Grid>
-                            </Border>
-
-                        </Grid>
-                    </Border>
-
-                    <!--  Main content  -->
-                    <Border
-                        Grid.Column="2"
-                        Margin="{Binding AppSettings.TaskSettings.Spacing, Source={StaticResource AppSettings}, Converter={StaticResource TaskSpacingToMarginConverter}}">
-                        <Grid Margin="0 2 10 2">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-
-                            <!--  Task tag  -->
-                            <ListView
-                                Grid.Column="0"
-                                HorizontalContentAlignment="Stretch"
-                                Background="Transparent"
-                                BorderThickness="0"
-                                ItemsSource="{Binding Tags}"
-                                ScrollViewer.CanContentScroll="False"
-                                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                Opacity="{Binding TextEditorViewModel.TextOpacity}"
-                                Template="{DynamicResource NonScrollableListBoxControlTemplate}">
-
-                                <ListView.ItemContainerStyle>
-                                    <Style TargetType="ListViewItem">
-                                        <Setter Property="Template">
-                                            <Setter.Value>
-                                                <ControlTemplate TargetType="ListViewItem">
-                                                    <ContentPresenter />
-                                                </ControlTemplate>
-                                            </Setter.Value>
-                                        </Setter>
-                                    </Style>
-                                </ListView.ItemContainerStyle>
-
-                                <ListView.ItemTemplate>
-                                    <DataTemplate>
-                                        <controls:TagControl
-                                            Content="{Binding Name}"
-                                            TagColor="{Binding Color}" />
-                                    </DataTemplate>
-                                </ListView.ItemTemplate>
-                            </ListView>
-
-                            <!--  Task description  -->
-                            <controls1:RichTextEditorControl
-                                Grid.Column="1"
-                                DataContext="{Binding TextEditorViewModel}"
-                                IsReadOnly="False" />
-
-                            <!--  Catch double click to change to edit mode  -->
-                            <Border
-                                Grid.Column="0"
-                                Grid.ColumnSpan="2"
-                                Background="Transparent"
-                                Visibility="{Binding TextEditorViewModel.IsEditMode, Converter={StaticResource BoolToVisibilityNegatedConverter}}">
-                                <Border.InputBindings>
-                                    <MouseBinding
-                                        Command="{Binding EditItemCommand}"
-                                        Gesture="LeftDoubleClick" />
-                                    <MouseBinding
-                                        Command="{Binding ToggleIsDoneCommand}"
-                                        Gesture="MiddleDoubleClick" />
-                                </Border.InputBindings>
-                            </Border>
-
-                        </Grid>
-
-                    </Border>
-
-
-                    <!--  Hidden buttons  -->
-                    <Border
-                        x:Name="HoverButtonBorder"
-                        Grid.Column="2"
-                        Padding="0"
-                        HorizontalAlignment="Right"
-                        Background="Transparent"
-                        IsEnabled="{Binding AppSettings.TaskQuickActionSettings.Enabled, Source={StaticResource AppSettings}}"
-                        Opacity="0">
-                        <Border.Visibility>
-                            <MultiBinding Converter="{StaticResource BoolToVisibilityAndConverter}">
-                                <Binding
-                                    Path="AppSettings.TaskQuickActionSettings.AnyEnabled"
-                                    Source="{StaticResource AppSettings}" />
-                                <Binding Path="TextEditorViewModel.IsDisplayMode" />
-                            </MultiBinding>
-                        </Border.Visibility>
-
-                        <Border.Triggers>
-                            <EventTrigger RoutedEvent="Border.MouseEnter">
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <DoubleAnimation
-                                            Storyboard.TargetName="HoverButtonBorder"
-                                            Storyboard.TargetProperty="(Opacity)"
-                                            From="0"
-                                            To="1"
-                                            Duration="0:0:0.10" />
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </EventTrigger>
-
-                            <EventTrigger RoutedEvent="Border.MouseLeave">
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <DoubleAnimation
-                                            Storyboard.TargetName="HoverButtonBorder"
-                                            Storyboard.TargetProperty="(Opacity)"
-                                            From="1"
-                                            To="0"
-                                            Duration="0:0:0.05" />
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </EventTrigger>
-                        </Border.Triggers>
-
-                        <!--  ENABLE OR DISABLE QUICK ACTIONS  -->
-                        <b:Interaction.Triggers>
-                            <b:EventTrigger EventName="MouseEnter">
-                                <b:InvokeCommandAction Command="{Binding EnableQuickActionsCommand}" />
-                            </b:EventTrigger>
-
-                            <b:EventTrigger EventName="MouseLeave">
-                                <b:InvokeCommandAction Command="{Binding DisableQuickActionsCommand}" />
-                            </b:EventTrigger>
-                        </b:Interaction.Triggers>
-
-                        <!--  HOVER PANEL  -->
+                        <!--  ITEM BACKGROUND  -->
                         <Border
-                            Padding="10 0"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="3"
+                            Background="{Binding BackgroundColor, Converter={StaticResource StringRgbToBrushConverter}}"
+                            BorderBrush="Transparent"
+                            BorderThickness="0"
+                            CornerRadius="3"
+                            Opacity="0.3" />
+
+                        <!--  MOUSE OVER BACKGROUND  -->
+                        <Grid
+                            x:Name="MouseOverBackground"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="3"
+                            Opacity="0">
+                            <Border
+                                Background="{DynamicResource OnBackground}"
+                                BorderBrush="Transparent"
+                                BorderThickness="0"
+                                CornerRadius="3"
+                                IsEnabled="False"
+                                IsHitTestVisible="False"
+                                Opacity="0.06" />
+                        </Grid>
+
+                        <!--  Task Checkbox  -->
+                        <Grid Grid.Column="1">
+                            <Border Visibility="{Binding AppSettings.TaskSettings.CircularCheckbox, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}">
+                                <CheckBox
+                                    Margin="{Binding UIScaler.TaskCheckBoxWidth, Source={StaticResource UIScaler}, Converter={StaticResource TaskCheckboxMarginConverter}}"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Command="{Binding IsDoneModifiedCommand}"
+                                    IsChecked="{Binding IsDone}"
+                                    IsEnabled="{Binding TextEditorViewModel.IsDisplayMode}"
+                                    Style="{StaticResource TaskCheckBoxStyle}"
+                                    Opacity="{Binding Opacity}"
+                                    Visibility="{Binding AppSettings.TaskQuickActionSettings.CheckboxEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
+                            </Border>
+
+                            <Border Visibility="{Binding AppSettings.TaskSettings.CircularCheckbox, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityNegatedConverter}}">
+                                <CheckBox
+                                    Margin="{Binding UIScaler.TaskCheckBoxWidth, Source={StaticResource UIScaler}, Converter={StaticResource TaskCheckboxMarginConverter}}"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Command="{Binding IsDoneModifiedCommand}"
+                                    IsChecked="{Binding IsDone}"
+                                    IsEnabled="{Binding TextEditorViewModel.IsDisplayMode}"
+                                    Style="{StaticResource TaskCheckBoxSquareStyle}"
+                                    Opacity="{Binding Opacity}"
+                                    Visibility="{Binding AppSettings.TaskQuickActionSettings.CheckboxEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
+                            </Border>
+                        </Grid>
+
+
+                        <!--  Clock and Pin icon  -->
+                        <Border
+                            Grid.Column="2"
+                            Margin="0"
                             HorizontalAlignment="Right"
-                            Background="{DynamicResource Surface1}"
-                            BorderBrush="{DynamicResource SurfaceVariant}"
-                            BorderThickness="1 0 0 0"
-                            CornerRadius="0 2 2 0">
+                            Background="Transparent">
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition Width="auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <!--  CLOCK ICON  -->
+                                <Border
+                                    Grid.Column="0"
+                                    Margin="0"
+                                    HorizontalAlignment="Right"
+                                    Background="Transparent">
+                                    <Border.Visibility>
+                                        <MultiBinding Converter="{StaticResource BoolToVisibilityAndConverter}">
+                                            <Binding Path="IsAnyReminderOn" />
+                                            <Binding Path="TextEditorViewModel.IsDisplayMode" />
+                                        </MultiBinding>
+                                    </Border.Visibility>
+
+                                    <Grid>
+                                        <Label
+                                            Padding="2"
+                                            Content="{StaticResource IconClock}"
+                                            FontFamily="{StaticResource IconFont}"
+                                            Foreground="{DynamicResource Tertiary}" />
+                                        <Grid.LayoutTransform>
+                                            <!--  -1 to mirror it  -->
+                                            <ScaleTransform ScaleX="{Binding Source={StaticResource UIScaler}, Path=UIScaler.ScaleValue}" ScaleY="{Binding Source={StaticResource UIScaler}, Path=UIScaler.ScaleValue}" />
+                                        </Grid.LayoutTransform>
+                                    </Grid>
+                                </Border>
+
+                                <!--  PIN ICON  -->
+                                <Border
+                                    Grid.Column="1"
+                                    Margin="0"
+                                    HorizontalAlignment="Right"
+                                    Background="Transparent">
+                                    <Border.Visibility>
+                                        <MultiBinding Converter="{StaticResource BoolToVisibilityAndConverter}">
+                                            <Binding Path="Pinned" />
+                                            <Binding Path="TextEditorViewModel.IsDisplayMode" />
+                                        </MultiBinding>
+                                    </Border.Visibility>
+
+                                    <Grid>
+                                        <Label
+                                            Padding="2"
+                                            Content="{StaticResource IconPinFilled}"
+                                            FontFamily="{StaticResource IconFont}"
+                                            Foreground="{DynamicResource Tertiary}" />
+                                        <Label
+                                            Padding="2"
+                                            Content="{StaticResource IconPin}"
+                                            FontFamily="{StaticResource IconFont}"
+                                            Foreground="{DynamicResource Tertiary}" />
+                                        <Grid.LayoutTransform>
+                                            <!--  -1 to mirror it  -->
+                                            <ScaleTransform ScaleX="{Binding Source={StaticResource UIScaler}, Path=UIScaler.ScaleValue}" ScaleY="{Binding Source={StaticResource UIScaler}, Path=UIScaler.ScaleValue}" />
+                                        </Grid.LayoutTransform>
+                                    </Grid>
+                                </Border>
+
+                            </Grid>
+                        </Border>
+
+                        <!--  Main content  -->
+                        <Border
+                            Grid.Column="2"
+                            Margin="{Binding AppSettings.TaskSettings.Spacing, Source={StaticResource AppSettings}, Converter={StaticResource TaskSpacingToMarginConverter}}">
+                            <Grid Margin="0 2 10 2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <!--  Task tag  -->
+                                <ListView
+                                    Grid.Column="0"
+                                    HorizontalContentAlignment="Stretch"
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    ItemsSource="{Binding Tags}"
+                                    Opacity="{Binding TextEditorViewModel.TextOpacity}"
+                                    ScrollViewer.CanContentScroll="False"
+                                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                    ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                    Template="{DynamicResource NonScrollableListBoxControlTemplate}">
+
+                                    <ListView.ItemContainerStyle>
+                                        <Style TargetType="ListViewItem">
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="ListViewItem">
+                                                        <ContentPresenter />
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </ListView.ItemContainerStyle>
+
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <controls:TagControl
+                                                Content="{Binding Name}"
+                                                TagColor="{Binding Color}" />
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+
+                                <!--  Task description  -->
+                                <controls1:RichTextEditorControl
+                                    Grid.Column="1"
+                                    DataContext="{Binding TextEditorViewModel}"
+                                    IsReadOnly="False" />
+
+                                <!--  Catch double click to change to edit mode  -->
+                                <Border
+                                    Grid.Column="0"
+                                    Grid.ColumnSpan="2"
+                                    Margin="0 -2 -10 -2"
+                                    Background="Transparent"
+                                    Visibility="{Binding TextEditorViewModel.IsEditMode, Converter={StaticResource BoolToVisibilityNegatedConverter}}">
+
+                                    <Border.InputBindings>
+                                        <MouseBinding
+                                            Command="{Binding EditItemCommand}"
+                                            Gesture="LeftDoubleClick" />
+                                        <MouseBinding
+                                            Command="{Binding ToggleIsDoneCommand}"
+                                            Gesture="MiddleDoubleClick" />
+                                    </Border.InputBindings>
+                                </Border>
+
+                            </Grid>
+
+                        </Border>
+
+                        <Border
+                            x:Name="HoverButtonBorder"
+                            Grid.Column="2"
+                            Height="{Binding UIScaler.TaskPopupHeight, Source={StaticResource UIScaler}}"
+                            Margin="-5 -20 5 20"
+                            Padding="4 0"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Top"
+                            Background="{DynamicResource Surface2}"
+                            BorderBrush="{DynamicResource Outline}"
+                            BorderThickness="1"
+                            CornerRadius="6"
+                            Opacity="0">
+
+                            <Border.Visibility>
+                                <MultiBinding Converter="{StaticResource BoolToVisibilityAndConverter}">
+                                    <Binding
+                                        Path="AppSettings.TaskQuickActionSettings.AnyEnabled"
+                                        Source="{StaticResource AppSettings}" />
+                                    <Binding Path="TextEditorViewModel.IsDisplayMode" />
+                                </MultiBinding>
+                            </Border.Visibility>
 
                             <StackPanel Orientation="Horizontal">
                                 <!--  Calendar empty button  -->
@@ -396,7 +442,6 @@
                                 <controls:SingletonColorPicker
                                     Width="{Binding UIScaler.ColorPickerWidth, Source={StaticResource UIScaler}}"
                                     Height="{Binding UIScaler.ColorPickerHeight, Source={StaticResource UIScaler}}"
-                                    Margin="4 0 0 0"
                                     ColorChangedNotification="{Binding ColorChangedNotification, Mode=OneWay}"
                                     IsEnabled="{Binding IsQuickActionsEnabled}"
                                     SelectedColorString="{Binding MarkerColor, Mode=TwoWay}"
@@ -407,7 +452,6 @@
                                 <controls:SingletonColorPicker
                                     Width="{Binding UIScaler.ColorPickerWidth, Source={StaticResource UIScaler}}"
                                     Height="{Binding UIScaler.ColorPickerHeight, Source={StaticResource UIScaler}}"
-                                    Margin="4 0 0 0"
                                     ColorChangedNotification="{Binding ColorChangedNotification, Mode=OneWay}"
                                     IsEnabled="{Binding IsQuickActionsEnabled}"
                                     SelectedColorString="{Binding BackgroundColor, Mode=TwoWay}"
@@ -418,7 +462,6 @@
                                 <controls:SingletonColorPicker
                                     Width="{Binding UIScaler.ColorPickerWidth, Source={StaticResource UIScaler}}"
                                     Height="{Binding UIScaler.ColorPickerHeight, Source={StaticResource UIScaler}}"
-                                    Margin="4 0 0 0"
                                     ColorChangedNotification="{Binding ColorChangedNotification, Mode=OneWay}"
                                     IsEnabled="{Binding IsQuickActionsEnabled}"
                                     SelectedColorString="{Binding BorderColor, Mode=TwoWay}"
@@ -427,17 +470,15 @@
 
                                 <Grid Visibility="{Binding AppSettings.TaskQuickActionSettings.TagEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}">
                                     <Button
-                                        Margin="4 0 0 0"
                                         Command="{Binding ShowTagSelectorCommand}"
                                         Content="{StaticResource IconTag}"
                                         Style="{StaticResource ButtonQuickActionStyle}"
-                                        ToolTip="Select tag" />
+                                        ToolTip="Select tags" />
                                 </Grid>
 
                                 <!--  Pin button  -->
                                 <Grid Visibility="{Binding Pinned, Converter={StaticResource BoolToVisibilityNegatedConverter}}">
                                     <Button
-                                        Margin="4 0 0 0"
                                         Command="{Binding PinItemCommand}"
                                         Content="{StaticResource IconPin}"
                                         Style="{StaticResource ButtonQuickActionStyle}"
@@ -447,7 +488,6 @@
                                 <!--  Unpin button  -->
                                 <Grid Visibility="{Binding Pinned, Converter={StaticResource BoolToVisibilityConverter}}">
                                     <Button
-                                        Margin="4 0 0 0"
                                         Command="{Binding UnpinItemCommand}"
                                         Content="{StaticResource IconUnpin}"
                                         Style="{StaticResource ButtonQuickActionStyle}"
@@ -458,7 +498,6 @@
                                 <!--  Show details  -->
                                 <Grid Visibility="{Binding AppSettings.TaskQuickActionSettings.DetailsEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}">
                                     <Button
-                                        Margin="4 0 0 0"
                                         Command="{Binding ToggleDetailsCommand}"
                                         Content="{StaticResource IconInfo}"
                                         Style="{StaticResource ButtonQuickActionStyle}"
@@ -469,7 +508,6 @@
                                 <!--  Hide details  -->
                                 <Grid Visibility="{Binding AppSettings.TaskQuickActionSettings.DetailsEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}">
                                     <Button
-                                        Margin="4 0 0 0"
                                         Command="{Binding ToggleDetailsCommand}"
                                         Content="{StaticResource IconHideInfo}"
                                         Style="{StaticResource ButtonQuickActionStyle}"
@@ -479,7 +517,6 @@
 
                                 <!--  Trash button  -->
                                 <Button
-                                    Margin="4 0 0 0"
                                     Command="{Binding DeleteItemCommand}"
                                     Content="{StaticResource IconTrash}"
                                     Cursor="Hand"
@@ -488,130 +525,131 @@
                                     Visibility="{Binding AppSettings.TaskQuickActionSettings.TrashEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
 
                             </StackPanel>
-
                         </Border>
-                    </Border>
-                </Grid>
 
-                <!--  INFO  -->
-                <Grid
-                    Grid.Row="1"
-                    Background="{DynamicResource Surface2}"
-                    Visibility="{Binding DetailsVisible, Converter={StaticResource BoolToVisibilityConverter}}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
+                    </Grid>
 
-                    <!--  Placeholder border to shift the info panel as much as the ColorBar's width  -->
-                    <Border Width="{Binding Width, ElementName=ColorBarBorder}" />
-
-                    <Grid Grid.Column="1">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition />
-                            <RowDefinition />
-                            <RowDefinition />
-                        </Grid.RowDefinitions>
-
+                    <!--  INFO  -->
+                    <Grid
+                        Grid.Row="1"
+                        Background="{DynamicResource Surface2}"
+                        Visibility="{Binding DetailsVisible, Converter={StaticResource BoolToVisibilityConverter}}">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
 
-                        <Border
-                            Grid.Row="0"
-                            Grid.Column="0"
-                            Grid.ColumnSpan="2"
-                            Height="1"
-                            Background="{DynamicResource OutlineVariant}" />
+                        <!--  Placeholder border to shift the info panel as much as the ColorBar's width  -->
+                        <Border Width="{Binding Width, ElementName=ColorBarBorder}" />
+
+                        <Grid Grid.Column="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+
+                            <Border
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                Grid.ColumnSpan="2"
+                                Height="1"
+                                Background="{DynamicResource OutlineVariant}" />
 
 
-                        <!--  LEFT COLUMN  -->
+                            <!--  LEFT COLUMN  -->
 
-                        <!--  CREATED  -->
-                        <Label
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            Content="Created:"
-                            Style="{StaticResource TaskPropertyLabelLeftStyle}" />
-
-                        <!--  MODIFIED  -->
-                        <Label
-                            Grid.Row="2"
-                            Grid.Column="0"
-                            Content="Modified:"
-                            Style="{StaticResource TaskPropertyLabelLeftStyle}" />
-
-                        <!--  EDITED  -->
-                        <Label
-                            Grid.Row="3"
-                            Grid.Column="0"
-                            Content="Edited:"
-                            Style="{StaticResource TaskPropertyLabelLeftStyle}" />
-
-                        <!--  RIGHT COLUMN  -->
-
-                        <!--  CREATION DATE  -->
-                        <Label
-                            Grid.Row="1"
-                            Grid.Column="1"
-                            Style="{StaticResource TaskPropertyLabelRightStyle}">
-                            <Label.Content>
-                                <MultiBinding>
-                                    <MultiBinding.Converter>
-                                        <valueConverters1:CurrentDateTimeFormatMultiConverter />
-                                    </MultiBinding.Converter>
-                                    <Binding Path="CreationDate" />
-                                    <Binding
-                                        Path="AppSettings.DateTimeSettings.TaskCreationDateFormat"
-                                        Source="{StaticResource AppSettings}" />
-                                </MultiBinding>
-                            </Label.Content>
-                        </Label>
-
-                        <!--  MODIFICATION DATE  -->
-                        <Label
-                            Grid.Row="2"
-                            Grid.Column="1"
-                            Style="{StaticResource TaskPropertyLabelRightStyle}">
-                            <Label.Content>
-                                <MultiBinding>
-                                    <MultiBinding.Converter>
-                                        <valueConverters1:CurrentDateTimeFormatMultiConverter />
-                                    </MultiBinding.Converter>
-                                    <Binding Path="ModificationDate" />
-                                    <Binding
-                                        Path="AppSettings.DateTimeSettings.TaskCreationDateFormat"
-                                        Source="{StaticResource AppSettings}" />
-                                </MultiBinding>
-                            </Label.Content>
-                        </Label>
-
-                        <!--  EDITED X TIMES  -->
-                        <StackPanel
-                            Grid.Row="3"
-                            Grid.Column="1"
-                            Orientation="Horizontal">
-
+                            <!--  CREATED  -->
                             <Label
-                                Margin="8 0 0 0"
-                                Padding="5 5 0 0"
-                                Content="{Binding VersionCount}"
-                                Style="{StaticResource TaskPropertyLabelRightStyle}" />
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                Content="Created:"
+                                Style="{StaticResource TaskPropertyLabelLeftStyle}" />
+
+                            <!--  MODIFIED  -->
                             <Label
-                                Margin="0"
-                                Content=" times"
-                                Style="{StaticResource TaskPropertyLabelRightStyle}" />
+                                Grid.Row="2"
+                                Grid.Column="0"
+                                Content="Modified:"
+                                Style="{StaticResource TaskPropertyLabelLeftStyle}" />
 
-                        </StackPanel>
+                            <!--  EDITED  -->
+                            <Label
+                                Grid.Row="3"
+                                Grid.Column="0"
+                                Content="Edited:"
+                                Style="{StaticResource TaskPropertyLabelLeftStyle}" />
 
+                            <!--  RIGHT COLUMN  -->
+
+                            <!--  CREATION DATE  -->
+                            <Label
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Style="{StaticResource TaskPropertyLabelRightStyle}">
+                                <Label.Content>
+                                    <MultiBinding>
+                                        <MultiBinding.Converter>
+                                            <valueConverters1:CurrentDateTimeFormatMultiConverter />
+                                        </MultiBinding.Converter>
+                                        <Binding Path="CreationDate" />
+                                        <Binding
+                                            Path="AppSettings.DateTimeSettings.TaskCreationDateFormat"
+                                            Source="{StaticResource AppSettings}" />
+                                    </MultiBinding>
+                                </Label.Content>
+                            </Label>
+
+                            <!--  MODIFICATION DATE  -->
+                            <Label
+                                Grid.Row="2"
+                                Grid.Column="1"
+                                Style="{StaticResource TaskPropertyLabelRightStyle}">
+                                <Label.Content>
+                                    <MultiBinding>
+                                        <MultiBinding.Converter>
+                                            <valueConverters1:CurrentDateTimeFormatMultiConverter />
+                                        </MultiBinding.Converter>
+                                        <Binding Path="ModificationDate" />
+                                        <Binding
+                                            Path="AppSettings.DateTimeSettings.TaskCreationDateFormat"
+                                            Source="{StaticResource AppSettings}" />
+                                    </MultiBinding>
+                                </Label.Content>
+                            </Label>
+
+                            <!--  EDITED X TIMES  -->
+                            <StackPanel
+                                Grid.Row="3"
+                                Grid.Column="1"
+                                Orientation="Horizontal">
+
+                                <Label
+                                    Margin="8 0 0 0"
+                                    Padding="5 5 0 0"
+                                    Content="{Binding VersionCount}"
+                                    Style="{StaticResource TaskPropertyLabelRightStyle}" />
+                                <Label
+                                    Margin="0"
+                                    Content=" times"
+                                    Style="{StaticResource TaskPropertyLabelRightStyle}" />
+
+                            </StackPanel>
+
+                        </Grid>
                     </Grid>
+
                 </Grid>
 
-            </Grid>
+            </Border>
 
-        </Border>
+        </Grid>
 
     </Grid>
 </UserControl>

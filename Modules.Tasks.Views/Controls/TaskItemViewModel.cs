@@ -104,8 +104,12 @@ public class TaskItemViewModel : BaseViewModel
         {
             _isDone = value;
             TextEditorViewModel.TextOpacity = IsDone ? 0.3 : 1.0;
+            Opacity = IsDone ? 0.5 : 1.0;
         }
     }
+
+    // Used for checkbox opacity
+    public double Opacity { get; private set; } = 1.0;
 
     public bool IsAnyReminderOn { get; set; }
     public bool Pinned { get; set; }
@@ -137,7 +141,7 @@ public class TaskItemViewModel : BaseViewModel
     public INotifiableObject ColorChangedNotification { get; }
     public ICommand ToggleDetailsCommand { get; }
     public ICommand ShowTagSelectorCommand { get; }
-
+    public bool IsFirstItem { get; set; }
 
     private void EditItem()
     {

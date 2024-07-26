@@ -20,6 +20,7 @@ public class UIScaler : BaseViewModel, IUIScaler
     private const double OriginalColorPickerHeight = 31;
     private const double OriginalColorPickerWidth = 56;
     private const double OriginalColorPickerItemSize = 21;
+    private const double OriginalTaskPopupHeight = 31;
     private const double OriginalTextEditorToggleWidth = 15;
     private const double OriginalTaskProgressBarHeight = 5;
     private const int ColorPickerColumns = 9;
@@ -43,11 +44,12 @@ public class UIScaler : BaseViewModel, IUIScaler
     public double SideMenuWidth => OriginalSideMenuWidth * ScaleValue;
     public double SideMenuMinimumWidth => OriginalSideMenuMinimumWidth * ScaleValue;
     public double TextBoxMaxHeight => OriginalTextBoxMaxHeight * ScaleValue;
-    public double PortableColorPickerWidth => OriginalPortableColorPickerWidth * ScaleValue;
     public double ColorPickerHeight => OriginalColorPickerHeight * ScaleValue;
     public double ColorPickerWidth => OriginalColorPickerWidth * ScaleValue;
     public double ColorPickerHalfWidth => (OriginalColorPickerWidth * ScaleValue) / 2;
     public double ColorPickerItemSize => OriginalColorPickerItemSize * ScaleValue;
+    public double TaskPopupHeight => OriginalTaskPopupHeight * ScaleValue;
+    public double PortableColorPickerWidth => OriginalPortableColorPickerWidth * ScaleValue;
     public double TextEditorToggleWidth => OriginalTextEditorToggleWidth * ScaleValue;
     public double ColorPickerDropDownWidth => 44 + 16 + (ColorPickerColumns * ColorPickerItemSize);
     public double TaskCheckBoxWidth => 8 * ScaleValue;

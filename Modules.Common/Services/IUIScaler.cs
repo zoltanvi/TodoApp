@@ -10,6 +10,7 @@ public interface IUIScaler
     double ColorPickerItemSize { get; }
     double ColorPickerWidth { get; }
     double PortableColorPickerWidth { get; }
+    double TaskPopupHeight { get; }
     ScaledFontSizeProvider FontSize { get; }
     double ScaleValue { get; }
     double SideMenuWidth { get; }
