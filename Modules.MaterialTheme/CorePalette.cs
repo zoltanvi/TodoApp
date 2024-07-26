@@ -59,28 +59,20 @@ public class CorePalette
                 Primary = new TonalPalette(hue, 36);
                 Secondary = new TonalPalette(hue, 16);
                 Tertiary = new TonalPalette(hue + 60, 24);
-                Neutral = new TonalPalette(hue, 4);
+                Neutral = new TonalPalette(hue, 6);
                 NeutralVariant = new TonalPalette(hue, 8);
                 break;
             case ThemeStyle.Vibrant:
                 Primary = new TonalPalette(hue, CHROMA_MAX_OUT);
-                Secondary = new TonalPalette(
-                    MathUtils.RotateHue(hue, (0, 18), (41, 15), (61, 10), (101, 12), (131, 15), (181, 18), (251, 15), (301, 12), (360, 12)),
-                    24);
-                Tertiary = new TonalPalette(
-                    MathUtils.RotateHue(hue, (0, 35), (41, 30), (61, 20), (101, 25), (131, 30), (181, 35), (251, 30), (301, 25), (360, 25)),
-                    32);
+                Secondary = new TonalPalette(GetHueVibrantSecondary(hue), 24);
+                Tertiary = new TonalPalette(GetHueVibrantTertiary(hue), 32);
                 Neutral = new TonalPalette(hue, 10);
                 NeutralVariant = new TonalPalette(hue, 12);
                 break;
             case ThemeStyle.Expressive:
                 Primary = new TonalPalette(hue + 240, 40);
-                Secondary = new TonalPalette(
-                    MathUtils.RotateHue(hue, (0, 45), (21, 95), (51, 45), (121, 20), (151, 45), (191, 90), (271, 45), (321, 45), (360, 45)),
-                    24);
-                Tertiary = new TonalPalette(
-                    MathUtils.RotateHue(hue, (0, 120), (21, 120), (51, 20), (121, 45), (151, 20), (191, 15), (271, 20), (321, 120), (360, 120)),
-                    32);
+                Secondary = new TonalPalette(GetHueExpressiveSecondary(hue), 24);
+                Tertiary = new TonalPalette(GetHueExpressiveTertiary(hue), 32);
                 Neutral = new TonalPalette(hue + 15, 8);
                 NeutralVariant = new TonalPalette(hue + 15, 12);
                 break;
@@ -139,7 +131,35 @@ public class CorePalette
     private static double ChromaBound(double chroma, double min, double max) => Math.Min(Math.Max(chroma, min), max);
 
 
-    private const double CHROMA_MAX_OUT = 130.0;
-    private const double CHROMA_MAX = 120.0;
-    private const double CHROMA_MIN = 0.0;
+    private readonly (int Hue, int Rotation)[] _hueVibrantSecondary =
+    [
+        (0, 18), (41, 15), (61, 10), (101, 12), (131, 15), (181, 18), (251, 15), (301, 12), (360, 12)
+    ];
+
+    private readonly (int Hue, int Rotation)[] _hueVibrantTertiary =
+    [
+        (0, 35), (41, 30), (61, 20), (101, 25), (131, 30), (181, 35), (251, 30), (301, 25), (360, 25)
+    ];
+
+    private readonly (int Hue, int Rotation)[] _hueExpressiveSecondary =
+    [
+        (0, 45), (21, 95), (51, 45), (121, 20), (151, 45), (191, 90), (271, 45), (321, 45), (360, 45)
+    ];
+
+    private readonly (int Hue, int Rotation)[] _hueExpressiveTertiary =
+    [
+        (0, 120), (21, 120), (51, 20), (121, 45), (151, 20), (191, 15), (271, 20), (321, 120), (360, 120)
+    ];
+
+    private double GetHueVibrantSecondary(double hue) => MathUtils.RotateHue(hue, _hueVibrantSecondary);
+    private double GetHueVibrantTertiary(double hue) => MathUtils.RotateHue(hue, _hueVibrantTertiary);
+    private double GetHueExpressiveSecondary(double hue) => MathUtils.RotateHue(hue, _hueExpressiveSecondary);
+    private double GetHueExpressiveTertiary(double hue) => MathUtils.RotateHue(hue, _hueExpressiveTertiary);
+
+
+
+private const double CHROMA_MAX_OUT = 130;
+    private const double CHROMA_MAX = 120;
+    private const double MIN_CHROMA = 5;
+    private const double ACCENT1_CHROMA = 48;
 }
