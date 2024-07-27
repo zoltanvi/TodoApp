@@ -6,5 +6,5 @@ public class WindowSettings : SettingsBase
     public int Top { get; set; } = 100;
     public int Width { get; set; } = 400;
     public int Height { get; set; } = 540;
-    public double Scaling { get; set; }
+    public double Scaling { get; set; } = 1;
 }
