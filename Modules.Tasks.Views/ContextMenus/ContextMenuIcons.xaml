@@ -1,0 +1,104 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Style
+        x:Key="ContextMenuIconStyle"
+        BasedOn="{StaticResource IconLabelStyle}"
+        TargetType="Label">
+        <Setter Property="FontSize" Value="{Binding UIScaler.FontSize.Small, Source={StaticResource UIScaler}}" />
+        <Setter Property="Margin" Value="-3 0" />
+    </Style>
+
+
+    <Label
+        x:Key="CtxIconCompleted"
+        Content="{StaticResource IconCompleted}"
+        Style="{StaticResource ContextMenuIconStyle}" />
+
+    <Label
+        x:Key="CtxIconNotCompleted"
+        Content="{StaticResource IconNotCompleted}"
+        Style="{StaticResource ContextMenuIconStyle}" />
+
+    <Label
+        x:Key="CtxIconTag"
+        Content="{StaticResource IconTag}"
+        Style="{StaticResource ContextMenuIconStyle}" />
+
+    <Label
+        x:Key="CtxIconPin"
+        Content="{StaticResource IconPin}"
+        Style="{StaticResource ContextMenuIconStyle}" />
+
+    <Label
+        x:Key="CtxIconUnpin"
+        Content="{StaticResource IconUnpin}"
+        Style="{StaticResource ContextMenuIconStyle}" />
+
+    <Label
+        x:Key="CtxIconEdit"
+        Content="{StaticResource IconEdit}"
+        Style="{StaticResource ContextMenuIconStyle}" />
+
+    <Label
+        x:Key="CtxIconReminder"
+        Content="{StaticResource IconDateTime}"
+        Style="{StaticResource ContextMenuIconStyle}" />
+
+    <Label
+        x:Key="CtxIconTasks"
+        Content="{StaticResource IconTasks}"
+        Style="{StaticResource ContextMenuIconStyle}" />
+
+    <Label
+        x:Key="CtxIconColor1"
+        Content="{StaticResource IconPalette}"
+        Style="{StaticResource ContextMenuIconStyle}" />
+
+    <Label
+        x:Key="CtxIconColor2"
+        Content="{StaticResource IconPalette}"
+        Style="{StaticResource ContextMenuIconStyle}" />
+
+    <Label
+        x:Key="CtxIconColor3"
+        Content="{StaticResource IconPalette}"
+        Style="{StaticResource ContextMenuIconStyle}" />
+
+    <Label
+        x:Key="CtxIconSort"
+        Content="{StaticResource IconSort}"
+        Style="{StaticResource ContextMenuIconStyle}" />
+
+    <Label
+        x:Key="CtxIconMoveToTop"
+        Content="{StaticResource IconArrowUp}"
+        Style="{StaticResource ContextMenuIconStyle}" />
+
+    <Label
+        x:Key="CtxIconMoveToBottom"
+        Content="{StaticResource IconArrowDown}"
+        Style="{StaticResource ContextMenuIconStyle}" />
+
+    <Label
+        x:Key="CtxIconMoveTo"
+        Content="{StaticResource IconMoveTo}"
+        Style="{StaticResource ContextMenuIconStyle}" />
+
+    <Label
+        x:Key="CtxIconReset"
+        Content="{StaticResource IconResetAll}"
+        Style="{StaticResource ContextMenuIconStyle}" />
+
+    <Label
+        x:Key="CtxIconDelete1"
+        Content="{StaticResource IconTrash}"
+        Style="{StaticResource ContextMenuIconStyle}" />
+
+    <Label
+        x:Key="CtxIconDelete2"
+        Content="{StaticResource IconTrash}"
+        Style="{StaticResource ContextMenuIconStyle}" />
+
+</ResourceDictionary>

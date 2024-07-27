@@ -59,5 +59,13 @@
     <system:String x:Key="IconHideInfo">&#xECE4;</system:String>
     <system:String x:Key="IconTag">&#xE8EC;</system:String>
 
+    <system:String x:Key="IconNotCompleted">&#xE003;</system:String>
+    <system:String x:Key="IconCompleted">&#xE65F;</system:String>
+    <system:String x:Key="IconTasks">&#xE71D;</system:String>
+    <system:String x:Key="IconSort">&#xE174;</system:String>
+    <system:String x:Key="IconArrowUp">&#xE74A;</system:String>
+    <system:String x:Key="IconArrowDown">&#xE74B;</system:String>
+    <system:String x:Key="IconMoveTo">&#xE72D;</system:String>
+    <system:String x:Key="IconResetAll">&#xE777;</system:String>
 
 </ResourceDictionary>

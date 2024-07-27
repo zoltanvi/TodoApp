@@ -243,7 +243,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         if (lastAddedTaskItem != null)
         {
             int index = Items.IndexOf(lastAddedTaskItem);
-            lastAddedTaskItem.EditItemCommand.Execute(null);
+            lastAddedTaskItem.Cmd.EditItemCommand.Execute(null);
             ScrollIntoViewRequested?.Invoke(index);
         }
     }

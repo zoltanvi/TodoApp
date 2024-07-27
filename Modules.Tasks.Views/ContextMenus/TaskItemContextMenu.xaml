@@ -1,0 +1,351 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls1="clr-namespace:Modules.Common.Views.Controls;assembly=Modules.Common.Views">
+
+    <ContextMenu x:Key="TaskListItemContextMenu">
+
+        <!--  "Mark as completed"  -->
+        <MenuItem
+            Command="{Binding Cmd.ToggleIsDoneCommand}"
+            DataContext="{Binding Path=PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
+            Header="Mark as completed"
+            Icon="{StaticResource CtxIconCompleted}"
+            Visibility="{Binding IsDone, Converter={StaticResource BoolToVisibilityNegatedConverter}}" />
+
+        <!--  "Mark as not completed"  -->
+        <MenuItem
+            Command="{Binding Cmd.ToggleIsDoneCommand}"
+            DataContext="{Binding Path=PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
+            Header="Mark as not completed"
+            Icon="{StaticResource CtxIconNotCompleted}"
+            Visibility="{Binding IsDone, Converter={StaticResource BoolToVisibilityConverter}}" />
+
+        <!--  ============================================================  -->
+        <Separator />
+
+        <!--  Pin  -->
+        <MenuItem
+            Command="{Binding Cmd.PinItemCommand}"
+            DataContext="{Binding Path=PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
+            Header="Pin"
+            Icon="{StaticResource CtxIconPin}"
+            Visibility="{Binding Pinned, Converter={StaticResource BoolToVisibilityNegatedConverter}}" />
+
+        <!--  Unpin  -->
+        <MenuItem
+            Command="{Binding Cmd.UnpinItemCommand}"
+            DataContext="{Binding Path=PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
+            Header="Unpin"
+            Icon="{StaticResource CtxIconUnpin}"
+            Visibility="{Binding Pinned, Converter={StaticResource BoolToVisibilityConverter}}" />
+
+        <!--  Edit  -->
+        <MenuItem
+            Command="{Binding Cmd.EditItemCommand}"
+            DataContext="{Binding Path=PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
+            Header="Edit"
+            Icon="{StaticResource CtxIconEdit}" />
+
+        <!--  Select tags  -->
+        <MenuItem
+            Command="{Binding Cmd.ShowTagSelectorCommand}"
+            DataContext="{Binding Path=PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
+            Header="Select tags"
+            Icon="{StaticResource CtxIconTag}" />
+
+
+        <!--  Set reminder  -->
+        <MenuItem
+            Command="{Binding Cmd.OpenReminderCommand}"
+            DataContext="{Binding Path=PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
+            Header="Set reminder"
+            Icon="{StaticResource CtxIconReminder}" />
+
+        <!--  ============================================================  -->
+        <Separator />
+
+        <!--  Create task from each line  -->
+        <MenuItem
+            Command="{Binding Cmd.SplitLinesCommand}"
+            DataContext="{Binding Path=PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
+            Header="Create task from each line"
+            Icon="{StaticResource CtxIconTasks}" />
+
+        <Separator />
+
+        <MenuItem
+            HorizontalAlignment="Center"
+            Foreground="{DynamicResource OnSurface}"
+            Header="Colors"
+            IsEnabled="False" />
+
+        <!--  Marker color  -->
+        <MenuItem
+            DataContext="{Binding Path=PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
+            Header="Marker">
+            <MenuItem.Template>
+                <ControlTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <Label
+                            Grid.Column="0"
+                            Content="{StaticResource CtxIconColor1}" />
+                        <Label
+                            Grid.Column="1"
+                            Style="{DynamicResource BaseLabelClearTypeStyle}">
+                            Marker
+                        </Label>
+                        <controls1:SingletonColorPicker
+                            Grid.Column="3"
+                            Width="{Binding UIScaler.ColorPickerWidth, Source={StaticResource UIScaler}}"
+                            Height="{Binding UIScaler.ColorPickerHeight, Source={StaticResource UIScaler}}"
+                            Margin="4 0 0 0"
+                            ColorChangedNotification="{Binding ColorChangedNotification, Mode=OneWay}"
+                            SelectedColorString="{Binding MarkerColor, Mode=TwoWay}"
+                            ToolTip="Marker color" />
+                    </Grid>
+                </ControlTemplate>
+            </MenuItem.Template>
+        </MenuItem>
+
+        <!--  Background color  -->
+        <MenuItem
+            DataContext="{Binding Path=PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
+            Header="Background">
+            <MenuItem.Template>
+                <ControlTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <Label
+                            Grid.Column="0"
+                            Content="{StaticResource CtxIconColor2}" />
+                        <Label
+                            Grid.Column="1"
+                            Style="{DynamicResource BaseLabelClearTypeStyle}">
+                            Background
+                        </Label>
+                        <controls1:SingletonColorPicker
+                            Grid.Column="3"
+                            Width="{Binding UIScaler.ColorPickerWidth, Source={StaticResource UIScaler}}"
+                            Height="{Binding UIScaler.ColorPickerHeight, Source={StaticResource UIScaler}}"
+                            Margin="4 0 0 0"
+                            ColorChangedNotification="{Binding ColorChangedNotification, Mode=OneWay}"
+                            SelectedColorString="{Binding BackgroundColor, Mode=TwoWay}"
+                            ToolTip="Background color" />
+                    </Grid>
+                </ControlTemplate>
+            </MenuItem.Template>
+        </MenuItem>
+
+        <!--  Border color  -->
+        <MenuItem
+            DataContext="{Binding Path=PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
+            Header="Border">
+            <MenuItem.Template>
+                <ControlTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <Label
+                            Grid.Column="0"
+                            Content="{StaticResource CtxIconColor3}" />
+                        <Label
+                            Grid.Column="1"
+                            Style="{DynamicResource BaseLabelClearTypeStyle}">
+                            Border
+                        </Label>
+                        <controls1:SingletonColorPicker
+                            Grid.Column="3"
+                            Width="{Binding UIScaler.ColorPickerWidth, Source={StaticResource UIScaler}}"
+                            Height="{Binding UIScaler.ColorPickerHeight, Source={StaticResource UIScaler}}"
+                            Margin="4 0 0 0"
+                            ColorChangedNotification="{Binding ColorChangedNotification, Mode=OneWay}"
+                            SelectedColorString="{Binding BorderColor, Mode=TwoWay}"
+                            ToolTip="Border color" />
+                    </Grid>
+                </ControlTemplate>
+            </MenuItem.Template>
+        </MenuItem>
+
+        <!--  ============================================================  -->
+        <Separator />
+
+        <!--  Sort by  -->
+        <MenuItem
+            DataContext="{Binding Path=PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
+            Header="Sort by"
+            Icon="{StaticResource CtxIconSort}">
+            <MenuItem
+                Command="{Binding Cmd.SortByStateCommand}"
+                Header="state" />
+            <MenuItem Header="creation date">
+                <MenuItem
+                    Command="{Binding Cmd.SortByCreationDateCommand}"
+                    Header="ascending" />
+                <MenuItem
+                    Command="{Binding Cmd.SortByCreationDateDescCommand}"
+                    Header="descending" />
+            </MenuItem>
+            <MenuItem Header="modification date">
+                <MenuItem
+                    Command="{Binding Cmd.SortByModificationDateCommand}"
+                    Header="ascending" />
+                <MenuItem
+                    Command="{Binding Cmd.SortByModificationDateDescCommand}"
+                    Header="descending" />
+            </MenuItem>
+        </MenuItem>
+
+        <!--  Move to top  -->
+        <MenuItem
+            Command="{Binding Cmd.MoveToTopCommand}"
+            DataContext="{Binding Path=PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
+            Header="Move to top"
+            Icon="{StaticResource CtxIconMoveToTop}" />
+
+        <!--  Move to bottom  -->
+        <MenuItem
+            Command="{Binding Cmd.MoveToBottomCommand}"
+            DataContext="{Binding Path=PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
+            Header="Move to bottom"
+            Icon="{StaticResource CtxIconMoveToBottom}" />
+
+        <!--  ============================================================  -->
+        <Separator />
+
+        <!--  Move this item to  -->
+        <MenuItem
+            DataContext="{Binding Path=PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
+            Header="Move to category:"
+            ItemsSource="{Binding InactiveCategories}">
+            <MenuItem.ItemContainerStyle>
+                <Style TargetType="MenuItem">
+                    <Setter Property="Header" Value="{Binding Name}" />
+                    <Setter Property="Command" Value="{Binding Cmd.MoveToCategoryCommand}" />
+                    <Setter Property="CommandParameter" Value="{Binding}">
+                        <!--<Setter.Value>
+                            <MultiBinding Converter="{local:TaskContextMenuCommandParameterConverter}">
+                                <MultiBinding.Bindings>
+                                    <Binding
+                                        Path="PlacementTarget.DataContext"
+                                        RelativeSource="{RelativeSource AncestorType={x:Type ContextMenu}}" />
+                                    <Binding Path="." />
+                                </MultiBinding.Bindings>
+                            </MultiBinding>
+                        </Setter.Value>-->
+                    </Setter>
+                </Style>
+            </MenuItem.ItemContainerStyle>
+        </MenuItem>
+
+        <!--  Move all  -->
+        <MenuItem
+            DataContext="{Binding Path=PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
+            Header="Move all"
+            Icon="{StaticResource CtxIconMoveTo}">
+            <MenuItem
+                Header="items to"
+                ItemsSource="{Binding InactiveCategories}">
+                <MenuItem.ItemContainerStyle>
+                    <Style TargetType="MenuItem">
+                        <Setter Property="Header" Value="{Binding Name}" />
+                        <Setter Property="Command" Value="{Binding Cmd.MoveAllToCategoryCommand}" />
+                        <Setter Property="CommandParameter" Value="{Binding}" />
+                    </Style>
+                </MenuItem.ItemContainerStyle>
+            </MenuItem>
+            <MenuItem
+                Header="completed items to"
+                ItemsSource="{Binding InactiveCategories}">
+                <MenuItem.ItemContainerStyle>
+                    <Style TargetType="MenuItem">
+                        <Setter Property="Header" Value="{Binding Name}" />
+                        <Setter Property="Command" Value="{Binding Cmd.MoveAllCompletedToCategoryCommand}" />
+                        <Setter Property="CommandParameter" Value="{Binding}" />
+                    </Style>
+                </MenuItem.ItemContainerStyle>
+            </MenuItem>
+            <MenuItem
+                Header="incomplete items to"
+                ItemsSource="{Binding InactiveCategories}">
+                <MenuItem.ItemContainerStyle>
+                    <Style TargetType="MenuItem">
+                        <Setter Property="Header" Value="{Binding Name}" />
+                        <Setter Property="Command" Value="{Binding Cmd.MoveAllIncompleteToCategoryCommand}" />
+                        <Setter Property="CommandParameter" Value="{Binding}" />
+                    </Style>
+                </MenuItem.ItemContainerStyle>
+            </MenuItem>
+        </MenuItem>
+
+
+        <!--  Reset all  -->
+        <MenuItem
+            DataContext="{Binding Path=PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
+            Header="Reset all"
+            Icon="{StaticResource CtxIconReset}">
+            <MenuItem
+                Command="{Binding Cmd.ResetAllStatesCommand}"
+                Header="state"
+                ToolTip="Resets completed and pinned states." />
+            <MenuItem
+                Command="{Binding Cmd.ResetAllColorsCommand}"
+                Header="colors" />
+            <MenuItem
+                Command="{Binding Cmd.ResetColorsCommand}"
+                Header="marker colors" />
+            <MenuItem
+                Command="{Binding Cmd.ResetBackgroundColorsCommand}"
+                Header="background colors" />
+            <MenuItem
+                Command="{Binding Cmd.ResetBorderColorsCommand}"
+                Header="border colors" />
+        </MenuItem>
+
+        <!--  Delete all  -->
+        <MenuItem
+            DataContext="{Binding Path=PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
+            Header="Delete all"
+            Icon="{StaticResource CtxIconDelete1}">
+            <MenuItem
+                Command="{Binding Cmd.DeleteAllCommand}"
+                Header="items" />
+            <MenuItem
+                Command="{Binding Cmd.DeleteCompletedCommand}"
+                Header="completed items" />
+            <MenuItem
+                Command="{Binding Cmd.DeleteIncompleteCommand}"
+                Header="incomplete items" />
+        </MenuItem>
+
+        <!--  ============================================================  -->
+        <Separator />
+
+        <!--  Delete  -->
+        <MenuItem
+            Command="{Binding Cmd.DeleteItemCommand}"
+            DataContext="{Binding Path=PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
+            Header="Delete"
+            Icon="{StaticResource CtxIconDelete2}" />
+
+    </ContextMenu>
+
+</ResourceDictionary>

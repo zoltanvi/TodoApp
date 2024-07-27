@@ -35,7 +35,7 @@
                 <!--  Calendar empty button  -->
                 <Grid Visibility="{Binding IsAnyReminderOn, Converter={StaticResource BoolToVisibilityNegatedConverter}}">
                     <Button
-                        Command="{Binding OpenReminderCommand}"
+                        Command="{Binding Cmd.OpenReminderCommand}"
                         Content="{StaticResource IconCalendar}"
                         IsEnabled="{Binding IsQuickActionsEnabled}"
                         Style="{StaticResource ButtonQuickActionStyle}"
@@ -46,7 +46,7 @@
                 <!--  Calendar active button  -->
                 <Grid Visibility="{Binding IsAnyReminderOn, Converter={StaticResource BoolToVisibilityConverter}}">
                     <Button
-                        Command="{Binding OpenReminderCommand}"
+                        Command="{Binding Cmd.OpenReminderCommand}"
                         Content="{StaticResource IconDateTime}"
                         IsEnabled="{Binding IsQuickActionsEnabled}"
                         Style="{StaticResource ButtonQuickActionStyle}"
@@ -94,7 +94,7 @@
 
                 <Grid Visibility="{Binding AppSettings.TaskQuickActionSettings.TagEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}">
                     <Button
-                        Command="{Binding ShowTagSelectorCommand}"
+                        Command="{Binding Cmd.ShowTagSelectorCommand}"
                         Content="{StaticResource IconTag}"
                         Style="{StaticResource ButtonQuickActionStyle}"
                         ToolTip="Select tags" />
@@ -103,7 +103,7 @@
                 <!--  Pin button  -->
                 <Grid Visibility="{Binding Pinned, Converter={StaticResource BoolToVisibilityNegatedConverter}}">
                     <Button
-                        Command="{Binding PinItemCommand}"
+                        Command="{Binding Cmd.PinItemCommand}"
                         Content="{StaticResource IconPin}"
                         Style="{StaticResource ButtonQuickActionStyle}"
                         ToolTip="Pin task"
@@ -112,7 +112,7 @@
                 <!--  Unpin button  -->
                 <Grid Visibility="{Binding Pinned, Converter={StaticResource BoolToVisibilityConverter}}">
                     <Button
-                        Command="{Binding UnpinItemCommand}"
+                        Command="{Binding Cmd.UnpinItemCommand}"
                         Content="{StaticResource IconUnpin}"
                         Style="{StaticResource ButtonQuickActionStyle}"
                         ToolTip="Unpin task"
@@ -122,7 +122,7 @@
                 <!--  Show details  -->
                 <Grid Visibility="{Binding AppSettings.TaskQuickActionSettings.DetailsEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}">
                     <Button
-                        Command="{Binding ToggleDetailsCommand}"
+                        Command="{Binding Cmd.ToggleDetailsCommand}"
                         Content="{StaticResource IconInfo}"
                         Style="{StaticResource ButtonQuickActionStyle}"
                         ToolTip="Show details"
@@ -132,7 +132,7 @@
                 <!--  Hide details  -->
                 <Grid Visibility="{Binding AppSettings.TaskQuickActionSettings.DetailsEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}">
                     <Button
-                        Command="{Binding ToggleDetailsCommand}"
+                        Command="{Binding Cmd.ToggleDetailsCommand}"
                         Content="{StaticResource IconHideInfo}"
                         Style="{StaticResource ButtonQuickActionStyle}"
                         ToolTip="Hide details"
@@ -141,7 +141,7 @@
 
                 <!--  Trash button  -->
                 <Button
-                    Command="{Binding DeleteItemCommand}"
+                    Command="{Binding Cmd.DeleteItemCommand}"
                     Content="{StaticResource IconTrash}"
                     Cursor="Hand"
                     Style="{StaticResource ButtonQuickActionRedStyle}"

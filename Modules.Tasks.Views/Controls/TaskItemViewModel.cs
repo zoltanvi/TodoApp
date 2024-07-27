@@ -5,7 +5,6 @@ using Modules.Settings.Contracts.ViewModels;
 using Modules.Tasks.Contracts.Cqrs.Commands;
 using Modules.Tasks.Contracts.Cqrs.Queries;
 using Modules.Tasks.TextEditor.Controls;
-using Modules.Tasks.Views.Events;
 using Modules.Tasks.Views.Mappings;
 using Modules.Tasks.Views.Services;
 using Prism.Events;
@@ -14,8 +13,14 @@ using System.Windows.Input;
 
 namespace Modules.Tasks.Views.Controls;
 
+internal interface ITaskItemViewModel
+{
+    void EditItem();
+    void UpdateTask();
+}
+
 [AddINotifyPropertyChangedInterface]
-public class TaskItemViewModel : BaseViewModel
+public class TaskItemViewModel : BaseViewModel, ITaskItemViewModel
 {
     private readonly IMediator _mediator;
     private readonly OneEditorOpenService _oneEditorOpenService;
@@ -42,33 +47,10 @@ public class TaskItemViewModel : BaseViewModel
             acceptsTab: true);
         TextEditorViewModel.EnterAction = ExitEditItem;
 
-        ToggleDetailsCommand = new RelayCommand(() => DetailsVisible ^= true);
+        Cmd = new TaskItemCommandsViewModel(this, mediator, eventAggregator);
+
         EnableQuickActionsCommand = new RelayCommand(() => IsQuickActionsEnabled = true);
         DisableQuickActionsCommand = new RelayCommand(() => IsQuickActionsEnabled = false);
-        EditItemCommand = new RelayCommand(EditItem);
-        DeleteItemCommand = new RelayCommand(() => eventAggregator.GetEvent<TaskItemDeleteClickedEvent>().Publish(Id));
-
-        ToggleIsDoneCommand = new RelayCommand(() =>
-        {
-            IsDone ^= true;
-            UpdateTask();
-        });
-
-        PinItemCommand = new RelayCommand(() => eventAggregator.GetEvent<TaskItemPinClickedEvent>().Publish(Id));
-        UnpinItemCommand = new RelayCommand(() => eventAggregator.GetEvent<TaskItemUnpinClickedEvent>().Publish(Id));
-        IsDoneModifiedCommand = new RelayCommand(() =>
-        {
-            if (IsDone)
-            {
-                eventAggregator.GetEvent<TaskItemCheckedEvent>().Publish(Id);
-            }
-            else
-            {
-                eventAggregator.GetEvent<TaskItemUncheckedEvent>().Publish(Id);
-            }
-        });
-
-        ShowTagSelectorCommand = new RelayCommand(() => _mediator.Send(new OpenTagSelectorCommand { TaskId = Id }));
 
         // CheckBox and Combobox changes the viewmodel properties directly, only need to persist the changes
         ColorChangedNotification = new NotifiableObject(UpdateTask);
@@ -84,6 +66,8 @@ public class TaskItemViewModel : BaseViewModel
     public string BackgroundColor { get; set; }
 
     public RichTextEditorViewModel TextEditorViewModel { get; }
+
+    public TaskItemCommandsViewModel Cmd { get; }
 
     public string Content
     {
@@ -125,25 +109,14 @@ public class TaskItemViewModel : BaseViewModel
     public List<TagItemOnTaskViewModel> Tags { get; set; }
     public bool HasAnyTags => Tags.Count != 0;
     public int VersionCount => Versions.Count;
-
-    // Commands
-    public ICommand IsDoneModifiedCommand { get; }
-    public ICommand EditItemCommand { get; }
-    public ICommand ToggleIsDoneCommand { get; }
-    public ICommand OpenReminderCommand { get; }
-    public ICommand PinItemCommand { get; }
-    public ICommand UnpinItemCommand { get; }
-    public ICommand DeleteItemCommand { get; }
-
-    public ICommand EnableQuickActionsCommand { get; }
-    public ICommand DisableQuickActionsCommand { get; }
-
-    public INotifiableObject ColorChangedNotification { get; }
-    public ICommand ToggleDetailsCommand { get; }
-    public ICommand ShowTagSelectorCommand { get; }
     public bool IsFirstItem { get; set; }
 
-    private void EditItem()
+    // Commands
+    public ICommand EnableQuickActionsCommand { get; }
+    public ICommand DisableQuickActionsCommand { get; }
+    public INotifiableObject ColorChangedNotification { get; }
+
+    void ITaskItemViewModel.EditItem()
     {
         // Save the content before editing for a possible rollback
         _contentRollback = Content;
@@ -177,6 +150,8 @@ public class TaskItemViewModel : BaseViewModel
         TextEditorViewModel.IsToolbarOpen = false;
         _oneEditorOpenService.DisplayMode(this);
     }
+
+    void ITaskItemViewModel.UpdateTask() => UpdateTask();
 
     private void UpdateTask() => _mediator.Send(new UpdateTaskCommand { Task = this.Map() });
 }

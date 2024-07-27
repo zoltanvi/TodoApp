@@ -38,6 +38,7 @@
                 <ResourceDictionary Source="pack://application:,,,/Modules.Common.Views;component/Resources/FontResources.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Modules.Common.Views;component/Resources/Icons.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Modules.Common.Views;component/Resources/ColorLists.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Modules.Common.Views;component/Styles/ContextMenuStyles.xaml" />
 
                 <!--=========================================-->
                 <!--Possible dependencies below-->
@@ -62,6 +63,10 @@
                 <ResourceDictionary Source="pack://application:,,,/Modules.Common.Views;component/Styles/ListBoxStyles.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Modules.Settings.Views;component/Styles/ListBoxStyles.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Modules.Tasks.Views;component/Styles/ListBoxStyles.xaml" />
+
+
+                <ResourceDictionary Source="pack://application:,,,/Modules.Tasks.Views;component/ContextMenus/ContextMenuIcons.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Modules.Tasks.Views;component/ContextMenus/TaskItemContextMenu.xaml" />
 
 
                 <ResourceDictionary Source="pack://application:,,,/Modules.RecycleBin.Views;component/Styles/Buttons.xaml" />
