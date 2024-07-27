@@ -84,7 +84,7 @@ public class TaskItemRepository : ITaskItemRepository
         return dbTask;
     }
 
-    public TaskItem? GetTaskById(int id) => _context.Tasks.Find(id);
+    public TaskItem? GetTaskById(int id) => _context.Tasks.FirstOrDefault(x => x.Id == id);
 
     public List<TaskItemVersion> GetTaskItemVersions(int taskId)
     {
@@ -229,6 +229,43 @@ public class TaskItemRepository : ITaskItemRepository
         dbTask.IsDone = false;
         dbTask.Pinned = false;
         dbTask.ListOrder = newListOrder;
+
+        _context.SaveChanges();
+
+        return dbTask;
+    }
+
+    public TaskItemVersion? GetTaskItemVersionById(int versionId) =>
+        _context.TaskItemVersions.FirstOrDefault(x => x.Id == versionId);
+
+    public TaskItem RestoreTaskToVersion(int taskId, int versionId)
+    {
+        var dbTask = _context.Tasks
+            .Include(x => x.Versions)
+            .FirstOrDefault(x => x.Id == taskId);
+
+        ArgumentNullException.ThrowIfNull(dbTask);
+
+        var dbVersion = dbTask.Versions.FirstOrDefault(x => x.Id == versionId);
+        ArgumentNullException.ThrowIfNull(dbVersion);
+
+        var oldVersion = new TaskItemVersion
+        {
+            TaskId = dbTask.Id,
+            Content = dbTask.Content,
+            ContentPreview = dbTask.ContentPreview,
+            VersionDate = dbTask.ModificationDate
+        };
+
+        // Remove this because it will be the current content
+        _context.TaskItemVersions.Remove(dbVersion);
+
+        // Add this because this was the previous content
+        _context.TaskItemVersions.Add(oldVersion);
+
+        dbTask.Content = dbVersion.Content;
+        dbTask.ContentPreview = dbVersion.ContentPreview;
+        dbTask.ModificationDate = DateTime.Now;
 
         _context.SaveChanges();
 

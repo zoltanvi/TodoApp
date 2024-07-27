@@ -1,9 +1,12 @@
-﻿using Modules.Common.Navigation;
+﻿using MediatR;
+using Modules.Common.Navigation;
 using Modules.Common.ViewModel;
 using Modules.Tasks.Contracts;
 using Modules.Tasks.Contracts.Models;
 using Modules.Tasks.Views.Controls;
+using Modules.Tasks.Views.Events;
 using Modules.Tasks.Views.Mappings;
+using Prism.Events;
 using PropertyChanged;
 using System.Collections.ObjectModel;
 
@@ -13,13 +16,50 @@ namespace Modules.Tasks.Views.Pages;
 public class TaskHistoryPageViewModel : BaseViewModel, IParameterReceiver
 {
     private readonly ITaskItemRepository _taskItemRepository;
+    private readonly IMediator _mediator;
+    private readonly IEventAggregator _eventAggregator;
     private int _taskId;
     private TaskItem? _taskItem;
-    
-    public TaskHistoryPageViewModel(ITaskItemRepository taskItemRepository)
+
+    public TaskHistoryPageViewModel(
+        ITaskItemRepository taskItemRepository,
+        IMediator mediator,
+        IEventAggregator eventAggregator)
     {
         ArgumentNullException.ThrowIfNull(taskItemRepository);
+        ArgumentNullException.ThrowIfNull(mediator);
+        ArgumentNullException.ThrowIfNull(eventAggregator);
+
         _taskItemRepository = taskItemRepository;
+        _mediator = mediator;
+        _eventAggregator = eventAggregator;
+
+        _eventAggregator.GetEvent<TaskItemVersionRestoredEvent>().Subscribe(OnVersionRestored);
+    }
+
+    private void OnVersionRestored(int taskId)
+    {
+        if (_taskId != taskId) return;
+
+        var dbTask = _taskItemRepository.GetTaskById(_taskId);
+        ArgumentNullException.ThrowIfNull(dbTask);
+
+        _taskItem = dbTask;
+        var current = new TaskItemVersionViewModel(_mediator)
+        {
+            Id = -1,
+            TaskId = _taskId,
+            Content = _taskItem.Content,
+            ContentPreview = _taskItem.ContentPreview,
+            VersionDate = _taskItem.ModificationDate
+        };
+
+        var history = _taskItemRepository.GetTaskItemVersions(_taskId)
+            .MapToViewModelList(_mediator)
+            .OrderByDescending(x => x.VersionDate);
+
+        HistoryItems = new ObservableCollection<TaskItemVersionViewModel>(history);
+        CurrentItemList = [current];
     }
 
     public void ReceiveParameter(object parameter)
@@ -31,17 +71,29 @@ public class TaskHistoryPageViewModel : BaseViewModel, IParameterReceiver
             ArgumentNullException.ThrowIfNull(dbTask);
 
             _taskItem = dbTask;
-            CurrentContent = _taskItem.Content;
+            var current = new TaskItemVersionViewModel(_mediator)
+            {
+                Id = -1,
+                TaskId = _taskId,
+                Content = _taskItem.Content,
+                ContentPreview = _taskItem.ContentPreview,
+                VersionDate = _taskItem.ModificationDate
+            };
 
             var history = _taskItemRepository.GetTaskItemVersions(_taskId)
-                .MapToViewModelList()
+                .MapToViewModelList(_mediator)
                 .OrderByDescending(x => x.VersionDate);
 
             HistoryItems = new ObservableCollection<TaskItemVersionViewModel>(history);
+            CurrentItemList = [current];
         }
     }
 
-    public string CurrentContent { get; private set; }
+    public ObservableCollection<TaskItemVersionViewModel> HistoryItems { get; set; }
 
-    public ObservableCollection<TaskItemVersionViewModel> HistoryItems { get; private set; }
+    public ObservableCollection<TaskItemVersionViewModel> CurrentItemList { get; set; }
+    protected override void OnDispose()
+    {
+        _eventAggregator.GetEvent<TaskItemVersionRestoredEvent>().Unsubscribe(OnVersionRestored);
+    }
 }

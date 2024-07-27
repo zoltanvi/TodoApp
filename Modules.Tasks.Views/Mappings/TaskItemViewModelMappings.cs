@@ -56,7 +56,7 @@ public static class TaskItemViewModelMappings
             BackgroundColor = taskItem.BackgroundColor,
             IsDeleted = taskItem.IsDeleted,
             DeletedDate = taskItem.DeletedDate,
-            Versions = taskItem.Versions.MapToViewModelList(),
+            Versions = taskItem.Versions.MapToViewModelList(mediator),
             Tags = taskItem.Tags.MapTagItems()
         };
     }

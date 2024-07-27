@@ -134,7 +134,7 @@ public class TaskItemViewModel : BaseViewModel, ITaskItemViewModel
             UpdateTask();
 
             var versionList = _mediator.Send(new TaskItemVersionsQuery { TaskId = Id }).Result;
-            Versions = versionList.MapToViewModelList();
+            Versions = versionList.MapToViewModelList(_mediator);
 
             OnPropertyChanged(nameof(Versions));
             OnPropertyChanged(nameof(VersionCount));

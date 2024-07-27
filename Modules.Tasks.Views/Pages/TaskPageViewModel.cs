@@ -88,6 +88,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         _eventAggregator.GetEvent<TaskItemUncheckedEvent>().Subscribe(OnUnfinishTaskItemRequested);
         _eventAggregator.GetEvent<TagsChangedOnTaskItemEvent>().Subscribe(OnTagsChangedOnTaskItem);
         _eventAggregator.GetEvent<TaskSortingRequestedEvent>().Subscribe(OnSortingRequested);
+        _eventAggregator.GetEvent<TaskItemVersionRestoredEvent>().Subscribe(OnVersionRestored);
 
         _oneEditorOpenService.ChangedToDisplayMode += FocusAddNewTaskTextEditor;
     }
@@ -343,6 +344,19 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         ItemsOnCollectionChanged(null, null);
     }
 
+    private void OnVersionRestored(int taskId)
+    {
+        var dbTask = _taskItemRepository.GetTaskById(taskId);
+
+        var updatedTask = Items.FirstOrDefault(x => x.Id == taskId);
+        ArgumentNullException.ThrowIfNull(updatedTask);
+
+        updatedTask.Content = dbTask.Content;
+        updatedTask.ContentPreview = dbTask.ContentPreview;
+        updatedTask.ModificationDate = dbTask.ModificationDate;
+        updatedTask.Versions = dbTask.Versions.MapToViewModelList(_mediator);
+    }
+
     private void EditCategory()
     {
         IsCategoryInEditMode = true;
@@ -390,6 +404,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         _eventAggregator.GetEvent<TaskItemUncheckedEvent>().Unsubscribe(OnUnfinishTaskItemRequested);
         _eventAggregator.GetEvent<TagsChangedOnTaskItemEvent>().Unsubscribe(OnTagsChangedOnTaskItem);
         _eventAggregator.GetEvent<TaskSortingRequestedEvent>().Unsubscribe(OnSortingRequested);
+        _eventAggregator.GetEvent<TaskItemVersionRestoredEvent>().Unsubscribe(OnVersionRestored);
 
         _oneEditorOpenService.ChangedToDisplayMode -= FocusAddNewTaskTextEditor;
     }

@@ -31,7 +31,9 @@
             Style="{StaticResource PageTitleTextBlockStyle}"
             Text="History" />
 
-        <ScrollViewer Style="{StaticResource TodoAppScrollViewer}" Grid.Row="1">
+        <ScrollViewer
+            Grid.Row="1"
+            Style="{StaticResource TodoAppScrollViewer}">
 
             <Grid Margin="8 0">
                 <Grid.RowDefinitions>
@@ -55,21 +57,154 @@
                             Foreground="{DynamicResource Primary}"
                             Text="Task content" />
 
-                        <!--  CURRENT CONTENT  -->
-                        <Border
+                        <!--  CURRENT CONTENT - workaround for a bug where the item does not refresh on the BasicTextEditorBox  -->
+                        <ListView
+                            Margin="0"
+                            HorizontalContentAlignment="Stretch"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            ItemsSource="{Binding CurrentItemList}"
+                            ScrollViewer.CanContentScroll="True"
+                            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                            ScrollViewer.VerticalScrollBarVisibility="Auto"
+                            Template="{DynamicResource NonScrollableListBoxControlTemplate}">
+
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="ListViewItem">
+                                                <ContentPresenter />
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="3 3">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Border
+                                            Grid.Column="0"
+                                            BorderBrush="{DynamicResource OutlineVariant}"
+                                            BorderThickness="1"
+                                            CornerRadius="3">
+
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="*" />
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                </Grid.RowDefinitions>
+
+                                                <controls:BasicTextEditorBox
+                                                    Grid.Row="0"
+                                                    Margin="0 6"
+                                                    Padding="7 0"
+                                                    DocumentContent="{Binding Content}"
+                                                    IsReadOnly="True"
+                                                    ScrollViewer.CanContentScroll="False"
+                                                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                                    ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                                    Style="{StaticResource BaseRichTextBoxStyle}" />
+
+                                                <Border
+                                                    Grid.Row="1"
+                                                    Height="1"
+                                                    Background="{DynamicResource OutlineVariant}" />
+
+                                                <Grid
+                                                    Grid.Row="2"
+                                                    Background="{DynamicResource Surface1}">
+                                                    <Label
+                                                        HorizontalAlignment="Right"
+                                                        Style="{StaticResource TaskPropertyLabelRightStyle}">
+                                                        <Label.Content>
+                                                            <MultiBinding>
+                                                                <MultiBinding.Converter>
+                                                                    <valueConverters:CurrentDateTimeFormatMultiConverter />
+                                                                </MultiBinding.Converter>
+                                                                <Binding Path="VersionDate" />
+                                                                <Binding
+                                                                    Path="AppSettings.DateTimeSettings.TaskCreationDateFormat"
+                                                                    Source="{StaticResource AppSettings}" />
+                                                            </MultiBinding>
+                                                        </Label.Content>
+                                                    </Label>
+                                                </Grid>
+                                            </Grid>
+                                        </Border>
+                                    </Grid>
+
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+
+                            <ListView.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel Orientation="Horizontal" />
+                                </ItemsPanelTemplate>
+                            </ListView.ItemsPanel>
+
+                        </ListView>
+
+
+                        <!--<Border
                             BorderBrush="{DynamicResource OutlineVariant}"
                             BorderThickness="1"
                             CornerRadius="3">
-                            <controls:BasicTextEditorBox
-                                Margin="0 6"
-                                Padding="7 0"
-                                DocumentContent="{Binding CurrentContent}"
-                                IsReadOnly="True"
-                                ScrollViewer.CanContentScroll="False"
-                                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                Style="{StaticResource BaseRichTextBoxStyle}" />
-                        </Border>
+
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
+                                <controls:BasicTextEditorBox
+                                    Grid.Row="0"
+                                    Margin="0 6"
+                                    Padding="7 0"
+                                    DocumentContent="{Binding CurrentVersion.Content}"
+                                    IsReadOnly="True"
+                                    ScrollViewer.CanContentScroll="False"
+                                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                    ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                    Style="{StaticResource BaseRichTextBoxStyle}" />
+
+                                <Border
+                                    Grid.Row="1"
+                                    Height="1"
+                                    Background="{DynamicResource OutlineVariant}" />
+
+                                <Grid
+                                    Grid.Row="2"
+                                    Background="{DynamicResource Surface1}">
+                                    <Label
+                                        HorizontalAlignment="Right"
+                                        Style="{StaticResource TaskPropertyLabelRightStyle}">
+                                        <Label.Content>
+                                            <MultiBinding UpdateSourceTrigger="PropertyChanged">
+                                                <MultiBinding.Converter>
+                                                    <valueConverters:CurrentDateTimeFormatMultiConverter />
+                                                </MultiBinding.Converter>
+                                                <Binding Path="CurrentVersion.VersionDate" />
+                                                <Binding
+                                                    Path="AppSettings.DateTimeSettings.TaskCreationDateFormat"
+                                                    Source="{StaticResource AppSettings}" />
+                                            </MultiBinding>
+                                        </Label.Content>
+                                    </Label>
+
+
+                                </Grid>
+
+                            </Grid>
+                        </Border>-->
 
                     </StackPanel>
                 </Grid>
@@ -169,19 +304,16 @@
                                                     </MultiBinding>
                                                 </Label.Content>
                                             </Label>
-
-
                                         </Grid>
-
                                     </Grid>
                                 </Border>
 
                                 <Button
                                     Grid.Column="1"
-                                    Command="{Binding RestoreTaskItemCommand}"
+                                    Command="{Binding RestoreToThisCommand}"
                                     Content="{StaticResource IconRestore}"
                                     Style="{StaticResource ButtonQuickActionStyle}"
-                                    ToolTip="Restore task" />
+                                    ToolTip="Restore task content to this" />
                             </Grid>
 
                         </DataTemplate>

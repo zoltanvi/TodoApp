@@ -1,4 +1,5 @@
-﻿using Modules.Tasks.Contracts.Models;
+﻿using MediatR;
+using Modules.Tasks.Contracts.Models;
 using Modules.Tasks.Views.Controls;
 
 namespace Modules.Tasks.Views.Mappings;
@@ -20,9 +21,9 @@ public static class TaskItemVersionViewModelMappings
     public static List<TaskItemVersion> MapList(this IEnumerable<TaskItemVersionViewModel> vmList) =>
         vmList.Select(x => x.Map()).ToList();
 
-    public static TaskItemVersionViewModel MapToViewModel(this TaskItemVersion version)
+    public static TaskItemVersionViewModel MapToViewModel(this TaskItemVersion version, IMediator mediator)
     {
-        return new TaskItemVersionViewModel
+        return new TaskItemVersionViewModel(mediator)
         {
             Id = version.Id,
             TaskId = version.TaskId,
@@ -32,6 +33,8 @@ public static class TaskItemVersionViewModelMappings
         };
     }
 
-    public static List<TaskItemVersionViewModel> MapToViewModelList(this IEnumerable<TaskItemVersion> taskList) =>
-        taskList.Select(x => x.MapToViewModel()).ToList();
+    public static List<TaskItemVersionViewModel> MapToViewModelList(
+        this IEnumerable<TaskItemVersion> taskList, 
+        IMediator mediator) =>
+        taskList.Select(x => x.MapToViewModel(mediator)).ToList();
 }
