@@ -107,12 +107,17 @@
                                     To="1"
                                     Duration="0:0:0.1" />
 
-                                <BooleanAnimationUsingKeyFrames 
-                                    Storyboard.TargetName="HoverButtonBorder" 
+                                <BooleanAnimationUsingKeyFrames
+                                    FillBehavior="HoldEnd"
+                                    Storyboard.TargetName="HoverButtonBorder"
                                     Storyboard.TargetProperty="IsHitTestVisible"
-                                    Duration="0:0:0.1" FillBehavior="HoldEnd">
-                                    <DiscreteBooleanKeyFrame Value="False" KeyTime="0:0:0" />
-                                    <DiscreteBooleanKeyFrame Value="True" KeyTime="0:0:0" />
+                                    Duration="0:0:0.1">
+                                    <DiscreteBooleanKeyFrame
+                                        KeyTime="0:0:0"
+                                        Value="False" />
+                                    <DiscreteBooleanKeyFrame
+                                        KeyTime="0:0:0"
+                                        Value="True" />
                                 </BooleanAnimationUsingKeyFrames>
 
                             </Storyboard>
@@ -136,12 +141,17 @@
                                     To="0"
                                     Duration="0:0:0.1" />
 
-                                <BooleanAnimationUsingKeyFrames 
-                                    Storyboard.TargetName="HoverButtonBorder" 
+                                <BooleanAnimationUsingKeyFrames
+                                    FillBehavior="HoldEnd"
+                                    Storyboard.TargetName="HoverButtonBorder"
                                     Storyboard.TargetProperty="IsHitTestVisible"
-                                    Duration="0:0:0.1" FillBehavior="HoldEnd">
-                                    <DiscreteBooleanKeyFrame Value="True" KeyTime="0:0:0" />
-                                    <DiscreteBooleanKeyFrame Value="False" KeyTime="0:0:0" />
+                                    Duration="0:0:0.1">
+                                    <DiscreteBooleanKeyFrame
+                                        KeyTime="0:0:0"
+                                        Value="True" />
+                                    <DiscreteBooleanKeyFrame
+                                        KeyTime="0:0:0"
+                                        Value="False" />
                                 </BooleanAnimationUsingKeyFrames>
 
                             </Storyboard>
@@ -216,8 +226,8 @@
                                     Command="{Binding IsDoneModifiedCommand}"
                                     IsChecked="{Binding IsDone}"
                                     IsEnabled="{Binding TextEditorViewModel.IsDisplayMode}"
-                                    Style="{StaticResource TaskCheckBoxStyle}"
                                     Opacity="{Binding Opacity}"
+                                    Style="{StaticResource TaskCheckBoxStyle}"
                                     Visibility="{Binding AppSettings.TaskQuickActionSettings.CheckboxEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
                             </Border>
 
@@ -229,8 +239,8 @@
                                     Command="{Binding IsDoneModifiedCommand}"
                                     IsChecked="{Binding IsDone}"
                                     IsEnabled="{Binding TextEditorViewModel.IsDisplayMode}"
-                                    Style="{StaticResource TaskCheckBoxSquareStyle}"
                                     Opacity="{Binding Opacity}"
+                                    Style="{StaticResource TaskCheckBoxSquareStyle}"
                                     Visibility="{Binding AppSettings.TaskQuickActionSettings.CheckboxEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
                             </Border>
                         </Grid>
@@ -381,151 +391,12 @@
 
                         </Border>
 
-
-                        <!--TASK POPUP PANEL-->
-                        <Border
+                        <!--  TASK POPUP PANEL  -->
+                        <local:TaskPopupControl
                             x:Name="HoverButtonBorder"
                             Grid.Column="2"
-                            Height="{Binding UIScaler.TaskPopupHeight, Source={StaticResource UIScaler}}"
-                            Margin="-5 -20 5 20"
-                            Padding="2 1"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Top"
-                            Background="{DynamicResource Surface1}"
-                            BorderBrush="{DynamicResource OutlineVariant}"
-                            BorderThickness="1"
-                            CornerRadius="6"
-                            Opacity="0">
-
-                            <Border.Visibility>
-                                <MultiBinding Converter="{StaticResource BoolToVisibilityAndConverter}">
-                                    <Binding
-                                        Path="AppSettings.TaskQuickActionSettings.AnyEnabled"
-                                        Source="{StaticResource AppSettings}" />
-                                    <Binding Path="TextEditorViewModel.IsDisplayMode" />
-                                </MultiBinding>
-                            </Border.Visibility>
-
-                            <StackPanel Orientation="Horizontal">
-                                <!--  Calendar empty button  -->
-                                <Grid Visibility="{Binding IsAnyReminderOn, Converter={StaticResource BoolToVisibilityNegatedConverter}}">
-                                    <Button
-                                        Command="{Binding OpenReminderCommand}"
-                                        Content="{StaticResource IconCalendar}"
-                                        IsEnabled="{Binding IsQuickActionsEnabled}"
-                                        Style="{StaticResource ButtonQuickActionStyle}"
-                                        ToolTip="Set Reminder"
-                                        Visibility="{Binding AppSettings.TaskQuickActionSettings.ReminderEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
-                                </Grid>
-
-                                <!--  Calendar active button  -->
-                                <Grid Visibility="{Binding IsAnyReminderOn, Converter={StaticResource BoolToVisibilityConverter}}">
-                                    <Button
-                                        Command="{Binding OpenReminderCommand}"
-                                        Content="{StaticResource IconDateTime}"
-                                        IsEnabled="{Binding IsQuickActionsEnabled}"
-                                        Style="{StaticResource ButtonQuickActionStyle}"
-                                        Visibility="{Binding AppSettings.TaskQuickActionSettings.ReminderEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}">
-                                        <Button.ToolTip>
-                                            <MultiBinding>
-                                                <MultiBinding.Converter>
-                                                    <valueConverters1:CurrentDateTimeFormatMultiConverter />
-                                                </MultiBinding.Converter>
-                                                <Binding Path="NextReminderDate" />
-                                                <Binding
-                                                    Path="AppSettings.DateTimeSettings.ReminderDateFormat"
-                                                    Source="{StaticResource AppSettings}" />
-                                            </MultiBinding>
-                                        </Button.ToolTip>
-                                    </Button>
-                                </Grid>
-
-                                <!--  Marker color  -->
-                                <controls:SingletonColorPicker
-                                    ColorChangedNotification="{Binding ColorChangedNotification, Mode=OneWay}"
-                                    IsEnabled="{Binding IsQuickActionsEnabled}"
-                                    SelectedColorString="{Binding MarkerColor, Mode=TwoWay}"
-                                    Style="{StaticResource MinimalColorPickerComboboxStyle}"
-                                    ToolTip="Marker color"
-                                    Visibility="{Binding AppSettings.TaskQuickActionSettings.ColorEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
-
-                                <!--  Background color picker  -->
-                                <controls:SingletonColorPicker
-                                    ColorChangedNotification="{Binding ColorChangedNotification, Mode=OneWay}"
-                                    IsEnabled="{Binding IsQuickActionsEnabled}"
-                                    SelectedColorString="{Binding BackgroundColor, Mode=TwoWay}"
-                                    Style="{StaticResource MinimalColorPickerComboboxStyle}"
-                                    ToolTip="Background color"
-                                    Visibility="{Binding AppSettings.TaskQuickActionSettings.BackgroundColorEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
-
-                                <!--  BorderColor picker  -->
-                                <controls:SingletonColorPicker
-                                    ColorChangedNotification="{Binding ColorChangedNotification, Mode=OneWay}"
-                                    IsEnabled="{Binding IsQuickActionsEnabled}"
-                                    SelectedColorString="{Binding BorderColor, Mode=TwoWay}"
-                                    Style="{StaticResource MinimalColorPickerComboboxStyle}"
-                                    ToolTip="Border color"
-                                    Visibility="{Binding AppSettings.TaskQuickActionSettings.BorderColorEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
-
-                                <Grid Visibility="{Binding AppSettings.TaskQuickActionSettings.TagEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}">
-                                    <Button
-                                        Command="{Binding ShowTagSelectorCommand}"
-                                        Content="{StaticResource IconTag}"
-                                        Style="{StaticResource ButtonQuickActionStyle}"
-                                        ToolTip="Select tags" />
-                                </Grid>
-
-                                <!--  Pin button  -->
-                                <Grid Visibility="{Binding Pinned, Converter={StaticResource BoolToVisibilityNegatedConverter}}">
-                                    <Button
-                                        Command="{Binding PinItemCommand}"
-                                        Content="{StaticResource IconPin}"
-                                        Style="{StaticResource ButtonQuickActionStyle}"
-                                        ToolTip="Pin task"
-                                        Visibility="{Binding AppSettings.TaskQuickActionSettings.PinEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
-                                </Grid>
-                                <!--  Unpin button  -->
-                                <Grid Visibility="{Binding Pinned, Converter={StaticResource BoolToVisibilityConverter}}">
-                                    <Button
-                                        Command="{Binding UnpinItemCommand}"
-                                        Content="{StaticResource IconUnpin}"
-                                        Style="{StaticResource ButtonQuickActionStyle}"
-                                        ToolTip="Unpin task"
-                                        Visibility="{Binding AppSettings.TaskQuickActionSettings.PinEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
-                                </Grid>
-
-                                <!--  Show details  -->
-                                <Grid Visibility="{Binding AppSettings.TaskQuickActionSettings.DetailsEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}">
-                                    <Button
-                                        Command="{Binding ToggleDetailsCommand}"
-                                        Content="{StaticResource IconInfo}"
-                                        Style="{StaticResource ButtonQuickActionStyle}"
-                                        ToolTip="Show details"
-                                        Visibility="{Binding DetailsVisible, Converter={StaticResource BoolToVisibilityNegatedConverter}}" />
-                                </Grid>
-
-                                <!--  Hide details  -->
-                                <Grid Visibility="{Binding AppSettings.TaskQuickActionSettings.DetailsEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}">
-                                    <Button
-                                        Command="{Binding ToggleDetailsCommand}"
-                                        Content="{StaticResource IconHideInfo}"
-                                        Style="{StaticResource ButtonQuickActionStyle}"
-                                        ToolTip="Hide details"
-                                        Visibility="{Binding DetailsVisible, Converter={StaticResource BoolToVisibilityConverter}}" />
-                                </Grid>
-
-                                <!--  Trash button  -->
-                                <Button
-                                    Command="{Binding DeleteItemCommand}"
-                                    Content="{StaticResource IconTrash}"
-                                    Cursor="Hand"
-                                    Style="{StaticResource ButtonQuickActionRedStyle}"
-                                    ToolTip="Trash task"
-                                    Visibility="{Binding AppSettings.TaskQuickActionSettings.TrashEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
-
-                            </StackPanel>
-                        </Border>
-
+                            Opacity="0" />
+                        
                     </Grid>
 
                     <!--  INFO  -->

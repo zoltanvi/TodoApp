@@ -28,15 +28,4 @@ public class UiScaledEventHandler : INotificationHandler<UiScaledEvent>
 
         return Task.CompletedTask;
     }
-
-    // TODO: check
-    //private void WindowSettings_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-    //{
-    //    _appSettings.WindowSettings.PropertyChanged += WindowSettings_PropertyChanged;
-
-    //    if (e.PropertyName != nameof(WindowSettings.Scaling)) return;
-    //    if (UIScaler.StaticScaleValue == _appSettings.WindowSettings.Scaling) return;
-
-    //    _uiScaler.SetScaling(_appSettings.WindowSettings.Scaling);
-    //}
 }

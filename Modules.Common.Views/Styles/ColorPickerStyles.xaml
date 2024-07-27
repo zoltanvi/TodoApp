@@ -223,6 +223,7 @@
         x:Key="MinimalColorPickerComboboxStyle"
         TargetType="{x:Type commonControls:SingletonColorPicker}">
         <Setter Property="Margin" Value="2 0"/>
+        <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Width" Value="{Binding ActualHeight, RelativeSource={RelativeSource Self}}"/>
         <Setter Property="Template">
             <Setter.Value>

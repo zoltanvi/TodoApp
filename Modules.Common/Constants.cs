@@ -27,6 +27,8 @@
             public const string TaskBgBrush = "Surface1";
             public const string TransparentPatternBrush = "TransparentPatternBrush";
             public const string ForegroundBrush = "OnBackground";
+            public const string Surface1 = "Surface1";
+            public const string Surface2 = "Surface2";
             public const string Surface3 = "Surface3";
         }
 
