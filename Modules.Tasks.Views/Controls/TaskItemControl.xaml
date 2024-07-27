@@ -381,16 +381,18 @@
 
                         </Border>
 
+
+                        <!--TASK POPUP PANEL-->
                         <Border
                             x:Name="HoverButtonBorder"
                             Grid.Column="2"
                             Height="{Binding UIScaler.TaskPopupHeight, Source={StaticResource UIScaler}}"
                             Margin="-5 -20 5 20"
-                            Padding="4 0"
+                            Padding="2 1"
                             HorizontalAlignment="Right"
                             VerticalAlignment="Top"
-                            Background="{DynamicResource Surface2}"
-                            BorderBrush="{DynamicResource Outline}"
+                            Background="{DynamicResource Surface1}"
+                            BorderBrush="{DynamicResource OutlineVariant}"
                             BorderThickness="1"
                             CornerRadius="6"
                             Opacity="0">
@@ -440,31 +442,28 @@
 
                                 <!--  Marker color  -->
                                 <controls:SingletonColorPicker
-                                    Width="{Binding UIScaler.ColorPickerWidth, Source={StaticResource UIScaler}}"
-                                    Height="{Binding UIScaler.ColorPickerHeight, Source={StaticResource UIScaler}}"
                                     ColorChangedNotification="{Binding ColorChangedNotification, Mode=OneWay}"
                                     IsEnabled="{Binding IsQuickActionsEnabled}"
                                     SelectedColorString="{Binding MarkerColor, Mode=TwoWay}"
+                                    Style="{StaticResource MinimalColorPickerComboboxStyle}"
                                     ToolTip="Marker color"
                                     Visibility="{Binding AppSettings.TaskQuickActionSettings.ColorEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
 
                                 <!--  Background color picker  -->
                                 <controls:SingletonColorPicker
-                                    Width="{Binding UIScaler.ColorPickerWidth, Source={StaticResource UIScaler}}"
-                                    Height="{Binding UIScaler.ColorPickerHeight, Source={StaticResource UIScaler}}"
                                     ColorChangedNotification="{Binding ColorChangedNotification, Mode=OneWay}"
                                     IsEnabled="{Binding IsQuickActionsEnabled}"
                                     SelectedColorString="{Binding BackgroundColor, Mode=TwoWay}"
+                                    Style="{StaticResource MinimalColorPickerComboboxStyle}"
                                     ToolTip="Background color"
                                     Visibility="{Binding AppSettings.TaskQuickActionSettings.BackgroundColorEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
 
                                 <!--  BorderColor picker  -->
                                 <controls:SingletonColorPicker
-                                    Width="{Binding UIScaler.ColorPickerWidth, Source={StaticResource UIScaler}}"
-                                    Height="{Binding UIScaler.ColorPickerHeight, Source={StaticResource UIScaler}}"
                                     ColorChangedNotification="{Binding ColorChangedNotification, Mode=OneWay}"
                                     IsEnabled="{Binding IsQuickActionsEnabled}"
                                     SelectedColorString="{Binding BorderColor, Mode=TwoWay}"
+                                    Style="{StaticResource MinimalColorPickerComboboxStyle}"
                                     ToolTip="Border color"
                                     Visibility="{Binding AppSettings.TaskQuickActionSettings.BorderColorEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
 

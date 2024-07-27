@@ -134,7 +134,7 @@
         BasedOn="{StaticResource ButtonIconHoverRectangleStyle}"
         TargetType="{x:Type Button}">
         <Setter Property="Background" Value="{DynamicResource Surface3}" />
-        <Setter Property="Margin" Value="0" />
+        <Setter Property="Margin" Value="2 0" />
         <Setter Property="FontSize" Value="{Binding UIScaler.FontSize.RegularIcon, Source={StaticResource UIScaler}}"/>
         <Setter Property="MaxHeight" Value="{Binding UIScaler.ColorPickerHeight, Source={StaticResource UIScaler}}" />
         <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
