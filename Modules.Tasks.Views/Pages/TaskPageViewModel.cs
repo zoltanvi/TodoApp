@@ -154,7 +154,8 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         taskItem.Pinned = true;
         taskItem.IsDone = false;
 
-        _taskItemRepository.UpdateTaskItem(taskItem.Map());
+        var updatedDbTask = _taskItemRepository.UpdateTaskItem(taskItem.Map());
+        taskItem.ModificationDate = updatedDbTask.ModificationDate;
 
         var query = new TaskInsertPositionQuery
         {
@@ -173,7 +174,8 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         ArgumentNullException.ThrowIfNull(taskItem);
 
         taskItem.Pinned = false;
-        _taskItemRepository.UpdateTaskItem(taskItem.Map());
+        var updatedDbTask = _taskItemRepository.UpdateTaskItem(taskItem.Map());
+        taskItem.ModificationDate = updatedDbTask.ModificationDate;
 
         var query = new TaskInsertPositionQuery
         {
@@ -193,7 +195,8 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
 
         taskItem.IsDone = true;
         taskItem.Pinned = false;
-        _taskItemRepository.UpdateTaskItem(taskItem.Map());
+        var updatedDbTask = _taskItemRepository.UpdateTaskItem(taskItem.Map());
+        taskItem.ModificationDate = updatedDbTask.ModificationDate;
         RecalculateProgress();
 
         var query = new TaskInsertPositionQuery
@@ -213,7 +216,8 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         ArgumentNullException.ThrowIfNull(taskItem);
 
         taskItem.IsDone = false;
-        _taskItemRepository.UpdateTaskItem(taskItem.Map());
+        var updatedDbTask = _taskItemRepository.UpdateTaskItem(taskItem.Map());
+        taskItem.ModificationDate = updatedDbTask.ModificationDate;
         RecalculateProgress();
 
         var query = new TaskInsertPositionQuery
@@ -259,8 +263,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
             var updatedTask = _taskItemRepository.GetTaskById(taskId);
             ArgumentNullException.ThrowIfNull(updatedTask);
 
-            Items.RemoveAt(index);
-            Items.Insert(index, updatedTask.MapToViewModel(_mediator, _oneEditorOpenService, _eventAggregator));
+            Items[index].Tags = updatedTask.Tags.MapTagItems();
         }
     }
 

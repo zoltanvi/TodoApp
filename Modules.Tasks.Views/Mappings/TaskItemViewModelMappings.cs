@@ -68,7 +68,7 @@ public static class TaskItemViewModelMappings
         IEventAggregator eventAggregator) =>
         taskList.Select(x => x.MapToViewModel(mediator, oneEditorOpenService, eventAggregator)).ToList();
 
-    private static List<TagItemOnTaskViewModel> MapTagItems(this IEnumerable<TagItem> tags)
+    public static List<TagItemOnTaskViewModel> MapTagItems(this IEnumerable<TagItem> tags)
     {
         return tags.Select(x => new TagItemOnTaskViewModel
         {
