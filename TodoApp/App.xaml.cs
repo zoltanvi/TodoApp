@@ -14,6 +14,7 @@ using System.IO;
 using System.Text;
 using System.Windows;
 using System.Windows.Threading;
+using TodoApp.ErrorHandling;
 using Application = System.Windows.Application;
 
 namespace TodoApp;
@@ -129,9 +130,12 @@ public partial class App : Application
             ex = ex.InnerException;
         }
 
-        File.AppendAllText(reportFilePath, sb.ToString());
-    }
+        var errorDetails = sb.ToString();
+        File.AppendAllText(reportFilePath, errorDetails);
 
+        var window = new ErrorWindow("An error occurred.", errorDetails);
+        window.ShowDialog();
+    }
 }
 
 // Class to jump to for quick navigation with resharper
