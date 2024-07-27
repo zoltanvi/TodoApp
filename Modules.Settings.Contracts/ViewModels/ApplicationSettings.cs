@@ -19,6 +19,9 @@ public class ApplicationSettings : SettingsBase
     public double WindowMinimumHeight { get; set; } = 200;
     public int ResizeBorderSize { get; set; } = 9;
     public TitleBarHeight TitleBarHeight { get; set; } = TitleBarHeight.Normal;
+    
+    // This is the version of the app that last used the database.
+    public string AppVersion { get; set; }
 
     public const double TurnedOnRoundedCornersRadius = 8;
 }

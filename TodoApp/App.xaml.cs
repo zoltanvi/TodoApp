@@ -57,6 +57,10 @@ public partial class App : Application
     {
         base.OnStartup(e);
 
+        // Set app version info
+        var version = (string)Current.TryFindResource(Constants.CurrentVersion);
+        AppSettings.Instance.ApplicationSettings.AppVersion = version;
+
         CreateMainWindow();
     }
 
