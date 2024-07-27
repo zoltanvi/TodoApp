@@ -99,9 +99,8 @@
                             Content="{StaticResource CtxIconColor1}" />
                         <Label
                             Grid.Column="1"
-                            Style="{DynamicResource BaseLabelClearTypeStyle}">
-                            Marker
-                        </Label>
+                            Content="Marker"
+                            Style="{DynamicResource BaseLabelClearTypeStyle}" />
                         <controls1:SingletonColorPicker
                             Grid.Column="3"
                             Width="{Binding UIScaler.ColorPickerWidth, Source={StaticResource UIScaler}}"
@@ -134,9 +133,8 @@
                             Content="{StaticResource CtxIconColor2}" />
                         <Label
                             Grid.Column="1"
-                            Style="{DynamicResource BaseLabelClearTypeStyle}">
-                            Background
-                        </Label>
+                            Content="Background"
+                            Style="{DynamicResource BaseLabelClearTypeStyle}" />
                         <controls1:SingletonColorPicker
                             Grid.Column="3"
                             Width="{Binding UIScaler.ColorPickerWidth, Source={StaticResource UIScaler}}"
@@ -169,9 +167,8 @@
                             Content="{StaticResource CtxIconColor3}" />
                         <Label
                             Grid.Column="1"
-                            Style="{DynamicResource BaseLabelClearTypeStyle}">
-                            Border
-                        </Label>
+                            Content="Border"
+                            Style="{DynamicResource BaseLabelClearTypeStyle}" />
                         <controls1:SingletonColorPicker
                             Grid.Column="3"
                             Width="{Binding UIScaler.ColorPickerWidth, Source={StaticResource UIScaler}}"

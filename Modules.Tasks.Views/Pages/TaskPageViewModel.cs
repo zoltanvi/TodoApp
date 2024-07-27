@@ -28,6 +28,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
     private readonly ITaskItemRepository _taskItemRepository;
     private readonly OneEditorOpenService _oneEditorOpenService;
     private readonly IEventAggregator _eventAggregator;
+    private bool _sortingInProgress;
 
     public event EventHandler? FocusAddNewTaskTextEditorRequested;
     public event Action<int>? ScrollIntoViewRequested;
@@ -86,6 +87,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         _eventAggregator.GetEvent<TaskItemCheckedEvent>().Subscribe(OnFinishTaskItemRequested);
         _eventAggregator.GetEvent<TaskItemUncheckedEvent>().Subscribe(OnUnfinishTaskItemRequested);
         _eventAggregator.GetEvent<TagsChangedOnTaskItemEvent>().Subscribe(OnTagsChangedOnTaskItem);
+        _eventAggregator.GetEvent<TaskSortingRequestedEvent>().Subscribe(OnSortingRequested);
 
         _oneEditorOpenService.ChangedToDisplayMode += FocusAddNewTaskTextEditor;
     }
@@ -262,6 +264,82 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         }
     }
 
+    private void OnSortingRequested(TaskSortingRequestedPayload request)
+    {
+        IEnumerable<TaskItemViewModel> sortedItems = Items;
+
+        switch (request.SortBy)
+        {
+            case TaskSortingRequestedPayload.SortByProperty.State:
+            {
+                if (AppSettings.Instance.TaskPageSettings.ForceTaskOrderByState) break;
+
+                var pinnedItems = Items.Where(x => x.Pinned && !x.IsDone);
+                var unfinishedItems = Items.Where(x => !x.Pinned && !x.IsDone);
+                var finishedItems = Items.Where(x => !x.Pinned && x.IsDone);
+
+                sortedItems = pinnedItems.Concat(unfinishedItems).Concat(finishedItems);
+                break;
+            }
+            case TaskSortingRequestedPayload.SortByProperty.CreationDate:
+            {
+                sortedItems = request.Ascending
+                    ? Items.OrderBy(x => x.CreationDate)
+                    : Items.OrderByDescending(x => x.CreationDate);
+                break;
+            }
+            case TaskSortingRequestedPayload.SortByProperty.ModificationDate:
+            {
+                sortedItems = request.Ascending
+                    ? Items.OrderBy(x => x.ModificationDate)
+                    : Items.OrderByDescending(x => x.ModificationDate);
+                break;
+            }
+            case TaskSortingRequestedPayload.SortByProperty.Content:
+            {
+                sortedItems = request.Ascending
+                    ? Items.OrderBy(x => x.ContentPreview)
+                    : Items.OrderByDescending(x => x.ContentPreview);
+                break;
+            }
+            default:
+            throw new NotImplementedException($"Sorting is not implemented on {request.SortBy}.");
+        }
+
+        // If forced task order by state is turned on, re-sort the sorted items by state
+        if (request.SortBy != TaskSortingRequestedPayload.SortByProperty.State)
+        {
+            if (AppSettings.Instance.TaskPageSettings.ForceTaskOrderByState)
+            {
+                var pinnedItems = sortedItems.Where(x => x.Pinned && !x.IsDone);
+                var unfinishedItems = sortedItems.Where(x => !x.Pinned && !x.IsDone);
+                var finishedItems = sortedItems.Where(x => !x.Pinned && x.IsDone);
+
+                sortedItems = pinnedItems.Concat(unfinishedItems).Concat(finishedItems);
+            }
+            else
+            {
+                var pinnedItems = sortedItems.Where(x => x.Pinned);
+                var notPinnedItems = sortedItems.Where(x => !x.Pinned);
+
+                sortedItems = pinnedItems.Concat(notPinnedItems);
+            }
+        }
+
+        sortedItems = sortedItems.ToList();
+
+        _sortingInProgress = true;
+        
+        Items.Clear();
+        foreach (var taskItem in sortedItems)
+        {
+            Items.Add(taskItem);
+        }
+        
+        _sortingInProgress = false;
+        ItemsOnCollectionChanged(null, null);
+    }
+
     private void EditCategory()
     {
         IsCategoryInEditMode = true;
@@ -302,17 +380,21 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         AppSettings.Instance.PageTitleSettings.SettingsChanged -= OnPageTitleSettingsChanged;
         Items.CollectionChanged -= ItemsOnCollectionChanged;
 
+        _eventAggregator.GetEvent<TaskItemDeleteClickedEvent>().Unsubscribe(OnDeleteTaskItemRequestedEvent);
         _eventAggregator.GetEvent<TaskItemPinClickedEvent>().Unsubscribe(OnPinTaskItemRequested);
         _eventAggregator.GetEvent<TaskItemUnpinClickedEvent>().Unsubscribe(OnUnpinTaskItemRequested);
         _eventAggregator.GetEvent<TaskItemCheckedEvent>().Unsubscribe(OnFinishTaskItemRequested);
         _eventAggregator.GetEvent<TaskItemUncheckedEvent>().Unsubscribe(OnUnfinishTaskItemRequested);
-        _eventAggregator.GetEvent<TaskItemDeleteClickedEvent>().Unsubscribe(OnDeleteTaskItemRequestedEvent);
+        _eventAggregator.GetEvent<TagsChangedOnTaskItemEvent>().Unsubscribe(OnTagsChangedOnTaskItem);
+        _eventAggregator.GetEvent<TaskSortingRequestedEvent>().Unsubscribe(OnSortingRequested);
 
         _oneEditorOpenService.ChangedToDisplayMode -= FocusAddNewTaskTextEditor;
     }
 
-    private void ItemsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    private void ItemsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs? e)
     {
+        if (_sortingInProgress) return;
+
         for (var i = 0; i < Items.Count; i++)
         {
             Items[i].ListOrder = i;

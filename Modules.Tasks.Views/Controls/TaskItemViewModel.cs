@@ -13,12 +13,6 @@ using System.Windows.Input;
 
 namespace Modules.Tasks.Views.Controls;
 
-internal interface ITaskItemViewModel
-{
-    void EditItem();
-    void UpdateTask();
-}
-
 [AddINotifyPropertyChangedInterface]
 public class TaskItemViewModel : BaseViewModel, ITaskItemViewModel
 {
@@ -107,7 +101,6 @@ public class TaskItemViewModel : BaseViewModel, ITaskItemViewModel
     public List<TaskItemVersionViewModel> Versions { get; set; }
 
     public List<TagItemOnTaskViewModel> Tags { get; set; }
-    public bool HasAnyTags => Tags.Count != 0;
     public int VersionCount => Versions.Count;
     public bool IsFirstItem { get; set; }
 

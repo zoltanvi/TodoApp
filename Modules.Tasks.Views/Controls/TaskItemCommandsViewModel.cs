@@ -50,16 +50,21 @@ public class TaskItemCommandsViewModel : BaseViewModel
             _taskItemInternal.UpdateTask();
         });
 
-        PinItemCommand = new RelayCommand(() => eventAggregator.GetEvent<TaskItemPinClickedEvent>().Publish(_taskItem.Id));
-        UnpinItemCommand = new RelayCommand(() => eventAggregator.GetEvent<TaskItemUnpinClickedEvent>().Publish(_taskItem.Id));
-        DeleteItemCommand = new RelayCommand(() => eventAggregator.GetEvent<TaskItemDeleteClickedEvent>().Publish(_taskItem.Id));
+        PinItemCommand = new RelayCommand(() => _eventAggregator.GetEvent<TaskItemPinClickedEvent>().Publish(_taskItem.Id));
+        UnpinItemCommand = new RelayCommand(() => _eventAggregator.GetEvent<TaskItemUnpinClickedEvent>().Publish(_taskItem.Id));
+        DeleteItemCommand = new RelayCommand(() => _eventAggregator.GetEvent<TaskItemDeleteClickedEvent>().Publish(_taskItem.Id));
         ToggleDetailsCommand = new RelayCommand(() => _taskItem.DetailsVisible ^= true);
         ShowTagSelectorCommand = new RelayCommand(() => _mediator.Send(new OpenTagSelectorCommand { TaskId = _taskItem. Id }));
 
-
-
+        SortByStateCommand = CreateSortCommand(TaskSortingRequestedPayload.SortByProperty.State);
+        SortByCreationDateCommand = CreateSortCommand(TaskSortingRequestedPayload.SortByProperty.CreationDate, true);
+        SortByCreationDateDescCommand = CreateSortCommand(TaskSortingRequestedPayload.SortByProperty.CreationDate);
+        SortByModificationDateCommand = CreateSortCommand(TaskSortingRequestedPayload.SortByProperty.ModificationDate, true);
+        SortByModificationDateDescCommand = CreateSortCommand(TaskSortingRequestedPayload.SortByProperty.ModificationDate);
+        SortByContentCommand = CreateSortCommand(TaskSortingRequestedPayload.SortByProperty.Content, true);
+        SortByContentDescCommand = CreateSortCommand(TaskSortingRequestedPayload.SortByProperty.Content);
     }
-
+    
     public ICommand IsDoneModifiedCommand { get; }
     public ICommand EditItemCommand { get; }
     public ICommand ToggleIsDoneCommand { get; }
@@ -68,19 +73,19 @@ public class TaskItemCommandsViewModel : BaseViewModel
     public ICommand UnpinItemCommand { get; }
     public ICommand DeleteItemCommand { get; }
 
-    public ICommand EnableQuickActionsCommand { get; }
-    public ICommand DisableQuickActionsCommand { get; }
-
-    public INotifiableObject ColorChangedNotification { get; }
     public ICommand ToggleDetailsCommand { get; }
     public ICommand ShowTagSelectorCommand { get; }
 
-    public ICommand SortByStateCommand { get; }
     public ICommand SplitLinesCommand { get; }
+
+    public ICommand SortByStateCommand { get; }
     public ICommand SortByCreationDateCommand { get; }
     public ICommand SortByCreationDateDescCommand { get; }
     public ICommand SortByModificationDateCommand { get; }
     public ICommand SortByModificationDateDescCommand { get; }
+    public ICommand SortByContentCommand { get; }
+    public ICommand SortByContentDescCommand { get; }
+
     public ICommand MoveToTopCommand { get; }
     public ICommand MoveToBottomCommand { get; }
     public ICommand MoveToCategoryCommand { get; }
@@ -98,6 +103,17 @@ public class TaskItemCommandsViewModel : BaseViewModel
     public ICommand DeleteAllCommand { get; }
     public ICommand DeleteCompletedCommand { get; }
     public ICommand DeleteIncompleteCommand { get; }
-    //
-    //
+
+    private ICommand CreateSortCommand(TaskSortingRequestedPayload.SortByProperty sortBy, bool ascending = false)
+    {
+        return new RelayCommand(() =>
+            _eventAggregator.GetEvent<TaskSortingRequestedEvent>().Publish(
+                new TaskSortingRequestedPayload
+                {
+                    TaskId = _taskItem.Id,
+                    SortBy = sortBy,
+                    Ascending = ascending
+                }));
+    }
+
 }
