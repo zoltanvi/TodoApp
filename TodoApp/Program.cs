@@ -139,6 +139,9 @@ public static class Program
         services.AddTransient<ITagSelectorPage, TagSelectorPage>();
         services.AddTransient<TagSelectorPageViewModel>();
 
+        services.AddTransient<ITaskHistoryPage, TaskHistoryPage>();
+        services.AddTransient<TaskHistoryPageViewModel>();
+
         services.AddSingleton<IEmptyPage, EmptyPage>();
         
         //services.AddScoped<INoteEditorPage, NotePage>();

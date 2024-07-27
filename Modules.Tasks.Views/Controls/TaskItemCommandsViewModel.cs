@@ -54,7 +54,8 @@ public class TaskItemCommandsViewModel : BaseViewModel
         UnpinItemCommand = new RelayCommand(() => _eventAggregator.GetEvent<TaskItemUnpinClickedEvent>().Publish(_taskItem.Id));
         DeleteItemCommand = new RelayCommand(() => _eventAggregator.GetEvent<TaskItemDeleteClickedEvent>().Publish(_taskItem.Id));
         ToggleDetailsCommand = new RelayCommand(() => _taskItem.DetailsVisible ^= true);
-        ShowTagSelectorCommand = new RelayCommand(() => _mediator.Send(new OpenTagSelectorCommand { TaskId = _taskItem. Id }));
+        ShowTagSelectorCommand = new RelayCommand(() => _mediator.Send(new OpenTagSelectorCommand { TaskId = _taskItem.Id }));
+        ShowHistoryCommand = new RelayCommand(() => _mediator.Send(new OpenHistoryCommand { TaskId = _taskItem.Id }));
 
         SortByStateCommand = CreateSortCommand(TaskSortingRequestedPayload.SortByProperty.State);
         SortByCreationDateCommand = CreateSortCommand(TaskSortingRequestedPayload.SortByProperty.CreationDate, true);
@@ -75,6 +76,7 @@ public class TaskItemCommandsViewModel : BaseViewModel
 
     public ICommand ToggleDetailsCommand { get; }
     public ICommand ShowTagSelectorCommand { get; }
+    public ICommand ShowHistoryCommand { get; }
 
     public ICommand SplitLinesCommand { get; }
 

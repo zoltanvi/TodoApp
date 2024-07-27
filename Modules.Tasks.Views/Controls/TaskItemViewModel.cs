@@ -102,6 +102,7 @@ public class TaskItemViewModel : BaseViewModel, ITaskItemViewModel
 
     public List<TagItemOnTaskViewModel> Tags { get; set; }
     public int VersionCount => Versions.Count;
+    public bool HasHistory => VersionCount != 0;
     public bool IsFirstItem { get; set; }
 
     // Commands

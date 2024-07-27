@@ -15,9 +15,8 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     dd:DragDrop.IsDragSource="{Binding TextEditorViewModel.IsEditMode}"
-    mc:Ignorable="d"
     ContextMenu="{StaticResource TaskListItemContextMenu}"
-    >
+    mc:Ignorable="d">
 
     <Grid Margin="{Binding IsFirstItem, Converter={StaticResource TaskItemBoolToMarginConverter}}">
         <Grid
@@ -398,7 +397,7 @@
                             x:Name="HoverButtonBorder"
                             Grid.Column="2"
                             Opacity="0" />
-                        
+
                     </Grid>
 
                     <!--  INFO  -->
@@ -424,13 +423,15 @@
 
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
 
                             <Border
                                 Grid.Row="0"
                                 Grid.Column="0"
-                                Grid.ColumnSpan="2"
+                                Grid.ColumnSpan="4"
                                 Height="1"
                                 Background="{DynamicResource OutlineVariant}" />
 
@@ -511,6 +512,12 @@
                                     Margin="0"
                                     Content=" times"
                                     Style="{StaticResource TaskPropertyLabelRightStyle}" />
+
+                                <Button
+                                    Visibility="{Binding HasHistory, Converter={StaticResource BoolToVisibilityConverter}}"
+                                    Content="Open history"
+                                    Style="{StaticResource HistoryButtonStyle}"
+                                    Command="{Binding Cmd.ShowHistoryCommand}"/>
 
                             </StackPanel>
 

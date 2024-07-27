@@ -29,7 +29,7 @@
             FontSize="{Binding AppSettings.PageTitleSettings.FontSize, Source={StaticResource AppSettings}, Converter={StaticResource FontSizeScaler}}"
             Style="{StaticResource PageTitleTextBlockStyle}"
             Text="Select tags"
-            Visibility="{Binding AppSettings.PageTitleSettings.Visible, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
+            />
 
         <ListView
             x:Name="TagListListView"
