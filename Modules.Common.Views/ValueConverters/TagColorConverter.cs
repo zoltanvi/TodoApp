@@ -15,8 +15,12 @@ public class TagColorConverter : BaseValueConverter
         {
             return Convert(tagColor);
         }
+#if !DEBUG
 
         throw new ArgumentException($"Cannot convert {value} to TagColor.");
+#else
+        return new SolidColorBrush(Color.FromRgb(255, 0, 255));
+#endif
     }
 
     public Brush Convert(TagPresetColor tagColor)
