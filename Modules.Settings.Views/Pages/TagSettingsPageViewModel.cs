@@ -1,17 +1,13 @@
 ﻿using MediatR;
-using Modules.Common.DataBinding;
-using Modules.Common.DataModels;
 using Modules.Common.ViewModel;
-using Modules.PopupMessage.Contracts.Cqrs.Commands;
+using Modules.Common.Views.Controls;
 using Modules.Settings.Views.Mappings;
 using Modules.Settings.Views.Tag;
 using Modules.Tasks.Contracts;
 using Modules.Tasks.Contracts.Events;
-using Modules.Tasks.Contracts.Models;
 using Prism.Events;
 using PropertyChanged;
 using System.Collections.ObjectModel;
-using System.Windows.Input;
 
 namespace Modules.Settings.Views.Pages;
 
@@ -35,44 +31,17 @@ public class TagSettingsPageViewModel : BaseViewModel
         _tagItemRepository = tagItemRepository;
         _eventAggregator = eventAggregator;
 
-        AddNewTagCommand = new RelayCommand(AddTag);
-
         var tags = _tagItemRepository.GetTags();
         Items = new ObservableCollection<TagItemViewModel>(tags.MapToViewModelList(_mediator));
+        TagCreator = new TagCreatorViewModel(_tagItemRepository, _mediator, _eventAggregator);
 
         _eventAggregator.GetEvent<DeleteTagItemRequestedEvent>().Subscribe(OnDeleteTagItemRequested);
         _eventAggregator.GetEvent<TagItemUpdatedEvent>().Subscribe(OnTagItemUpdated);
+        _eventAggregator.GetEvent<TagItemCreatedEvent>().Subscribe(OnTagItemCreated);
     }
-
-    public TagPresetColor SelectedColor { get; set; }
-
-    public string PendingAddNewTagText { get; set; } = string.Empty;
-
-    public ICommand AddNewTagCommand { get; set; }
 
     public ObservableCollection<TagItemViewModel> Items { get; }
-
-    private void AddTag()
-    {
-        if (string.IsNullOrWhiteSpace(PendingAddNewTagText)) return;
-
-        var tagItem = Items.FirstOrDefault(x => x.Name.Equals(PendingAddNewTagText));
-        if (tagItem != null)
-        {
-            _mediator.Send(new ShowMessageErrorCommand { Message = "A tag with this name already exists!" });
-            return;
-        }
-
-        var dbTag = _tagItemRepository.AddTag(new TagItem
-        {
-            Name = PendingAddNewTagText,
-            Color = SelectedColor.ToString(),
-        });
-
-        Items.Add(dbTag.MapToViewModel(_mediator));
-
-        PendingAddNewTagText = string.Empty;
-    }
+    public TagCreatorViewModel TagCreator { get; set; }
 
     private void OnDeleteTagItemRequested(int tagId)
     {
@@ -95,9 +64,18 @@ public class TagSettingsPageViewModel : BaseViewModel
         Items.Insert(index, dbTag.MapToViewModel(_mediator));
     }
 
+    private void OnTagItemCreated(int tagId)
+    {
+        var dbTag = _tagItemRepository.GetTagById(tagId);
+        ArgumentNullException.ThrowIfNull(dbTag);
+        
+        Items.Add(dbTag.MapToViewModel(_mediator));
+    }
+
     protected override void OnDispose()
     {
         _eventAggregator.GetEvent<DeleteTagItemRequestedEvent>().Unsubscribe(OnDeleteTagItemRequested);
         _eventAggregator.GetEvent<TagItemUpdatedEvent>().Unsubscribe(OnTagItemUpdated);
+        _eventAggregator.GetEvent<TagItemCreatedEvent>().Unsubscribe(OnTagItemCreated);
     }
 }

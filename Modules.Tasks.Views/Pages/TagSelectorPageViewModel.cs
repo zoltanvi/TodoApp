@@ -1,11 +1,15 @@
-﻿using Modules.Common.DataBinding;
+﻿using MediatR;
+using Modules.Common.DataBinding;
 using Modules.Common.Navigation;
 using Modules.Common.ViewModel;
+using Modules.Common.Views.Controls;
 using Modules.Tasks.Contracts;
+using Modules.Tasks.Contracts.Events;
 using Modules.Tasks.Contracts.Models;
 using Modules.Tasks.Views.Events;
 using Modules.Tasks.Views.Mappings;
 using Prism.Events;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 namespace Modules.Tasks.Views.Pages;
@@ -14,29 +18,35 @@ public class TagSelectorPageViewModel : BaseViewModel, IParameterReceiver
 {
     private readonly ITaskItemRepository _taskItemRepository;
     private readonly ITagItemRepository _tagItemRepository;
+    private readonly IMediator _mediator;
     private readonly IEventAggregator _eventAggregator;
     private int _taskId;
 
     public TagSelectorPageViewModel(
         ITaskItemRepository taskItemRepository,
         ITagItemRepository tagItemRepository,
+        IMediator mediator,
         IEventAggregator eventAggregator)
     {
         ArgumentNullException.ThrowIfNull(taskItemRepository);
         ArgumentNullException.ThrowIfNull(tagItemRepository);
+        ArgumentNullException.ThrowIfNull(mediator);
         ArgumentNullException.ThrowIfNull(eventAggregator);
 
         _taskItemRepository = taskItemRepository;
         _tagItemRepository = tagItemRepository;
+        _mediator = mediator;
         _eventAggregator = eventAggregator;
 
         List<TagItem> tags = _tagItemRepository.GetTags();
-        Items = new List<TagSelectionItemViewModel>(tags.MapToViewModelList(eventAggregator));
+        Items = new ObservableCollection<TagSelectionItemViewModel>(tags.MapToViewModelList(eventAggregator));
+        TagCreator = new TagCreatorViewModel(_tagItemRepository, _mediator, _eventAggregator);
 
         DeselectAllTagsCommand = new RelayCommand(DeselectAllTags);
 
         _eventAggregator.GetEvent<TagSelectedEvent>().Subscribe(SelectTag);
         _eventAggregator.GetEvent<TagDeselectedEvent>().Subscribe(DeselectTag);
+        _eventAggregator.GetEvent<TagItemCreatedEvent>().Subscribe(OnTagItemCreated);
     }
 
     private void DeselectAllTags()
@@ -54,9 +64,11 @@ public class TagSelectorPageViewModel : BaseViewModel, IParameterReceiver
         _eventAggregator.GetEvent<TagsChangedOnTaskItemEvent>().Publish(_taskId);
     }
 
-    public List<TagSelectionItemViewModel> Items { get; }
+    public ObservableCollection<TagSelectionItemViewModel> Items { get; }
 
     public ICommand DeselectAllTagsCommand { get; set; }
+
+    public TagCreatorViewModel TagCreator { get; set; }
 
     public void ReceiveParameter(object parameter)
     {
@@ -99,9 +111,18 @@ public class TagSelectorPageViewModel : BaseViewModel, IParameterReceiver
         _eventAggregator.GetEvent<TagsChangedOnTaskItemEvent>().Publish(_taskId);
     }
 
+    private void OnTagItemCreated(int tagId)
+    {
+        var dbTag = _tagItemRepository.GetTagById(tagId);
+        ArgumentNullException.ThrowIfNull(dbTag);
+
+        Items.Add(dbTag.MapToViewModel(_eventAggregator));
+    }
+
     protected override void OnDispose()
     {
         _eventAggregator.GetEvent<TagSelectedEvent>().Unsubscribe(SelectTag);
         _eventAggregator.GetEvent<TagDeselectedEvent>().Unsubscribe(DeselectTag);
+        _eventAggregator.GetEvent<TagItemCreatedEvent>().Unsubscribe(OnTagItemCreated);
     }
 }

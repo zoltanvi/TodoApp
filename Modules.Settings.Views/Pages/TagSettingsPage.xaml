@@ -24,120 +24,37 @@
         <!--  ===========================================================  -->
         <!--  Tag settings  -->
 
+        <!--  CREATE NEW TAG  -->
+        <TextBlock
+            Grid.Row="0"
+            Margin="5 0 0 10"
+            FontFamily="{Binding AppSettings.PageTitleSettings.FontFamily, Source={StaticResource AppSettings}, Converter={StaticResource EnumToFontFamilyConverter}}"
+            FontSize="{Binding UIScaler.FontSize.Regular, Source={StaticResource UIScaler}}"
+            Foreground="{DynamicResource Primary}"
+            Text="Create new tag" />
+
         <Grid Grid.Row="1">
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <Border
-                Name="OuterBorder"
-                Grid.Row="0"
-                Height="0"
-                Margin="20 0" />
+            <commonControls:TagCreatorControl Grid.Row="0" DataContext="{Binding TagCreator}" />
 
-            <Grid Grid.Row="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-
-                <!--  TAG NAME  -->
-                <Border
-                    Grid.Column="0"
-                    Margin="0 0 0 5">
-                    <commonControls:TagControl TagColor="{Binding SelectedColor}">
-                        <TextBox
-                            Width="{Binding ElementName=OuterBorder, Path=ActualWidth}"
-                            Padding="0"
-                            VerticalAlignment="Stretch"
-                            HorizontalContentAlignment="Center"
-                            BorderBrush="{DynamicResource Outline}"
-                            Foreground="{Binding SelectedColor, Converter={StaticResource TagForegroundConverter}}"
-                            MaxLength="15"
-                            Style="{StaticResource SidePageAddNewTextBoxStyle}"
-                            Tag="Tag name"
-                            Text="{Binding PendingAddNewTagText, UpdateSourceTrigger=PropertyChanged}"
-                            TextWrapping="NoWrap">
-                            <TextBox.InputBindings>
-                                <KeyBinding
-                                    Key="Return"
-                                    Command="{Binding AddNewTagCommand}" />
-                            </TextBox.InputBindings>
-                        </TextBox>
-                    </commonControls:TagControl>
-                </Border>
-
-                <ComboBox
-                    Grid.Column="1"
-                    Margin="4 0 0 7"
-                    ItemsSource="{Binding Source={StaticResource TagColorProvider}}"
-                    SelectedItem="{Binding SelectedColor, Mode=TwoWay}">
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <Border
-                                Width="{Binding UIScaler.ColorPickerItemSize, Source={StaticResource UIScaler}}"
-                                Height="{Binding UIScaler.ColorPickerItemSize, Source={StaticResource UIScaler}}"
-                                Background="{Binding ., Converter={StaticResource TagBackgroundConverter}}"
-                                BorderBrush="{Binding ., Converter={StaticResource TagBorderConverter}}"
-                                BorderThickness="1"
-                                CornerRadius="4">
-                                <Label
-                                    Margin="0"
-                                    Padding="0"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Content="A"
-                                    FontSize="{Binding UIScaler.FontSize.Smallest, Source={StaticResource UIScaler}}"
-                                    Foreground="{Binding ., Converter={StaticResource TagForegroundConverter}}" />
-                            </Border>
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                </ComboBox>
-
-            </Grid>
-
-
-            <!--  Add tag  -->
-            <Border Grid.Row="2">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="auto" />
-                    </Grid.ColumnDefinitions>
-
-                    <Button
-                        Grid.Column="0"
-                        Command="{Binding AddNewTagCommand}"
-                        Content="Add"
-                        Cursor="Hand"
-                        FontSize="{Binding UIScaler.FontSize.Regular, Source={StaticResource UIScaler}}"
-                        Style="{StaticResource ButtonSettingItemStyle}"
-                        ToolTip="Add tag" />
-                </Grid>
-            </Border>
-
-            <Label
-                Grid.Row="3"
-                Margin="0 10 0 0"
-                Content="Your tags"
-                FontSize="{Binding UIScaler.FontSize.Large, Source={StaticResource UIScaler}}"
-                Style="{StaticResource BaseLabelClearTypeStyle}" />
-
-            <Border
-                Grid.Row="4"
-                Height="{Binding UIScaler.FontSize.Smallest, Source={StaticResource UIScaler}}" />
-
-
-            <Border Grid.Row="5">
+            <!--  YOUR TAGS  -->
+            <TextBlock
+                Grid.Row="1"
+                Margin="5 20 0 5"
+                FontFamily="{Binding AppSettings.PageTitleSettings.FontFamily, Source={StaticResource AppSettings}, Converter={StaticResource EnumToFontFamilyConverter}}"
+                FontSize="{Binding UIScaler.FontSize.Regular, Source={StaticResource UIScaler}}"
+                Foreground="{DynamicResource Primary}"
+                Text="Your tags" />
+           
+            <!--  TAG LIST  -->
+            <Border Grid.Row="3">
                 <ListView
                     x:Name="TagListListView"
                     HorizontalContentAlignment="Stretch"
