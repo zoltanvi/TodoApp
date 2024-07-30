@@ -37,7 +37,7 @@
                 Command="{Binding ClosePageCommand}"
                 Content="{StaticResource IconClose}"
                 Style="{StaticResource ButtonIconHoverRectangleStyle}"
-                ToolTip="Close settings" />
+                ToolTip="Close" />
         </Grid>
 
         <ListView
