@@ -9,11 +9,12 @@ using Modules.Tasks.Views.Mappings;
 using Prism.Events;
 using PropertyChanged;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 namespace Modules.Tasks.Views.Pages;
 
 [AddINotifyPropertyChangedInterface]
-public class TaskHistoryPageViewModel : BaseViewModel, IParameterReceiver
+public class TaskHistoryPageViewModel : BaseViewModel, IParameterReceiver, ICloseRequester
 {
     private readonly ITaskItemRepository _taskItemRepository;
     private readonly IMediator _mediator;
@@ -92,6 +93,8 @@ public class TaskHistoryPageViewModel : BaseViewModel, IParameterReceiver
     public ObservableCollection<TaskItemVersionViewModel> HistoryItems { get; set; }
 
     public ObservableCollection<TaskItemVersionViewModel> CurrentItemList { get; set; }
+    public ICommand ClosePageCommand { get; set; }
+
     protected override void OnDispose()
     {
         _eventAggregator.GetEvent<TaskItemVersionRestoredEvent>().Unsubscribe(OnVersionRestored);

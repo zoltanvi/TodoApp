@@ -99,7 +99,7 @@ public class CategoryPageViewModel : BaseViewModel
             }
             else
             {
-                _mediator.Send(new ShowMessageInfoCommand { Message = "A category with this name already exists!" });
+                _mediator.Send(new ShowMessageWarningCommand { Message = "A category with this name already exists!" });
             }
         }
         else

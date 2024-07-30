@@ -21,15 +21,25 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <!--  HISTORY  -->
-        <TextBlock
+        <Grid
             Grid.Row="0"
-            Margin="20 10"
-            HorizontalAlignment="Center"
-            FontFamily="{Binding AppSettings.PageTitleSettings.FontFamily, Source={StaticResource AppSettings}, Converter={StaticResource EnumToFontFamilyConverter}}"
-            FontSize="{Binding AppSettings.PageTitleSettings.FontSize, Source={StaticResource AppSettings}, Converter={StaticResource FontSizeScaler}}"
-            Style="{StaticResource PageTitleTextBlockStyle}"
-            Text="History" />
+            Margin="10 10">
+
+            <!--  HISTORY  -->
+            <TextBlock
+                HorizontalAlignment="Center"
+                FontFamily="{Binding AppSettings.PageTitleSettings.FontFamily, Source={StaticResource AppSettings}, Converter={StaticResource EnumToFontFamilyConverter}}"
+                Style="{StaticResource PageTitleTextBlockStyle}"
+                Text="History" />
+
+            <!--  CLOSE  -->
+            <Button
+                HorizontalAlignment="Right"
+                Command="{Binding ClosePageCommand}"
+                Content="{StaticResource IconClose}"
+                Style="{StaticResource ButtonIconHoverRectangleStyle}"
+                ToolTip="Close" />
+        </Grid>
 
         <ScrollViewer
             Grid.Row="1"
@@ -327,10 +337,8 @@
 
                 </ListView>
 
-
             </Grid>
         </ScrollViewer>
-
 
     </Grid>
 

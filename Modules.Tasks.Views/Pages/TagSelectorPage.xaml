@@ -24,14 +24,18 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0" Margin="10 10" >
+        <Grid
+            Grid.Row="0"
+            Margin="10 10">
+
+            <!--  SELECT TAGS  -->
             <TextBlock
                 HorizontalAlignment="Center"
                 FontFamily="{Binding AppSettings.PageTitleSettings.FontFamily, Source={StaticResource AppSettings}, Converter={StaticResource EnumToFontFamilyConverter}}"
                 Style="{StaticResource PageTitleTextBlockStyle}"
                 Text="Select tags" />
 
-            <!--  BACK button  -->
+            <!--  CLOSE  -->
             <Button
                 HorizontalAlignment="Right"
                 Command="{Binding ClosePageCommand}"
