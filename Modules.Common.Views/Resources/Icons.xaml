@@ -12,6 +12,7 @@
     <system:String x:Key="IconPath">&#xE62F;</system:String>
     <system:String x:Key="IconSettings">&#xE713;</system:String>
     <system:String x:Key="IconDeleteX">&#xEDAE;</system:String>
+    <system:String x:Key="IconClose">&#xE8BB;</system:String>
     <system:String x:Key="IconSave">&#xE74E;</system:String>
     <system:String x:Key="IconEdit">&#xE104;</system:String>
     <system:String x:Key="IconAlwaysOnTop">&#xE78B;</system:String>

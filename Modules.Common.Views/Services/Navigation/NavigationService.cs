@@ -1,6 +1,8 @@
-﻿using Modules.Common.Navigation;
+﻿using Modules.Common.DataBinding;
+using Modules.Common.Navigation;
 using Modules.Common.Services.Navigation;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace Modules.Common.Views.Services.Navigation;
 
@@ -11,12 +13,16 @@ public abstract class NavigationService : INavigationService
     private Type? PreviousPageType { get; set; }
     private Type? CurrentPageType { get; set; }
     private Type? NextPageType { get; set; }
+    protected ICommand CloseCommand { get; }
+    protected ICommand NavigateBackCommand { get; }
 
     protected NavigationService(IServiceProvider serviceProvider)
     {
         ArgumentNullException.ThrowIfNull(serviceProvider);
 
         _serviceProvider = serviceProvider;
+        CloseCommand = new RelayCommand(ClosePage);
+        NavigateBackCommand = new RelayCommand(NavigateBack);
     }
 
     public void Initialize(object frame)
@@ -25,6 +31,7 @@ public abstract class NavigationService : INavigationService
     }
 
     public void NavigateTo<T>(object? parameter = null) where T : class, IPage => NavigateTo(typeof(T), parameter);
+    private void NavigateBack() => GoBackToPreviousPage();
 
     public bool GoBackToPreviousPage()
     {
@@ -48,10 +55,24 @@ public abstract class NavigationService : INavigationService
         return true;
     }
 
+    protected void ClosePage()
+    {
+        OnClosePage();
+
+        NavigateTo<IEmptyPage>();
+    }
+
     /// <summary>
     /// Override to add extra functionality before opening a page
     /// </summary>
     protected virtual void BeforeNavigateToPage(Type pageType)
+    {
+    }
+
+    /// <summary>
+    /// Override to add extra functionality before closing the current page
+    /// </summary>
+    protected virtual void OnClosePage()
     {
     }
 
@@ -90,6 +111,16 @@ public abstract class NavigationService : INavigationService
             CurrentPageType = pageType;
 
             BeforeNavigateToPage(pageType);
+
+            if (page.DataContext is ICloseRequester closeRequester)
+            {
+                closeRequester.ClosePageCommand = CloseCommand;
+            }
+
+            if (page.DataContext is INavigateBackRequester navigationBackRequester)
+            {
+                navigationBackRequester.NavigateBackCommand = NavigateBackCommand;
+            }
 
             if (parameter != null && page.DataContext is IParameterReceiver parameterReceiver)
             {

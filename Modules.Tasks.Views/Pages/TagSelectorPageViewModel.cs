@@ -14,7 +14,7 @@ using System.Windows.Input;
 
 namespace Modules.Tasks.Views.Pages;
 
-public class TagSelectorPageViewModel : BaseViewModel, IParameterReceiver
+public class TagSelectorPageViewModel : BaseViewModel, IParameterReceiver, ICloseRequester
 {
     private readonly ITaskItemRepository _taskItemRepository;
     private readonly ITagItemRepository _tagItemRepository;
@@ -67,7 +67,7 @@ public class TagSelectorPageViewModel : BaseViewModel, IParameterReceiver
     public ObservableCollection<TagSelectionItemViewModel> Items { get; }
 
     public ICommand DeselectAllTagsCommand { get; set; }
-
+    public ICommand ClosePageCommand { get; set; }
     public TagCreatorViewModel TagCreator { get; set; }
 
     public void ReceiveParameter(object parameter)

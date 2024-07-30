@@ -24,7 +24,7 @@
             </Grid.RowDefinitions>
 
             <!--  Settings title  -->
-            <Grid Grid.Row="0" Margin="15 10">
+            <Grid Grid.Row="0" Margin="10 10" >
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
@@ -39,7 +39,7 @@
                 <!--  BACK button  -->
                 <Button
                     Grid.Column="1"
-                    Command="{Binding GoBackCommand}"
+                    Command="{Binding NavigateBackCommand}"
                     Content="{StaticResource IconArrowLeft}"
                     Style="{StaticResource ButtonIconHoverRectangleStyle}"
                     ToolTip="Close settings" />

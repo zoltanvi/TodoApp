@@ -1,5 +1,5 @@
 ﻿using Modules.Common.DataBinding;
-using Modules.Common.Services.Navigation;
+using Modules.Common.Navigation;
 using Modules.Common.ViewModel;
 using Modules.Common.Views.Pages;
 using Modules.Settings.Contracts.ViewModels;
@@ -10,23 +10,16 @@ using System.Windows.Input;
 namespace Modules.Settings.Views.Pages;
 
 [AddINotifyPropertyChangedInterface]
-public class SettingsPageViewModel : BaseViewModel
+public class SettingsPageViewModel : BaseViewModel, INavigateBackRequester
 {
     private readonly IServiceProvider _serviceProvider;
-    private readonly IMainPageNavigationService _mainPageNavigationService;
     private int _activeCategoryId;
 
-    public SettingsPageViewModel(
-        IServiceProvider serviceProvider, 
-        IMainPageNavigationService mainPageNavigationService)
+    public SettingsPageViewModel(IServiceProvider serviceProvider)
     {
         ArgumentNullException.ThrowIfNull(serviceProvider);
-        ArgumentNullException.ThrowIfNull(mainPageNavigationService);
 
         _serviceProvider = serviceProvider;
-        _mainPageNavigationService = mainPageNavigationService;
-
-        GoBackCommand = new RelayCommand(() => _mainPageNavigationService.GoBackToPreviousPage());
 
         OpenPageCommand = new RelayParameterizedCommand<SettingsPageItemViewModel>(OpenSettingsPage);
 
@@ -55,7 +48,7 @@ public class SettingsPageViewModel : BaseViewModel
     }
 
     public ICommand OpenPageCommand { get; }
-    public ICommand GoBackCommand { get; }
+    public ICommand NavigateBackCommand { get; set; }
 
     public BasePage? SettingsPageFrameContent { get; private set; }
 
@@ -81,7 +74,7 @@ public class SettingsPageViewModel : BaseViewModel
 
         ArgumentNullException.ThrowIfNull(itemViewModel);
 
-        return (BasePage)_serviceProvider.GetService(itemViewModel.PageType);
+        return _serviceProvider.GetService(itemViewModel.PageType) as BasePage;
 
     }
 }

@@ -24,14 +24,21 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <TextBlock
-            Grid.Row="0"
-            Margin="20 10"
-            HorizontalAlignment="Center"
-            FontFamily="{Binding AppSettings.PageTitleSettings.FontFamily, Source={StaticResource AppSettings}, Converter={StaticResource EnumToFontFamilyConverter}}"
-            FontSize="{Binding AppSettings.PageTitleSettings.FontSize, Source={StaticResource AppSettings}, Converter={StaticResource FontSizeScaler}}"
-            Style="{StaticResource PageTitleTextBlockStyle}"
-            Text="Select tags" />
+        <Grid Grid.Row="0" Margin="10 10" >
+            <TextBlock
+                HorizontalAlignment="Center"
+                FontFamily="{Binding AppSettings.PageTitleSettings.FontFamily, Source={StaticResource AppSettings}, Converter={StaticResource EnumToFontFamilyConverter}}"
+                Style="{StaticResource PageTitleTextBlockStyle}"
+                Text="Select tags" />
+
+            <!--  BACK button  -->
+            <Button
+                HorizontalAlignment="Right"
+                Command="{Binding ClosePageCommand}"
+                Content="{StaticResource IconClose}"
+                Style="{StaticResource ButtonIconHoverRectangleStyle}"
+                ToolTip="Close settings" />
+        </Grid>
 
         <ListView
             x:Name="TagListListView"
@@ -144,7 +151,7 @@
             Style="{StaticResource ButtonSettingItemStyle}"
             ToolTip="Deselect all" />
 
-        <!--SEPARATOR LINE-->
+        <!--  SEPARATOR LINE  -->
         <Border
             Grid.Row="3"
             Height="1"
@@ -162,7 +169,10 @@
             Foreground="{DynamicResource Primary}"
             Text="Create new tag" />
 
-        <controls:TagCreatorControl Grid.Row="5" DataContext="{Binding TagCreator}" />
+        <controls:TagCreatorControl
+            Grid.Row="5"
+            Margin="5"
+            DataContext="{Binding TagCreator}" />
 
     </Grid>
 </pages:GenericBasePage>
