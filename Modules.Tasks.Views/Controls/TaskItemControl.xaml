@@ -47,15 +47,22 @@
                 </Border.Width>
             </Border>
 
-            <!--  ITEM BORDER  -->
+            <!--  ITEM BORDER DEFAULT OUTLINE  -->
             <Border
                 Margin="4 2"
-                BorderBrush="{Binding BorderColor, Converter={StaticResource TaskBorderBrushConverter}}"
+                BorderBrush="{DynamicResource OutlineVariant}"
                 BorderThickness="1"
                 CornerRadius="3"
                 Visibility="{Binding AppSettings.TaskSettings.BorderVisible, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
 
-            <!--  Editor indicator  -->
+            <!--  ITEM BORDER WITH CUSTOM COLOR  -->
+            <Border
+                Margin="4 2"
+                BorderBrush="{Binding BorderColor, Converter={StaticResource StringRgbToBrushConverter}}"
+                BorderThickness="1"
+                CornerRadius="3" />
+
+            <!--  EDITOR INDICATOR BORDER  -->
             <Border
                 Margin="2 0"
                 BorderBrush="{DynamicResource Tertiary}"
@@ -219,6 +226,8 @@
 
                         <!--  Task Checkbox  -->
                         <Grid Grid.Column="1">
+
+                            <!--  CIRCULAR CHECKBOX  -->
                             <Border Visibility="{Binding AppSettings.TaskSettings.CircularCheckbox, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}">
                                 <CheckBox
                                     Margin="{Binding UIScaler.TaskCheckBoxWidth, Source={StaticResource UIScaler}, Converter={StaticResource TaskCheckboxMarginConverter}}"
@@ -232,6 +241,7 @@
                                     Visibility="{Binding AppSettings.TaskQuickActionSettings.CheckboxEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
                             </Border>
 
+                            <!--  SQUARE CHECKBOX  -->
                             <Border Visibility="{Binding AppSettings.TaskSettings.CircularCheckbox, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityNegatedConverter}}">
                                 <CheckBox
                                     Margin="{Binding UIScaler.TaskCheckBoxWidth, Source={StaticResource UIScaler}, Converter={StaticResource TaskCheckboxMarginConverter}}"
@@ -514,10 +524,10 @@
                                     Style="{StaticResource TaskPropertyLabelRightStyle}" />
 
                                 <Button
-                                    Visibility="{Binding HasHistory, Converter={StaticResource BoolToVisibilityConverter}}"
+                                    Command="{Binding Cmd.ShowHistoryCommand}"
                                     Content="Open history"
                                     Style="{StaticResource HistoryButtonStyle}"
-                                    Command="{Binding Cmd.ShowHistoryCommand}"/>
+                                    Visibility="{Binding HasHistory, Converter={StaticResource BoolToVisibilityConverter}}" />
 
                             </StackPanel>
 
