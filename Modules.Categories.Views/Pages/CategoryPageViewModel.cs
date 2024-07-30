@@ -91,9 +91,16 @@ public class CategoryPageViewModel : BaseViewModel
         // Untrash category if exists
         var existingCategory = _categoriesRepository.GetCategoryByName(PendingAddNewCategoryText);
 
-        if (existingCategory != null && existingCategory.IsDeleted)
+        if (existingCategory != null)
         {
-            RestoreCategory(existingCategory);
+            if (existingCategory.IsDeleted)
+            {
+                RestoreCategory(existingCategory);
+            }
+            else
+            {
+                _mediator.Send(new ShowMessageInfoCommand { Message = "A category with this name already exists!" });
+            }
         }
         else
         {
