@@ -31,23 +31,13 @@ public class TaskItemCommandsViewModel : BaseViewModel
         _taskItemInternal = taskItem;
         _eventAggregator = eventAggregator;
 
-        IsDoneModifiedCommand = new RelayCommand(() =>
-        {
-            if (_taskItem.IsDone)
-            {
-                _eventAggregator.GetEvent<TaskItemCheckedEvent>().Publish(_taskItem.Id);
-            }
-            else
-            {
-                _eventAggregator.GetEvent<TaskItemUncheckedEvent>().Publish(_taskItem.Id);
-            }
-        });
+        IsDoneModifiedCommand = new RelayCommand(HandleIsDoneModified);
 
         EditItemCommand = new RelayCommand(_taskItemInternal.EditItem);
         ToggleIsDoneCommand = new RelayCommand(() =>
         {
             _taskItem.IsDone ^= true;
-            _taskItemInternal.UpdateTask();
+           HandleIsDoneModified();
         });
 
         PinItemCommand = new RelayCommand(() => _eventAggregator.GetEvent<TaskItemPinClickedEvent>().Publish(_taskItem.Id));
@@ -65,8 +55,20 @@ public class TaskItemCommandsViewModel : BaseViewModel
         SortByContentCommand = CreateSortCommand(TaskSortingRequestedPayload.SortByProperty.Content, true);
         SortByContentDescCommand = CreateSortCommand(TaskSortingRequestedPayload.SortByProperty.Content);
     }
+
+    private void HandleIsDoneModified()
+    {
+        if (_taskItem.IsDone)
+        {
+            _eventAggregator.GetEvent<TaskItemCheckedEvent>().Publish(_taskItem.Id);
+        }
+        else
+        {
+            _eventAggregator.GetEvent<TaskItemUncheckedEvent>().Publish(_taskItem.Id);
+        }
+    }
     
-    public ICommand IsDoneModifiedCommand { get; }
+    public ICommand IsDoneModifiedCommand { get; set; }
     public ICommand EditItemCommand { get; }
     public ICommand ToggleIsDoneCommand { get; }
     public ICommand OpenReminderCommand { get; }
