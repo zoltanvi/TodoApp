@@ -1,21 +1,27 @@
-﻿using Modules.Tasks.Views.Controls;
+﻿using Modules.Common.ViewModel;
+using Modules.Tasks.Views.Controls;
+using PropertyChanged;
 
 namespace Modules.Tasks.Views.Services;
 
-public class OneEditorOpenService
+[AddINotifyPropertyChangedInterface]
+public class OneEditorOpenService : BaseViewModel
 {
     private TaskItemViewModel? _editorOpenTask;
     private bool _editModeRequested;
-
+    private OneEditorOpenService() { }
+    
     public event Action? ChangedToDisplayMode;
-
+    public static OneEditorOpenService Instance { get; } = new();
     public int LastEditedTaskId { get; set; }
+    public bool NoTaskIsUnderEdit => _editorOpenTask == null;
 
     public void DisplayMode(TaskItemViewModel taskItem)
     {
         if (_editorOpenTask == taskItem)
         {
             _editorOpenTask = null;
+            OnPropertyChanged(nameof(NoTaskIsUnderEdit));
 
             if (!_editModeRequested)
             {
@@ -36,6 +42,7 @@ public class OneEditorOpenService
         }
 
         _editorOpenTask = taskItem;
+        OnPropertyChanged(nameof(NoTaskIsUnderEdit));
 
         if (_editorOpenTask != null)
         {
@@ -52,6 +59,7 @@ public class OneEditorOpenService
         // Save changes and close editor for old task
         _editorOpenTask?.ExitEditItem();
         _editorOpenTask = null;
+        OnPropertyChanged(nameof(NoTaskIsUnderEdit));
 
         _editModeRequested = false;
     }

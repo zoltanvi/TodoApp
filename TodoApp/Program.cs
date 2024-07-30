@@ -66,18 +66,17 @@ public static class Program
         services.AddScoped<MainWindow>();
         services.AddScoped<MainWindowViewModel>();
 
+        services.AddSingleton<OneEditorOpenService>(provider => OneEditorOpenService.Instance);
         services.AddSingleton<AppSettings>(provider => AppSettings.Instance);
-        services.AddScoped<IAppSettingsService, AppSettingsService>();
         services.AddSingleton<IAppSettingsAutoSaveService, AppSettingsAutoSaveService>();
-
-        services.AddSettingsViews();
-
         services.AddSingleton<IMainPageNavigationService, MainPageNavigationService>();
         services.AddSingleton<ISideMenuPageNavigationService, SideMenuPageNavigationService>();
         services.AddSingleton<IOverlayPageNavigationService, OverlayPageNavigationService>();
-
         services.AddSingleton<PopupMessageControl>();
-        services.AddSingleton<OneEditorOpenService>();
+
+        services.AddScoped<IAppSettingsService, AppSettingsService>();
+        
+        services.AddSettingsViews();
 
         AddDatabases(services);
         AddPages(services);

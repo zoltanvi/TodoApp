@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using Modules.Common.Services;
 
-namespace Modules.Common.Views.DataBinding;
+namespace Modules.Common.Views.Services;
 
 public class UIScalerBindingProxy : Freezable
 {

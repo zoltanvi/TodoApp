@@ -36,8 +36,6 @@ public class UIScaler : BaseViewModel, IUIScaler
         FontSize = new ScaledFontSizeProvider(this);
     }
 
-    public static IUIScaler FreezableInstance { get; set; }
-
     public static double StaticScaleValue { get; private set; } = 1;
     public double ScaleValue => StaticScaleValue;
     public ScaledFontSizeProvider FontSize { get; }

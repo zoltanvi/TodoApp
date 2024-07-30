@@ -1,11 +1,9 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:commonDd="clr-namespace:Modules.Common.Views.DragDrop"
-                    xmlns:markupExtensions="clr-namespace:Modules.Common.Views.MarkupExtensions"
-                    xmlns:dataBinding="clr-namespace:Modules.Common.Views.DataBinding"
                     xmlns:services="clr-namespace:Modules.Common.Views.Services">
 
-    <dataBinding:UIScalerBindingProxy x:Key="UIScaler" UIScaler="{x:Static services:UIScaler.Instance}" />
+    <services:UIScalerBindingProxy x:Key="UIScaler" UIScaler="{x:Static services:UIScaler.Instance}" />
     <commonDd:CustomDropHandlerBindingProxy x:Key="CustomDropHandler" Handler="{x:Static commonDd:CustomDropHandler.Instance}" />
 
 </ResourceDictionary>
