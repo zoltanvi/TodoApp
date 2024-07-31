@@ -85,7 +85,7 @@ public partial class RichTextEditorControl : UserControl
         toolbar.AlignJustifyCommandAction(() => PartTextEditor.AlignJustifyCommand?.Execute(null));
     }
 
-    private void OnTextEditorStatePropertyChanged(object sender, EventArgs e)
+    private void OnTextEditorStatePropertyChanged(object? sender, EventArgs e)
     {
         ArgumentNullException.ThrowIfNull(_toolbar);
         _toolbar.IsSelectionBold = PartTextEditor.IsSelectionBold;

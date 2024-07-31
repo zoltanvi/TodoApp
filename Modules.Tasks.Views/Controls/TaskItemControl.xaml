@@ -228,7 +228,9 @@
                         <Grid Grid.Column="1">
 
                             <!--  CIRCULAR CHECKBOX  -->
-                            <Border Visibility="{Binding AppSettings.TaskSettings.CircularCheckbox, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <Border
+                                IsEnabled="{Binding AppSettings.TaskSettings.CircularCheckbox, Source={StaticResource AppSettings}}"
+                                Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource BoolToVisibilityConverter}}">
                                 <CheckBox
                                     Margin="{Binding UIScaler.TaskCheckBoxWidth, Source={StaticResource UIScaler}, Converter={StaticResource TaskCheckboxMarginConverter}}"
                                     HorizontalAlignment="Center"
@@ -242,7 +244,9 @@
                             </Border>
 
                             <!--  SQUARE CHECKBOX  -->
-                            <Border Visibility="{Binding AppSettings.TaskSettings.CircularCheckbox, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityNegatedConverter}}">
+                            <Border
+                                IsEnabled="{Binding AppSettings.TaskSettings.CircularCheckbox, Source={StaticResource AppSettings}}"
+                                Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource BoolToVisibilityNegatedConverter}}">
                                 <CheckBox
                                     Margin="{Binding UIScaler.TaskCheckBoxWidth, Source={StaticResource UIScaler}, Converter={StaticResource TaskCheckboxMarginConverter}}"
                                     HorizontalAlignment="Center"
@@ -414,6 +418,7 @@
                     <Grid
                         Grid.Row="1"
                         Background="{DynamicResource Surface2}"
+                        IsEnabled="{Binding DetailsVisible}"
                         Visibility="{Binding DetailsVisible, Converter={StaticResource BoolToVisibilityConverter}}">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
@@ -527,7 +532,8 @@
                                     Command="{Binding Cmd.ShowHistoryCommand}"
                                     Content="Open history"
                                     Style="{StaticResource HistoryButtonStyle}"
-                                    Visibility="{Binding HasHistory, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                    Visibility="{Binding HasHistory, Converter={StaticResource BoolToVisibilityConverter}}"
+                                    IsEnabled="{Binding HasHistory}"/>
 
                             </StackPanel>
 
