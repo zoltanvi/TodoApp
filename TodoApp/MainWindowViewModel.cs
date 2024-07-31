@@ -1,12 +1,14 @@
 ﻿using MediatR;
 using Modules.Common.Cqrs.Events;
 using Modules.Common.DataBinding;
+using Modules.Common.Events;
 using Modules.Common.OBSOLETE.Mediator;
 using Modules.Common.Services;
 using Modules.Common.Services.Navigation;
 using Modules.Common.ViewModel;
 using Modules.Common.Views.Services;
 using Modules.Settings.Contracts.ViewModels;
+using Prism.Events;
 using PropertyChanged;
 using System.Windows;
 using System.Windows.Input;
@@ -27,6 +29,7 @@ public class MainWindowViewModel : BaseViewModel
 
     private readonly IWindowService _windowService;
     private readonly IMediator _mediator;
+    private readonly IEventAggregator _eventAggregator;
     private readonly IUIScaler _uiScaler;
     private readonly ThemeManager _themeManager;
     private readonly IOverlayPageNavigationService _overlayPageNavigationService;
@@ -39,18 +42,21 @@ public class MainWindowViewModel : BaseViewModel
     public MainWindowViewModel(
         IWindowService windowService,
         IMediator mediator,
+        IEventAggregator eventAggregator,
         IUIScaler uiScaler,
         ThemeManager themeManager,
         IOverlayPageNavigationService overlayPageNavigationService)
     {
         ArgumentNullException.ThrowIfNull(windowService);
         ArgumentNullException.ThrowIfNull(mediator);
+        ArgumentNullException.ThrowIfNull(eventAggregator);
         ArgumentNullException.ThrowIfNull(uiScaler);
         ArgumentNullException.ThrowIfNull(themeManager);
         ArgumentNullException.ThrowIfNull(overlayPageNavigationService);
         
         _windowService = windowService;
         _mediator = mediator;
+        _eventAggregator = eventAggregator;
         _uiScaler = uiScaler;
         // ThemeManager is injected so it is being created
         _themeManager = themeManager;
@@ -266,28 +272,41 @@ public class MainWindowViewModel : BaseViewModel
 
         if (Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
         {
-            // Ctrl + Z, Ctrl + Y
-            if (key == Key.Z)
+            switch (key)
             {
-                //IoC.UndoManager.Undo();
-            }
-            else if (key == Key.Y)
-            {
-                //IoC.UndoManager.Redo();
-            }
-            else if (key == Key.Subtract)
-            {
-                _uiScaler.ZoomOut();
-            }
-            else if (key == Key.Add)
-            {
-                _uiScaler.ZoomIn();
-            }
-            else if (key == Key.E)
-            {
-                // Ctrl + E
-                // Set focus on task page bottom text editor
-                MediatorOBSOLETE.NotifyClients(ViewModelMessages.FocusBottomTextEditor);
+                case Key.F:
+                {
+                    _eventAggregator.GetEvent<HotkeyPressedCtrlFEvent>().Publish();
+                    break;
+                }
+                case Key.Z:
+                {
+                    //IoC.UndoManager.Undo();
+                    break;
+                }
+                case Key.Y:
+                {
+                    //IoC.UndoManager.Redo();
+                    break;
+                }
+                case Key.Subtract:
+                {
+                    _uiScaler.ZoomOut();
+                    break;
+                }
+                case Key.Add:
+                {
+                    _uiScaler.ZoomIn();
+                    break;
+                }
+                case Key.E:
+                {
+                    // TODO:
+                    // Ctrl + E
+                    // Set focus on task page bottom text editor
+                    MediatorOBSOLETE.NotifyClients(ViewModelMessages.FocusBottomTextEditor);
+                    break;
+                }
             }
 
             if (Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))

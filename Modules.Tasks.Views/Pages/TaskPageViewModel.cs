@@ -2,6 +2,8 @@
 using Modules.Categories.Contracts.Cqrs.Commands;
 using Modules.Categories.Contracts.Cqrs.Queries;
 using Modules.Common.DataBinding;
+using Modules.Common.Events;
+using Modules.Common.Helpers;
 using Modules.Common.ViewModel;
 using Modules.Common.Views.DragDrop;
 using Modules.Settings.Contracts.ViewModels;
@@ -17,6 +19,8 @@ using Prism.Events;
 using PropertyChanged;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace Modules.Tasks.Views.Pages;
@@ -29,6 +33,8 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
     private readonly OneEditorOpenService _oneEditorOpenService;
     private readonly IEventAggregator _eventAggregator;
     private bool _sortingInProgress;
+    private string _searchText;
+    private List<string> _searchTerms = new();
 
     public event EventHandler? FocusAddNewTaskTextEditorRequested;
     public event Action<int>? ScrollIntoViewRequested;
@@ -59,6 +65,11 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         ToggleBottomPanelCommand = new RelayCommand(() => IsBottomPanelOpen ^= true);
         AddTaskItemCommand = new RelayCommand(AddTaskItem);
         TextBoxFocusedCommand = new RelayCommand(OnTextBoxFocused);
+        CloseSearchBoxCommand = new RelayCommand(() =>
+        {
+            IsSearchBoxOpen = false;
+            SearchText = string.Empty;
+        });
 
         AddNewTaskTextEditorViewModel = new RichTextEditorViewModel(false, false, true, true);
         AddNewTaskTextEditorViewModel.WatermarkText = "Add new task";
@@ -72,14 +83,15 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
             ? OrderTasksByState(tasks)
             : tasks;
 
-        Items = new ObservableCollection<TaskItemViewModel>(orderedTasks.MapToViewModelList(_mediator, oneEditorOpenService, _eventAggregator));
+        Items = new ObservableCollection<TaskItemViewModel>(
+            orderedTasks.MapToViewModelList(_mediator, oneEditorOpenService, _eventAggregator));
+
         Items.CollectionChanged += ItemsOnCollectionChanged;
-        var firstItem = Items.FirstOrDefault();
-        if (firstItem != null)
-        {
-            firstItem.IsFirstItem = true;
-        }
+        SetFirstItem();
         RecalculateProgress();
+
+        ItemsView = CollectionViewSource.GetDefaultView(Items);
+        ItemsView.Filter = FilterTaskItems;
 
         _eventAggregator.GetEvent<TaskItemDeleteClickedEvent>().Subscribe(OnDeleteTaskItemRequestedEvent);
         _eventAggregator.GetEvent<TaskItemPinClickedEvent>().Subscribe(OnPinTaskItemRequested);
@@ -89,11 +101,47 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         _eventAggregator.GetEvent<TagsChangedOnTaskItemEvent>().Subscribe(OnTagsChangedOnTaskItem);
         _eventAggregator.GetEvent<TaskSortingRequestedEvent>().Subscribe(OnSortingRequested);
         _eventAggregator.GetEvent<TaskItemVersionRestoredEvent>().Subscribe(OnVersionRestored);
+        _eventAggregator.GetEvent<HotkeyPressedCtrlFEvent>().Subscribe(OnCtrlFPressed);
 
         _oneEditorOpenService.ChangedToDisplayMode += FocusAddNewTaskTextEditor;
     }
 
+    public bool IsSearchBoxOpen { get; set; }
+
+    private bool FilterTaskItems(object obj)
+    {
+        if (string.IsNullOrWhiteSpace(SearchText)) return true;
+
+        if (obj is TaskItemViewModel taskItem)
+        {
+            HashSet<string> searchTerms = SearchText.GetSearchTerms();
+
+            return searchTerms.All(term => taskItem.ContentPreview.Contains(term, StringComparison.OrdinalIgnoreCase));
+        }
+
+        return false;
+    }
+
     public ObservableCollection<TaskItemViewModel> Items { get; }
+
+    public ICollectionView ItemsView { get; set; }
+
+    public string SearchText
+    {
+        get => _searchText;
+        set
+        {
+            _searchText = value;
+            
+            var newSearchTerms = _searchText.GetSearchTermsList();
+            if (!newSearchTerms.SequenceEqual(_searchTerms))
+            {
+                ItemsView.Refresh();
+            }
+
+            _searchTerms = newSearchTerms;
+        }
+    }
 
     public RichTextEditorViewModel AddNewTaskTextEditorViewModel { get; }
 
@@ -118,6 +166,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
     public ICommand ToggleBottomPanelCommand { get; }
     public ICommand AddTaskItemCommand { get; }
     public ICommand TextBoxFocusedCommand { get; }
+    public ICommand CloseSearchBoxCommand { get; }
 
     private void OnTextBoxFocused() => _oneEditorOpenService.EditModeWithoutTask();
 
@@ -357,6 +406,11 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         updatedTask.Versions = dbTask.Versions.MapToViewModelList(_mediator);
     }
 
+    private void OnCtrlFPressed()
+    {
+        IsSearchBoxOpen = true;
+    }
+
     private void EditCategory()
     {
         IsCategoryInEditMode = true;
@@ -405,6 +459,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         _eventAggregator.GetEvent<TagsChangedOnTaskItemEvent>().Unsubscribe(OnTagsChangedOnTaskItem);
         _eventAggregator.GetEvent<TaskSortingRequestedEvent>().Unsubscribe(OnSortingRequested);
         _eventAggregator.GetEvent<TaskItemVersionRestoredEvent>().Unsubscribe(OnVersionRestored);
+        _eventAggregator.GetEvent<HotkeyPressedCtrlFEvent>().Unsubscribe(OnCtrlFPressed);
 
         _oneEditorOpenService.ChangedToDisplayMode -= FocusAddNewTaskTextEditor;
     }
@@ -464,5 +519,14 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         };
 
         return _mediator.Send(query).Result;
+    }
+
+    private void SetFirstItem()
+    {
+        var firstItem = Items.FirstOrDefault();
+        if (firstItem != null)
+        {
+            firstItem.IsFirstItem = true;
+        }
     }
 }
