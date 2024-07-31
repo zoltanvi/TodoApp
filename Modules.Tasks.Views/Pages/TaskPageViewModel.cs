@@ -35,6 +35,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
     private bool _sortingInProgress;
     private string _searchText;
     private List<string> _searchTerms = new();
+    private bool _isSearchBoxOpen;
 
     public event EventHandler? FocusAddNewTaskTextEditorRequested;
     public event Action<int>? ScrollIntoViewRequested;
@@ -106,7 +107,19 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         _oneEditorOpenService.ChangedToDisplayMode += FocusAddNewTaskTextEditor;
     }
 
-    public bool IsSearchBoxOpen { get; set; }
+    public bool IsSearchBoxOpen
+    {
+        get => _isSearchBoxOpen;
+        set
+        {
+            if (value == false)
+            {
+                SearchText = string.Empty;
+            }
+
+            _isSearchBoxOpen = value;
+        }
+    }
 
     private bool FilterTaskItems(object obj)
     {
@@ -131,6 +144,8 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         get => _searchText;
         set
         {
+            if (!IsSearchBoxOpen) return;
+
             _searchText = value;
             
             var newSearchTerms = _searchText.GetSearchTermsList();
