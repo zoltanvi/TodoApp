@@ -118,7 +118,8 @@
                                 Padding="0 2"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
-                                FontSize="{Binding UIScaler.FontSize.Regular, Source={StaticResource UIScaler}}"
+                                FontSize="{Binding UIScaler.FontSize.Medium, Source={StaticResource UIScaler}}"
+                                FontFamily="Consolas"
                                 Foreground="{DynamicResource OnPrimaryContainer}"
                                 Text="{DynamicResource CurrentVersion}" />
                         </Border>
