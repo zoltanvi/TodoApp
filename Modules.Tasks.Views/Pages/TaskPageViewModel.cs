@@ -205,6 +205,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
             _oneEditorOpenService.LastEditedTaskId = addedTask.Id;
 
             Items.Add(addedTask.MapToViewModel(_mediator, _oneEditorOpenService, _eventAggregator));
+            ScrollIntoViewRequested?.Invoke(Items.Count - 1);
             RecalculateProgress();
 
             AddNewTaskTextEditorViewModel.DocumentContent = string.Empty;
