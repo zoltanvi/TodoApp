@@ -2,4 +2,4 @@
 
 namespace Modules.Categories.Contracts.Events;
 
-public class RestoreCategoryRequestedEvent : PubSubEvent<int>;
+public class CategoryRestoredEvent : PubSubEvent<int>;

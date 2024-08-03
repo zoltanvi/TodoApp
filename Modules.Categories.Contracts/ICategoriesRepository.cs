@@ -12,4 +12,5 @@ public interface ICategoriesRepository
     Category RestoreCategory(Category category, int newListOrder);
     Category UpdateCategory(Category category);
     void UpdateCategoryListOrders(List<Category> categories);
+    int GetActiveCategoriesCount();
 }

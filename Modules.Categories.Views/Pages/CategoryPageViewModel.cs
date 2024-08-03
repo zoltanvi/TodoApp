@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Modules.Categories.Contracts;
+using Modules.Categories.Contracts.Cqrs.Commands;
 using Modules.Categories.Contracts.Cqrs.Events;
 using Modules.Categories.Contracts.Events;
 using Modules.Categories.Contracts.Models;
@@ -64,7 +65,7 @@ public class CategoryPageViewModel : BaseViewModel
         eventAggregator.GetEvent<CategoryDeleteClickedEvent>().Subscribe(DeleteCategory);
         eventAggregator.GetEvent<CategoryClickedEvent>().Subscribe(SetActiveCategory);
         eventAggregator.GetEvent<CategoryNameUpdatedEvent>().Subscribe(OnCategoryNameUpdated);
-        eventAggregator.GetEvent<RestoreCategoryRequestedEvent>().Subscribe(OnRestoreCategoryRequested);
+        eventAggregator.GetEvent<CategoryRestoredEvent>().Subscribe(OnCategoryRestored);
     }
 
     public int RecycleBinCategoryId => Constants.RecycleBinCategoryId;
@@ -95,7 +96,7 @@ public class CategoryPageViewModel : BaseViewModel
         {
             if (existingCategory.IsDeleted)
             {
-                RestoreCategory(existingCategory);
+                _mediator.Send(new RestoreCategoryCommand { Id = existingCategory.Id });
             }
             else
             {
@@ -131,19 +132,12 @@ public class CategoryPageViewModel : BaseViewModel
         Items.Add(addedCategory.MapToViewModel(_eventAggregator));
     }
 
-    private void RestoreCategory(Category category)
-    {
-        _categoriesRepository.RestoreCategory(category, Items.Count);
-
-        Items.Add(category.MapToViewModel(_eventAggregator));
-    }
-
-    private void OnRestoreCategoryRequested(int categoryId)
+    private void OnCategoryRestored(int categoryId)
     {
         var dbCategory = _categoriesRepository.GetCategoryById(categoryId);
         ArgumentNullException.ThrowIfNull(dbCategory);
 
-        RestoreCategory(dbCategory);
+        Items.Add(dbCategory.MapToViewModel(_eventAggregator));
     }
 
     private void DeleteCategory(int categoryId)
@@ -260,6 +254,6 @@ public class CategoryPageViewModel : BaseViewModel
         _eventAggregator.GetEvent<CategoryDeleteClickedEvent>().Unsubscribe(DeleteCategory);
         _eventAggregator.GetEvent<CategoryClickedEvent>().Unsubscribe(SetActiveCategory);
         _eventAggregator.GetEvent<CategoryNameUpdatedEvent>().Unsubscribe(OnCategoryNameUpdated);
-        _eventAggregator.GetEvent<RestoreCategoryRequestedEvent>().Unsubscribe(OnRestoreCategoryRequested);
+        _eventAggregator.GetEvent<CategoryRestoredEvent>().Unsubscribe(OnCategoryRestored);
     }
 }

@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Modules.Categories.Contracts;
-using Modules.Categories.Contracts.Events;
+using Modules.Categories.Contracts.Cqrs.Commands;
 using Modules.Tasks.Contracts;
 using Modules.Tasks.Contracts.Cqrs.Commands;
 using Modules.Tasks.Contracts.Cqrs.Queries;
@@ -34,7 +34,7 @@ public class RestoreTaskItemCommandHandler : IRequestHandler<RestoreTaskItemComm
         _categoriesRepository = categoriesRepository;
     }
 
-    public Task Handle(RestoreTaskItemCommand request, CancellationToken cancellationToken)
+    public async Task Handle(RestoreTaskItemCommand request, CancellationToken cancellationToken)
     {
         var dbTask = _taskItemRepository.GetTaskById(request.TaskId);
         ArgumentNullException.ThrowIfNull(dbTask);
@@ -44,7 +44,7 @@ public class RestoreTaskItemCommandHandler : IRequestHandler<RestoreTaskItemComm
 
         if (dbCategory.IsDeleted)
         {
-            _eventAggregator.GetEvent<RestoreCategoryRequestedEvent>().Publish(dbCategory.Id);
+            await _mediator.Send(new RestoreCategoryCommand { Id = dbCategory.Id }, cancellationToken);
         }
 
         var query = new TaskInsertPositionQuery
@@ -54,9 +54,9 @@ public class RestoreTaskItemCommandHandler : IRequestHandler<RestoreTaskItemComm
         };
 
         var newIndex = _mediator.Send(query, cancellationToken).Result;
-        
+
         _taskItemRepository.RestoreTask(dbTask, newIndex);
-        
+
         InsertAndFixListOrders(dbTask.Id, dbCategory.Id, newIndex, dbTask);
 
         _eventAggregator.GetEvent<TaskRestoredEvent>().Publish(new TaskRestoredPayload
@@ -64,8 +64,6 @@ public class RestoreTaskItemCommandHandler : IRequestHandler<RestoreTaskItemComm
             TaskId = dbTask.Id,
             CategoryId = dbCategory.Id
         });
-
-        return Task.CompletedTask;
     }
 
     private void InsertAndFixListOrders(int taskId, int categoryId, int newIndex, TaskItem taskItem)

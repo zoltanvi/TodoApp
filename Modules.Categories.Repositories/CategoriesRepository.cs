@@ -1,5 +1,6 @@
 ﻿using Modules.Categories.Contracts;
 using Modules.Categories.Contracts.Models;
+using Modules.Common;
 
 namespace Modules.Categories.Repositories;
 
@@ -87,5 +88,12 @@ public class CategoriesRepository : ICategoriesRepository
         }
 
         _context.SaveChanges();
+    }
+
+    public int GetActiveCategoriesCount()
+    {
+        return _context.Categories
+            .Where(x => !x.IsDeleted)
+            .Count(x => x.Id != Constants.RecycleBinCategoryId);
     }
 }

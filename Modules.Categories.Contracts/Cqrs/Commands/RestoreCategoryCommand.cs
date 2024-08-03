@@ -2,7 +2,7 @@
 
 namespace Modules.Categories.Contracts.Cqrs.Commands;
 
-public class RestoreCategoryIfDeletedCommand : IRequest
+public class RestoreCategoryCommand : IRequest
 {
     public int Id { get; set; }
 }
