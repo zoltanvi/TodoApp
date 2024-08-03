@@ -3,7 +3,6 @@ using Modules.Categories.Contracts.Cqrs.Commands;
 using Modules.Categories.Contracts.Cqrs.Queries;
 using Modules.Common.DataBinding;
 using Modules.Common.Events;
-using Modules.Common.Helpers;
 using Modules.Common.ViewModel;
 using Modules.Common.Views.Controls;
 using Modules.Common.Views.DragDrop;
@@ -100,11 +99,6 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
 
         _oneEditorOpenService.ChangedToDisplayMode += FocusAddNewTaskTextEditor;
         SearchBoxViewModel.SearchTermsChanged += OnSearchTermsChanged;
-    }
-
-    private void OnSearchTermsChanged()
-    {
-        ItemsView.Refresh();
     }
 
     public SearchBoxViewModel SearchBoxViewModel { get; set; }
@@ -428,6 +422,11 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
     }
 
     private void FocusAddNewTaskTextEditor() => FocusAddNewTaskTextEditorRequested?.Invoke(this, EventArgs.Empty);
+
+    private void OnSearchTermsChanged()
+    {
+        ItemsView.Refresh();
+    }
 
     protected override void OnDispose()
     {

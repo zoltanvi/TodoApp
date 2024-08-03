@@ -13,6 +13,7 @@ public class RecycleBinGroupItemViewModel : BaseViewModel
 {
     private readonly IMediator _mediator;
     private bool _isOpen;
+    private HashSet<string> _searchTerms = new();
 
     public required int CategoryId { get; init; }
     public required string CategoryName { get; init; }
@@ -54,6 +55,19 @@ public class RecycleBinGroupItemViewModel : BaseViewModel
 
     private bool FilterTaskItem(object obj)
     {
+        if (_searchTerms.Count != 0 && obj is RecycleBinTaskItemViewModel taskItem)
+        {
+            return _searchTerms.All(x => taskItem.ContentPreview.Contains(x, StringComparison.OrdinalIgnoreCase));
+        }
+
         return IsOpen;
+    }
+
+    public bool SetSearchTerms(HashSet<string> searchTerms)
+    {
+        _searchTerms = searchTerms;
+        ItemsView.Refresh();
+
+        return ItemsView.Cast<object>().Any();
     }
 }

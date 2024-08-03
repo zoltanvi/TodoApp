@@ -1,7 +1,9 @@
 ﻿using MediatR;
 using Modules.Categories.Contracts;
 using Modules.Categories.Contracts.Events;
+using Modules.Common.Events;
 using Modules.Common.ViewModel;
+using Modules.Common.Views.Controls;
 using Modules.RecycleBin.Repositories;
 using Modules.RecycleBin.Views.Controls;
 using Modules.RecycleBin.Views.Mappings;
@@ -10,19 +12,21 @@ using Modules.Tasks.Contracts.Models;
 using Prism.Events;
 using PropertyChanged;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Windows.Data;
 
 namespace Modules.RecycleBin.Views.Pages;
 
 [AddINotifyPropertyChangedInterface]
 public class RecycleBinPageViewModel : BaseViewModel
 {
+    private const int CollapseGroupsItemLimit = 10;
+    private const int GroupTotalContentLengthLimit = CollapseGroupsItemLimit * 200;
     private readonly IMediator _mediator;
     private readonly IEventAggregator _eventAggregator;
     private readonly ICategoriesRepository _categoryRepository;
     private readonly RecycleBinRepository _recycleBinRepository;
-    private const int CollapseGroupsItemLimit = 10;
-    private const int GroupTotalContentLengthLimit = CollapseGroupsItemLimit * 200;
-
+    
     public RecycleBinPageViewModel(
         IMediator mediator,
         IEventAggregator eventAggregator,
@@ -39,15 +43,22 @@ public class RecycleBinPageViewModel : BaseViewModel
         _categoryRepository = categoryRepository;
         _recycleBinRepository = recycleBinRepository;
 
+        SearchBoxViewModel = new SearchBoxViewModel();
         InitializeGroupItems();
 
         _eventAggregator.GetEvent<CategoryDeletedEvent>().Subscribe(OnCategoryDeleted);
         _eventAggregator.GetEvent<TaskRestoredEvent>().Subscribe(OnTaskRestored);
         _eventAggregator.GetEvent<AllTasksInCategoryRestoredEvent>().Subscribe(OnAllTasksInCategoryRestored);
+        _eventAggregator.GetEvent<HotkeyPressedCtrlFEvent>().Subscribe(OnCtrlFPressed);
+        SearchBoxViewModel.SearchTermsChanged += OnSearchTermsChanged;
     }
 
     public ObservableCollection<RecycleBinGroupItemViewModel> GroupItems { get; } = new();
+    public ICollectionView GroupItemsView { get; set; }
+
     public bool IsEmpty => GroupItems.Count == 0;
+
+    public SearchBoxViewModel SearchBoxViewModel { get; set; }
 
     private void OnTaskRestored(TaskRestoredPayload payload)
     {
@@ -65,6 +76,7 @@ public class RecycleBinPageViewModel : BaseViewModel
         }
 
         OnPropertyChanged(nameof(IsEmpty));
+        GroupItemsView.Refresh();
     }
 
     private void OnAllTasksInCategoryRestored(int categoryId)
@@ -75,6 +87,7 @@ public class RecycleBinPageViewModel : BaseViewModel
         GroupItems.Remove(group);
         
         OnPropertyChanged(nameof(IsEmpty));
+        GroupItemsView.Refresh();
     }
 
     private void OnCategoryDeleted(int categoryId)
@@ -117,6 +130,7 @@ public class RecycleBinPageViewModel : BaseViewModel
         }
 
         OnPropertyChanged(nameof(IsEmpty));
+        GroupItemsView.Refresh();
     }
 
     private void InitializeGroupItems()
@@ -149,7 +163,39 @@ public class RecycleBinPageViewModel : BaseViewModel
             });
         }
 
+        GroupItemsView = CollectionViewSource.GetDefaultView(GroupItems);
+        GroupItemsView.Filter = FilterGroupItems;
+
         OnPropertyChanged(nameof(IsEmpty));
+    }
+
+    private bool FilterGroupItems(object obj)
+    {
+        if (obj is RecycleBinGroupItemViewModel groupItem)
+        {
+            // Empty, reset sub-search
+            if (string.IsNullOrWhiteSpace(SearchBoxViewModel.SearchText))
+            {
+                groupItem.SetSearchTerms([]);
+                return true;
+            }
+
+            // Search in category task items
+            var hasItems = groupItem.SetSearchTerms(SearchBoxViewModel.SearchTerms);
+            return hasItems;
+        }
+
+        return false;
+    }
+
+    private void OnCtrlFPressed()
+    {
+        SearchBoxViewModel.IsSearchBoxOpen = true;
+    }
+
+    private void OnSearchTermsChanged()
+    {
+        GroupItemsView.Refresh();
     }
 
     protected override void OnDispose()
@@ -157,6 +203,8 @@ public class RecycleBinPageViewModel : BaseViewModel
         _eventAggregator.GetEvent<TaskRestoredEvent>().Unsubscribe(OnTaskRestored);
         _eventAggregator.GetEvent<CategoryDeletedEvent>().Unsubscribe(OnCategoryDeleted);
         _eventAggregator.GetEvent<AllTasksInCategoryRestoredEvent>().Unsubscribe(OnAllTasksInCategoryRestored);
+        _eventAggregator.GetEvent<HotkeyPressedCtrlFEvent>().Unsubscribe(OnCtrlFPressed);
+        SearchBoxViewModel.SearchTermsChanged -= OnSearchTermsChanged;
     }
 
     private int GetTotalLength(IEnumerable<RecycleBinTaskItemViewModel> items) => 
