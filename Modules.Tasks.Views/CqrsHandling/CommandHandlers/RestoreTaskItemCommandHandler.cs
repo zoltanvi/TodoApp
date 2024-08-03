@@ -59,6 +59,7 @@ public class RestoreTaskItemCommandHandler : IRequestHandler<RestoreTaskItemComm
 
         InsertAndFixListOrders(dbTask.Id, dbCategory.Id, newIndex, dbTask);
 
+        // Notify view
         _eventAggregator.GetEvent<TaskRestoredEvent>().Publish(new TaskRestoredPayload
         {
             TaskId = dbTask.Id,
@@ -68,12 +69,15 @@ public class RestoreTaskItemCommandHandler : IRequestHandler<RestoreTaskItemComm
 
     private void InsertAndFixListOrders(int taskId, int categoryId, int newIndex, TaskItem taskItem)
     {
+        // Filter out the task that we want to insert into the correct position
         var otherTasksInCategory = _taskItemRepository.GetActiveTasksFromCategory(categoryId)
             .Where(x => x.Id != taskId)
             .ToList();
 
+        // Insert into the correct position
         otherTasksInCategory.Insert(newIndex, taskItem);
 
+        // Fix list orders
         for (var i = 0; i < otherTasksInCategory.Count; i++)
         {
             otherTasksInCategory[i].ListOrder = i;

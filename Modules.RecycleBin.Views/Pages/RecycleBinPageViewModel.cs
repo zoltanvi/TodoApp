@@ -43,6 +43,7 @@ public class RecycleBinPageViewModel : BaseViewModel
 
         _eventAggregator.GetEvent<CategoryDeletedEvent>().Subscribe(OnCategoryDeleted);
         _eventAggregator.GetEvent<TaskRestoredEvent>().Subscribe(OnTaskRestored);
+        _eventAggregator.GetEvent<AllTasksInCategoryRestoredEvent>().Subscribe(OnAllTasksInCategoryRestored);
     }
 
     public ObservableCollection<RecycleBinGroupItemViewModel> GroupItems { get; } = new();
@@ -63,6 +64,16 @@ public class RecycleBinPageViewModel : BaseViewModel
             GroupItems.Remove(group);
         }
 
+        OnPropertyChanged(nameof(IsEmpty));
+    }
+
+    private void OnAllTasksInCategoryRestored(int categoryId)
+    {
+        var group = GroupItems.FirstOrDefault(x => x.CategoryId == categoryId);
+        ArgumentNullException.ThrowIfNull(group);
+
+        GroupItems.Remove(group);
+        
         OnPropertyChanged(nameof(IsEmpty));
     }
 
@@ -90,7 +101,7 @@ public class RecycleBinPageViewModel : BaseViewModel
             ArgumentNullException.ThrowIfNull(category);
 
             var groupIsOpen = /*!closeAllGroups &&*/ !closeGroup && items.Count <= CollapseGroupsItemLimit;
-            GroupItems.Add(new RecycleBinGroupItemViewModel(groupIsOpen, items)
+            GroupItems.Add(new RecycleBinGroupItemViewModel(groupIsOpen, items, _mediator)
             {
                 CategoryId = category.Id,
                 CategoryName = category.Name
@@ -131,7 +142,7 @@ public class RecycleBinPageViewModel : BaseViewModel
             ArgumentNullException.ThrowIfNull(category);
 
             var groupIsOpen = /*!closeAllGroups &&*/ !closeGroup && items.Count <= CollapseGroupsItemLimit;
-            GroupItems.Add(new RecycleBinGroupItemViewModel(groupIsOpen, items)
+            GroupItems.Add(new RecycleBinGroupItemViewModel(groupIsOpen, items, _mediator)
             {
                 CategoryId = category.Id,
                 CategoryName = category.Name,
@@ -145,6 +156,7 @@ public class RecycleBinPageViewModel : BaseViewModel
     {
         _eventAggregator.GetEvent<TaskRestoredEvent>().Unsubscribe(OnTaskRestored);
         _eventAggregator.GetEvent<CategoryDeletedEvent>().Unsubscribe(OnCategoryDeleted);
+        _eventAggregator.GetEvent<AllTasksInCategoryRestoredEvent>().Unsubscribe(OnAllTasksInCategoryRestored);
     }
 
     private int GetTotalLength(IEnumerable<RecycleBinTaskItemViewModel> items) => 

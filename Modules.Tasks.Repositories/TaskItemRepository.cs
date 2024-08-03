@@ -95,7 +95,7 @@ public class TaskItemRepository : ITaskItemRepository
                 .FirstOrDefault(x => x.Id == id);
         }
 
-        return _context.Tasks.FirstOrDefault(x => x.Id == id);
+        return _context.Tasks.Find(id);
     }
 
     public List<TaskItemVersion> GetTaskItemVersions(int taskId)
@@ -125,6 +125,27 @@ public class TaskItemRepository : ITaskItemRepository
         return _context.Tasks
             .Where(x => x.CategoryId == categoryId)
             .Where(x => !x.IsDeleted)
+            .OrderBy(x => x.ListOrder)
+            .ToList();
+    }
+
+    public List<TaskItem> GetDeletedTasksFromCategory(int categoryId, bool includeNavigation = false)
+    {
+        if (includeNavigation)
+        {
+            return _context.Tasks
+                .Where(x => x.CategoryId == categoryId)
+                .Where(x => x.IsDeleted)
+                .Include(x => x.Reminders)
+                .Include(x => x.Versions)
+                .Include(x => x.Tags)
+                .OrderBy(x => x.ListOrder)
+                .ToList();
+        }
+
+        return _context.Tasks
+            .Where(x => x.CategoryId == categoryId)
+            .Where(x => x.IsDeleted)
             .OrderBy(x => x.ListOrder)
             .ToList();
     }
@@ -201,6 +222,30 @@ public class TaskItemRepository : ITaskItemRepository
             dbTask.DeletedDate = DateTime.Now;
             dbTask.IsDeleted = true;
             dbTask.ListOrder = -1;
+        }
+
+        _context.SaveChanges();
+    }
+
+    public void RestoreTasksInCategory(int categoryId, int startingListOrder)
+    {
+        var dbTasks = _context.Tasks
+            .Where(x => x.CategoryId == categoryId && x.IsDeleted)
+            .ToList();
+
+        if (dbTasks.Count == 0) return;
+
+        var listOrder = startingListOrder;
+
+        foreach (TaskItem dbTask in dbTasks)
+        {
+            dbTask.DeletedDate = null;
+            dbTask.IsDeleted = false;
+            dbTask.IsDone = false;
+            dbTask.Pinned = false;
+            dbTask.ListOrder = listOrder;
+
+            listOrder++;
         }
 
         _context.SaveChanges();

@@ -78,12 +78,12 @@
 
                 <ListView.ItemTemplate>
                     <DataTemplate>
-
                         <controls:RecycleBinGroupItemControl />
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
 
+            <!--EMPTY RECYCLE BIN LABEL-->
             <Grid Grid.Row="1" Visibility="{Binding IsEmpty, Converter={StaticResource BoolToVisibilityConverter}}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
