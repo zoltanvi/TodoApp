@@ -4,15 +4,13 @@ namespace Modules.Tasks.Contracts;
 
 public interface ITaskItemRepository
 {
-    bool AddReminderToTask(TaskItem task, Reminder reminder);
     TaskItem AddTask(TaskItem task);
 
     TaskItem AddTagToTask(TaskItem task, TagItem tag);
     TaskItem RemoveTagsFromTask(TaskItem task);
     TaskItem RemoveTagFromTask(TaskItem task, TagItem tag);
-    List<TaskItem> GetActiveTasks();
-    List<TaskItem> GetActiveTasksFromCategory(int categoryId);
-    TaskItem? GetTaskById(int id);
+    List<TaskItem> GetActiveTasksFromCategory(int categoryId, bool includeNavigation = false);
+    TaskItem? GetTaskById(int id, bool includeNavigation = false);
     List<TaskItemVersion> GetTaskItemVersions(int taskId);
     void UpdateTaskListOrders(List<TaskItem> taskItems);
     TaskItem UpdateTaskItem(TaskItem task);

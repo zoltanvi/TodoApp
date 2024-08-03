@@ -84,7 +84,19 @@ public class TaskItemRepository : ITaskItemRepository
         return dbTask;
     }
 
-    public TaskItem? GetTaskById(int id) => _context.Tasks.FirstOrDefault(x => x.Id == id);
+    public TaskItem? GetTaskById(int id, bool includeNavigation = false)
+    {
+        if (includeNavigation)
+        {
+            return _context.Tasks
+                .Include(x => x.Reminders)
+                .Include(x => x.Versions)
+                .Include(x => x.Tags)
+                .FirstOrDefault(x => x.Id == id);
+        }
+
+        return _context.Tasks.FirstOrDefault(x => x.Id == id);
+    }
 
     public List<TaskItemVersion> GetTaskItemVersions(int taskId)
     {
@@ -96,48 +108,23 @@ public class TaskItemRepository : ITaskItemRepository
             .ToList();
     }
 
-    public bool AddReminderToTask(TaskItem task, Reminder reminder)
+    public List<TaskItem> GetActiveTasksFromCategory(int categoryId, bool includeNavigation = false)
     {
-        if (task == null) return false;
-
-        var dbTask = _context.Tasks.Find(task.Id);
-        ArgumentNullException.ThrowIfNull(dbTask);
-
-        var dbReminder = _context.Reminders.Find(reminder.Id);
-
-        if (dbReminder != null)
+        if (includeNavigation)
         {
-            throw new InvalidOperationException("A reminder with this ID already exists.");
+            return _context.Tasks
+                .Where(x => x.CategoryId == categoryId)
+                .Where(x => !x.IsDeleted)
+                .Include(x => x.Reminders)
+                .Include(x => x.Versions)
+                .Include(x => x.Tags)
+                .OrderBy(x => x.ListOrder)
+                .ToList();
         }
 
-        reminder.TaskId = task.Id;
-        reminder.TaskItem = dbTask;
-
-        dbTask.Reminders.Add(reminder);
-        _context.SaveChanges();
-
-        return true;
-    }
-
-    public List<TaskItem> GetActiveTasks()
-    {
-        return _context.Tasks
-            .Where(x => !x.IsDeleted)
-            .Include(x => x.Reminders)
-            .Include(x => x.Versions)
-            .Include(x => x.Tags)
-            .OrderBy(x => x.ListOrder)
-            .ToList();
-    }
-
-    public List<TaskItem> GetActiveTasksFromCategory(int categoryId)
-    {
         return _context.Tasks
             .Where(x => x.CategoryId == categoryId)
             .Where(x => !x.IsDeleted)
-            .Include(x => x.Reminders)
-            .Include(x => x.Versions)
-            .Include(x => x.Tags)
             .OrderBy(x => x.ListOrder)
             .ToList();
     }

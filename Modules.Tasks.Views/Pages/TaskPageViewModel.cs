@@ -77,7 +77,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         AddNewTaskTextEditorViewModel.EnterAction = AddTaskItem;
         AddNewTaskTextEditorViewModel.OnQuickEditRequestedAction = OnQuickEditRequested;
 
-        var tasks = _taskItemRepository.GetActiveTasksFromCategory(activeCategoryInfo.Id);
+        var tasks = _taskItemRepository.GetActiveTasksFromCategory(activeCategoryInfo.Id, includeNavigation: true);
 
         // Fixes list orders if necessary, when the task page opens
         var orderedTasks = AppSettings.Instance.TaskPageSettings.ForceTaskOrderByState
@@ -326,7 +326,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         if (task != null)
         {
             var index = Items.IndexOf(task);
-            var updatedTask = _taskItemRepository.GetTaskById(taskId);
+            var updatedTask = _taskItemRepository.GetTaskById(taskId, includeNavigation: true);
             ArgumentNullException.ThrowIfNull(updatedTask);
 
             Items[index].Tags = updatedTask.Tags.MapTagItems();
@@ -411,8 +411,9 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
 
     private void OnVersionRestored(int taskId)
     {
-        var dbTask = _taskItemRepository.GetTaskById(taskId);
-
+        var dbTask = _taskItemRepository.GetTaskById(taskId, includeNavigation: true);
+        ArgumentNullException.ThrowIfNull(dbTask);
+        
         var updatedTask = Items.FirstOrDefault(x => x.Id == taskId);
         ArgumentNullException.ThrowIfNull(updatedTask);
 
@@ -528,7 +529,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
             throw new ArgumentException($"{nameof(droppedObject)} is not a {nameof(TaskItemViewModel)}");
         }
 
-        var query = new TaskExternalInsertPositionQuery
+        var query = new TaskDragDropInsertPositionQuery
         {
             TaskId = taskItem.Id,
             RequestedInsertPosition = dropIndex

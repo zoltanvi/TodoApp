@@ -5,17 +5,17 @@ using Modules.Tasks.Contracts.Cqrs.Queries;
 
 namespace Modules.Tasks.Views.CqrsHandling.QueryHandlers;
 
-public class TaskExternalInsertPositionQueryHandler : IRequestHandler<TaskExternalInsertPositionQuery, int>
+public class TaskDragDropInsertPositionQueryHandler : IRequestHandler<TaskDragDropInsertPositionQuery, int>
 {
     private readonly ITaskItemRepository _taskItemRepository;
 
-    public TaskExternalInsertPositionQueryHandler(ITaskItemRepository taskItemRepository)
+    public TaskDragDropInsertPositionQueryHandler(ITaskItemRepository taskItemRepository)
     {
         ArgumentNullException.ThrowIfNull(taskItemRepository);
         _taskItemRepository = taskItemRepository;
     }
 
-    public Task<int> Handle(TaskExternalInsertPositionQuery request, CancellationToken cancellationToken)
+    public Task<int> Handle(TaskDragDropInsertPositionQuery request, CancellationToken cancellationToken)
     {
         var dbTask = _taskItemRepository.GetTaskById(request.TaskId);
         ArgumentNullException.ThrowIfNull(dbTask);

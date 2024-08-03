@@ -28,13 +28,13 @@ public class CategoriesRepository : ICategoriesRepository
     public Category? GetCategoryById(int id) => _context.Categories.Find(id);
 
     public Category? GetCategoryByName(string name) =>
-        _context.Categories.FirstOrDefault(c => c.Name.ToLower() == name.ToLower());
+        _context.Categories.FirstOrDefault(c => c.Name.ToUpper() == name.ToUpper());
 
     public List<Category> GetActiveCategories()
     {
         return _context.Categories
             .Where(x => !x.IsDeleted)
-            .Where(x => x.Id != Common.Constants.RecycleBinCategoryId)
+            .Where(x => x.Id != Constants.RecycleBinCategoryId)
             .OrderBy(x => x.ListOrder)
             .ToList();
     }

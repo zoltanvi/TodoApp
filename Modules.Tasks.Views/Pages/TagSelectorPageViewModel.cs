@@ -75,7 +75,7 @@ public class TagSelectorPageViewModel : BaseViewModel, IParameterReceiver, IClos
         if (parameter is int taskId)
         {
             _taskId = taskId;
-            var dbTask = _taskItemRepository.GetTaskById(_taskId);
+            var dbTask = _taskItemRepository.GetTaskById(_taskId, includeNavigation: true);
             ArgumentNullException.ThrowIfNull(dbTask);
 
             // Set tags that are already on the task to selected
