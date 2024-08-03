@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace Modules.Tasks.Views.Controls;
+namespace Modules.Common.Views.Controls;
 
 public class SubmitEscapeTextBox : TextBox
 {

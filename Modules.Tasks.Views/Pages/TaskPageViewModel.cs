@@ -5,6 +5,7 @@ using Modules.Common.DataBinding;
 using Modules.Common.Events;
 using Modules.Common.Helpers;
 using Modules.Common.ViewModel;
+using Modules.Common.Views.Controls;
 using Modules.Common.Views.DragDrop;
 using Modules.Settings.Contracts.ViewModels;
 using Modules.Tasks.Contracts;
@@ -33,9 +34,6 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
     private readonly OneEditorOpenService _oneEditorOpenService;
     private readonly IEventAggregator _eventAggregator;
     private bool _sortingInProgress;
-    private string _searchText;
-    private List<string> _searchTerms = new();
-    private bool _isSearchBoxOpen;
 
     public event EventHandler? FocusAddNewTaskTextEditorRequested;
     public event Action<int>? ScrollIntoViewRequested;
@@ -66,11 +64,6 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         ToggleBottomPanelCommand = new RelayCommand(() => IsBottomPanelOpen ^= true);
         AddTaskItemCommand = new RelayCommand(AddTaskItem);
         TextBoxFocusedCommand = new RelayCommand(OnTextBoxFocused);
-        CloseSearchBoxCommand = new RelayCommand(() =>
-        {
-            IsSearchBoxOpen = false;
-            SearchText = string.Empty;
-        });
 
         AddNewTaskTextEditorViewModel = new RichTextEditorViewModel(false, false, true, true);
         AddNewTaskTextEditorViewModel.WatermarkText = "Add new task";
@@ -91,6 +84,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         SetFirstItem();
         RecalculateProgress();
 
+        SearchBoxViewModel = new SearchBoxViewModel();
         ItemsView = CollectionViewSource.GetDefaultView(Items);
         ItemsView.Filter = FilterTaskItems;
 
@@ -105,31 +99,23 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         _eventAggregator.GetEvent<HotkeyPressedCtrlFEvent>().Subscribe(OnCtrlFPressed);
 
         _oneEditorOpenService.ChangedToDisplayMode += FocusAddNewTaskTextEditor;
+        SearchBoxViewModel.SearchTermsChanged += OnSearchTermsChanged;
     }
 
-    public bool IsSearchBoxOpen
+    private void OnSearchTermsChanged()
     {
-        get => _isSearchBoxOpen;
-        set
-        {
-            if (value == false)
-            {
-                SearchText = string.Empty;
-            }
-
-            _isSearchBoxOpen = value;
-        }
+        ItemsView.Refresh();
     }
+
+    public SearchBoxViewModel SearchBoxViewModel { get; set; }
 
     private bool FilterTaskItems(object obj)
     {
-        if (string.IsNullOrWhiteSpace(SearchText)) return true;
+        if (string.IsNullOrWhiteSpace(SearchBoxViewModel.SearchText)) return true;
 
         if (obj is TaskItemViewModel taskItem)
         {
-            HashSet<string> searchTerms = SearchText.GetSearchTerms();
-
-            return searchTerms.All(term => taskItem.ContentPreview.Contains(term, StringComparison.OrdinalIgnoreCase));
+            return SearchBoxViewModel.SearchTerms.All(term => taskItem.ContentPreview.Contains(term, StringComparison.OrdinalIgnoreCase));
         }
 
         return false;
@@ -138,25 +124,6 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
     public ObservableCollection<TaskItemViewModel> Items { get; }
 
     public ICollectionView ItemsView { get; set; }
-
-    public string SearchText
-    {
-        get => _searchText;
-        set
-        {
-            if (!IsSearchBoxOpen) return;
-
-            _searchText = value;
-            
-            var newSearchTerms = _searchText.GetSearchTermsList();
-            if (!newSearchTerms.SequenceEqual(_searchTerms))
-            {
-                ItemsView.Refresh();
-            }
-
-            _searchTerms = newSearchTerms;
-        }
-    }
 
     public RichTextEditorViewModel AddNewTaskTextEditorViewModel { get; }
 
@@ -181,7 +148,6 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
     public ICommand ToggleBottomPanelCommand { get; }
     public ICommand AddTaskItemCommand { get; }
     public ICommand TextBoxFocusedCommand { get; }
-    public ICommand CloseSearchBoxCommand { get; }
 
     private void OnTextBoxFocused() => _oneEditorOpenService.EditModeWithoutTask();
 
@@ -425,7 +391,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
 
     private void OnCtrlFPressed()
     {
-        IsSearchBoxOpen = true;
+        SearchBoxViewModel.IsSearchBoxOpen = true;
     }
 
     private void EditCategory()
@@ -479,6 +445,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         _eventAggregator.GetEvent<HotkeyPressedCtrlFEvent>().Unsubscribe(OnCtrlFPressed);
 
         _oneEditorOpenService.ChangedToDisplayMode -= FocusAddNewTaskTextEditor;
+        SearchBoxViewModel.SearchTermsChanged -= OnSearchTermsChanged;
     }
 
     private void ItemsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs? e)
