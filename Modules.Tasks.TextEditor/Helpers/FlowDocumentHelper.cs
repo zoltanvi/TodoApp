@@ -12,8 +12,6 @@ public static class FlowDocumentHelper
 {
     public static string EmptySerializedDocument { get; } = XamlWriter.Save(new FlowDocument());
 
-    public static IEnumerable<Block> EmptyFlowDocumentBlocks { get; } = new FlowDocument().Blocks;
-
     public static string SerializeDocument(FlowDocument document)
     {
         var index = 0;
@@ -76,31 +74,6 @@ public static class FlowDocumentHelper
         return documentItems;
     }
 
-    private static void FixNode(XmlNode node, List<string> documentItems, ref int index)
-    {
-        if (node.HasChildNodes)
-        {
-            foreach (var childNode in node.ChildNodes)
-            {
-                if (childNode is XmlNode xmlChildNode)
-                {
-                    FixNode(xmlChildNode, documentItems, ref index);
-                }
-            }
-        }
-        else if (!string.IsNullOrEmpty(node.InnerText))
-        {
-            var item = documentItems[index++];
-
-            // Fix the serialization bug that comes from XamlWriter.Save().
-            // It messes up the '{' and '}' characters during serialization and writes '{}{' instead.
-            if (node.InnerText != item)
-            {
-                node.InnerText = item;
-            }
-        }
-    }
-
     private static void AddListItems(List<string> documentItems, List list)
     {
         foreach (ListItem listItem in list.ListItems)
@@ -149,6 +122,31 @@ public static class FlowDocumentHelper
         else if (inline is Span span)
         {
             AddInlines(documentItems, span);
+        }
+    }
+
+    private static void FixNode(XmlNode node, List<string> documentItems, ref int index)
+    {
+        if (node.HasChildNodes)
+        {
+            foreach (var childNode in node.ChildNodes)
+            {
+                if (childNode is XmlNode xmlChildNode)
+                {
+                    FixNode(xmlChildNode, documentItems, ref index);
+                }
+            }
+        }
+        else if (!string.IsNullOrEmpty(node.InnerText))
+        {
+            var item = documentItems[index++];
+
+            // Fix the serialization bug that comes from XamlWriter.Save().
+            // It messes up the '{' and '}' characters during serialization and writes '{}{' instead.
+            if (node.InnerText != item)
+            {
+                node.InnerText = item;
+            }
         }
     }
 }

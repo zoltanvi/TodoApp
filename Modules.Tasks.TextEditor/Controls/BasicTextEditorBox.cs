@@ -100,9 +100,7 @@ public class BasicTextEditorBox : RichTextBox
 
     private void SetContentPreview(FlowDocument flowDocument)
     {
-        var items = FlowDocumentHelper.GetDocumentItems(flowDocument);
-
-        ContentPreview = string.Join(" ", items);
+        ContentPreview = FlowDocumentToPlainTextConverter.ConvertToPlainText(flowDocument);
     }
 
     private static void OnContentChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
