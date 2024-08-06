@@ -33,16 +33,7 @@ public static class FlowDocumentHelper
                 {
                     foreach (XmlNode xmlNode in xmlElement)
                     {
-                        if (IsValidNode(xmlNode))
-                        {
-                            var item = documentItems[index++];
-
-                            // Fix the serialization bug that comes from XamlWriter.Save()
-                            if (xmlNode.InnerText != item)
-                            {
-                                xmlNode.InnerText = item;
-                            }
-                        }
+                        FixNode(xmlNode, documentItems, ref index);
                     }
                 }
             }
@@ -76,7 +67,7 @@ public static class FlowDocumentHelper
             {
                 AddInlines(documentItems, paragraph);
             }
-            else if (block is System.Windows.Documents.List list)
+            else if (block is List list)
             {
                 AddListItems(documentItems, list);
             }
@@ -85,7 +76,32 @@ public static class FlowDocumentHelper
         return documentItems;
     }
 
-    private static void AddListItems(List<string> documentItems, System.Windows.Documents.List list)
+    private static void FixNode(XmlNode node, List<string> documentItems, ref int index)
+    {
+        if (node.HasChildNodes)
+        {
+            foreach (var childNode in node.ChildNodes)
+            {
+                if (childNode is XmlNode xmlChildNode)
+                {
+                    FixNode(xmlChildNode, documentItems, ref index);
+                }
+            }
+        }
+        else if (!string.IsNullOrEmpty(node.InnerText))
+        {
+            var item = documentItems[index++];
+
+            // Fix the serialization bug that comes from XamlWriter.Save().
+            // It messes up the '{' and '}' characters during serialization and writes '{}{' instead.
+            if (node.InnerText != item)
+            {
+                node.InnerText = item;
+            }
+        }
+    }
+
+    private static void AddListItems(List<string> documentItems, List list)
     {
         foreach (ListItem listItem in list.ListItems)
         {
@@ -101,7 +117,7 @@ public static class FlowDocumentHelper
             {
                 AddInlines(documentItems, paragraph);
             }
-            else if (block is System.Windows.Documents.List list)
+            else if (block is List list)
             {
                 AddListItems(documentItems, list);
             }
@@ -134,13 +150,5 @@ public static class FlowDocumentHelper
         {
             AddInlines(documentItems, span);
         }
-    }
-
-    private static bool IsValidNode(XmlNode xmlNode)
-    {
-        return !string.IsNullOrEmpty(xmlNode.InnerText) &&
-               (xmlNode.Name == "Run" ||
-               xmlNode.Name == "Span" ||
-               xmlNode.Name == "#text");
     }
 }

@@ -8,6 +8,7 @@ namespace Modules.Tasks.TextEditor.Controls;
 public class BasicTextEditorBox : RichTextBox
 {
     private bool _setContentInProgress;
+    private string _documentContent;
 
     public static readonly DependencyPropertyKey IsEmptyPropertyKey = 
         DependencyProperty.RegisterReadOnly(nameof(IsEmpty), typeof(bool), typeof(BasicTextEditorBox), new PropertyMetadata());
@@ -33,6 +34,12 @@ public class BasicTextEditorBox : RichTextBox
         get => (string)GetValue(DocumentContentProperty);
         set
         {
+            if (_documentContent == value)
+            {
+                // No need for serialization
+                return;
+            }
+
             if (string.IsNullOrWhiteSpace(value))
             {
                 SetValue(DocumentContentProperty, FlowDocumentHelper.EmptySerializedDocument);
@@ -45,7 +52,7 @@ public class BasicTextEditorBox : RichTextBox
                 {
                     SetContentPreview(flowDocument);
                     SetValue(DocumentContentProperty, value);
-
+                    _documentContent = value;
                     // flowDocument is cleared with the ToList() below
                     Document.Blocks.Clear();
                     Document.Blocks.AddRange(flowDocument.Blocks.ToList());
