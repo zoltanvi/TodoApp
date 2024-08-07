@@ -9,6 +9,7 @@ using Modules.Tasks.Views.Mappings;
 using Modules.Tasks.Views.Services;
 using Prism.Events;
 using PropertyChanged;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 namespace Modules.Tasks.Views.Controls;
@@ -100,7 +101,7 @@ public class TaskItemViewModel : BaseViewModel, ITaskItemViewModel
 
     public List<TaskItemVersionViewModel> Versions { get; set; }
 
-    public List<TagItemOnTaskViewModel> Tags { get; set; }
+    public ObservableCollection<TagItemOnTaskViewModel> Tags { get; set; }
     public int VersionCount => Versions.Count;
     public bool HasHistory => VersionCount != 0;
     public bool IsFirstItem { get; set; }

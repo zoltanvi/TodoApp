@@ -29,7 +29,8 @@ public class DeleteTagItemCommandHandler : IRequestHandler<DeleteTagItemCommand>
 
         _tagItemRepository.DeleteTag(dbTag);
 
-        _eventAggregator.GetEvent<DeleteTagItemRequestedEvent>().Publish(request.TagId);
+        // Notify view
+        _eventAggregator.GetEvent<TagItemDeletedEvent>().Publish(request.TagId);
 
         return Task.CompletedTask;
     }

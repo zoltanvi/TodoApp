@@ -35,15 +35,15 @@ public class TagSettingsPageViewModel : BaseViewModel
         Items = new ObservableCollection<TagItemViewModel>(tags.MapToViewModelList(_mediator));
         TagCreator = new TagCreatorViewModel(_tagItemRepository, _mediator, _eventAggregator);
 
-        _eventAggregator.GetEvent<DeleteTagItemRequestedEvent>().Subscribe(OnDeleteTagItemRequested);
-        _eventAggregator.GetEvent<TagItemUpdatedEvent>().Subscribe(OnTagItemUpdated);
         _eventAggregator.GetEvent<TagItemCreatedEvent>().Subscribe(OnTagItemCreated);
+        _eventAggregator.GetEvent<TagItemUpdatedEvent>().Subscribe(OnTagItemUpdated);
+        _eventAggregator.GetEvent<TagItemDeletedEvent>().Subscribe(OnTagItemDeleted);
     }
 
     public ObservableCollection<TagItemViewModel> Items { get; }
     public TagCreatorViewModel TagCreator { get; set; }
 
-    private void OnDeleteTagItemRequested(int tagId)
+    private void OnTagItemDeleted(int tagId)
     {
         var tag = Items.FirstOrDefault(x => x.Id == tagId);
         ArgumentNullException.ThrowIfNull(tag);
@@ -74,8 +74,8 @@ public class TagSettingsPageViewModel : BaseViewModel
 
     protected override void OnDispose()
     {
-        _eventAggregator.GetEvent<DeleteTagItemRequestedEvent>().Unsubscribe(OnDeleteTagItemRequested);
-        _eventAggregator.GetEvent<TagItemUpdatedEvent>().Unsubscribe(OnTagItemUpdated);
         _eventAggregator.GetEvent<TagItemCreatedEvent>().Unsubscribe(OnTagItemCreated);
+        _eventAggregator.GetEvent<TagItemUpdatedEvent>().Unsubscribe(OnTagItemUpdated);
+        _eventAggregator.GetEvent<TagItemDeletedEvent>().Unsubscribe(OnTagItemDeleted);
     }
 }

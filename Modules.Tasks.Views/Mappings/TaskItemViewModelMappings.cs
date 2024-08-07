@@ -1,9 +1,11 @@
 ﻿using MediatR;
 using Modules.Common.DataModels;
+using Modules.Common.Extensions;
 using Modules.Tasks.Contracts.Models;
 using Modules.Tasks.Views.Controls;
 using Modules.Tasks.Views.Services;
 using Prism.Events;
+using System.Collections.ObjectModel;
 
 namespace Modules.Tasks.Views.Mappings;
 
@@ -68,11 +70,11 @@ public static class TaskItemViewModelMappings
         IEventAggregator eventAggregator) =>
         taskList.Select(x => x.MapToViewModel(mediator, oneEditorOpenService, eventAggregator)).ToList();
 
-    public static List<TagItemOnTaskViewModel> MapTagItems(this IEnumerable<TagItem> tags)
+    public static ObservableCollection<TagItemOnTaskViewModel> MapTagItems(this IEnumerable<TagItem> tags)
     {
         return tags.Select(x => new TagItemOnTaskViewModel
         {
             Id = x.Id, Color = (TagPresetColor)Enum.Parse(typeof(TagPresetColor), x.Color), Name = x.Name
-        }).ToList();
+        }).ToObservableCollection();
     }
 }

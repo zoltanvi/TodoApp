@@ -2,4 +2,4 @@
 
 namespace Modules.Tasks.Contracts.Events;
 
-public class DeleteTagItemRequestedEvent : PubSubEvent<int>;
+public class TagItemDeletedEvent : PubSubEvent<int>;

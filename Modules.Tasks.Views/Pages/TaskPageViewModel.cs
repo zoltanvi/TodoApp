@@ -6,9 +6,11 @@ using Modules.Common.Events;
 using Modules.Common.ViewModel;
 using Modules.Common.Views.Controls;
 using Modules.Common.Views.DragDrop;
+using Modules.PopupMessage.Contracts.Cqrs.Commands;
 using Modules.Settings.Contracts.ViewModels;
 using Modules.Tasks.Contracts;
 using Modules.Tasks.Contracts.Cqrs.Queries;
+using Modules.Tasks.Contracts.Events;
 using Modules.Tasks.Contracts.Models;
 using Modules.Tasks.TextEditor.Controls;
 using Modules.Tasks.Views.Controls;
@@ -20,6 +22,7 @@ using PropertyChanged;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows.Data;
 using System.Windows.Input;
 
@@ -96,6 +99,8 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         _eventAggregator.GetEvent<TaskSortingRequestedEvent>().Subscribe(OnSortingRequested);
         _eventAggregator.GetEvent<TaskItemVersionRestoredEvent>().Subscribe(OnVersionRestored);
         _eventAggregator.GetEvent<HotkeyPressedCtrlFEvent>().Subscribe(OnCtrlFPressed);
+        _eventAggregator.GetEvent<TagItemDeletedEvent>().Subscribe(OnTagItemDeleted);
+
 
         _oneEditorOpenService.ChangedToDisplayMode += FocusAddNewTaskTextEditor;
         SearchBoxViewModel.SearchTermsChanged += OnSearchTermsChanged;
@@ -170,6 +175,134 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
 
             AddNewTaskTextEditorViewModel.DocumentContent = string.Empty;
         }
+    }
+
+    private void OnQuickEditRequested()
+    {
+        var lastAddedTaskItem = Items.FirstOrDefault(x => x.Id == _oneEditorOpenService.LastEditedTaskId);
+
+        if (lastAddedTaskItem != null)
+        {
+            int index = Items.IndexOf(lastAddedTaskItem);
+            lastAddedTaskItem.Cmd.EditItemCommand.Execute(null);
+            ScrollIntoViewRequested?.Invoke(index);
+        }
+    }
+
+    private void EditCategory()
+    {
+        IsCategoryInEditMode = true;
+        var activeCategory = _mediator.Send(new GetActiveCategoryInfoQuery()).Result;
+        RenameCategoryContent = activeCategory.Name;
+    }
+
+    private void FinishCategoryEdit()
+    {
+        if (ActiveCategoryName != RenameCategoryContent)
+        {
+            var newName = _mediator.Send(new RenameActiveCategoryCommand { Name = RenameCategoryContent }).Result;
+            ActiveCategoryName = newName;
+        }
+
+        IsCategoryInEditMode = false;
+    }
+
+    private void RecalculateProgress()
+    {
+        TaskCount = Items.Count;
+        FinishedTaskCount = Items.Count(x => x.IsDone);
+    }
+
+    private void OnPageTitleSettingsChanged(object? sender, SettingsChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(PageTitleSettings.Visible))
+        {
+            OnPropertyChanged(nameof(IsCategoryNameTitleVisible));
+            OnPropertyChanged(nameof(IsCategoryNameTitleEditorVisible));
+        }
+    }
+
+    private void FocusAddNewTaskTextEditor() => FocusAddNewTaskTextEditorRequested?.Invoke(this, EventArgs.Empty);
+
+    private void OnSearchTermsChanged() => ItemsView.Refresh();
+
+    private void ItemsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs? e)
+    {
+        if (_sortingInProgress) return;
+
+        for (var i = 0; i < Items.Count; i++)
+        {
+            Items[i].ListOrder = i;
+            Items[i].IsFirstItem = i == 0;
+        }
+
+        _taskItemRepository.UpdateTaskListOrders(Items.MapList());
+    }
+
+    private List<TaskItem> OrderTasksByState(List<TaskItem> tasks)
+    {
+        List<TaskItem> orderedTasks = new List<TaskItem>();
+
+        var pinnedItems = tasks.Where(x => x.Pinned);
+        var activeItems = tasks.Where(x => !x.IsDone && !x.Pinned);
+        var doneItems = tasks.Where(x => x.IsDone);
+
+        orderedTasks.AddRange(pinnedItems);
+        orderedTasks.AddRange(activeItems);
+        orderedTasks.AddRange(doneItems);
+
+        for (var i = 0; i < orderedTasks.Count; i++)
+        {
+            orderedTasks[i].ListOrder = i;
+        }
+
+        _taskItemRepository.UpdateTaskListOrders(orderedTasks);
+
+        return orderedTasks;
+    }
+
+    private void MoveTaskItem(int newIndex, TaskItemViewModel taskItem)
+    {
+        Items.Remove(taskItem);
+        Items.Insert(newIndex, taskItem);
+    }
+
+    public int GetModifiedDropIndex(int dropIndex, object droppedObject)
+    {
+        if (droppedObject is not TaskItemViewModel taskItem)
+        {
+            throw new ArgumentException($"{nameof(droppedObject)} is not a {nameof(TaskItemViewModel)}");
+        }
+
+        var query = new TaskDragDropInsertPositionQuery
+        {
+            TaskId = taskItem.Id,
+            RequestedInsertPosition = dropIndex
+        };
+
+        return _mediator.Send(query).Result;
+    }
+
+    private void SetFirstItem()
+    {
+        var firstItem = Items.FirstOrDefault();
+        if (firstItem != null)
+        {
+            firstItem.IsFirstItem = true;
+        }
+    }
+
+    // Event handlers below ===========
+
+    private void OnDeleteTaskItemRequestedEvent(int taskId)
+    {
+        var taskItem = Items.FirstOrDefault(x => x.Id == taskId);
+        ArgumentNullException.ThrowIfNull(taskItem);
+
+        Items.Remove(taskItem);
+        RecalculateProgress();
+
+        _taskItemRepository.DeleteTask(taskItem.Map());
     }
 
     private void OnPinTaskItemRequested(int taskId)
@@ -257,29 +390,6 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         MoveTaskItem(newIndex, taskItem);
     }
 
-    private void OnDeleteTaskItemRequestedEvent(int taskId)
-    {
-        var taskItem = Items.FirstOrDefault(x => x.Id == taskId);
-        ArgumentNullException.ThrowIfNull(taskItem);
-
-        Items.Remove(taskItem);
-        RecalculateProgress();
-
-        _taskItemRepository.DeleteTask(taskItem.Map());
-    }
-
-    private void OnQuickEditRequested()
-    {
-        var lastAddedTaskItem = Items.FirstOrDefault(x => x.Id == _oneEditorOpenService.LastEditedTaskId);
-
-        if (lastAddedTaskItem != null)
-        {
-            int index = Items.IndexOf(lastAddedTaskItem);
-            lastAddedTaskItem.Cmd.EditItemCommand.Execute(null);
-            ScrollIntoViewRequested?.Invoke(index);
-        }
-    }
-
     private void OnTagsChangedOnTaskItem(int taskId)
     {
         var task = Items.FirstOrDefault(x => x.Id == taskId);
@@ -358,13 +468,13 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         sortedItems = sortedItems.ToList();
 
         _sortingInProgress = true;
-        
+
         Items.Clear();
         foreach (var taskItem in sortedItems)
         {
             Items.Add(taskItem);
         }
-        
+
         _sortingInProgress = false;
         ItemsOnCollectionChanged(null, null);
     }
@@ -373,7 +483,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
     {
         var dbTask = _taskItemRepository.GetTaskById(taskId, includeNavigation: true);
         ArgumentNullException.ThrowIfNull(dbTask);
-        
+
         var updatedTask = Items.FirstOrDefault(x => x.Id == taskId);
         ArgumentNullException.ThrowIfNull(updatedTask);
 
@@ -383,49 +493,19 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         updatedTask.Versions = dbTask.Versions.MapToViewModelList(_mediator);
     }
 
-    private void OnCtrlFPressed()
-    {
-        SearchBoxViewModel.IsSearchBoxOpen = true;
-    }
+    private void OnCtrlFPressed() => SearchBoxViewModel.IsSearchBoxOpen = true;
 
-    private void EditCategory()
+    private void OnTagItemDeleted(int tagId)
     {
-        IsCategoryInEditMode = true;
-        var activeCategory = _mediator.Send(new GetActiveCategoryInfoQuery()).Result;
-        RenameCategoryContent = activeCategory.Name;
-    }
-
-    private void FinishCategoryEdit()
-    {
-        if (ActiveCategoryName != RenameCategoryContent)
+        // Remove deleted tag from every tasks
+        foreach (var item in Items)
         {
-            var newName = _mediator.Send(new RenameActiveCategoryCommand { Name = RenameCategoryContent }).Result;
-            ActiveCategoryName = newName;
+            var tag = item.Tags.FirstOrDefault(x => x.Id == tagId);
+            if (tag != null)
+            {
+                item.Tags.Remove(tag);
+            }
         }
-
-        IsCategoryInEditMode = false;
-    }
-
-    private void RecalculateProgress()
-    {
-        TaskCount = Items.Count;
-        FinishedTaskCount = Items.Count(x => x.IsDone);
-    }
-
-    private void OnPageTitleSettingsChanged(object? sender, SettingsChangedEventArgs e)
-    {
-        if (e.PropertyName == nameof(PageTitleSettings.Visible))
-        {
-            OnPropertyChanged(nameof(IsCategoryNameTitleVisible));
-            OnPropertyChanged(nameof(IsCategoryNameTitleEditorVisible));
-        }
-    }
-
-    private void FocusAddNewTaskTextEditor() => FocusAddNewTaskTextEditorRequested?.Invoke(this, EventArgs.Empty);
-
-    private void OnSearchTermsChanged()
-    {
-        ItemsView.Refresh();
     }
 
     protected override void OnDispose()
@@ -442,74 +522,9 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         _eventAggregator.GetEvent<TaskSortingRequestedEvent>().Unsubscribe(OnSortingRequested);
         _eventAggregator.GetEvent<TaskItemVersionRestoredEvent>().Unsubscribe(OnVersionRestored);
         _eventAggregator.GetEvent<HotkeyPressedCtrlFEvent>().Unsubscribe(OnCtrlFPressed);
+        _eventAggregator.GetEvent<TagItemDeletedEvent>().Unsubscribe(OnTagItemDeleted);
 
         _oneEditorOpenService.ChangedToDisplayMode -= FocusAddNewTaskTextEditor;
         SearchBoxViewModel.SearchTermsChanged -= OnSearchTermsChanged;
-    }
-
-    private void ItemsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs? e)
-    {
-        if (_sortingInProgress) return;
-
-        for (var i = 0; i < Items.Count; i++)
-        {
-            Items[i].ListOrder = i;
-            Items[i].IsFirstItem = i == 0;
-        }
-
-        _taskItemRepository.UpdateTaskListOrders(Items.MapList());
-    }
-
-    private List<TaskItem> OrderTasksByState(List<TaskItem> tasks)
-    {
-        List<TaskItem> orderedTasks = new List<TaskItem>();
-
-        var pinnedItems = tasks.Where(x => x.Pinned);
-        var activeItems = tasks.Where(x => !x.IsDone && !x.Pinned);
-        var doneItems = tasks.Where(x => x.IsDone);
-
-        orderedTasks.AddRange(pinnedItems);
-        orderedTasks.AddRange(activeItems);
-        orderedTasks.AddRange(doneItems);
-
-        for (var i = 0; i < orderedTasks.Count; i++)
-        {
-            orderedTasks[i].ListOrder = i;
-        }
-
-        _taskItemRepository.UpdateTaskListOrders(orderedTasks);
-
-        return orderedTasks;
-    }
-
-    private void MoveTaskItem(int newIndex, TaskItemViewModel taskItem)
-    {
-        Items.Remove(taskItem);
-        Items.Insert(newIndex, taskItem);
-    }
-
-    public int GetModifiedDropIndex(int dropIndex, object droppedObject)
-    {
-        if (droppedObject is not TaskItemViewModel taskItem)
-        {
-            throw new ArgumentException($"{nameof(droppedObject)} is not a {nameof(TaskItemViewModel)}");
-        }
-
-        var query = new TaskDragDropInsertPositionQuery
-        {
-            TaskId = taskItem.Id,
-            RequestedInsertPosition = dropIndex
-        };
-
-        return _mediator.Send(query).Result;
-    }
-
-    private void SetFirstItem()
-    {
-        var firstItem = Items.FirstOrDefault();
-        if (firstItem != null)
-        {
-            firstItem.IsFirstItem = true;
-        }
     }
 }

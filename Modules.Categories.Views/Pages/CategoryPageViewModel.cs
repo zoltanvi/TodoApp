@@ -29,6 +29,7 @@ public class CategoryPageViewModel : BaseViewModel
     private readonly ICategoriesRepository _categoriesRepository;
     private readonly IMainPageNavigationService _mainPageNavigationService;
     private readonly ISideMenuPageNavigationService _sideMenuPageNavigationService;
+    private readonly IOverlayPageNavigationService _overlayPageNavigationService;
     private readonly IMediator _mediator;
     private readonly IEventAggregator _eventAggregator;
 
@@ -36,18 +37,21 @@ public class CategoryPageViewModel : BaseViewModel
         ICategoriesRepository categoriesRepository,
         IMainPageNavigationService mainPageNavigationService,
         ISideMenuPageNavigationService sideMenuPageNavigationService,
+        IOverlayPageNavigationService overlayPageNavigationService,
         IMediator mediator,
         IEventAggregator eventAggregator)
     {
         ArgumentNullException.ThrowIfNull(categoriesRepository);
         ArgumentNullException.ThrowIfNull(mainPageNavigationService);
         ArgumentNullException.ThrowIfNull(sideMenuPageNavigationService);
+        ArgumentNullException.ThrowIfNull(overlayPageNavigationService);
         ArgumentNullException.ThrowIfNull(mediator);
         ArgumentNullException.ThrowIfNull(eventAggregator);
         
         _categoriesRepository = categoriesRepository;
         _mainPageNavigationService = mainPageNavigationService;
         _sideMenuPageNavigationService = sideMenuPageNavigationService;
+        _overlayPageNavigationService = overlayPageNavigationService;
         _mediator = mediator;
         _eventAggregator = eventAggregator;
 
@@ -202,12 +206,7 @@ public class CategoryPageViewModel : BaseViewModel
 
     private void OpenSettingsPage()
     {
-        _mainPageNavigationService.NavigateTo<ISettingsPage>();
-
-        if (AppSettings.Instance.ApplicationSettings.CloseSideMenuOnPageChange)
-        {
-            AppSettings.Instance.SessionSettings.SideMenuOpen = false;
-        }
+        _overlayPageNavigationService.NavigateTo<ISettingsPage>();
     }
 
     private void OpenNoteListPage()

@@ -33,7 +33,7 @@ public class SettingsPageViewModel : BaseViewModel, INavigateBackRequester
             new() { Id = 6, Name = "TAGS", PageType = typeof(TagSettingsPage) },
             new() { Id = 7, Name = "QUICK ACTIONS", PageType = typeof(TaskQuickActionsSettingsPage) },
             new() { Id = 8, Name = "EDITOR", PageType = typeof(TextEditorQuickActionsSettingsPage) },
-            new() { Id = 9, Name = "NOTES", PageType = typeof(NotePageSettingsPage) },
+            //new() { Id = 9, Name = "NOTES", PageType = typeof(NotePageSettingsPage) },
             new() { Id = 10, Name = "DATE TIME", PageType = typeof(DateTimeSettingsPage) },
             new() { Id = 11, Name = "SHORTCUTS", PageType = typeof(ShortcutsPage) }
         };

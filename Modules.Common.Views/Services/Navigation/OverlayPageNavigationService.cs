@@ -46,6 +46,12 @@ public class OverlayPageNavigationService : NavigationService, IOverlayPageNavig
             Grid.Visibility = Visibility.Visible;
             PageVisible = true;
         }
+        else
+        {
+            Background.Visibility = Visibility.Collapsed;
+            Grid.Visibility = Visibility.Collapsed;
+            PageVisible = false;
+        }
     }
 
     protected override void OnClosePage()
