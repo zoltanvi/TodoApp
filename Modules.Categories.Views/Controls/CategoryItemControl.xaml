@@ -20,116 +20,98 @@
         </ContextMenu>
     </UserControl.ContextMenu>
 
-    <Button
-        Padding="0 0 0 0"
-        Command="{Binding Path=ChangeCategoryCommand}"
-        CommandParameter="{Binding DataContext, ElementName=CategoryListItem}"
-        Cursor="Hand"
-        Foreground="{DynamicResource OnPrimaryContainer}"
-        ToolTip="{Binding Name}">
-        <Button.Style>
-            <Style
-                BasedOn="{StaticResource ButtonHoverStyle}"
-                TargetType="Button">
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type Button}">
-                            <Border
-                                Margin="0 0 4 0"
-                                Padding="{TemplateBinding Padding}"
-                                CornerRadius="4">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="auto" />
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="auto" />
-                                    </Grid.ColumnDefinitions>
+    <Grid>
 
-                                    <Border
-                                        Grid.Column="0"
-                                        Grid.ColumnSpan="3"
-                                        Background="{TemplateBinding Background}"
-                                        CornerRadius="4"
-                                        Opacity="{TemplateBinding Opacity}" />
-
-                                    <Label
-                                        Grid.Column="0"
-                                        Margin="6 0"
-                                        Padding="0"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
-                                        Content="{StaticResource IconList}"
-                                        FontSize="{Binding UIScaler.FontSize.Small, Source={StaticResource UIScaler}}"
-                                        Style="{StaticResource IconLabelStyle}" />
-
-                                    <ContentPresenter
-                                        Grid.Column="1"
-                                        Margin="10 6"
-                                        HorizontalAlignment="Stretch"
-                                        VerticalAlignment="Center" />
-
-                                    <Button
-                                        x:Name="PART_DeleteButton"
-                                        Grid.Column="2"
-                                        Command="{Binding Path=DeleteCategoryCommand}"
-                                        CommandParameter="{Binding DataContext, ElementName=CategoryListItem}"
-                                        Content="{StaticResource IconDeleteX}"
-                                        Cursor="Hand"
-                                        FontSize="{Binding UIScaler.FontSize.Small, Source={StaticResource UIScaler}}"
-                                        Style="{StaticResource ButtonIconHoverCategoryDeleteStyle}"
-                                        Visibility="Hidden" />
-
-                                </Grid>
-                            </Border>
-
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="PART_DeleteButton" Property="Visibility" Value="Visible" />
-                                </Trigger>
-                                <Trigger Property="IsMouseOver" Value="False">
-                                    <Setter TargetName="PART_DeleteButton" Property="Visibility" Value="Hidden" />
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-                <Style.Triggers>
-                    <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Background" Value="{DynamicResource SecondaryContainer}" />
-                    </Trigger>
-
-                    <DataTrigger Value="True">
-                        <DataTrigger.Binding>
-                            <MultiBinding>
-                                <MultiBinding.Converter>
-                                    <converters:EqualityConverter />
-                                </MultiBinding.Converter>
-                                <Binding Path="Id" />
-                                <Binding
-                                    Path="ActiveCategoryId"
-                                    RelativeSource="{RelativeSource AncestorType={x:Type local:CategoryItemControl}}" />
-                            </MultiBinding>
-                        </DataTrigger.Binding>
-                        <Setter Property="Background" Value="{DynamicResource PrimaryContainer}" />
-                    </DataTrigger>
-
-                </Style.Triggers>
-            </Style>
-        </Button.Style>
-
-        <TextBlock
-            FontSize="{Binding UIScaler.FontSize.Medium, Source={StaticResource UIScaler}}"
-            FontWeight="Normal"
-            Text="{Binding Name}">
-
-            <TextBlock.Style>
+        <Button
+            Padding="0 0 0 0"
+            Command="{Binding Path=ChangeCategoryCommand}"
+            CommandParameter="{Binding DataContext, ElementName=CategoryListItem}"
+            Cursor="Hand"
+            Foreground="{DynamicResource OnPrimaryContainer}"
+            ToolTip="{Binding Name}">
+            <Button.LayoutTransform>
+                <ScaleTransform ScaleX="{Binding Source={StaticResource UIScaler}, Path=UIScaler.ScaleValue}" ScaleY="{Binding Source={StaticResource UIScaler}, Path=UIScaler.ScaleValue}" />
+            </Button.LayoutTransform>
+            <Button.Style>
                 <Style
-                    BasedOn="{StaticResource CategoryTextBlockStyle}"
-                    TargetType="TextBlock">
+                    BasedOn="{StaticResource ButtonHoverStyle}"
+                    TargetType="Button">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type Button}">
+                                <Border
+                                    Margin="0 0 4 0"
+                                    Padding="{TemplateBinding Padding}"
+                                    CornerRadius="4">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="auto" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Border
+                                            Grid.Column="0"
+                                            Grid.ColumnSpan="3"
+                                            Background="{TemplateBinding Background}"
+                                            CornerRadius="4"
+                                            Opacity="{TemplateBinding Opacity}" />
+
+                                        <Label
+                                            Grid.Column="0"
+                                            Margin="6 0"
+                                            Padding="0"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Content="{StaticResource IconList}"
+                                            FontSize="14"
+                                            Style="{StaticResource IconLabelStyle}" />
+
+                                        <ContentPresenter
+                                            Grid.Column="1"
+                                            Margin="10 6"
+                                            HorizontalAlignment="Stretch"
+                                            VerticalAlignment="Center" />
+
+                                        <Button
+                                            x:Name="PART_DeleteButton"
+                                            Grid.Column="2"
+                                            Command="{Binding Path=DeleteCategoryCommand}"
+                                            CommandParameter="{Binding DataContext, ElementName=CategoryListItem}"
+                                            Cursor="Hand"
+                                            FontSize="{Binding UIScaler.FontSize.Small, Source={StaticResource UIScaler}}"
+                                            Style="{StaticResource ButtonIconHoverCategoryDeleteStyle}"
+                                            Visibility="Hidden" >
+
+                                            <Label
+                                                Grid.Column="0"
+                                                Padding="0"
+                                                Margin="3 0"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                Content="{StaticResource IconDeleteX}"
+                                                FontSize="14"
+                                                Style="{StaticResource IconLabelStyle}" />
+                                        </Button>
+
+                                    </Grid>
+                                </Border>
+
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="PART_DeleteButton" Property="Visibility" Value="Visible" />
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="False">
+                                        <Setter TargetName="PART_DeleteButton" Property="Visibility" Value="Hidden" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
                     <Style.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Foreground" Value="{DynamicResource OnSecondaryContainer}" />
+                            <Setter Property="Background" Value="{DynamicResource SecondaryContainer}" />
                         </Trigger>
 
                         <DataTrigger Value="True">
@@ -144,16 +126,50 @@
                                         RelativeSource="{RelativeSource AncestorType={x:Type local:CategoryItemControl}}" />
                                 </MultiBinding>
                             </DataTrigger.Binding>
-                            <Setter Property="Foreground" Value="{DynamicResource OnPrimaryContainer}" />
+                            <Setter Property="Background" Value="{DynamicResource PrimaryContainer}" />
                         </DataTrigger>
 
                     </Style.Triggers>
-                    <Setter Property="Foreground" Value="{DynamicResource OnSecondaryContainer}" />
-
                 </Style>
-            </TextBlock.Style>
-        </TextBlock>
+            </Button.Style>
 
-    </Button>
+            <TextBlock
+                FontSize="16"
+                FontWeight="Normal"
+                Text="{Binding Name}">
+
+                <TextBlock.Style>
+                    <Style
+                        BasedOn="{StaticResource CategoryTextBlockStyle}"
+                        TargetType="TextBlock">
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="{DynamicResource OnSecondaryContainer}" />
+                            </Trigger>
+
+                            <DataTrigger Value="True">
+                                <DataTrigger.Binding>
+                                    <MultiBinding>
+                                        <MultiBinding.Converter>
+                                            <converters:EqualityConverter />
+                                        </MultiBinding.Converter>
+                                        <Binding Path="Id" />
+                                        <Binding
+                                            Path="ActiveCategoryId"
+                                            RelativeSource="{RelativeSource AncestorType={x:Type local:CategoryItemControl}}" />
+                                    </MultiBinding>
+                                </DataTrigger.Binding>
+                                <Setter Property="Foreground" Value="{DynamicResource OnPrimaryContainer}" />
+                            </DataTrigger>
+
+                        </Style.Triggers>
+                        <Setter Property="Foreground" Value="{DynamicResource OnSecondaryContainer}" />
+
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+
+        </Button>
+    </Grid>
 
 </UserControl>
