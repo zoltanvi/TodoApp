@@ -374,6 +374,14 @@
                                     </ListView.ItemTemplate>
                                 </ListView>
 
+                                <!--<TextBox
+                                    Grid.Column="1"
+                                    Background="Transparent"
+                                    Text="{Binding TextEditorViewModel.DocumentContentPreview}"
+                                    Foreground="Yellow"
+                                    IsReadOnly="False"
+                                ></TextBox>-->
+
                                 <!--  Task description  -->
                                 <controls1:RichTextEditorControl
                                     Grid.Column="1"
