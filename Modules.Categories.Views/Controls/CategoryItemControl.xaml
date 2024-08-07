@@ -1,11 +1,11 @@
 ﻿<UserControl
     x:Class="Modules.Categories.Views.Controls.CategoryItemControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:local="clr-namespace:Modules.Categories.Views.Controls"
     xmlns:converters="clr-namespace:Modules.Common.Views.ValueConverters;assembly=Modules.Common.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Modules.Categories.Views.Controls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     x:Name="CategoryListItem"
     d:DataContext="{d:DesignInstance Type=local:CategoryItemViewModel}"
     d:DesignHeight="60"
@@ -21,9 +21,11 @@
     </UserControl.ContextMenu>
 
     <Button
-        Padding="0 2 10 2"
+        Padding="0 0 0 0"
         Command="{Binding Path=ChangeCategoryCommand}"
         CommandParameter="{Binding DataContext, ElementName=CategoryListItem}"
+        Cursor="Hand"
+        Foreground="{DynamicResource OnPrimaryContainer}"
         ToolTip="{Binding Name}">
         <Button.Style>
             <Style
@@ -33,11 +35,8 @@
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type Button}">
                             <Border
-                                Margin="0 2 4 2"
+                                Margin="0 0 4 0"
                                 Padding="{TemplateBinding Padding}"
-                                Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
                                 CornerRadius="4">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
@@ -45,6 +44,13 @@
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="auto" />
                                     </Grid.ColumnDefinitions>
+
+                                    <Border
+                                        Grid.Column="0"
+                                        Grid.ColumnSpan="3"
+                                        Background="{TemplateBinding Background}"
+                                        CornerRadius="4"
+                                        Opacity="{TemplateBinding Opacity}" />
 
                                     <Label
                                         Grid.Column="0"
@@ -58,6 +64,7 @@
 
                                     <ContentPresenter
                                         Grid.Column="1"
+                                        Margin="10 6"
                                         HorizontalAlignment="Stretch"
                                         VerticalAlignment="Center" />
 
@@ -113,6 +120,7 @@
 
         <TextBlock
             FontSize="{Binding UIScaler.FontSize.Medium, Source={StaticResource UIScaler}}"
+            FontWeight="Normal"
             Text="{Binding Name}">
 
             <TextBlock.Style>
@@ -136,7 +144,7 @@
                                         RelativeSource="{RelativeSource AncestorType={x:Type local:CategoryItemControl}}" />
                                 </MultiBinding>
                             </DataTrigger.Binding>
-                            <Setter Property="Foreground" Value="{DynamicResource OnSecondaryContainer}" />
+                            <Setter Property="Foreground" Value="{DynamicResource OnPrimaryContainer}" />
                         </DataTrigger>
 
                     </Style.Triggers>

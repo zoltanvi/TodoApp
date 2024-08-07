@@ -7,7 +7,7 @@
     <system:String x:Key="IconChevronLeft">&#xE76B;</system:String>
     <system:String x:Key="IconChevronRight">&#xE76C;</system:String>
 
-    <system:String x:Key="IconList">&#xE292;</system:String>
+    <system:String x:Key="IconList">&#xE974;</system:String>
     <system:String x:Key="IconArrowLeft">&#xE0C4;</system:String>
     <system:String x:Key="IconPath">&#xE62F;</system:String>
     <system:String x:Key="IconSettings">&#xE713;</system:String>

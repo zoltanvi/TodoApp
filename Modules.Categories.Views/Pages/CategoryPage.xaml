@@ -120,6 +120,7 @@
                     Grid.Row="2"
                     Padding="0 2 10 2"
                     Command="{Binding Path=OpenRecycleBinPageCommand}"
+                    Cursor="Hand"
                     ToolTip="Open recycle bin page">
                     <Button.Style>
                         <Style BasedOn="{StaticResource ButtonHoverStyle}" TargetType="Button">
@@ -141,7 +142,7 @@
                                                 </Grid.ColumnDefinitions>
 
                                                 <Label
-                                                    Margin="6 0"
+                                                    Margin="10 0 0 0"
                                                     Padding="0"
                                                     HorizontalAlignment="Center"
                                                     VerticalAlignment="Center"
@@ -150,6 +151,7 @@
                                                     Style="{StaticResource IconLabelStyle}" />
 
                                                 <ContentPresenter
+                                                    Margin="10 6"
                                                     Grid.Column="1"
                                                     HorizontalAlignment="Stretch"
                                                     VerticalAlignment="Center" />
