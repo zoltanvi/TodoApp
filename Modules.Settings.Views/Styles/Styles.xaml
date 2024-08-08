@@ -258,6 +258,7 @@
         TargetType="TextBlock">
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="TextWrapping" Value="Wrap" />
+        <Setter Property="Margin" Value="0 0 20 0" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="FontSize" Value="{Binding UIScaler.FontSize.Small, Source={StaticResource UIScaler}}" />
         <Setter Property="Foreground" Value="{DynamicResource OnSurface}" />

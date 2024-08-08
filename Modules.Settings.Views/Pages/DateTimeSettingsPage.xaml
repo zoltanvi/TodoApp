@@ -108,7 +108,8 @@
                         <TextBlock
                             Grid.Column="1"
                             Style="{StaticResource SettingsDescriptionStyle}"
-                            Text="Task creation / modification date format" />
+                            Text="Task info date format"
+                            />
                         <ComboBox
                             Grid.Column="2"
                             HorizontalAlignment="Right"

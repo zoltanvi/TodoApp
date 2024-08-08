@@ -139,32 +139,43 @@
                     Name="OverlayBackground"
                     Background="{DynamicResource Background}"
                     Opacity="0.5"
-                    Visibility="Collapsed"/>
+                    Visibility="Collapsed" />
 
-                <!--  Overlay page is in front of the background.
+                <!--
+                    Overlay page is in front of the background.
                     This is important since we only want to handle the
                     mousedown event if the background is clicked and not the content area
                 -->
                 <Grid
                     Name="OverlayFrameGrid"
                     Visibility="Collapsed">
+
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="4*" />
-                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
                     <Border
                         Grid.Column="1"
                         Margin="10"
+                        HorizontalAlignment="Center"
+                        Background="{DynamicResource Background}"
                         BorderBrush="{DynamicResource Outline}"
                         BorderThickness="1"
-                        CornerRadius="6"
-                        Background="{DynamicResource Background}">
-                        <Frame
-                            x:Name="OverlayFrame"
-                            attached:NoFrameHistory.Value="True" />
+                        CornerRadius="6">
+
+                        <ScrollViewer
+                            HorizontalScrollBarVisibility="Auto"
+                            Style="{StaticResource TodoAppScrollViewer}"
+                            VerticalScrollBarVisibility="Disabled">
+                            <Frame
+                                x:Name="OverlayFrame"
+                                attached:NoFrameHistory.Value="True" />
+                        </ScrollViewer>
+
                     </Border>
+
 
                 </Grid>
 

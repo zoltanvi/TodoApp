@@ -42,7 +42,9 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <commonControls:TagCreatorControl Grid.Row="0" DataContext="{Binding TagCreator}" />
+            <commonControls:TagCreatorControl
+                Grid.Row="0"
+                DataContext="{Binding TagCreator}" />
 
             <!--  YOUR TAGS  -->
             <TextBlock
@@ -52,7 +54,7 @@
                 FontSize="{Binding UIScaler.FontSize.Regular, Source={StaticResource UIScaler}}"
                 Foreground="{DynamicResource Primary}"
                 Text="Your tags" />
-           
+
             <!--  TAG LIST  -->
             <Border Grid.Row="3">
                 <ListView
@@ -95,6 +97,7 @@
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
 
+                                    <!--  SAVE BUTTON  -->
                                     <Button
                                         x:Name="SaveButton"
                                         Grid.Column="0"
@@ -106,8 +109,10 @@
 
                                     <WrapPanel
                                         Grid.Column="1"
+                                        Margin="20 0"
                                         HorizontalAlignment="Center">
 
+                                        <!--  TAG CONTROL  -->
                                         <commonControls:TagControl
                                             MinWidth="30"
                                             TagColor="{Binding Color}">
@@ -131,6 +136,7 @@
                                         </commonControls:TagControl>
                                     </WrapPanel>
 
+                                    <!--  TAG COLOR  -->
                                     <ComboBox
                                         Grid.Column="2"
                                         Margin="4 0"
@@ -158,6 +164,7 @@
                                         </ComboBox.ItemTemplate>
                                     </ComboBox>
 
+                                    <!--  DELETE BUTTON  -->
                                     <Button
                                         Grid.Column="3"
                                         Margin="4 0 0 0"
