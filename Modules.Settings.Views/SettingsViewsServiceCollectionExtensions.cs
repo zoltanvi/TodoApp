@@ -1,13 +1,13 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Modules.Common.Navigation;
 using Modules.Settings.Views.Pages;
 
 namespace Modules.Settings.Views;
 
 public static class SettingsViewsServiceCollectionExtensions
 {
-    public static IServiceCollection AddSettingsViews(this IServiceCollection services)
+    public static IServiceCollection AddSettingsPages(this IServiceCollection services)
     {
-        services.AddTransient<NotePageSettingsPageViewModel>();
         services.AddTransient<TaskItemSettingsPageViewModel>();
         services.AddTransient<TagSettingsPageViewModel>();
         services.AddTransient<TaskPageSettingsPageViewModel>();
@@ -19,17 +19,16 @@ public static class SettingsViewsServiceCollectionExtensions
         services.AddTransient<DateTimeSettingsPageViewModel>();
         services.AddTransient<ShortcutsPageViewModel>();
 
-        services.AddTransient<NotePageSettingsPage>();
-        services.AddTransient<TaskItemSettingsPage>();
-        services.AddTransient<TagSettingsPage>();
-        services.AddTransient<TaskPageSettingsPage>();
-        services.AddTransient<TaskQuickActionsSettingsPage>();
-        services.AddTransient<TextEditorQuickActionsSettingsPage>();
-        services.AddTransient<ThemeSettingsPage>();
-        services.AddTransient<ApplicationSettingsPage>();
-        services.AddTransient<PageTitleSettingsPage>();
-        services.AddTransient<DateTimeSettingsPage>();
-        services.AddTransient<ShortcutsPage>();
+        services.AddTransient<ITaskItemSettingsPage, TaskItemSettingsPage>();
+        services.AddTransient<ITagSettingsPage, TagSettingsPage>();
+        services.AddTransient<ITaskPageSettingsPage, TaskPageSettingsPage>();
+        services.AddTransient<ITaskQuickActionsSettingsPage, TaskQuickActionsSettingsPage>();
+        services.AddTransient<ITextEditorQuickActionsSettingsPage, TextEditorQuickActionsSettingsPage>();
+        services.AddTransient<IThemeSettingsPage, ThemeSettingsPage>();
+        services.AddTransient<IApplicationSettingsPage, ApplicationSettingsPage>();
+        services.AddTransient<IPageTitleSettingsPage, PageTitleSettingsPage>();
+        services.AddTransient<IDateTimeSettingsPage, DateTimeSettingsPage>();
+        services.AddTransient<IShortcutsPage, ShortcutsPage>();
 
         return services;
     }

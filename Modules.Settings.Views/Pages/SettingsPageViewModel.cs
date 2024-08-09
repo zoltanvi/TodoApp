@@ -1,7 +1,7 @@
 ﻿using Modules.Common.DataBinding;
 using Modules.Common.Navigation;
+using Modules.Common.Services.Navigation;
 using Modules.Common.ViewModel;
-using Modules.Common.Views.Pages;
 using Modules.Settings.Contracts.ViewModels;
 using Modules.Settings.Views.Controls;
 using PropertyChanged;
@@ -10,36 +10,34 @@ using System.Windows.Input;
 namespace Modules.Settings.Views.Pages;
 
 [AddINotifyPropertyChangedInterface]
-public class SettingsPageViewModel : BaseViewModel, INavigateBackRequester
+public class SettingsPageViewModel : BaseViewModel, ICloseRequester
 {
-    private readonly IServiceProvider _serviceProvider;
+    private readonly ISettingsPageNavigationService _navigation;
     private int _activeCategoryId;
 
-    public SettingsPageViewModel(IServiceProvider serviceProvider)
+    public SettingsPageViewModel(ISettingsPageNavigationService navigation)
     {
-        ArgumentNullException.ThrowIfNull(serviceProvider);
+        ArgumentNullException.ThrowIfNull(navigation);
 
-        _serviceProvider = serviceProvider;
+        _navigation = navigation;
 
         OpenPageCommand = new RelayParameterizedCommand<SettingsPageItemViewModel>(OpenSettingsPage);
 
         Items = new List<SettingsPageItemViewModel>
         {
-            new() { Id = 1, Name = "APPLICATION", PageType = typeof(ApplicationSettingsPage) },
-            new() { Id = 2, Name = "THEME", PageType = typeof(ThemeSettingsPage) },
-            new() { Id = 3, Name = "PAGE TITLE", PageType = typeof(PageTitleSettingsPage) },
-            new() { Id = 4, Name = "TASK PAGE", PageType = typeof(TaskPageSettingsPage) },
-            new() { Id = 5, Name = "TASKS", PageType = typeof(TaskItemSettingsPage) },
-            new() { Id = 6, Name = "TAGS", PageType = typeof(TagSettingsPage) },
-            new() { Id = 7, Name = "QUICK ACTIONS", PageType = typeof(TaskQuickActionsSettingsPage) },
-            new() { Id = 8, Name = "EDITOR", PageType = typeof(TextEditorQuickActionsSettingsPage) },
-            //new() { Id = 9, Name = "NOTES", PageType = typeof(NotePageSettingsPage) },
-            new() { Id = 10, Name = "DATE TIME", PageType = typeof(DateTimeSettingsPage) },
-            new() { Id = 11, Name = "SHORTCUTS", PageType = typeof(ShortcutsPage) }
+            new() { Id = 1, Name = "APPLICATION", NavigateAction = () => _navigation.NavigateTo<IApplicationSettingsPage>() },
+            new() { Id = 2, Name = "THEME", NavigateAction = () => _navigation.NavigateTo<IThemeSettingsPage>() },
+            new() { Id = 3, Name = "PAGE TITLE", NavigateAction = () => _navigation.NavigateTo<IPageTitleSettingsPage>() },
+            new() { Id = 4, Name = "TASK PAGE", NavigateAction = () => _navigation.NavigateTo<ITaskPageSettingsPage>() },
+            new() { Id = 5, Name = "TASKS", NavigateAction = () => _navigation.NavigateTo<ITaskItemSettingsPage>() },
+            new() { Id = 6, Name = "TAGS", NavigateAction = () => _navigation.NavigateTo<ITagSettingsPage>() },
+            new() { Id = 7, Name = "QUICK ACTIONS", NavigateAction = () => _navigation.NavigateTo<ITaskQuickActionsSettingsPage>() },
+            new() { Id = 8, Name = "EDITOR", NavigateAction = () => _navigation.NavigateTo<ITextEditorQuickActionsSettingsPage>() },
+            new() { Id = 10, Name = "DATE TIME", NavigateAction = () => _navigation.NavigateTo<IDateTimeSettingsPage>() },
+            new() { Id = 11, Name = "SHORTCUTS", NavigateAction = () => _navigation.NavigateTo<IShortcutsPage>() }
         };
 
-        // Open ApplicationSettingsPage by default
-        ActiveCategoryId = 1;
+        _activeCategoryId = 1;
     }
 
     private void OpenSettingsPage(SettingsPageItemViewModel item)
@@ -48,10 +46,7 @@ public class SettingsPageViewModel : BaseViewModel, INavigateBackRequester
     }
 
     public ICommand OpenPageCommand { get; }
-    public ICommand NavigateBackCommand { get; set; }
-
-    public BasePage? SettingsPageFrameContent { get; private set; }
-
+    public ICommand ClosePageCommand { get; set; }
     public List<SettingsPageItemViewModel> Items { get; }
 
     public int ActiveCategoryId
@@ -63,18 +58,16 @@ public class SettingsPageViewModel : BaseViewModel, INavigateBackRequester
 
             _activeCategoryId = value;
             AppSettings.Instance.SessionSettings.ActiveSettingsCategoryId = value;
-
-            SettingsPageFrameContent = GetSettingsPage(_activeCategoryId);
+            
+            NavigateToCategory(_activeCategoryId);
         }
     }
 
-    private BasePage? GetSettingsPage(int id)
+    private void NavigateToCategory(int id)
     {
         SettingsPageItemViewModel? itemViewModel = Items.FirstOrDefault(x => x.Id == id);
-
         ArgumentNullException.ThrowIfNull(itemViewModel);
 
-        return _serviceProvider.GetService(itemViewModel.PageType) as BasePage;
-
+        itemViewModel.NavigateAction.Invoke();
     }
 }

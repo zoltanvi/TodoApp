@@ -1,4 +1,4 @@
-﻿using Modules.Common.Views.Pages;
+﻿using Modules.Common.Navigation;
 using System.ComponentModel;
 
 namespace Modules.Settings.Views.Pages;
@@ -6,7 +6,7 @@ namespace Modules.Settings.Views.Pages;
 /// <summary>
 /// Interaction logic for TextEditorQuickActionsSettingsPage.xaml
 /// </summary>
-public partial class TextEditorQuickActionsSettingsPage : GenericBasePage<TextEditorQuickActionsSettingsPageViewModel>, INotifyPropertyChanged
+public partial class TextEditorQuickActionsSettingsPage : INotifyPropertyChanged, ITextEditorQuickActionsSettingsPage
 {
     public TextEditorQuickActionsSettingsPage(TextEditorQuickActionsSettingsPageViewModel viewModel) : base(viewModel)
     {

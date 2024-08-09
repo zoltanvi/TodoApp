@@ -40,12 +40,7 @@ public static class Program
 {
     public static IServiceCollection ConfigureAppServices(this IServiceCollection services)
     {
-        // MediatR
-        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<App>());
-        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<SettingsCqrsRegistration>());
-        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<PopupMessageCqrsRegistration>());
-        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<CategoriesCqrsRegistration>());
-        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<TasksCqrsRegistration>());
+        AddMediatR(services);
 
         // Prism.Core
         services.AddSingleton<IEventAggregator, EventAggregator>();
@@ -69,19 +64,24 @@ public static class Program
         services.AddSingleton<OneEditorOpenService>(provider => OneEditorOpenService.Instance);
         services.AddSingleton<AppSettings>(provider => AppSettings.Instance);
         services.AddSingleton<IAppSettingsAutoSaveService, AppSettingsAutoSaveService>();
-        services.AddSingleton<IMainPageNavigationService, MainPageNavigationService>();
-        services.AddSingleton<ISideMenuPageNavigationService, SideMenuPageNavigationService>();
-        services.AddSingleton<IOverlayPageNavigationService, OverlayPageNavigationService>();
         services.AddSingleton<PopupMessageControl>();
 
         services.AddScoped<IAppSettingsService, AppSettingsService>();
-        
-        services.AddSettingsViews();
 
         AddDatabases(services);
+        AddNavigation(services);
         AddPages(services);
 
         return services;
+    }
+
+    private static void AddMediatR(IServiceCollection services)
+    {
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<App>());
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<SettingsCqrsRegistration>());
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<PopupMessageCqrsRegistration>());
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<CategoriesCqrsRegistration>());
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<TasksCqrsRegistration>());
     }
 
     public static void InitializeDatabase(this IServiceProvider serviceProvider)
@@ -99,13 +99,8 @@ public static class Program
 
         migrationService.Run(dbContextList);
 
-        serviceProvider.CreateDefaultData();
-    }
-
-    private static void CreateDefaultData(this IServiceProvider serviceProvider)
-    {
+        // Create default data
         var defaultDataCreator = serviceProvider.GetRequiredService<DefaultDataCreator>();
-
         defaultDataCreator.CreateDefaultsIfNeeded();
     }
 
@@ -142,19 +137,16 @@ public static class Program
         services.AddTransient<TaskHistoryPageViewModel>();
 
         services.AddSingleton<IEmptyPage, EmptyPage>();
-        
-        //services.AddScoped<INoteEditorPage, NotePage>();
-        //services.AddScoped<INoteListPage, NoteListPage>();
-        
-        //services.AddScoped<ITaskNotificationPage, NotificationPage>();
-        //services.AddScoped<ITaskReminderEditorPage, ReminderEditorPage>();
-        //services.AddScoped<ITaskReminderPage, TaskReminderPage>();
 
-        //services.AddScoped<NotePageViewModel>();
-        //services.AddScoped<NoteListPageViewModel>();
+        // Settings pages
+        services.AddSettingsPages();
+    }
 
-        //services.AddScoped<NotificationPageViewModel>();
-        //services.AddScoped<ReminderEditorPageViewModel>();
-        //services.AddScoped<TaskReminderPageViewModel>();
+    private static void AddNavigation(IServiceCollection services)
+    {
+        services.AddSingleton<IMainPageNavigationService, MainPageNavigationService>();
+        services.AddSingleton<ISideMenuPageNavigationService, SideMenuPageNavigationService>();
+        services.AddSingleton<IOverlayPageNavigationService, OverlayPageNavigationService>();
+        services.AddSingleton<ISettingsPageNavigationService, SettingsPageNavigationService>();
     }
 }

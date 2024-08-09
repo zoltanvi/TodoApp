@@ -1,4 +1,4 @@
-﻿using Modules.Common.Views.Pages;
+﻿using Modules.Common.Navigation;
 using System.ComponentModel;
 
 namespace Modules.Settings.Views.Pages;
@@ -6,7 +6,7 @@ namespace Modules.Settings.Views.Pages;
 /// <summary>
 /// Interaction logic for ThemeSettingsPage.xaml
 /// </summary>
-public partial class ThemeSettingsPage : GenericBasePage<ThemeSettingsPageViewModel>, INotifyPropertyChanged
+public partial class ThemeSettingsPage : INotifyPropertyChanged, IThemeSettingsPage
 {
     public ThemeSettingsPage(ThemeSettingsPageViewModel viewModel) : base(viewModel)
     {

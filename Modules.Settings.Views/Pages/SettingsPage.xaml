@@ -39,8 +39,8 @@
                 <!--  BACK button  -->
                 <Button
                     Grid.Column="1"
-                    Command="{Binding NavigateBackCommand}"
-                    Content="{StaticResource IconArrowLeft}"
+                    Command="{Binding ClosePageCommand}"
+                    Content="{StaticResource IconClose}"
                     Style="{StaticResource ButtonIconHoverRectangleStyle}"
                     ToolTip="Close settings" />
             </Grid>
@@ -130,8 +130,7 @@
                 <Border Grid.Column="1" Padding="5 0 5 5">
                     <Frame
                         attached:NoFrameHistory.Value="True"
-                        Content="{Binding}"
-                        DataContext="{Binding SettingsPageFrameContent, UpdateSourceTrigger=PropertyChanged}" />
+                        x:Name="SettingsPageFrame"/>
                 </Border>
 
             </Grid>

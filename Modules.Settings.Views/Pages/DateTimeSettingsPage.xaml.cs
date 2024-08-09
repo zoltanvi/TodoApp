@@ -1,4 +1,4 @@
-﻿using Modules.Common.Views.Pages;
+﻿using Modules.Common.Navigation;
 using System.ComponentModel;
 
 namespace Modules.Settings.Views.Pages;
@@ -6,7 +6,7 @@ namespace Modules.Settings.Views.Pages;
 /// <summary>
 /// Interaction logic for DateTimeSettingsPage.xaml
 /// </summary>
-public partial class DateTimeSettingsPage : GenericBasePage<DateTimeSettingsPageViewModel>, INotifyPropertyChanged
+public partial class DateTimeSettingsPage : INotifyPropertyChanged, IDateTimeSettingsPage
 {
     public DateTimeSettingsPage(DateTimeSettingsPageViewModel viewModel) : base(viewModel)
     {

@@ -1,5 +1,3 @@
 ﻿namespace Modules.Common.Services.Navigation;
 
-public interface IMainPageNavigationService : INavigationService
-{
-}
+public interface IMainPageNavigationService : INavigationService;
