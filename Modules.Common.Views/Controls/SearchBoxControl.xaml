@@ -47,10 +47,18 @@
                     Grid.Column="1"
                     Margin="5 0 10 0"
                     Command="{Binding CloseSearchBoxCommand}"
-                    Content="{StaticResource IconDeleteX}"
                     Cursor="Hand"
-                    FontSize="{Binding UIScaler.FontSize.Small, Source={StaticResource UIScaler}}"
-                    Style="{StaticResource ButtonIconHoverCategoryDeleteStyle}" />
+                    Style="{StaticResource ButtonIconHoverCategoryDeleteStyle}" >
+                    <Label
+                        Grid.Column="0"
+                        Margin="3 0"
+                        Padding="0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Content="{StaticResource IconDeleteX}"
+                        FontSize="{Binding UIScaler.FontSize.Small, Source={StaticResource UIScaler}}"
+                        Style="{StaticResource IconLabelStyle}" />
+                </Button>
             </Grid>
         </Border>
     </Grid>
