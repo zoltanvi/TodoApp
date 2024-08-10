@@ -11,19 +11,11 @@
     d:DesignWidth="800"
     mc:Ignorable="d">
 
-        <!--animations:AnimateSlideInFromTopProperty.Value="{Binding Visible}"-->
-    <Grid 
-        animations:SlideInOutAnimation.IsAnimating="{Binding Visible}"
-        animations:SlideInOutAnimation.Duration="{Binding MessageDuration}"
-        >
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
+    <Grid animations:SlideInOutAnimation.IsAnimating="{Binding Visible}"
+          animations:SlideInOutAnimation.Duration="{Binding MessageDuration}"
+    >
+
         <Border
-            Grid.Column="1"
-            MaxHeight="100"
             Margin="10"
             Padding="10 0"
             Background="{Binding MessageType, Converter={StaticResource MessageBackgroundConverter}}"
@@ -40,25 +32,17 @@
                     Color="Black" />
             </Border.Effect>
 
-
-            <Grid Margin="10 4">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-
+            <Grid Margin="0 4">
                 <TextBlock
                     Grid.Column="0"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    DockPanel.Dock="Left"
                     FontFamily="{DynamicResource UIFont}"
                     FontSize="{Binding UIScaler.FontSize.Regular, Source={StaticResource UIScaler}}"
                     FontWeight="Bold"
                     Foreground="{Binding MessageType, Converter={StaticResource MessageForegroundConverter}}"
                     Text="{Binding Message}"
                     TextWrapping="Wrap" />
-
             </Grid>
 
         </Border>
