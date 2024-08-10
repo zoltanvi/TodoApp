@@ -1,7 +1,9 @@
-﻿using Modules.Common.ViewModel;
+﻿using Modules.Common.DataBinding;
+using Modules.Common.ViewModel;
 using Modules.PopupMessage.Views.Models;
 using Modules.Settings.Contracts.ViewModels;
 using PropertyChanged;
+using System.Windows.Input;
 
 namespace Modules.PopupMessage.Views;
 
@@ -13,7 +15,14 @@ public class PopupMessageManager : BaseViewModel
     private PopupMessageManager()
     {
         AppSettings.Instance.ThemeSettings.SettingsChanged += OnThemeSettingsChanged;
+        CloseMessageCommand = new RelayCommand(() =>
+        {
+            // Changing it to true triggers the animation to close, changing back to false does not.
+            Closed = true;
+            Closed = false;
+        });
     }
+
 
     private void OnThemeSettingsChanged(object? sender, SettingsChangedEventArgs e)
     {
@@ -41,6 +50,8 @@ public class PopupMessageManager : BaseViewModel
 
     public MessageType MessageType { get; set; } = MessageType.Invalid;
     public string Message { get; set; } = string.Empty;
-    public bool Visible { get; set; } = false;
+    public bool Visible { get; set; }
+    public bool Closed { get; set; }
     public TimeSpan MessageDuration { get; set; } = TimeSpan.FromSeconds(4);
+    public ICommand CloseMessageCommand { get; }
 }

@@ -11,13 +11,14 @@
     d:DesignWidth="800"
     mc:Ignorable="d">
 
-    <Grid animations:SlideInOutAnimation.IsAnimating="{Binding Visible}"
-          animations:SlideInOutAnimation.Duration="{Binding MessageDuration}"
-    >
+    <Grid
+        animations:SlideInOutAnimation.Duration="{Binding MessageDuration}"
+        animations:SlideInOutAnimation.IsAnimating="{Binding Visible}"
+        animations:SlideInOutAnimation.IsClosed="{Binding Closed}">
 
         <Border
             Margin="10"
-            Padding="10 0"
+            Padding="4 0"
             Background="{Binding MessageType, Converter={StaticResource MessageBackgroundConverter}}"
             BorderBrush="{Binding MessageType, Converter={StaticResource MessageBorderConverter}}"
             BorderThickness="{Binding UIScaler.ScaleValue, Source={StaticResource UIScaler}}"
@@ -33,7 +34,19 @@
             </Border.Effect>
 
             <Grid Margin="0 4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
                 <TextBlock
+                    Grid.Row="0"
+                    Grid.RowSpan="2"
                     Grid.Column="0"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
@@ -43,6 +56,15 @@
                     Foreground="{Binding MessageType, Converter={StaticResource MessageForegroundConverter}}"
                     Text="{Binding Message}"
                     TextWrapping="Wrap" />
+
+                <Button 
+                    Grid.Column="1" 
+                    Grid.Row="0"
+                    Padding="5"
+                        Command="{Binding CloseMessageCommand}"
+                        Content="{StaticResource IconClose}"
+                        Style="{StaticResource ButtonIconHoverRectangleStyle}"
+                        ToolTip="Close" />
             </Grid>
 
         </Border>

@@ -21,6 +21,19 @@ public static class SlideInOutAnimation
     private static readonly DependencyProperty AnimationTimerProperty =
         DependencyProperty.RegisterAttached("AnimationTimer", typeof(DispatcherTimer), typeof(SlideInOutAnimation));
 
+    public static readonly DependencyProperty IsClosedProperty =
+        DependencyProperty.RegisterAttached("IsClosed", typeof(bool), typeof(SlideInOutAnimation), new PropertyMetadata(false, OnIsClosedChanged));
+
+    public static bool GetIsClosed(UIElement element)
+    {
+        return (bool)element.GetValue(IsClosedProperty);
+    }
+
+    public static void SetIsClosed(UIElement element, bool value)
+    {
+        element.SetValue(IsClosedProperty, value);
+    }
+
     public static bool GetIsAnimating(DependencyObject obj)
     {
         return (bool)obj.GetValue(IsAnimatingProperty);
@@ -73,6 +86,17 @@ public static class SlideInOutAnimation
         }
     }
 
+    private static void OnIsClosedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        if (d is FrameworkElement element)
+        {
+            if ((bool)e.NewValue)
+            {
+                CloseAnimation(element);
+            }
+        }
+    }
+
     private static void StartOrResetAnimation(FrameworkElement element)
     {
         TimeSpan duration = GetDuration(element);
@@ -95,17 +119,32 @@ public static class SlideInOutAnimation
             // Set the element as visible and start the timer to slide out after the duration
             SetIsVisible(element, true);
             var timer = new DispatcherTimer { Interval = duration };
-            timer.Tick += (s, e) =>
+
+            timer.Tick += TimerOnTick;
+            void TimerOnTick(object? sender, EventArgs e)
             {
                 SlideOut(element);
                 timer.Stop();
                 SetIsVisible(element, false);
-            };
+
+                timer.Tick -= TimerOnTick;
+            }
             timer.Start();
 
             // Store the timer in the attached property for future reference
             SetAnimationTimer(element, timer);
         }
+    }
+
+    private static void CloseAnimation(FrameworkElement element)
+    {
+        var timer = GetAnimationTimer(element);
+        if (timer != null)
+        {
+            timer.Stop();
+        }
+        SlideOut(element);
+        SetIsVisible(element, false);
     }
 
     private static void SlideIn(FrameworkElement element)
