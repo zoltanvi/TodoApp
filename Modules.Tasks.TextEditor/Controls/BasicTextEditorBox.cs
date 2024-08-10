@@ -9,6 +9,7 @@ public class BasicTextEditorBox : RichTextBox
 {
     private bool _setContentInProgress;
     private string _documentContent;
+    private bool _serializedUpdateOnly;
 
     public static readonly DependencyPropertyKey IsEmptyPropertyKey = 
         DependencyProperty.RegisterReadOnly(nameof(IsEmpty), typeof(bool), typeof(BasicTextEditorBox), new PropertyMetadata());
@@ -25,9 +26,8 @@ public class BasicTextEditorBox : RichTextBox
         set { SetValue(ContentPreviewProperty, value); }
     }
 
-
     /// <summary>
-    /// The Document of the <see cref="BasicTextEditorBox"/> serialized into an xml format.
+    /// The Document of the <see cref="BasicTextEditorBox"/> serialized into xml format.
     /// </summary>
     public string DocumentContent
     {
@@ -48,11 +48,16 @@ public class BasicTextEditorBox : RichTextBox
             {
                 _setContentInProgress = true;
 
-                if (FlowDocumentHelper.DeserializeDocument(value) is FlowDocument flowDocument)
+                if (_serializedUpdateOnly)
                 {
-                    SetContentPreview(flowDocument);
                     SetValue(DocumentContentProperty, value);
                     _documentContent = value;
+                }
+                else if (FlowDocumentHelper.DeserializeDocument(value) is FlowDocument flowDocument)
+                {
+                    SetValue(DocumentContentProperty, value);
+                    _documentContent = value;
+
                     // flowDocument is cleared with the ToList() below
                     Document.Blocks.Clear();
                     Document.Blocks.AddRange(flowDocument.Blocks.ToList());
@@ -95,7 +100,10 @@ public class BasicTextEditorBox : RichTextBox
 
     public void UpdateContent()
     {
+        _serializedUpdateOnly = true;
         DocumentContent = FlowDocumentHelper.SerializeDocument(Document);
+        _serializedUpdateOnly = false;
+        //SetValue(DocumentContentProperty, FlowDocumentHelper.SerializeDocument(Document));
     }
 
     private void SetContentPreview(FlowDocument flowDocument)
