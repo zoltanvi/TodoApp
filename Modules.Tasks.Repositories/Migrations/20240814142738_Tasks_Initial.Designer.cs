@@ -10,7 +10,7 @@ using Modules.Tasks.Repositories;
 namespace Modules.Tasks.Repositories.Migrations
 {
     [DbContext(typeof(TaskItemDbContext))]
-    [Migration("20240721080119_Tasks_Initial")]
+    [Migration("20240814142738_Tasks_Initial")]
     partial class Tasks_Initial
     {
         /// <inheritdoc />
@@ -93,6 +93,9 @@ namespace Modules.Tasks.Repositories.Migrations
                     b.Property<string>("DeletedDate")
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("IsContentPlainText")
+                        .HasColumnType("INTEGER");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("INTEGER");
 
@@ -135,6 +138,9 @@ namespace Modules.Tasks.Repositories.Migrations
                     b.Property<string>("ContentPreview")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsContentPlainText")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("TaskId")
                         .HasColumnType("INTEGER");

@@ -17,8 +17,9 @@ public static class TaskItemViewModelMappings
         {
             Id = vm.Id,
             CategoryId = vm.CategoryId,
-            Content = vm.Content,
-            ContentPreview = vm.ContentPreview,
+            Content = vm.Content.GetContent(),
+            IsContentPlainText = vm.Content.IsPlainTextMode,
+            ContentPreview = vm.Content.GetContentInPlainText(),
             ListOrder = vm.ListOrder,
             Pinned = vm.Pinned,
             IsDone = vm.IsDone,
@@ -37,17 +38,20 @@ public static class TaskItemViewModelMappings
         vmList.Select(x => x.Map()).ToList();
 
     public static TaskItemViewModel MapToViewModel(
-        this TaskItem taskItem, 
+        this TaskItem taskItem,
         IMediator mediator,
         OneEditorOpenService oneEditorOpenService,
         IEventAggregator eventAggregator)
     {
-        return new TaskItemViewModel(mediator, oneEditorOpenService, eventAggregator)
+        return new TaskItemViewModel(
+            mediator,
+            oneEditorOpenService,
+            eventAggregator,
+            taskItem.Content,
+            taskItem.IsContentPlainText)
         {
             Id = taskItem.Id,
             CategoryId = taskItem.CategoryId,
-            Content = taskItem.Content,
-            ContentPreview = taskItem.ContentPreview,
             ListOrder = taskItem.ListOrder,
             Pinned = taskItem.Pinned,
             IsDone = taskItem.IsDone,
@@ -64,7 +68,7 @@ public static class TaskItemViewModelMappings
     }
 
     public static List<TaskItemViewModel> MapToViewModelList(
-        this IEnumerable<TaskItem> taskList, 
+        this IEnumerable<TaskItem> taskList,
         IMediator mediator,
         OneEditorOpenService oneEditorOpenService,
         IEventAggregator eventAggregator) =>
@@ -74,7 +78,9 @@ public static class TaskItemViewModelMappings
     {
         return tags.Select(x => new TagItemOnTaskViewModel
         {
-            Id = x.Id, Color = (TagPresetColor)Enum.Parse(typeof(TagPresetColor), x.Color), Name = x.Name
+            Id = x.Id,
+            Color = (TagPresetColor)Enum.Parse(typeof(TagPresetColor), x.Color),
+            Name = x.Name
         }).ToObservableCollection();
     }
 }

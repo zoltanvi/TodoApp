@@ -32,6 +32,7 @@ namespace Modules.Tasks.Repositories.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     CategoryId = table.Column<int>(type: "INTEGER", nullable: false),
                     Content = table.Column<string>(type: "TEXT", nullable: false),
+                    IsContentPlainText = table.Column<bool>(type: "INTEGER", nullable: false),
                     ContentPreview = table.Column<string>(type: "TEXT", nullable: false),
                     ListOrder = table.Column<int>(type: "INTEGER", nullable: false, defaultValue: 0),
                     Pinned = table.Column<bool>(type: "INTEGER", nullable: false),
@@ -115,6 +116,7 @@ namespace Modules.Tasks.Repositories.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     TaskId = table.Column<int>(type: "INTEGER", nullable: false),
                     Content = table.Column<string>(type: "TEXT", nullable: false),
+                    IsContentPlainText = table.Column<bool>(type: "INTEGER", nullable: false),
                     ContentPreview = table.Column<string>(type: "TEXT", nullable: false),
                     VersionDate = table.Column<string>(type: "TEXT", nullable: false)
                 },

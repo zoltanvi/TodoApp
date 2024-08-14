@@ -66,11 +66,18 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         ToggleBottomPanelCommand = new RelayCommand(() => IsBottomPanelOpen ^= true);
         AddTaskItemCommand = new RelayCommand(AddTaskItem);
         TextBoxFocusedCommand = new RelayCommand(OnTextBoxFocused);
+        SwitchFormatMode = new RelayCommand(() => NewContentViewModel.IsPlainTextMode ^= true);
 
-        AddNewTaskTextEditorViewModel = new RichTextEditorViewModel(false, false, true, true);
-        AddNewTaskTextEditorViewModel.WatermarkText = "Add new task";
-        AddNewTaskTextEditorViewModel.EnterAction = AddTaskItem;
-        AddNewTaskTextEditorViewModel.OnQuickEditRequestedAction = OnQuickEditRequested;
+        NewContentViewModel = new DynamicTextBoxViewModel(
+            focusOnEditMode: false,
+            enterActionOnLostFocus: false,
+            toolbarCloseOnLostFocus: true,
+            acceptsTab: true,
+            isPlainTextMode: true,
+            enterAction: AddTaskItem);
+
+        NewContentViewModel.WatermarkText = "Add new task";
+        NewContentViewModel.OnQuickEditRequestedAction = OnQuickEditRequested;
 
         var tasks = _taskItemRepository.GetActiveTasksFromCategory(activeCategoryInfo.Id, includeNavigation: true);
 
@@ -114,7 +121,12 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
 
         if (obj is TaskItemViewModel taskItem)
         {
-            return SearchBoxViewModel.SearchTerms.All(term => taskItem.ContentPreview.Contains(term, StringComparison.OrdinalIgnoreCase));
+            var plainTextContent = taskItem.Content.GetContentInPlainText();
+
+            var res = SearchBoxViewModel.SearchTerms
+                .All(term => plainTextContent.Contains(term, StringComparison.OrdinalIgnoreCase));
+
+            return res;
         }
 
         return false;
@@ -124,7 +136,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
 
     public ICollectionView ItemsView { get; set; }
 
-    public RichTextEditorViewModel AddNewTaskTextEditorViewModel { get; }
+    public DynamicTextBoxViewModel NewContentViewModel { get; }
 
     public string ActiveCategoryName { get; private set; }
 
@@ -147,19 +159,21 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
     public ICommand ToggleBottomPanelCommand { get; }
     public ICommand AddTaskItemCommand { get; }
     public ICommand TextBoxFocusedCommand { get; }
+    public ICommand SwitchFormatMode { get; }
 
     private void OnTextBoxFocused() => _oneEditorOpenService.EditModeWithoutTask();
 
     private void AddTaskItem()
     {
-        if (!AddNewTaskTextEditorViewModel.IsContentEmpty)
+        if (!NewContentViewModel.IsEmpty)
         {
             var activeCategory = _mediator.Send(new GetActiveCategoryInfoQuery()).Result;
 
             var task = new TaskItem
             {
-                Content = AddNewTaskTextEditorViewModel.DocumentContent,
-                ContentPreview = AddNewTaskTextEditorViewModel.DocumentContentPreview,
+                Content = NewContentViewModel.GetContent(),
+                ContentPreview = NewContentViewModel.GetContentInPlainText(),
+                IsContentPlainText = NewContentViewModel.IsPlainTextMode,
                 CategoryId = activeCategory.Id,
                 // TODO
                 ListOrder = Items.Count
@@ -173,7 +187,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
             ScrollIntoViewRequested?.Invoke(Items.Count - 1);
             RecalculateProgress();
 
-            AddNewTaskTextEditorViewModel.DocumentContent = string.Empty;
+            NewContentViewModel.SetContent(NewContentViewModel.IsPlainTextMode, string.Empty);
         }
     }
 
@@ -437,8 +451,8 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
             case TaskSortingRequestedPayload.SortByProperty.Content:
             {
                 sortedItems = request.Ascending
-                    ? Items.OrderBy(x => x.ContentPreview)
-                    : Items.OrderByDescending(x => x.ContentPreview);
+                    ? Items.OrderBy(x => x.Content.GetContentInPlainText())
+                    : Items.OrderByDescending(x => x.Content.PlainTextContent);
                 break;
             }
             default:
@@ -486,9 +500,9 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
 
         var updatedTask = Items.FirstOrDefault(x => x.Id == taskId);
         ArgumentNullException.ThrowIfNull(updatedTask);
+            
+        updatedTask.Content.SetContent(dbTask.IsContentPlainText, dbTask.Content);
 
-        updatedTask.Content = dbTask.Content;
-        updatedTask.ContentPreview = dbTask.ContentPreview;
         updatedTask.ModificationDate = dbTask.ModificationDate;
         updatedTask.Versions = dbTask.Versions.MapToViewModelList(_mediator);
     }

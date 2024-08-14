@@ -208,5 +208,5 @@ public class RecycleBinPageViewModel : BaseViewModel
     }
 
     private int GetTotalLength(IEnumerable<RecycleBinTaskItemViewModel> items) => 
-        items.Sum(item => item.ContentPreview.Length);
+        items.Sum(item => item.Content.GetContentInPlainText().Length);
 }

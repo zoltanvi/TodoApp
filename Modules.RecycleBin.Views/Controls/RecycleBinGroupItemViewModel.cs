@@ -57,7 +57,8 @@ public class RecycleBinGroupItemViewModel : BaseViewModel
     {
         if (_searchTerms.Count != 0 && obj is RecycleBinTaskItemViewModel taskItem)
         {
-            return _searchTerms.All(x => taskItem.ContentPreview.Contains(x, StringComparison.OrdinalIgnoreCase));
+            var plainTextContent = taskItem.Content.GetContentInPlainText();
+            return _searchTerms.All(x => plainTextContent.Contains(x, StringComparison.OrdinalIgnoreCase));
         }
 
         return IsOpen;

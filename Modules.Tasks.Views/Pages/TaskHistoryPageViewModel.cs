@@ -46,12 +46,14 @@ public class TaskHistoryPageViewModel : BaseViewModel, IParameterReceiver, IClos
         ArgumentNullException.ThrowIfNull(dbTask);
 
         _taskItem = dbTask;
-        var current = new TaskItemVersionViewModel(_mediator)
+
+        var current = new TaskItemVersionViewModel(
+            _mediator, 
+            _taskItem.IsContentPlainText, 
+            _taskItem.Content)
         {
             Id = -1,
             TaskId = _taskId,
-            Content = _taskItem.Content,
-            ContentPreview = _taskItem.ContentPreview,
             VersionDate = _taskItem.ModificationDate
         };
 
@@ -72,12 +74,13 @@ public class TaskHistoryPageViewModel : BaseViewModel, IParameterReceiver, IClos
             ArgumentNullException.ThrowIfNull(dbTask);
 
             _taskItem = dbTask;
-            var current = new TaskItemVersionViewModel(_mediator)
+            var current = new TaskItemVersionViewModel(
+                _mediator,
+                _taskItem.IsContentPlainText,
+                _taskItem.Content)
             {
                 Id = -1,
                 TaskId = _taskId,
-                Content = _taskItem.Content,
-                ContentPreview = _taskItem.ContentPreview,
                 VersionDate = _taskItem.ModificationDate
             };
 

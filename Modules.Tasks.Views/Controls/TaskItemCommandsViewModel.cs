@@ -46,6 +46,11 @@ public class TaskItemCommandsViewModel : BaseViewModel
         ToggleDetailsCommand = new RelayCommand(() => _taskItem.DetailsVisible ^= true);
         ShowTagSelectorCommand = new RelayCommand(() => _mediator.Send(new OpenTagSelectorCommand { TaskId = _taskItem.Id }));
         ShowHistoryCommand = new RelayCommand(() => _mediator.Send(new OpenHistoryCommand { TaskId = _taskItem.Id }));
+        SwitchFormattedPlainTextModeCommand = new RelayCommand(() =>
+        {
+            _taskItem.Content.IsPlainTextMode ^= true;
+            _taskItemInternal.UpdateTask();
+        });
 
         SortByStateCommand = CreateSortCommand(TaskSortingRequestedPayload.SortByProperty.State);
         SortByCreationDateCommand = CreateSortCommand(TaskSortingRequestedPayload.SortByProperty.CreationDate, true);
@@ -79,6 +84,7 @@ public class TaskItemCommandsViewModel : BaseViewModel
     public ICommand ToggleDetailsCommand { get; }
     public ICommand ShowTagSelectorCommand { get; }
     public ICommand ShowHistoryCommand { get; }
+    public ICommand SwitchFormattedPlainTextModeCommand { get; set; }
 
     public ICommand SplitLinesCommand { get; }
 

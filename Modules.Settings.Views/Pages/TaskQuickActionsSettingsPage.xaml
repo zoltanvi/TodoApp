@@ -74,6 +74,12 @@
                     Icon="{StaticResource IconPin}"
                     IsChecked="{Binding AppSettings.TaskQuickActionSettings.PinEnabled, Source={StaticResource AppSettings}, Mode=TwoWay}" />
 
+                <!--  Switch button  -->
+                <controls:ToggleButtonSettingControl
+                    Description="Switch mode button"
+                    Icon="{StaticResource IconSwitch}"
+                    IsChecked="{Binding AppSettings.TaskQuickActionSettings.SwitchFormattedPlainTextModeEnabled, Source={StaticResource AppSettings}, Mode=TwoWay}" />
+
                 <!--  Details button  -->
                 <controls:ToggleButtonSettingControl
                     Description="Details button"
@@ -153,6 +159,15 @@
                                             Style="{StaticResource ButtonQuickActionStyle}"
                                             ToolTip="Pin task"
                                             Visibility="{Binding AppSettings.TaskQuickActionSettings.PinEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                    </Grid>
+
+                                    <!--  Switch button  -->
+                                    <Grid>
+                                        <Button
+                                            Content="{StaticResource IconSwitch}"
+                                            Style="{StaticResource ButtonQuickActionStyle}"
+                                            ToolTip="Switch formatted / plain text mode"
+                                            Visibility="{Binding AppSettings.TaskQuickActionSettings.SwitchFormattedPlainTextModeEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
                                     </Grid>
 
                                     <!--  Show details  -->

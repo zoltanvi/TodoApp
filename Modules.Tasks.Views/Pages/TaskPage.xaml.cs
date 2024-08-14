@@ -1,9 +1,8 @@
 ﻿using Modules.Common.Navigation;
-using Modules.Common.Views.Pages;
 
 namespace Modules.Tasks.Views.Pages;
 
-public partial class TaskPage : GenericBasePage<TaskPageViewModel>, ITaskPage, IDisposable
+public partial class TaskPage : ITaskPage, IDisposable
 {
     public TaskPage(TaskPageViewModel viewModel) : base(viewModel)
     {

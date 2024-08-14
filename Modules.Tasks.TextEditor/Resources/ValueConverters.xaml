@@ -1,8 +1,9 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:valueConverters="clr-namespace:Modules.Tasks.TextEditor.ValueConverters">
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:valueConverters="clr-namespace:Modules.Tasks.TextEditor.ValueConverters">
 
-    <valueConverters:BoolNegatedConverter x:Key="BoolNegatedConverter"/>
-    <valueConverters:BoolToVisibilityOrConverter x:Key="BoolToVisibilityOrConverter"/>
+    <valueConverters:BoolNegatedConverter x:Key="BoolNegatedConverter" />
+    <valueConverters:BoolToVisibilityOrConverter x:Key="BoolToVisibilityOrConverter" />
 
 </ResourceDictionary>

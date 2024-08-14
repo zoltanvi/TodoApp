@@ -90,6 +90,9 @@ namespace Modules.Tasks.Repositories.Migrations
                     b.Property<string>("DeletedDate")
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("IsContentPlainText")
+                        .HasColumnType("INTEGER");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("INTEGER");
 
@@ -132,6 +135,9 @@ namespace Modules.Tasks.Repositories.Migrations
                     b.Property<string>("ContentPreview")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsContentPlainText")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("TaskId")
                         .HasColumnType("INTEGER");

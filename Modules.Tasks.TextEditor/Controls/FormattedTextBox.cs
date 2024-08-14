@@ -4,8 +4,10 @@ using Modules.Common.OBSOLETE.Mediator;
 using Modules.Common.Views.Services;
 using Modules.Common.Views.ValueConverters;
 using Modules.Settings.Contracts.ViewModels;
+using Modules.Tasks.TextEditor.Helpers;
 using System.Globalization;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -13,24 +15,73 @@ using MediaFontFamily = System.Windows.Media.FontFamily;
 
 namespace Modules.Tasks.TextEditor.Controls;
 
-public class FormattableTextEditorBox : BasicTextEditorBox
+public class FormattedTextBox : RichTextBox
 {
     private bool _executing;
- 
-    public static readonly DependencyProperty IsSelectionBoldProperty = DependencyProperty.Register(nameof(IsSelectionBold), typeof(bool), typeof(FormattableTextEditorBox), new PropertyMetadata());
-    public static readonly DependencyProperty IsSelectionItalicProperty = DependencyProperty.Register(nameof(IsSelectionItalic), typeof(bool), typeof(FormattableTextEditorBox), new PropertyMetadata());
-    public static readonly DependencyProperty IsSelectionUnderlinedProperty = DependencyProperty.Register(nameof(IsSelectionUnderlined), typeof(bool), typeof(FormattableTextEditorBox), new PropertyMetadata());
-    public static readonly DependencyProperty SelectedColorProperty = DependencyProperty.Register(nameof(SelectedColor), typeof(string), typeof(FormattableTextEditorBox), new PropertyMetadata());
-    public static readonly DependencyProperty TextColorProperty = DependencyProperty.Register(nameof(TextColor), typeof(string), typeof(FormattableTextEditorBox), new PropertyMetadata(OnTextColorChanged));
+    private bool _setContentInProgress;
+    private bool _serializedUpdateOnly;
 
-    public static readonly DependencyProperty IsFormattedPasteEnabledProperty = DependencyProperty.Register(nameof(IsFormattedPasteEnabled), typeof(bool), typeof(FormattableTextEditorBox), new PropertyMetadata(true));
+    public static readonly DependencyPropertyKey IsEmptyPropertyKey = DependencyProperty.RegisterReadOnly(nameof(IsEmpty), typeof(bool), typeof(FormattedTextBox), new PropertyMetadata());
+    public static readonly DependencyProperty DocumentContentProperty = DependencyProperty.Register(nameof(DocumentContent), typeof(string), typeof(FormattedTextBox), new PropertyMetadata(OnContentChanged));
 
-    public static readonly DependencyProperty EnterActionProperty = DependencyProperty.Register(nameof(EnterAction), typeof(Action), typeof(FormattableTextEditorBox), new PropertyMetadata());
-    public static readonly DependencyProperty EmptyContentUpArrowActionProperty = DependencyProperty.Register(nameof(EmptyContentUpArrowAction), typeof(Action), typeof(FormattableTextEditorBox), new PropertyMetadata());
+    public static readonly DependencyProperty IsSelectionBoldProperty = DependencyProperty.Register(nameof(IsSelectionBold), typeof(bool), typeof(FormattedTextBox), new PropertyMetadata());
+    public static readonly DependencyProperty IsSelectionItalicProperty = DependencyProperty.Register(nameof(IsSelectionItalic), typeof(bool), typeof(FormattedTextBox), new PropertyMetadata());
+    public static readonly DependencyProperty IsSelectionUnderlinedProperty = DependencyProperty.Register(nameof(IsSelectionUnderlined), typeof(bool), typeof(FormattedTextBox), new PropertyMetadata());
+    public static readonly DependencyProperty SelectedColorProperty = DependencyProperty.Register(nameof(SelectedColor), typeof(string), typeof(FormattedTextBox), new PropertyMetadata());
+    public static readonly DependencyProperty TextColorProperty = DependencyProperty.Register(nameof(TextColor), typeof(string), typeof(FormattedTextBox), new PropertyMetadata(OnTextColorChanged));
+
+    public static readonly DependencyProperty IsFormattedPasteEnabledProperty = DependencyProperty.Register(nameof(IsFormattedPasteEnabled), typeof(bool), typeof(FormattedTextBox), new PropertyMetadata(true));
+
+    public static readonly DependencyProperty EnterActionProperty = DependencyProperty.Register(nameof(EnterAction), typeof(Action), typeof(FormattedTextBox), new PropertyMetadata());
+    public static readonly DependencyProperty EmptyContentUpArrowActionProperty = DependencyProperty.Register(nameof(EmptyContentUpArrowAction), typeof(Action), typeof(FormattedTextBox), new PropertyMetadata());
 
     public event EventHandler StatePropertyChanged;
 
     public Action CtrlShiftEnterAction { get; set; }
+
+    /// <summary>
+    /// The Document of the <see cref="FormattedTextBox"/> serialized into xml format.
+    /// </summary>
+    public string DocumentContent
+    {
+        get => (string)GetValue(DocumentContentProperty);
+        set
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                SetValue(DocumentContentProperty, FlowDocumentHelper.EmptySerializedDocument);
+            }
+            else if (!_setContentInProgress)
+            {
+                _setContentInProgress = true;
+
+                if (_serializedUpdateOnly)
+                {
+                    SetValue(DocumentContentProperty, value);
+                }
+                else if (FlowDocumentHelper.DeserializeDocument(value) is FlowDocument flowDocument)
+                {
+                    SetValue(DocumentContentProperty, value);
+
+                    // flowDocument is cleared with the ToList() below
+                    Document.Blocks.Clear();
+                    Document.Blocks.AddRange(flowDocument.Blocks.ToList());
+                    
+                    bool isEmpty = IsRichTextBoxEmpty();
+                    SetIsEmpty(isEmpty);
+                }
+
+                _setContentInProgress = false;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Indicates whether the content of the RichTextBox is empty / whitespace or not.
+    /// </summary>
+    public bool IsEmpty => (bool)GetValue(IsEmptyPropertyKey.DependencyProperty);
+
+    private void SetIsEmpty(bool value) => SetValue(IsEmptyPropertyKey, value);
 
     public bool IsSelectionBold
     {
@@ -95,11 +146,10 @@ public class FormattableTextEditorBox : BasicTextEditorBox
     public ICommand AlignRightCommand { get; set; }
     public ICommand AlignJustifyCommand { get; set; }
 
-
-    private bool IsCtrlDown => Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
-
-    public FormattableTextEditorBox()
+    public FormattedTextBox()
     {
+        SetIsEmpty(true);
+
         SetBoldCommand = new RelayCommand(() => EditingCommands.ToggleBold.Execute(null, this));
         SetItalicCommand = new RelayCommand(() => EditingCommands.ToggleItalic.Execute(null, this));
         SetUnderlinedCommand = new RelayCommand(() => EditingCommands.ToggleUnderline.Execute(null, this));
@@ -124,16 +174,45 @@ public class FormattableTextEditorBox : BasicTextEditorBox
         AlignJustifyCommand = new RelayCommand(() => EditingCommands.AlignJustify.Execute(null, this));
     }
 
+    public void UpdateContent()
+    {
+        _serializedUpdateOnly = true;
+        DocumentContent = FlowDocumentHelper.SerializeDocument(Document);
+        _serializedUpdateOnly = false;
+    }
+
+    private static void OnContentChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        if (d is FormattedTextBox textEditorBox && e.NewValue is string newContent)
+        {
+            textEditorBox.DocumentContent = newContent;
+        }
+    }
+
+    private void OnTextChanged(object? sender, TextChangedEventArgs e)
+    {
+        bool isEmpty = IsRichTextBoxEmpty();
+        SetIsEmpty(isEmpty);
+    }
+
+    private bool IsRichTextBoxEmpty()
+    {
+        List<string> res = FlowDocumentHelper.GetDocumentItems(Document);
+        return res.Count == 0 || res.All(string.IsNullOrWhiteSpace);
+    }
+
     protected override void OnGotFocus(RoutedEventArgs e)
     {
         base.OnGotFocus(e);
 
+        TextChanged += OnTextChanged;
+        DataObject.AddPastingHandler(this, OnPaste);
+
         CommandManager.AddPreviewExecutedHandler(this, OnExecuted);
         SelectionChanged += OnSelectionChanged;
-        PreviewKeyDown += OnPrevKeyDown;
         PreviewKeyUp += OnPrevKeyUp;
         KeyDown += OnKeyDown;
-        PreviewKeyDown += FormattableTextEditorBox_PreviewKeyDown;
+        PreviewKeyDown += OnPreviewKeyDown;
         DataObject.AddPastingHandler(this, OnPaste);
     }
 
@@ -141,30 +220,20 @@ public class FormattableTextEditorBox : BasicTextEditorBox
     {
         base.OnLostFocus(e);
 
+        UpdateContent();
+
+        TextChanged -= OnTextChanged;
+        DataObject.RemovePastingHandler(this, OnPaste);
+
         CommandManager.RemovePreviewExecutedHandler(this, OnExecuted);
         SelectionChanged -= OnSelectionChanged;
-        PreviewKeyDown -= OnPrevKeyDown;
         PreviewKeyUp -= OnPrevKeyUp;
         KeyDown -= OnKeyDown;
-        PreviewKeyDown -= FormattableTextEditorBox_PreviewKeyDown;
+        PreviewKeyDown -= OnPreviewKeyDown;
         DataObject.RemovePastingHandler(this, OnPaste);
     }
 
-    private void OnPrevKeyDown(object sender, KeyEventArgs e)
-    {
-        var ctrl = Keyboard.Modifiers.HasFlag(ModifierKeys.Control);
-        var shift = Keyboard.Modifiers.HasFlag(ModifierKeys.Shift);
-
-        if (ctrl && shift && e.Key != Key.LeftCtrl && e.Key != Key.LeftShift)
-        {
-            if (e.Key == Key.L)
-            {
-                e.Handled = false;
-            }
-        }
-    }
-
-    private void FormattableTextEditorBox_PreviewKeyDown(object sender, KeyEventArgs e)
+    private void OnPreviewKeyDown(object sender, KeyEventArgs e)
     {
         var keyArrowUp = e.Key == Key.Up;
         var keyL = e.Key == Key.L;
@@ -238,7 +307,6 @@ public class FormattableTextEditorBox : BasicTextEditorBox
                 Selection.ApplyPropertyValue(TextElement.FontFamilyProperty, consolas);
             }
         }
-
     }
 
     private void ResetAllFormatting()
@@ -367,7 +435,9 @@ public class FormattableTextEditorBox : BasicTextEditorBox
 
     private void OnPrevKeyUp(object sender, KeyEventArgs e)
     {
-        if (e.Key == Key.Enter && !Keyboard.IsKeyDown(Key.LeftShift) && !Keyboard.IsKeyDown(Key.RightShift))
+        if (e.Key == Key.Enter &&
+            !Keyboard.IsKeyDown(Key.LeftShift) &&
+            !Keyboard.IsKeyDown(Key.RightShift))
         {
             UpdateSelectionProperties();
         }
@@ -377,14 +447,12 @@ public class FormattableTextEditorBox : BasicTextEditorBox
     {
         if (IsReadOnly) return;
 
-        // TODO: Implement Shift + TAB
-
         switch (e.Key)
         {
             // Delete text formatting on Ctrl + H
             case Key.H:
             {
-                if (IsCtrlDown)
+                if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
                 {
                     ResetFormatting();
                 }
@@ -393,7 +461,7 @@ public class FormattableTextEditorBox : BasicTextEditorBox
             // Apply text color on Ctrl + G
             case Key.G:
             {
-                if (IsCtrlDown)
+                if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
                 {
                     ApplyColor(TextColor);
                 }
@@ -441,7 +509,7 @@ public class FormattableTextEditorBox : BasicTextEditorBox
 
     private static void OnTextColorChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        if (d is FormattableTextEditorBox textEditor && e.NewValue is string textColor)
+        if (d is FormattedTextBox textEditor && e.NewValue is string textColor)
         {
             textEditor.ApplyColor(textColor);
         }
@@ -449,6 +517,12 @@ public class FormattableTextEditorBox : BasicTextEditorBox
 
     private void OnPaste(object sender, DataObjectPastingEventArgs e)
     {
+        // Prevent pasting an image because it cannot be persisted.
+        if (e.FormatToApply == DataFormats.Bitmap)
+        {
+            e.CancelCommand();
+        }
+
         if (!IsFormattedPasteEnabled)
         {
             e.DataObject = new DataObject(DataFormats.Text, e.DataObject.GetData(DataFormats.Text) as string ?? string.Empty);

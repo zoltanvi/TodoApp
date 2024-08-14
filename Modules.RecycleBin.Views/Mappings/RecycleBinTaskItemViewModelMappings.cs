@@ -8,12 +8,13 @@ public static class RecycleBinTaskItemViewModelMappings
 {
     public static RecycleBinTaskItemViewModel MapToRecycleBinTaskItem(this TaskItem taskItem, IMediator mediator)
     {
-        return new RecycleBinTaskItemViewModel(mediator)
+        return new RecycleBinTaskItemViewModel(
+            mediator, 
+            taskItem.Content, 
+            taskItem.IsContentPlainText)
         {
             Id = taskItem.Id,
             CategoryId = taskItem.CategoryId,
-            Content = taskItem.Content,
-            ContentPreview = taskItem.ContentPreview,
             Pinned = taskItem.Pinned,
             IsDone = taskItem.IsDone,
             BackgroundColor = taskItem.BackgroundColor,

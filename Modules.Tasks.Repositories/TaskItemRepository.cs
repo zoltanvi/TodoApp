@@ -181,6 +181,7 @@ public class TaskItemRepository : ITaskItemRepository
             {
                 TaskId = dbTask.Id,
                 Content = dbTask.Content,
+                IsContentPlainText = dbTask.IsContentPlainText,
                 ContentPreview = dbTask.ContentPreview,
                 VersionDate = dbTask.ModificationDate
             };
@@ -190,6 +191,7 @@ public class TaskItemRepository : ITaskItemRepository
 
         dbTask.Content = task.Content;
         dbTask.ContentPreview = task.ContentPreview;
+        dbTask.IsContentPlainText = task.IsContentPlainText;
         dbTask.ModificationDate = DateTime.Now;
 
         _context.SaveChanges();
@@ -285,6 +287,7 @@ public class TaskItemRepository : ITaskItemRepository
         {
             TaskId = dbTask.Id,
             Content = dbTask.Content,
+            IsContentPlainText = dbTask.IsContentPlainText,
             ContentPreview = dbTask.ContentPreview,
             VersionDate = dbTask.ModificationDate
         };
@@ -297,6 +300,7 @@ public class TaskItemRepository : ITaskItemRepository
 
         dbTask.Content = dbVersion.Content;
         dbTask.ContentPreview = dbVersion.ContentPreview;
+        dbTask.IsContentPlainText = dbVersion.IsContentPlainText;
         dbTask.ModificationDate = DateTime.Now;
 
         _context.SaveChanges();

@@ -12,8 +12,9 @@ public static class TaskItemVersionViewModelMappings
         {
             Id = vm.Id,
             TaskId = vm.TaskId,
-            Content = vm.Content,
-            ContentPreview = vm.ContentPreview,
+            Content = vm.Content.GetContent(),
+            IsContentPlainText = vm.Content.IsPlainTextMode,
+            ContentPreview = vm.Content.GetContentInPlainText(),
             VersionDate = vm.VersionDate
         };
     }
@@ -23,12 +24,13 @@ public static class TaskItemVersionViewModelMappings
 
     public static TaskItemVersionViewModel MapToViewModel(this TaskItemVersion version, IMediator mediator)
     {
-        return new TaskItemVersionViewModel(mediator)
+        return new TaskItemVersionViewModel(
+            mediator, 
+            version.IsContentPlainText, 
+            version.Content)
         {
             Id = version.Id,
             TaskId = version.TaskId,
-            Content = version.Content,
-            ContentPreview = version.ContentPreview,
             VersionDate = version.VersionDate
         };
     }

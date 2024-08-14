@@ -84,18 +84,19 @@
 
 
                     <!--  CONTENT  -->
-                    <controls:BasicTextEditorBox
+
+                    <controls:DynamicTextBox
                         Grid.Row="0"
                         Grid.Column="1"
                         Margin="0 6"
                         Padding="7 0 0 0"
                         Background="Transparent"
-                        DocumentContent="{Binding Content}"
                         IsReadOnly="True"
                         ScrollViewer.CanContentScroll="False"
                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                         ScrollViewer.VerticalScrollBarVisibility="Auto"
-                        Style="{StaticResource BaseRichTextBoxStyle}" />
+                        DataContext="{Binding Content}"
+                        IsPlainTextMode="{Binding IsPlainTextMode}" />
 
                     <!--  INFO  -->
                     <Grid

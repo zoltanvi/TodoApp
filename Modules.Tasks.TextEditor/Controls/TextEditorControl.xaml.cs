@@ -4,15 +4,15 @@ using System.Windows.Controls;
 
 namespace Modules.Tasks.TextEditor.Controls;
 
-public partial class RichTextEditorControl : UserControl
+public partial class TextEditorControl : UserControl
 {
     private SingletonToolbar? _toolbar;
 
     public static readonly DependencyProperty TextOpacityProperty = 
-        DependencyProperty.Register(nameof(TextOpacity), typeof(double), typeof(RichTextEditorControl), new PropertyMetadata());
+        DependencyProperty.Register(nameof(TextOpacity), typeof(double), typeof(TextEditorControl), new PropertyMetadata());
 
     public static readonly DependencyProperty IsReadOnlyProperty = 
-        DependencyProperty.Register(nameof(IsReadOnly), typeof(bool), typeof(RichTextEditorControl), new PropertyMetadata());
+        DependencyProperty.Register(nameof(IsReadOnly), typeof(bool), typeof(TextEditorControl), new PropertyMetadata());
 
     public double TextOpacity
     {
@@ -26,7 +26,7 @@ public partial class RichTextEditorControl : UserControl
         set { SetValue(IsReadOnlyProperty, value); }
     }
 
-    public RichTextEditorControl()
+    public TextEditorControl()
     {
         InitializeComponent();
         IsEditorOpenToggle.Checked += IsEditorOpenToggle_Checked;

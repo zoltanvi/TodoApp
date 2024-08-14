@@ -8,13 +8,14 @@ using System.Windows.Input;
 namespace Modules.Tasks.TextEditor.Controls;
 
 [AddINotifyPropertyChangedInterface]
-public class RichTextEditorViewModel : BaseViewModel
+public class TextEditorViewModel : BaseViewModel
 {
     private bool _isEditMode;
-    private bool _enterActionOnLostFocus;
-    private bool _toolbarCloseOnLostFocus;
-    private string _documentContentPreview = "EMPTY";
-    private string _documentContent;
+    private readonly bool _enterActionOnLostFocus;
+    private readonly bool _toolbarCloseOnLostFocus;
+    private string? _documentContent;
+
+    public event Action OnDocumentContentChanged;
 
     public bool Focusable { get; set; }
     public bool NeedFocus { get; set; }
@@ -40,14 +41,17 @@ public class RichTextEditorViewModel : BaseViewModel
 
     public string DocumentContent
     {
-        get => _documentContent;
-        set => _documentContent = value;
-    }
+        get => _documentContent ?? string.Empty;
+        set
+        {
+            if (_documentContent != null && _documentContent.Equals(value))
+            {
+                return;
+            }
 
-    public string DocumentContentPreview
-    {
-        get => _documentContentPreview;
-        set => _documentContentPreview = string.IsNullOrEmpty(value) ? _documentContentPreview : value;
+            _documentContent = value;
+            OnDocumentContentChanged?.Invoke();
+        }
     }
 
     public bool IsToolbarOpen { get; set; }
@@ -58,7 +62,7 @@ public class RichTextEditorViewModel : BaseViewModel
     public Action OnQuickEditRequestedAction { get; set; }
     public ICommand LostFocusCommand { get; }
 
-    public RichTextEditorViewModel(
+    public TextEditorViewModel(
         bool focusOnEditMode, 
         bool enterActionOnLostFocus, 
         bool toolbarCloseOnLostFocus, 

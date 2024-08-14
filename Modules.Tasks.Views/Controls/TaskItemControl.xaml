@@ -14,7 +14,7 @@
     d:DataContext="{d:DesignInstance local:TaskItemViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
-    dd:DragDrop.IsDragSource="{Binding TextEditorViewModel.IsEditMode}"
+    dd:DragDrop.IsDragSource="{Binding Content.IsEditMode}"
     ContextMenu="{StaticResource TaskListItemContextMenu}"
     mc:Ignorable="d">
 
@@ -68,7 +68,7 @@
                 BorderBrush="{DynamicResource Tertiary}"
                 BorderThickness="1.5"
                 CornerRadius="3"
-                Visibility="{Binding TextEditorViewModel.IsEditMode, Converter={StaticResource BoolToVisibilityConverter}}" />
+                Visibility="{Binding Content.IsEditMode, Converter={StaticResource BoolToVisibilityConverter}}" />
 
             <!--  ITEM CONTENT  -->
             <Border
@@ -235,7 +235,7 @@
                                     VerticalAlignment="Center"
                                     Command="{Binding Cmd.IsDoneModifiedCommand}"
                                     IsChecked="{Binding IsDone}"
-                                    IsEnabled="{Binding TextEditorViewModel.IsDisplayMode}"
+                                    IsEnabled="{Binding Content.IsDisplayMode}"
                                     Opacity="{Binding Opacity}"
                                     Style="{StaticResource TaskCheckBoxStyle}"
                                     Visibility="{Binding AppSettings.TaskQuickActionSettings.CheckboxEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
@@ -249,7 +249,7 @@
                                     VerticalAlignment="Center"
                                     Command="{Binding Cmd.IsDoneModifiedCommand}"
                                     IsChecked="{Binding IsDone}"
-                                    IsEnabled="{Binding TextEditorViewModel.IsDisplayMode}"
+                                    IsEnabled="{Binding Content.IsDisplayMode}"
                                     Opacity="{Binding Opacity}"
                                     Style="{StaticResource TaskCheckBoxSquareStyle}"
                                     Visibility="{Binding AppSettings.TaskQuickActionSettings.CheckboxEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
@@ -279,7 +279,7 @@
                                     <Border.Visibility>
                                         <MultiBinding Converter="{StaticResource BoolToVisibilityAndConverter}">
                                             <Binding Path="IsAnyReminderOn" />
-                                            <Binding Path="TextEditorViewModel.IsDisplayMode" />
+                                            <Binding Path="Content.IsDisplayMode" />
                                         </MultiBinding>
                                     </Border.Visibility>
 
@@ -305,7 +305,7 @@
                                     <Border.Visibility>
                                         <MultiBinding Converter="{StaticResource BoolToVisibilityAndConverter}">
                                             <Binding Path="Pinned" />
-                                            <Binding Path="TextEditorViewModel.IsDisplayMode" />
+                                            <Binding Path="Content.IsDisplayMode" />
                                         </MultiBinding>
                                     </Border.Visibility>
 
@@ -347,7 +347,7 @@
                                     Background="Transparent"
                                     BorderThickness="0"
                                     ItemsSource="{Binding Tags}"
-                                    Opacity="{Binding TextEditorViewModel.TextOpacity}"
+                                    Opacity="{Binding Content.TextOpacity}"
                                     ScrollViewer.CanContentScroll="False"
                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                     ScrollViewer.VerticalScrollBarVisibility="Auto"
@@ -374,19 +374,14 @@
                                     </ListView.ItemTemplate>
                                 </ListView>
 
-                                <!--<TextBox
-                                    Grid.Column="1"
-                                    Background="Transparent"
-                                    Text="{Binding TextEditorViewModel.DocumentContentPreview}"
-                                    Foreground="Yellow"
-                                    IsReadOnly="False"
-                                ></TextBox>-->
+                                <Grid Grid.Column="1">
 
-                                <!--  Task description  -->
-                                <controls1:RichTextEditorControl
-                                    Grid.Column="1"
-                                    DataContext="{Binding TextEditorViewModel}"
-                                    IsReadOnly="False" />
+                                    <!--  TASK CONTENT  -->
+                                    <controls1:DynamicTextBox
+                                        DataContext="{Binding Content}"
+                                        IsPlainTextMode="{Binding IsPlainTextMode}" />
+                                </Grid>
+
 
                                 <!--  Catch double click to change to edit mode  -->
                                 <Border
@@ -394,7 +389,7 @@
                                     Grid.ColumnSpan="2"
                                     Margin="0 -2 -10 -2"
                                     Background="Transparent"
-                                    Visibility="{Binding TextEditorViewModel.IsEditMode, Converter={StaticResource BoolToVisibilityNegatedConverter}}">
+                                    Visibility="{Binding Content.IsEditMode, Converter={StaticResource BoolToVisibilityNegatedConverter}}">
 
                                     <Border.InputBindings>
                                         <MouseBinding

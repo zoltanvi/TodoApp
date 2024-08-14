@@ -5,9 +5,22 @@ namespace Modules.Tasks.TextEditor.Helpers;
 
 public static class FlowDocumentToPlainTextConverter
 {
-    public static string ConvertToPlainText(FlowDocument document)
+    public static string Convert(FlowDocument document)
     {
         var documentStringBuilder = GetDocumentWithLineBreaks(document);
+
+        string newLine = Environment.NewLine;
+        int newLineLength = newLine.Length;
+        int afterRemoveLength = documentStringBuilder.Length - newLineLength;
+
+        // Check if the StringBuilder ends with Environment.NewLine
+        if (afterRemoveLength > 0 &&
+            documentStringBuilder.ToString(afterRemoveLength, newLineLength) == newLine)
+        {
+            // Remove the NewLine characters
+            documentStringBuilder.Remove(afterRemoveLength, newLineLength);
+        }
+
         return documentStringBuilder.ToString();
     }
 
@@ -79,7 +92,7 @@ public static class FlowDocumentToPlainTextConverter
         else if (inline is Span span)
         {
             AddInlines(documentItems, span);
-        } 
+        }
         else if (inline is LineBreak)
         {
             documentItems.AppendLine();

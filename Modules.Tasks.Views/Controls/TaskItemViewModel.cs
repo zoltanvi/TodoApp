@@ -22,10 +22,11 @@ public class TaskItemViewModel : BaseViewModel, ITaskItemViewModel
     private string _contentRollback = string.Empty;
     private bool _isDone;
 
-    public TaskItemViewModel(
-        IMediator mediator, 
+    public TaskItemViewModel(IMediator mediator,
         OneEditorOpenService oneEditorOpenService,
-        IEventAggregator eventAggregator)
+        IEventAggregator eventAggregator, 
+        string content,
+        bool isContentPlainText)
     {
         ArgumentNullException.ThrowIfNull(mediator);
         ArgumentNullException.ThrowIfNull(oneEditorOpenService);
@@ -33,14 +34,16 @@ public class TaskItemViewModel : BaseViewModel, ITaskItemViewModel
 
         _mediator = mediator;
         _oneEditorOpenService = oneEditorOpenService;
-
-        // TODO: make it dynamic somehow
-        TextEditorViewModel = new RichTextEditorViewModel(
-            focusOnEditMode: true,
+        
+        Content = new DynamicTextBoxViewModel(
+            focusOnEditMode: true, 
             enterActionOnLostFocus: AppSettings.Instance.TaskPageSettings.ExitEditOnFocusLost,
             toolbarCloseOnLostFocus: false,
-            acceptsTab: true);
-        TextEditorViewModel.EnterAction = ExitEditItem;
+            acceptsTab: true,
+            isPlainTextMode: isContentPlainText);
+        
+        Content.EnterAction = ExitEditItem;
+        Content.SetContent(isContentPlainText, content);
 
         Cmd = new TaskItemCommandsViewModel(this, mediator, eventAggregator);
 
@@ -60,21 +63,8 @@ public class TaskItemViewModel : BaseViewModel, ITaskItemViewModel
     public string BorderColor { get; set; }
     public string BackgroundColor { get; set; }
 
-    public RichTextEditorViewModel TextEditorViewModel { get; }
-
+    public DynamicTextBoxViewModel Content { get; }
     public TaskItemCommandsViewModel Cmd { get; }
-
-    public string Content
-    {
-        get => TextEditorViewModel.DocumentContent;
-        set => TextEditorViewModel.DocumentContent = value;
-    }
-
-    public string ContentPreview
-    {
-        get => TextEditorViewModel.DocumentContentPreview;
-        set => TextEditorViewModel.DocumentContentPreview = value;
-    }
 
     public bool IsDone
     {
@@ -82,7 +72,7 @@ public class TaskItemViewModel : BaseViewModel, ITaskItemViewModel
         set
         {
             _isDone = value;
-            TextEditorViewModel.TextOpacity = IsDone ? 0.3 : 1.0;
+            Content.TextOpacity = IsDone ? 0.3 : 1.0;
             Opacity = IsDone ? 0.5 : 1.0;
         }
     }
@@ -114,21 +104,21 @@ public class TaskItemViewModel : BaseViewModel, ITaskItemViewModel
     void ITaskItemViewModel.EditItem()
     {
         // Save the content before editing for a possible rollback
-        _contentRollback = Content;
+        _contentRollback = Content.GetContent();
 
         // Enable editing
-        TextEditorViewModel.IsEditMode = true;
+        Content.IsEditMode = true;
         _oneEditorOpenService.EditMode(this);
     }
 
     public void ExitEditItem()
     {
-        if (TextEditorViewModel.IsContentEmpty)
+        if (Content.IsEmpty)
         {
             // Empty content is rejected, roll back the previous content.
-            Content = _contentRollback;
+            Content.SetContent(Content.IsPlainTextMode, _contentRollback);
         }
-        else if (Content != _contentRollback)
+        else if (Content.GetContent() != _contentRollback)
         {
             //Modifications are accepted, update task
             ModificationDate = DateTime.Now;
@@ -141,8 +131,8 @@ public class TaskItemViewModel : BaseViewModel, ITaskItemViewModel
             OnPropertyChanged(nameof(VersionCount));
         }
 
-        TextEditorViewModel.IsEditMode = false;
-        TextEditorViewModel.IsToolbarOpen = false;
+        Content.IsEditMode = false;
+        Content.IsToolbarOpen = false;
         _oneEditorOpenService.DisplayMode(this);
     }
 

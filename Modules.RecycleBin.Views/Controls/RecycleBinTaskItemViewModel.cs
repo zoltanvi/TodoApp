@@ -2,6 +2,7 @@
 using Modules.Common.DataBinding;
 using Modules.Common.ViewModel;
 using Modules.Tasks.Contracts.Cqrs.Commands;
+using Modules.Tasks.TextEditor.Controls;
 using System.Windows.Input;
 
 namespace Modules.RecycleBin.Views.Controls;
@@ -10,8 +11,7 @@ public class RecycleBinTaskItemViewModel : BaseViewModel
 {
     public int Id { get; init; }
     public required int CategoryId { get; set; }
-    public required string Content { get; set; }
-    public required string ContentPreview { get; set; }
+    public DynamicTextBoxViewModel Content { get; set; }
     public int ListOrder { get; set; }
     public bool Pinned { get; set; }
     public bool IsDone { get; set; }
@@ -30,11 +30,14 @@ public class RecycleBinTaskItemViewModel : BaseViewModel
     public ICommand ToggleDetailsCommand { get; }
     public ICommand RestoreTaskItemCommand { get; }
 
-    public RecycleBinTaskItemViewModel(IMediator mediator)
+    public RecycleBinTaskItemViewModel(IMediator mediator, string content, bool isContentPlainText)
     {
         ArgumentNullException.ThrowIfNull(mediator);
 
         ToggleDetailsCommand = new RelayCommand(() => DetailsVisible ^= true);
         RestoreTaskItemCommand = new RelayCommand(() => mediator.Send(new RestoreTaskItemCommand { TaskId = Id }));
+
+        Content = new DynamicTextBoxViewModel();
+        Content.SetContent(isContentPlainText, content);
     }
 }
