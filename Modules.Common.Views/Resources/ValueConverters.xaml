@@ -1,13 +1,14 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:valueConverters="clr-namespace:Modules.Common.Views.ValueConverters">
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:valueConverters="clr-namespace:Modules.Common.Views.ValueConverters">
 
     <valueConverters:StringRGBToBrushConverter x:Key="StringRgbToBrushConverter" />
-    
-    <valueConverters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
-    <valueConverters:BoolToVisibilityHiddenConverter x:Key="BoolToVisibilityHiddenConverter"/>
-    <valueConverters:BoolToVisibilityNegatedConverter x:Key="BoolToVisibilityNegatedConverter"/>
 
-    <valueConverters:EnumToFontFamilyConverter x:Key="EnumToFontFamilyConverter"/>
+    <valueConverters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+    <valueConverters:BoolToVisibilityHiddenConverter x:Key="BoolToVisibilityHiddenConverter" />
+    <valueConverters:BoolToVisibilityNegatedConverter x:Key="BoolToVisibilityNegatedConverter" />
+
+    <valueConverters:EnumToFontFamilyConverter x:Key="EnumToFontFamilyConverter" />
 
 </ResourceDictionary>

@@ -8,7 +8,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:pages="clr-namespace:Modules.Settings.Views.Pages"
-    xmlns:valueConverters="clr-namespace:Modules.Common.Views.ValueConverters;assembly=Modules.Common.Views"
     Title="TaskQuickActionsSettingsPage"
     d:DataContext="{d:DesignInstance Type=pages:TaskQuickActionsSettingsPageViewModel}"
     d:DesignHeight="450"
@@ -93,105 +92,169 @@
                     IsChecked="{Binding AppSettings.TaskQuickActionSettings.TrashEnabled, Source={StaticResource AppSettings}, Mode=TwoWay}" />
 
 
-                <Border
-                    Style="{StaticResource SettingsItemStyle}"
-                    Visibility="{Binding AppSettings.TaskQuickActionSettings.AnyEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}">
-                    <StackPanel Orientation="Vertical">
+                <!--  PREVIEW PANEL  -->
 
-                        <Label
-                            Content="Preview"
-                            FontSize="{Binding UIScaler.FontSize.Regular, Source={StaticResource UIScaler}}"
-                            Style="{StaticResource BaseLabelClearTypeStyle}" />
+                <Border>
+                    <Border.Resources>
+                        <DataTemplate x:Key="PreviewPanelTemplate">
 
+                            <Border Style="{StaticResource SettingsItemStyle}">
+                                <StackPanel Orientation="Vertical">
+                                    <Label
+                                        Content="Preview"
+                                        FontSize="{Binding UIScaler.FontSize.Regular, Source={StaticResource UIScaler}}"
+                                        Style="{StaticResource BaseLabelClearTypeStyle}" />
 
-                        <Grid>
-                            <Border
-                                Height="{Binding UIScaler.TaskPopupHeight, Source={StaticResource UIScaler}}"
-                                Padding="2 1"
-                                HorizontalAlignment="Left"
-                                Background="{DynamicResource Surface1}"
-                                BorderBrush="{DynamicResource OutlineVariant}"
-                                BorderThickness="1"
-                                CornerRadius="6">
-
-                                <StackPanel Orientation="Horizontal">
-                                    <!--  Calendar empty button  -->
                                     <Grid>
-                                        <Button
-                                            Content="{StaticResource IconCalendar}"
-                                            Style="{StaticResource ButtonQuickActionStyle}"
-                                            ToolTip="Set Reminder"
-                                            Visibility="{Binding AppSettings.TaskQuickActionSettings.ReminderEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                        <Border
+                                            Height="{Binding UIScaler.TaskPopupHeight, Source={StaticResource UIScaler}}"
+                                            Padding="2 1"
+                                            HorizontalAlignment="Left"
+                                            Background="{DynamicResource Surface1}"
+                                            BorderBrush="{DynamicResource OutlineVariant}"
+                                            BorderThickness="1"
+                                            CornerRadius="6">
+                                            <Border.Resources>
+                                                <DataTemplate x:Key="TrashButtonTemplate">
+                                                    <Button
+                                                        Content="{StaticResource IconTrash}"
+                                                        Cursor="Hand"
+                                                        Style="{StaticResource ButtonQuickActionRedStyle}"
+                                                        ToolTip="Trash task" />
+                                                </DataTemplate>
+
+                                                <DataTemplate x:Key="ShowDetailsButtonTemplate">
+                                                    <Button
+                                                        Content="{StaticResource IconInfo}"
+                                                        Style="{StaticResource ButtonQuickActionStyle}"
+                                                        ToolTip="Show details" />
+                                                </DataTemplate>
+
+                                                <DataTemplate x:Key="SwitchButtonTemplate">
+                                                    <Button
+                                                        Content="{StaticResource IconSwitch}"
+                                                        Style="{StaticResource ButtonQuickActionStyle}"
+                                                        ToolTip="Switch formatted / plain text mode" />
+                                                </DataTemplate>
+
+                                                <DataTemplate x:Key="PinButtonTemplate">
+                                                    <Button
+                                                        Content="{StaticResource IconPin}"
+                                                        Style="{StaticResource ButtonQuickActionStyle}"
+                                                        ToolTip="Pin task" />
+                                                </DataTemplate>
+
+                                                <DataTemplate x:Key="TagSelectorButtonTemplate">
+                                                    <Button
+                                                        Content="{StaticResource IconTag}"
+                                                        Style="{StaticResource ButtonQuickActionStyle}"
+                                                        ToolTip="Select tags" />
+                                                </DataTemplate>
+
+                                                <DataTemplate x:Key="BorderColorButtonTemplate">
+                                                    <controls1:SingletonColorPicker
+                                                        SelectedColorString="Transparent"
+                                                        Style="{StaticResource MinimalColorPickerComboboxStyle}"
+                                                        ToolTip="Border color" />
+                                                </DataTemplate>
+
+                                                <DataTemplate x:Key="BackgroundColorButtonTemplate">
+                                                    <controls1:SingletonColorPicker
+                                                        SelectedColorString="Transparent"
+                                                        Style="{StaticResource MinimalColorPickerComboboxStyle}"
+                                                        ToolTip="Background color" />
+                                                </DataTemplate>
+
+                                                <DataTemplate x:Key="MarkerColorButtonTemplate">
+                                                    <controls1:SingletonColorPicker
+                                                        SelectedColorString="Transparent"
+                                                        Style="{StaticResource MinimalColorPickerComboboxStyle}"
+                                                        ToolTip="Marker color" />
+                                                </DataTemplate>
+
+                                                <DataTemplate x:Key="CalendarButtonTemplate">
+                                                    <Button
+                                                        Content="{StaticResource IconCalendar}"
+                                                        Style="{StaticResource ButtonQuickActionStyle}"
+                                                        ToolTip="Set Reminder" />
+                                                </DataTemplate>
+
+
+                                            </Border.Resources>
+
+                                            <StackPanel Orientation="Horizontal">
+
+                                                <!--  Calendar empty button  -->
+                                                <controls1:ShowHideControl
+                                                    CanShow="{Binding AppSettings.TaskQuickActionSettings.ReminderEnabled, Source={StaticResource AppSettings}}"
+                                                    Id="Calendar empty button"
+                                                    TemplateToShow="{StaticResource CalendarButtonTemplate}" />
+
+                                                <!--  Marker color  -->
+                                                <controls1:ShowHideControl
+                                                    CanShow="{Binding AppSettings.TaskQuickActionSettings.ColorEnabled, Source={StaticResource AppSettings}}"
+                                                    Id="Marker color"
+                                                    TemplateToShow="{StaticResource MarkerColorButtonTemplate}" />
+
+                                                <!--  Background color  -->
+                                                <controls1:ShowHideControl
+                                                    CanShow="{Binding AppSettings.TaskQuickActionSettings.BackgroundColorEnabled, Source={StaticResource AppSettings}}"
+                                                    Id="Background color"
+                                                    TemplateToShow="{StaticResource BackgroundColorButtonTemplate}" />
+
+                                                <!--  Border color  -->
+                                                <controls1:ShowHideControl
+                                                    CanShow="{Binding AppSettings.TaskQuickActionSettings.BorderColorEnabled, Source={StaticResource AppSettings}}"
+                                                    Id="Border color"
+                                                    TemplateToShow="{StaticResource BorderColorButtonTemplate}" />
+
+                                                <!--  TagSelector button  -->
+                                                <controls1:ShowHideControl
+                                                    CanShow="{Binding AppSettings.TaskQuickActionSettings.TagEnabled, Source={StaticResource AppSettings}}"
+                                                    Id="TagSelector button"
+                                                    TemplateToShow="{StaticResource TagSelectorButtonTemplate}" />
+
+                                                <!--  Pin button  -->
+                                                <controls1:ShowHideControl
+                                                    CanShow="{Binding AppSettings.TaskQuickActionSettings.PinEnabled, Source={StaticResource AppSettings}}"
+                                                    Id="Pin button"
+                                                    TemplateToShow="{StaticResource PinButtonTemplate}" />
+
+                                                <!--  Switch button  -->
+                                                <controls1:ShowHideControl
+                                                    CanShow="{Binding AppSettings.TaskQuickActionSettings.SwitchFormattedPlainTextModeEnabled, Source={StaticResource AppSettings}}"
+                                                    Id="Switch button"
+                                                    TemplateToShow="{StaticResource SwitchButtonTemplate}" />
+
+                                                <!--  Show details  -->
+                                                <controls1:ShowHideControl
+                                                    CanShow="{Binding AppSettings.TaskQuickActionSettings.DetailsEnabled, Source={StaticResource AppSettings}}"
+                                                    Id="Show details"
+                                                    TemplateToShow="{StaticResource ShowDetailsButtonTemplate}" />
+
+                                                <!--  Trash button  -->
+                                                <controls1:ShowHideControl
+                                                    CanShow="{Binding AppSettings.TaskQuickActionSettings.TrashEnabled, Source={StaticResource AppSettings}}"
+                                                    Id="Trash button"
+                                                    TemplateToShow="{StaticResource TrashButtonTemplate}" />
+
+                                            </StackPanel>
+                                        </Border>
                                     </Grid>
-
-                                    <!--  Marker color  -->
-                                    <controls1:SingletonColorPicker
-                                        SelectedColorString="Transparent"
-                                        Style="{StaticResource MinimalColorPickerComboboxStyle}"
-                                        ToolTip="Marker color"
-                                        Visibility="{Binding AppSettings.TaskQuickActionSettings.ColorEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
-
-                                    <!--  Background color picker  -->
-                                    <controls1:SingletonColorPicker
-                                        SelectedColorString="Transparent"
-                                        Style="{StaticResource MinimalColorPickerComboboxStyle}"
-                                        ToolTip="Background color"
-                                        Visibility="{Binding AppSettings.TaskQuickActionSettings.BackgroundColorEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
-
-                                    <!--  BorderColor picker  -->
-                                    <controls1:SingletonColorPicker
-                                        SelectedColorString="Transparent"
-                                        Style="{StaticResource MinimalColorPickerComboboxStyle}"
-                                        ToolTip="Border color"
-                                        Visibility="{Binding AppSettings.TaskQuickActionSettings.BorderColorEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
-
-                                    <Grid Visibility="{Binding AppSettings.TaskQuickActionSettings.TagEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}">
-                                        <Button
-                                            Content="{StaticResource IconTag}"
-                                            Style="{StaticResource ButtonQuickActionStyle}"
-                                            ToolTip="Select tags" />
-                                    </Grid>
-
-                                    <!--  Pin button  -->
-                                    <Grid>
-                                        <Button
-                                            Content="{StaticResource IconPin}"
-                                            Style="{StaticResource ButtonQuickActionStyle}"
-                                            ToolTip="Pin task"
-                                            Visibility="{Binding AppSettings.TaskQuickActionSettings.PinEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
-                                    </Grid>
-
-                                    <!--  Switch button  -->
-                                    <Grid>
-                                        <Button
-                                            Content="{StaticResource IconSwitch}"
-                                            Style="{StaticResource ButtonQuickActionStyle}"
-                                            ToolTip="Switch formatted / plain text mode"
-                                            Visibility="{Binding AppSettings.TaskQuickActionSettings.SwitchFormattedPlainTextModeEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
-                                    </Grid>
-
-                                    <!--  Show details  -->
-                                    <Grid Visibility="{Binding AppSettings.TaskQuickActionSettings.DetailsEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}">
-                                        <Button
-                                            Content="{StaticResource IconInfo}"
-                                            Style="{StaticResource ButtonQuickActionStyle}"
-                                            ToolTip="Show details" />
-                                    </Grid>
-
-                                    <!--  Trash button  -->
-                                    <Button
-                                        Content="{StaticResource IconTrash}"
-                                        Cursor="Hand"
-                                        Style="{StaticResource ButtonQuickActionRedStyle}"
-                                        ToolTip="Trash task"
-                                        Visibility="{Binding AppSettings.TaskQuickActionSettings.TrashEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
 
                                 </StackPanel>
                             </Border>
-                        </Grid>
+                        </DataTemplate>
+                    </Border.Resources>
 
-                    </StackPanel>
+                    <Border>
+                        <controls1:ShowHideControl
+                            CanShow="{Binding AppSettings.TaskQuickActionSettings.AnyEnabled, Source={StaticResource AppSettings}}"
+                            TemplateToShow="{StaticResource PreviewPanelTemplate}" />
+
+                    </Border>
                 </Border>
+
 
             </StackPanel>
 

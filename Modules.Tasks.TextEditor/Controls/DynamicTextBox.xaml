@@ -18,17 +18,17 @@
             DataType="{x:Type local:DynamicTextBoxViewModel}">
 
             <TextBox
-                DataContext="{Binding DataContext, ElementName=Root}"
                 x:Name="TextBoxElement"
                 Padding="2"
-                IsReadOnly="{Binding IsReadOnly, ElementName=Root}"
                 VerticalContentAlignment="Center"
                 attachedProperties:FocusSetter.Value="{Binding DataContext.TextBoxNeedsFocus, ElementName=Root}"
                 AcceptsReturn="True"
                 AcceptsTab="{Binding DataContext.TextBoxAcceptsTab, ElementName=Root}"
                 BorderBrush="Transparent"
+                DataContext="{Binding DataContext, ElementName=Root}"
                 FontFamily="{Binding Path=AppSettings.TaskSettings.FontFamily, Source={StaticResource AppSettings}, Converter={StaticResource EnumToFontFamilyConverter}}"
                 FontSize="{Binding Path=AppSettings.TaskSettings.FontSize, Source={StaticResource AppSettings}, Converter={StaticResource FontSizeScaler}}"
+                IsReadOnly="{Binding IsReadOnly, ElementName=Root}"
                 PreviewKeyDown="TextBoxElement_OnPreviewKeyDown"
                 Style="{StaticResource SidePageAddNewTextBoxStyle}"
                 Tag="{Binding DataContext.WatermarkText, ElementName=Root}"
@@ -44,8 +44,7 @@
             <local:TextEditorControl
                 x:Name="RichTextEditorControlElement"
                 DataContext="{Binding DataContext, ElementName=Root}"
-                IsReadOnly="{Binding IsReadOnly, ElementName=Root}"
-            />
+                IsReadOnly="{Binding IsReadOnly, ElementName=Root}" />
         </DataTemplate>
 
     </UserControl.Resources>
