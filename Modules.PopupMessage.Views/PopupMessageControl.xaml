@@ -12,6 +12,8 @@
     mc:Ignorable="d">
 
     <Grid
+        MinWidth="150"
+        HorizontalAlignment="Center"
         animations:SlideInOutAnimation.Duration="{Binding MessageDuration}"
         animations:SlideInOutAnimation.IsAnimating="{Binding Visible}"
         animations:SlideInOutAnimation.IsClosed="{Binding Closed}">
@@ -35,19 +37,23 @@
 
             <Grid Margin="0 4">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
+
+                <!--placeholder-->
+                <Border Grid.Row="0" Grid.Column="0" Width="{Binding ActualWidth, ElementName=CloseButton}"/>
 
                 <TextBlock
                     Grid.Row="0"
                     Grid.RowSpan="2"
-                    Grid.Column="0"
+                    Grid.Column="1"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     FontFamily="{DynamicResource UIFont}"
@@ -57,14 +63,17 @@
                     Text="{Binding Message}"
                     TextWrapping="Wrap" />
 
-                <Button 
-                    Grid.Column="1" 
+                <Button
+                    Name="CloseButton"
                     Grid.Row="0"
+                    Grid.Column="2"
                     Padding="5"
-                        Command="{Binding CloseMessageCommand}"
-                        Content="{StaticResource IconClose}"
-                        Style="{StaticResource ButtonIconHoverRectangleStyle}"
-                        ToolTip="Close" />
+                    VerticalAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    Command="{Binding CloseMessageCommand}"
+                    Content="{StaticResource IconClose}"
+                    Style="{StaticResource ButtonIconHoverRectangleStyle}"
+                    ToolTip="Close" />
             </Grid>
 
         </Border>
