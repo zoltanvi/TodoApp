@@ -1,5 +1,5 @@
 ﻿using Modules.Common.ViewModel;
-using Modules.Tasks.Views.Controls;
+using Modules.Tasks.Views.Controls.TaskItemView;
 using PropertyChanged;
 
 namespace Modules.Tasks.Views.Services;

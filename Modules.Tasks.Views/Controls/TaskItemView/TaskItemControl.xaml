@@ -1,5 +1,5 @@
 ﻿<UserControl
-    x:Class="Modules.Tasks.Views.Controls.TaskItemControl"
+    x:Class="Modules.Tasks.Views.Controls.TaskItemView.TaskItemControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
@@ -11,8 +11,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:valueConverters="clr-namespace:Modules.Tasks.Views.ValueConverters"
     xmlns:valueConverters1="clr-namespace:Modules.Common.Views.ValueConverters;assembly=Modules.Common.Views"
+    xmlns:taskItemView="clr-namespace:Modules.Tasks.Views.Controls.TaskItemView"
     Name="Root"
-    d:DataContext="{d:DesignInstance local:TaskItemViewModel}"
+    d:DataContext="{d:DesignInstance taskItemView:TaskItemViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
     dd:DragDrop.IsDragSource="{Binding Content.IsEditMode}"
@@ -175,53 +176,6 @@
                     </Grid.RowDefinitions>
 
                     <Grid Grid.Row="0">
-                        <Grid.Resources>
-
-                            <DataTemplate x:Key="CheckBoxPanelTemplate">
-                                <Grid>
-                                    <Grid.Resources>
-                                        <DataTemplate x:Key="CircularCheckBoxTemplate">
-                                            <CheckBox
-                                                Margin="{Binding UIScaler.TaskCheckBoxWidth, Source={StaticResource UIScaler}, Converter={StaticResource TaskCheckboxMarginConverter}}"
-                                                HorizontalAlignment="Center"
-                                                VerticalAlignment="Center"
-                                                Command="{Binding Cmd.IsDoneModifiedCommand}"
-                                                DataContext="{Binding ElementName=Root, Path=DataContext}"
-                                                IsChecked="{Binding IsDone}"
-                                                IsEnabled="{Binding Content.IsDisplayMode}"
-                                                Opacity="{Binding Opacity}"
-                                                Style="{StaticResource TaskCheckBoxStyle}" />
-                                        </DataTemplate>
-                                        <DataTemplate x:Key="SquareCheckBoxTemplate">
-                                            <CheckBox
-                                                Margin="{Binding UIScaler.TaskCheckBoxWidth, Source={StaticResource UIScaler}, Converter={StaticResource TaskCheckboxMarginConverter}}"
-                                                HorizontalAlignment="Center"
-                                                VerticalAlignment="Center"
-                                                Command="{Binding Cmd.IsDoneModifiedCommand}"
-                                                DataContext="{Binding ElementName=Root, Path=DataContext}"
-                                                IsChecked="{Binding IsDone}"
-                                                IsEnabled="{Binding Content.IsDisplayMode}"
-                                                Opacity="{Binding Opacity}"
-                                                Style="{StaticResource TaskCheckBoxSquareStyle}" />
-                                        </DataTemplate>
-                                    </Grid.Resources>
-
-                                    <Grid>
-                                        <controls:ShowHideControl
-                                            CanShow="{Binding AppSettings.TaskSettings.CircularCheckbox, Source={StaticResource AppSettings}}"
-                                            Id="Circular checkbox"
-                                            TemplateToShow="{StaticResource CircularCheckBoxTemplate}"
-                                            DataContext="{Binding ElementName=Root, Path=DataContext}"/>
-                                        <controls:ShowHideControl
-                                            CanShow="{Binding AppSettings.TaskSettings.SquareCheckbox, Source={StaticResource AppSettings}}"
-                                            Id="Square checkbox"
-                                            TemplateToShow="{StaticResource SquareCheckBoxTemplate}"
-                                            DataContext="{Binding ElementName=Root, Path=DataContext}"/>
-                                    </Grid>
-                                </Grid>
-                            </DataTemplate>
-                        </Grid.Resources>
-
                         <Grid.ColumnDefinitions>
                             <!--  Color bar column  -->
                             <ColumnDefinition>
@@ -272,15 +226,8 @@
                                 Opacity="0.06" />
                         </Grid>
 
-                        <!--  Task Checkbox  -->
-                        <Grid Grid.Column="1">
-
-                            <controls:ShowHideControl
-                                CanShow="{Binding AppSettings.TaskQuickActionSettings.CheckboxEnabled, Source={StaticResource AppSettings}}"
-                                Id="Checkbox panel"
-                                TemplateToShow="{StaticResource CheckBoxPanelTemplate}" />
-                        </Grid>
-
+                        <!--  TASK CHECKBOX  -->
+                        <taskItemView:TaskItemCheckBoxControl Grid.Column="1"/>
 
                         <!--  Clock and Pin icon  -->
                         <Border

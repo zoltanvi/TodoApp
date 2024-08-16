@@ -12,7 +12,7 @@ using PropertyChanged;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
-namespace Modules.Tasks.Views.Controls;
+namespace Modules.Tasks.Views.Controls.TaskItemView;
 
 [AddINotifyPropertyChangedInterface]
 public class TaskItemViewModel : BaseViewModel, ITaskItemViewModel

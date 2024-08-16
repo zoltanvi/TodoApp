@@ -3,6 +3,7 @@ using Modules.Common.DataModels;
 using Modules.Common.Extensions;
 using Modules.Tasks.Contracts.Models;
 using Modules.Tasks.Views.Controls;
+using Modules.Tasks.Views.Controls.TaskItemView;
 using Modules.Tasks.Views.Services;
 using Prism.Events;
 using System.Collections.ObjectModel;

@@ -2,6 +2,7 @@
 using Modules.Common.DataBinding;
 using Modules.Common.ViewModel;
 using Modules.Tasks.Contracts.Cqrs.Commands;
+using Modules.Tasks.Views.Controls.TaskItemView;
 using Modules.Tasks.Views.Events;
 using Prism.Events;
 using PropertyChanged;

@@ -1,4 +1,4 @@
-﻿namespace Modules.Tasks.Views.Controls;
+﻿namespace Modules.Tasks.Views.Controls.TaskItemView;
 
 /// <summary>
 /// Interface for providing a way to interact with the <see cref="TaskItemViewModel"/>

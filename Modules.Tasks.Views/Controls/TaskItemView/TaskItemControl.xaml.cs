@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace Modules.Tasks.Views.Controls;
+namespace Modules.Tasks.Views.Controls.TaskItemView;
 
 public partial class TaskItemControl : UserControl
 {

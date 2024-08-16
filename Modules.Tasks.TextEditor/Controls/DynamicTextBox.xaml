@@ -31,6 +31,7 @@
                 FontSize="{Binding Path=AppSettings.TaskSettings.FontSize, Source={StaticResource AppSettings}, Converter={StaticResource FontSizeScaler}}"
                 IsReadOnly="{Binding IsReadOnly, ElementName=Root}"
                 PreviewKeyDown="TextBoxElement_OnPreviewKeyDown"
+                Opacity="{Binding TextOpacity}"
                 Style="{StaticResource SidePageAddNewTextBoxStyle}"
                 Tag="{Binding WatermarkText}"
                 Text="{Binding PlainTextContent, UpdateSourceTrigger=PropertyChanged}" />
