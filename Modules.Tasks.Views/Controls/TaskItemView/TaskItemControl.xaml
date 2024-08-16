@@ -9,9 +9,9 @@
     xmlns:dd="urn:gong-wpf-dragdrop"
     xmlns:local="clr-namespace:Modules.Tasks.Views.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:taskItemView="clr-namespace:Modules.Tasks.Views.Controls.TaskItemView"
     xmlns:valueConverters="clr-namespace:Modules.Tasks.Views.ValueConverters"
     xmlns:valueConverters1="clr-namespace:Modules.Common.Views.ValueConverters;assembly=Modules.Common.Views"
-    xmlns:taskItemView="clr-namespace:Modules.Tasks.Views.Controls.TaskItemView"
     Name="Root"
     d:DataContext="{d:DesignInstance taskItemView:TaskItemViewModel}"
     d:DesignHeight="450"
@@ -227,7 +227,7 @@
                         </Grid>
 
                         <!--  TASK CHECKBOX  -->
-                        <taskItemView:TaskItemCheckBoxControl Grid.Column="1"/>
+                        <taskItemView:TaskItemCheckBoxControl Grid.Column="1" />
 
                         <!--  Clock and Pin icon  -->
                         <Border
@@ -262,7 +262,9 @@
                                             FontFamily="{StaticResource IconFont}"
                                             Foreground="{DynamicResource Tertiary}" />
                                         <Grid.LayoutTransform>
-                                            --><!--  -1 to mirror it  --><!--
+                                -->
+                                <!--  -1 to mirror it  -->
+                                <!--
                                             <ScaleTransform ScaleX="{Binding Source={StaticResource UIScaler}, Path=UIScaler.ScaleValue}" ScaleY="{Binding Source={StaticResource UIScaler}, Path=UIScaler.ScaleValue}" />
                                         </Grid.LayoutTransform>
                                     </Grid>
@@ -385,131 +387,8 @@
 
                     </Grid>
 
-                    <!--  INFO  -->
-                    <Grid
-                        Grid.Row="1"
-                        Background="{DynamicResource Surface2}"
-                        IsEnabled="{Binding DetailsVisible}"
-                        Visibility="{Binding DetailsVisible, Converter={StaticResource BoolToVisibilityConverter}}">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
-
-                        <!--  Placeholder border to shift the info panel as much as the ColorBar's width  -->
-                        <Border Width="{Binding Width, ElementName=ColorBarBorder}" />
-
-                        <Grid Grid.Column="1">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition />
-                                <RowDefinition />
-                                <RowDefinition />
-                            </Grid.RowDefinitions>
-
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-
-                            <Border
-                                Grid.Row="0"
-                                Grid.Column="0"
-                                Grid.ColumnSpan="4"
-                                Height="1"
-                                Background="{DynamicResource OutlineVariant}" />
-
-
-                            <!--  LEFT COLUMN  -->
-
-                            <!--  CREATED  -->
-                            <Label
-                                Grid.Row="1"
-                                Grid.Column="0"
-                                Content="Created:"
-                                Style="{StaticResource TaskPropertyLabelLeftStyle}" />
-
-                            <!--  MODIFIED  -->
-                            <Label
-                                Grid.Row="2"
-                                Grid.Column="0"
-                                Content="Modified:"
-                                Style="{StaticResource TaskPropertyLabelLeftStyle}" />
-
-                            <!--  EDITED  -->
-                            <Label
-                                Grid.Row="3"
-                                Grid.Column="0"
-                                Content="Edited:"
-                                Style="{StaticResource TaskPropertyLabelLeftStyle}" />
-
-                            <!--  RIGHT COLUMN  -->
-
-                            <!--  CREATION DATE  -->
-                            <Label
-                                Grid.Row="1"
-                                Grid.Column="1"
-                                Style="{StaticResource TaskPropertyLabelRightStyle}">
-                                <Label.Content>
-                                    <MultiBinding>
-                                        <MultiBinding.Converter>
-                                            <valueConverters1:CurrentDateTimeFormatMultiConverter />
-                                        </MultiBinding.Converter>
-                                        <Binding Path="CreationDate" />
-                                        <Binding
-                                            Path="AppSettings.DateTimeSettings.TaskCreationDateFormat"
-                                            Source="{StaticResource AppSettings}" />
-                                    </MultiBinding>
-                                </Label.Content>
-                            </Label>
-
-                            <!--  MODIFICATION DATE  -->
-                            <Label
-                                Grid.Row="2"
-                                Grid.Column="1"
-                                Style="{StaticResource TaskPropertyLabelRightStyle}">
-                                <Label.Content>
-                                    <MultiBinding>
-                                        <MultiBinding.Converter>
-                                            <valueConverters1:CurrentDateTimeFormatMultiConverter />
-                                        </MultiBinding.Converter>
-                                        <Binding Path="ModificationDate" />
-                                        <Binding
-                                            Path="AppSettings.DateTimeSettings.TaskCreationDateFormat"
-                                            Source="{StaticResource AppSettings}" />
-                                    </MultiBinding>
-                                </Label.Content>
-                            </Label>
-
-                            <!--  EDITED X TIMES  -->
-                            <StackPanel
-                                Grid.Row="3"
-                                Grid.Column="1"
-                                Orientation="Horizontal">
-
-                                <Label
-                                    Margin="8 0 0 0"
-                                    Padding="5 5 0 0"
-                                    Content="{Binding VersionCount}"
-                                    Style="{StaticResource TaskPropertyLabelRightStyle}" />
-                                <Label
-                                    Margin="0"
-                                    Content=" times"
-                                    Style="{StaticResource TaskPropertyLabelRightStyle}" />
-
-                                <Button
-                                    Command="{Binding Cmd.ShowHistoryCommand}"
-                                    Content="Open history"
-                                    IsEnabled="{Binding HasHistory}"
-                                    Style="{StaticResource HistoryButtonStyle}"
-                                    Visibility="{Binding HasHistory, Converter={StaticResource BoolToVisibilityConverter}}" />
-
-                            </StackPanel>
-
-                        </Grid>
-                    </Grid>
+                    <!--  INFO PANEL  -->
+                    <taskItemView:TaskItemInfoPanelControl Grid.Row="1" />
 
                 </Grid>
 
