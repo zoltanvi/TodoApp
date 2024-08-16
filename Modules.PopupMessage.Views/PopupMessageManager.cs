@@ -41,8 +41,8 @@ public class PopupMessageManager : BaseViewModel
         MessageDuration = duration + TimeSpan.FromSeconds(1);
 
         // Changing it to true triggers the animation, changing back to false does not.
-        Visible = true;
-        Visible = false;
+        TriggerAnimation = true;
+        TriggerAnimation = false;
 
         // Make sure to trigger ui update
         OnPropertyChanged(nameof(MessageType));
@@ -50,7 +50,7 @@ public class PopupMessageManager : BaseViewModel
 
     public MessageType MessageType { get; set; } = MessageType.Invalid;
     public string Message { get; set; } = string.Empty;
-    public bool Visible { get; set; }
+    public bool TriggerAnimation { get; set; }
     public bool Closed { get; set; }
     public TimeSpan MessageDuration { get; set; } = TimeSpan.FromSeconds(4);
     public ICommand CloseMessageCommand { get; }

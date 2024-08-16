@@ -9,7 +9,7 @@ public static class SlideInOutAnimation
 {
     public static readonly DependencyProperty IsAnimatingProperty =
         DependencyProperty.RegisterAttached("IsAnimating", typeof(bool), typeof(SlideInOutAnimation),
-            new PropertyMetadata(false, OnIsAnimatingChanged));
+            new PropertyMetadata(false, OnIsAnimatingChanged, OnIsAnimatingUpdated));
 
     public static readonly DependencyProperty DurationProperty =
         DependencyProperty.RegisterAttached("Duration", typeof(TimeSpan), typeof(SlideInOutAnimation),
@@ -23,6 +23,12 @@ public static class SlideInOutAnimation
 
     public static readonly DependencyProperty IsClosedProperty =
         DependencyProperty.RegisterAttached("IsClosed", typeof(bool), typeof(SlideInOutAnimation), new PropertyMetadata(false, OnIsClosedChanged));
+
+    /// <summary>
+    /// True if this is the very first time the value has been updated
+    /// Used to make sure we run the logic at least once during first load
+    /// </summary>
+    private static readonly Dictionary<WeakReference, bool> AlreadyLoaded = [];
 
     public static bool GetIsClosed(UIElement element)
     {
@@ -74,9 +80,9 @@ public static class SlideInOutAnimation
         obj.SetValue(AnimationTimerProperty, value);
     }
 
-    private static void OnIsAnimatingChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    private static void OnIsAnimatingChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
     {
-        if (d is FrameworkElement element)
+        if (sender is FrameworkElement element)
         {
             if ((bool)e.NewValue)
             {
@@ -84,6 +90,36 @@ public static class SlideInOutAnimation
                 StartOrResetAnimation(element);
             }
         }
+    }
+
+    // This method is called even when the value is not changed, just updated.
+    private static object OnIsAnimatingUpdated(DependencyObject d, object value)
+    {
+        if (d is FrameworkElement element)
+        {
+            var alreadyLoadedRef = AlreadyLoaded.FirstOrDefault(x => Equals(x.Key.Target, element));
+            if (alreadyLoadedRef.Key == null)
+            {
+                var weakReference = new WeakReference(element);
+                
+                // Flag that we are in first load but have not finished it
+                AlreadyLoaded[weakReference] = false;
+
+                void OnLoaded(object loadedObject, RoutedEventArgs e)
+                {
+                    element.Loaded -= OnLoaded;
+
+                    // Run animation instantly
+                    SlideOut(element, 0);
+                    
+                    AlreadyLoaded[weakReference] = true;
+                }
+
+                element.Loaded += OnLoaded;
+            }
+        }
+
+        return value;
     }
 
     private static void OnIsClosedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -147,14 +183,14 @@ public static class SlideInOutAnimation
         SetIsVisible(element, false);
     }
 
-    private static void SlideIn(FrameworkElement element)
+    private static void SlideIn(FrameworkElement element, double duration = 0.5)
     {
         var height = element.ActualHeight;
         var slideInAnimation = new DoubleAnimation
         {
             From = -height,
             To = 0,
-            Duration = new Duration(TimeSpan.FromSeconds(0.5)),
+            Duration = new Duration(TimeSpan.FromSeconds(duration)),
             EasingFunction = new BackEase { EasingMode = EasingMode.EaseIn }
         };
 
@@ -162,14 +198,14 @@ public static class SlideInOutAnimation
         element.RenderTransform.BeginAnimation(TranslateTransform.YProperty, slideInAnimation);
     }
 
-    private static void SlideOut(FrameworkElement element)
+    private static void SlideOut(FrameworkElement element, double duration = 0.5)
     {
         var height = element.ActualHeight;
         var slideOutAnimation = new DoubleAnimation
         {
             From = 0,
             To = -height,
-            Duration = new Duration(TimeSpan.FromSeconds(0.5)),
+            Duration = new Duration(TimeSpan.FromSeconds(duration)),
             EasingFunction = new BackEase { EasingMode = EasingMode.EaseOut }
         };
 

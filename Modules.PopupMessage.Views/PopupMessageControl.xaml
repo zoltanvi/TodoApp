@@ -15,7 +15,7 @@
         MinWidth="150"
         HorizontalAlignment="Center"
         animations:SlideInOutAnimation.Duration="{Binding MessageDuration}"
-        animations:SlideInOutAnimation.IsAnimating="{Binding Visible}"
+        animations:SlideInOutAnimation.IsAnimating="{Binding TriggerAnimation}"
         animations:SlideInOutAnimation.IsClosed="{Binding Closed}">
 
         <Border
