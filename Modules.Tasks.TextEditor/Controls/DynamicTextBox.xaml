@@ -21,9 +21,10 @@
                 x:Name="TextBoxElement"
                 Padding="2"
                 VerticalContentAlignment="Center"
-                attachedProperties:FocusSetter.Value="{Binding DataContext.TextBoxNeedsFocus, ElementName=Root}"
+                attachedProperties:FocusSetter.Value="{Binding TextBoxNeedsFocus}"
+                d:DataContext="{d:DesignInstance local:DynamicTextBoxViewModel}"
                 AcceptsReturn="True"
-                AcceptsTab="{Binding DataContext.TextBoxAcceptsTab, ElementName=Root}"
+                AcceptsTab="{Binding TextBoxAcceptsTab}"
                 BorderBrush="Transparent"
                 DataContext="{Binding DataContext, ElementName=Root}"
                 FontFamily="{Binding Path=AppSettings.TaskSettings.FontFamily, Source={StaticResource AppSettings}, Converter={StaticResource EnumToFontFamilyConverter}}"
@@ -31,8 +32,8 @@
                 IsReadOnly="{Binding IsReadOnly, ElementName=Root}"
                 PreviewKeyDown="TextBoxElement_OnPreviewKeyDown"
                 Style="{StaticResource SidePageAddNewTextBoxStyle}"
-                Tag="{Binding DataContext.WatermarkText, ElementName=Root}"
-                Text="{Binding DataContext.PlainTextContent, ElementName=Root, UpdateSourceTrigger=PropertyChanged}" />
+                Tag="{Binding WatermarkText}"
+                Text="{Binding PlainTextContent, UpdateSourceTrigger=PropertyChanged}" />
         </DataTemplate>
 
 
@@ -43,6 +44,7 @@
 
             <local:TextEditorControl
                 x:Name="RichTextEditorControlElement"
+                d:DataContext="{d:DesignInstance local:DynamicTextBoxViewModel}"
                 DataContext="{Binding DataContext, ElementName=Root}"
                 IsReadOnly="{Binding IsReadOnly, ElementName=Root}" />
         </DataTemplate>

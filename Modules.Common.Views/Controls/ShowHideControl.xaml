@@ -8,6 +8,6 @@
     mc:Ignorable="d">
 
     <!--  The content is loaded dynamically, based on the CanShow property  -->
-    <ContentControl x:Name="ContentControlElement" />
+    <ContentControl x:Name="ContentControlElement" DataContext="{Binding DataContext, ElementName=Root}" />
 
 </UserControl>

@@ -57,7 +57,7 @@
                                 <MultiBinding.Converter>
                                     <valueConverters:CurrentDateTimeFormatMultiConverter />
                                 </MultiBinding.Converter>
-                                <Binding Path="NextReminderDate" />
+                                <!--<Binding Path="NextReminderDate" />-->
                                 <Binding
                                     Path="AppSettings.DateTimeSettings.ReminderDateFormat"
                                     Source="{StaticResource AppSettings}" />

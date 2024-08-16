@@ -11,6 +11,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:valueConverters="clr-namespace:Modules.Tasks.Views.ValueConverters"
     xmlns:valueConverters1="clr-namespace:Modules.Common.Views.ValueConverters;assembly=Modules.Common.Views"
+    Name="Root"
     d:DataContext="{d:DesignInstance local:TaskItemViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -174,6 +175,53 @@
                     </Grid.RowDefinitions>
 
                     <Grid Grid.Row="0">
+                        <Grid.Resources>
+
+                            <DataTemplate x:Key="CheckBoxPanelTemplate">
+                                <Grid>
+                                    <Grid.Resources>
+                                        <DataTemplate x:Key="CircularCheckBoxTemplate">
+                                            <CheckBox
+                                                Margin="{Binding UIScaler.TaskCheckBoxWidth, Source={StaticResource UIScaler}, Converter={StaticResource TaskCheckboxMarginConverter}}"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                Command="{Binding Cmd.IsDoneModifiedCommand}"
+                                                DataContext="{Binding ElementName=Root, Path=DataContext}"
+                                                IsChecked="{Binding IsDone}"
+                                                IsEnabled="{Binding Content.IsDisplayMode}"
+                                                Opacity="{Binding Opacity}"
+                                                Style="{StaticResource TaskCheckBoxStyle}" />
+                                        </DataTemplate>
+                                        <DataTemplate x:Key="SquareCheckBoxTemplate">
+                                            <CheckBox
+                                                Margin="{Binding UIScaler.TaskCheckBoxWidth, Source={StaticResource UIScaler}, Converter={StaticResource TaskCheckboxMarginConverter}}"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                Command="{Binding Cmd.IsDoneModifiedCommand}"
+                                                DataContext="{Binding ElementName=Root, Path=DataContext}"
+                                                IsChecked="{Binding IsDone}"
+                                                IsEnabled="{Binding Content.IsDisplayMode}"
+                                                Opacity="{Binding Opacity}"
+                                                Style="{StaticResource TaskCheckBoxSquareStyle}" />
+                                        </DataTemplate>
+                                    </Grid.Resources>
+
+                                    <Grid>
+                                        <controls:ShowHideControl
+                                            CanShow="{Binding AppSettings.TaskSettings.CircularCheckbox, Source={StaticResource AppSettings}}"
+                                            Id="Circular checkbox"
+                                            TemplateToShow="{StaticResource CircularCheckBoxTemplate}"
+                                            DataContext="{Binding ElementName=Root, Path=DataContext}"/>
+                                        <controls:ShowHideControl
+                                            CanShow="{Binding AppSettings.TaskSettings.SquareCheckbox, Source={StaticResource AppSettings}}"
+                                            Id="Square checkbox"
+                                            TemplateToShow="{StaticResource SquareCheckBoxTemplate}"
+                                            DataContext="{Binding ElementName=Root, Path=DataContext}"/>
+                                    </Grid>
+                                </Grid>
+                            </DataTemplate>
+                        </Grid.Resources>
+
                         <Grid.ColumnDefinitions>
                             <!--  Color bar column  -->
                             <ColumnDefinition>
@@ -227,33 +275,10 @@
                         <!--  Task Checkbox  -->
                         <Grid Grid.Column="1">
 
-                            <!--  CIRCULAR CHECKBOX  -->
-                            <Border Visibility="{Binding AppSettings.TaskSettings.CircularCheckbox, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}">
-                                <CheckBox
-                                    Margin="{Binding UIScaler.TaskCheckBoxWidth, Source={StaticResource UIScaler}, Converter={StaticResource TaskCheckboxMarginConverter}}"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Command="{Binding Cmd.IsDoneModifiedCommand}"
-                                    IsChecked="{Binding IsDone}"
-                                    IsEnabled="{Binding Content.IsDisplayMode}"
-                                    Opacity="{Binding Opacity}"
-                                    Style="{StaticResource TaskCheckBoxStyle}"
-                                    Visibility="{Binding AppSettings.TaskQuickActionSettings.CheckboxEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
-                            </Border>
-
-                            <!--  SQUARE CHECKBOX  -->
-                            <Border Visibility="{Binding AppSettings.TaskSettings.CircularCheckbox, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityNegatedConverter}}">
-                                <CheckBox
-                                    Margin="{Binding UIScaler.TaskCheckBoxWidth, Source={StaticResource UIScaler}, Converter={StaticResource TaskCheckboxMarginConverter}}"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Command="{Binding Cmd.IsDoneModifiedCommand}"
-                                    IsChecked="{Binding IsDone}"
-                                    IsEnabled="{Binding Content.IsDisplayMode}"
-                                    Opacity="{Binding Opacity}"
-                                    Style="{StaticResource TaskCheckBoxSquareStyle}"
-                                    Visibility="{Binding AppSettings.TaskQuickActionSettings.CheckboxEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}" />
-                            </Border>
+                            <controls:ShowHideControl
+                                CanShow="{Binding AppSettings.TaskQuickActionSettings.CheckboxEnabled, Source={StaticResource AppSettings}}"
+                                Id="Checkbox panel"
+                                TemplateToShow="{StaticResource CheckBoxPanelTemplate}" />
                         </Grid>
 
 
@@ -271,7 +296,7 @@
                                 </Grid.ColumnDefinitions>
 
                                 <!--  CLOCK ICON  -->
-                                <Border
+                                <!--<Border
                                     Grid.Column="0"
                                     Margin="0"
                                     HorizontalAlignment="Right"
@@ -290,11 +315,11 @@
                                             FontFamily="{StaticResource IconFont}"
                                             Foreground="{DynamicResource Tertiary}" />
                                         <Grid.LayoutTransform>
-                                            <!--  -1 to mirror it  -->
+                                            --><!--  -1 to mirror it  --><!--
                                             <ScaleTransform ScaleX="{Binding Source={StaticResource UIScaler}, Path=UIScaler.ScaleValue}" ScaleY="{Binding Source={StaticResource UIScaler}, Path=UIScaler.ScaleValue}" />
                                         </Grid.LayoutTransform>
                                     </Grid>
-                                </Border>
+                                </Border>-->
 
                                 <!--  PIN ICON  -->
                                 <Border
