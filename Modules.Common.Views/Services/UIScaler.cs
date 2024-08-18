@@ -53,8 +53,8 @@ public class UIScaler : BaseViewModel, IUIScaler
     public double TaskCheckBoxWidth => 8 * ScaleValue;
     public double SliderHeight => 18 * ScaleValue;
     public double SliderThumbHeight => 18 * ScaleValue;
-    public double SliderThumbWidth => 15;
-    public double ScrollbarWidth => 10 * ScaleValue;
+    public double SliderThumbWidth => 20;
+    public double ScrollbarWidth => 6 * ScaleValue;
     public double NotePageBoxWidth => 17 * ScaleValue;
     public double TaskProgressBarHeight => OriginalTaskProgressBarHeight * ScaleValue;
 
