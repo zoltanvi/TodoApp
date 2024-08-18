@@ -39,6 +39,4 @@
         x:Key="TagBorderConverter"
         ColorType="Border" />
 
-    <valueConverters:TaskItemBoolToMarginConverter x:Key="TaskItemBoolToMarginConverter"/>
-
 </ResourceDictionary>

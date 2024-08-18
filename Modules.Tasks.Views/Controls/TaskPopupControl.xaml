@@ -6,15 +6,19 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:taskItemView="clr-namespace:Modules.Tasks.Views.Controls.TaskItemView"
+    xmlns:attached="clr-namespace:Modules.Tasks.Views.AttachedProperties"
     x:Name="Root"
     d:DataContext="{d:DesignInstance taskItemView:TaskItemViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
     <Grid Visibility="{Binding Content.IsDisplayMode, Converter={StaticResource BoolToVisibilityConverter}}">
+            <!--Margin="-5 -20 5 20"-->
         <Border
             Height="{Binding UIScaler.TaskPopupHeight, Source={StaticResource UIScaler}}"
-            Margin="-5 -20 5 20"
+            attached:TaskPopupMarginScaler.HorizontalOffset="5"
+            attached:TaskPopupMarginScaler.VerticalOffset="20"
+            attached:TaskPopupMarginScaler.ScaleValue="{Binding UIScaler.ScaleValue, Source={StaticResource UIScaler}}"
             Padding="2 1"
             HorizontalAlignment="Right"
             VerticalAlignment="Top"
