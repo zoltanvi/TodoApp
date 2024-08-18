@@ -6,42 +6,56 @@ namespace Modules.Common.Views.Controls;
 
 public class TwoStateButton : Button
 {
-    public static readonly DependencyProperty IsState1ActiveProperty = DependencyProperty.Register(nameof(IsState1Active), typeof(bool), typeof(TwoStateButton), new PropertyMetadata(false, OnIsState1ActiveChanged));
+    public static readonly DependencyProperty IsInSecondStateProperty = DependencyProperty.Register(nameof(IsInSecondState), typeof(bool), typeof(TwoStateButton), new PropertyMetadata(false, OnIsState1ActiveChanged));
 
-    public static readonly DependencyProperty ContentForState1Property = DependencyProperty.Register(nameof(ContentForState1), typeof(object), typeof(TwoStateButton), new PropertyMetadata(default(object)));
-    public static readonly DependencyProperty ContentForState2Property = DependencyProperty.Register(nameof(ContentForState2), typeof(object), typeof(TwoStateButton), new PropertyMetadata(default(object)));
+    public static readonly DependencyProperty FirstContentProperty = DependencyProperty.Register(nameof(FirstContent), typeof(object), typeof(TwoStateButton), new PropertyMetadata(default(object)));
+    public static readonly DependencyProperty SecondContentProperty = DependencyProperty.Register(nameof(SecondContent), typeof(object), typeof(TwoStateButton), new PropertyMetadata(default(object)));
 
-    public static readonly DependencyProperty CommandForState1Property = DependencyProperty.Register(nameof(CommandForState1), typeof(ICommand), typeof(TwoStateButton), new PropertyMetadata(default(ICommand)));
-    public static readonly DependencyProperty CommandForState2Property = DependencyProperty.Register(nameof(CommandForState2), typeof(ICommand), typeof(TwoStateButton), new PropertyMetadata(default(ICommand)));
+    public static readonly DependencyProperty FirstCommandProperty = DependencyProperty.Register(nameof(FirstCommand), typeof(ICommand), typeof(TwoStateButton), new PropertyMetadata(default(ICommand)));
+    public static readonly DependencyProperty SecondCommandProperty = DependencyProperty.Register(nameof(SecondCommand), typeof(ICommand), typeof(TwoStateButton), new PropertyMetadata(default(ICommand)));
+    public static readonly DependencyProperty FirstToolTipProperty = DependencyProperty.Register(nameof(FirstToolTip), typeof(object), typeof(TwoStateButton), new PropertyMetadata(default(object)));
+    public static readonly DependencyProperty SecondToolTipProperty = DependencyProperty.Register(nameof(SecondToolTip), typeof(object), typeof(TwoStateButton), new PropertyMetadata(default(object)));
 
-    public bool IsState1Active
+    public bool IsInSecondState
     {
-        get => (bool)GetValue(IsState1ActiveProperty);
-        set => SetValue(IsState1ActiveProperty, value);
+        get => (bool)GetValue(IsInSecondStateProperty);
+        set => SetValue(IsInSecondStateProperty, value);
     }
 
-    public object ContentForState1
+    public object FirstContent
     {
-        get => (object)GetValue(ContentForState1Property);
-        set => SetValue(ContentForState1Property, value);
+        get => (object)GetValue(FirstContentProperty);
+        set => SetValue(FirstContentProperty, value);
     }
 
-    public object ContentForState2
+    public object SecondContent
     {
-        get => (object)GetValue(ContentForState2Property);
-        set => SetValue(ContentForState2Property, value);
+        get => (object)GetValue(SecondContentProperty);
+        set => SetValue(SecondContentProperty, value);
     }
 
-    public ICommand CommandForState1
+    public ICommand FirstCommand
     {
-        get => (ICommand)GetValue(CommandForState1Property);
-        set => SetValue(CommandForState1Property, value);
+        get => (ICommand)GetValue(FirstCommandProperty);
+        set => SetValue(FirstCommandProperty, value);
     }
 
-    public ICommand CommandForState2
+    public ICommand SecondCommand
     {
-        get => (ICommand)GetValue(CommandForState2Property);
-        set => SetValue(CommandForState2Property, value);
+        get => (ICommand)GetValue(SecondCommandProperty);
+        set => SetValue(SecondCommandProperty, value);
+    }
+
+    public object FirstToolTip
+    {
+        get => (object)GetValue(FirstToolTipProperty);
+        set => SetValue(FirstToolTipProperty, value);
+    }
+
+    public object SecondToolTip
+    {
+        get => (object)GetValue(SecondToolTipProperty);
+        set => SetValue(SecondToolTipProperty, value);
     }
 
     public TwoStateButton()
@@ -66,18 +80,19 @@ public class TwoStateButton : Button
     {
         base.OnClick();
 
-        if (IsState1Active && CommandForState1?.CanExecute(null) == true)
+        if (IsInSecondState && SecondCommand?.CanExecute(null) == true)
         {
-            CommandForState1.Execute(null);
+            SecondCommand.Execute(null);
         }
-        else if (!IsState1Active && CommandForState2?.CanExecute(null) == true)
+        else if (!IsInSecondState && FirstCommand?.CanExecute(null) == true)
         {
-            CommandForState2.Execute(null);
+            FirstCommand.Execute(null);
         }
     }
 
     private void UpdateContent()
     {
-        Content = IsState1Active ? ContentForState1 : ContentForState2;
+        Content = IsInSecondState ? SecondContent : FirstContent;
+        ToolTip = IsInSecondState ? SecondToolTip : FirstToolTip;
     }
 }

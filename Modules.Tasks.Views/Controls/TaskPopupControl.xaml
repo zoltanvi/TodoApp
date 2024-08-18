@@ -65,21 +65,15 @@
                 </DataTemplate>
 
                 <DataTemplate x:Key="PinButtonTemplate">
-                    <Button
-                        Command="{Binding Cmd.PinItemCommand}"
-                        Content="{StaticResource IconPin}"
+                    <controls:TwoStateButton
                         DataContext="{Binding ElementName=Root, Path=DataContext}"
-                        Style="{StaticResource ButtonQuickActionStyle}"
-                        ToolTip="Pin task" />
-                </DataTemplate>
-
-                <DataTemplate x:Key="UnpinButtonTemplate">
-                    <Button
-                        Command="{Binding Cmd.UnpinItemCommand}"
-                        Content="{StaticResource IconUnpin}"
-                        DataContext="{Binding ElementName=Root, Path=DataContext}"
-                        Style="{StaticResource ButtonQuickActionStyle}"
-                        ToolTip="Unpin task" />
+                        FirstCommand="{Binding Cmd.PinItemCommand}"
+                        FirstContent="{StaticResource IconPin}"
+                        FirstToolTip="Pin task"
+                        SecondCommand="{Binding Cmd.UnpinItemCommand}"
+                        SecondContent="{StaticResource IconUnpin}"
+                        SecondToolTip="Unpin task"
+                        IsInSecondState="{Binding Pinned}" />
                 </DataTemplate>
 
                 <DataTemplate x:Key="SwitchFormatButtonTemplate">
@@ -184,21 +178,13 @@
                     Id="Popup tag selector button"
                     TemplateToShow="{StaticResource TagSelectorButtonTemplate}" />
 
-                <!--  Pin button  -->
+                <!--  Pin / unpin button  -->
                 <controls:ShowHideControl
                     CanShow="{Binding AppSettings.TaskQuickActionSettings.PinEnabled, Source={StaticResource AppSettings}}"
                     DataContext="{Binding ElementName=Root, Path=DataContext}"
-                    Id="Popup pin button"
+                    Id="Popup pin toggle button"
                     TemplateToShow="{StaticResource PinButtonTemplate}"
-                    Visibility="{Binding Pinned, Converter={StaticResource BoolToVisibilityNegatedConverter}}" />
-
-                <!--  Unpin button  -->
-                <controls:ShowHideControl
-                    CanShow="{Binding AppSettings.TaskQuickActionSettings.PinEnabled, Source={StaticResource AppSettings}}"
-                    DataContext="{Binding ElementName=Root, Path=DataContext}"
-                    Id="Popup pin button"
-                    TemplateToShow="{StaticResource UnpinButtonTemplate}"
-                    Visibility="{Binding Pinned, Converter={StaticResource BoolToVisibilityConverter}}" />
+                    />
 
                 <!--  Switch formatted / plain text mode  -->
                 <controls:ShowHideControl
