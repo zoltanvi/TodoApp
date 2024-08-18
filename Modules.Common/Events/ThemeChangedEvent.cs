@@ -2,4 +2,4 @@
 
 namespace Modules.Common.Events;
 
-public class HotkeyPressedCtrlFEvent : PubSubEvent;
+public class ThemeChangedEvent : PubSubEvent;

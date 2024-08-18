@@ -81,12 +81,16 @@
                 </DataTemplate>
 
                 <DataTemplate x:Key="SwitchFormatButtonTemplate">
-                    <Button
-                        Command="{Binding Cmd.SwitchFormattedPlainTextModeCommand}"
-                        Content="{StaticResource IconSwitch}"
+                    <controls:TwoStateButton
                         DataContext="{Binding ElementName=Root, Path=DataContext}"
-                        Style="{StaticResource ButtonQuickActionStyle}"
-                        ToolTip="Switch formatted / plain text mode" />
+                        IsInSecondState="{Binding Content.IsPlainTextMode}"
+                        FirstCommand="{Binding Cmd.SwitchFormattedPlainTextModeCommand}"
+                        FirstContent="{StaticResource IconBold}"
+                        FirstToolTip="Change to plain text. WARNING: removes all formatting!"
+                        SecondCommand="{Binding Cmd.SwitchFormattedPlainTextModeCommand}"
+                        SecondContent="{StaticResource IconPlainText}"
+                        SecondToolTip="Change to formatted text."
+                    />
                 </DataTemplate>
 
                 <DataTemplate x:Key="ShowDetailsButtonTemplate">

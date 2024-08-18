@@ -327,20 +327,18 @@
                                     <RowDefinition Height="*" />
                                 </Grid.RowDefinitions>
 
-                                <Border
+                                <controls1:TwoStateButton
                                     Grid.Row="0"
-                                    VerticalAlignment="Top">
-                                    <Button
-                                        Padding="5"
-                                        HorizontalAlignment="Right"
-                                        Background="{DynamicResource Surface3}"
-                                        Command="{Binding SwitchFormatMode}"
-                                        Content="{StaticResource IconSwitch}"
-                                        Cursor="Hand"
-                                        Style="{StaticResource ButtonIconHoverStyle}"
-                                        ToolTip="Change to formatted text"
-                                        Visibility="{Binding NewContentViewModel.IsEmpty, Converter={StaticResource BoolToVisibilityNegatedConverter}}" />
-                                </Border>
+                                    VerticalAlignment="Top"
+                                    IsInSecondState="{Binding NewContentViewModel.IsPlainTextMode}"
+                                    FirstCommand="{Binding SwitchFormatMode}"
+                                    FirstContent="{StaticResource IconBold}"
+                                    FirstToolTip="Change to plain text. WARNING: removes all formatting!"
+                                    SecondCommand="{Binding SwitchFormatMode}"
+                                    SecondContent="{StaticResource IconPlainText}"
+                                    SecondToolTip="Change to formatted text."
+                                    FontSize="{Binding UIScaler.FontSize.Large, Source={StaticResource UIScaler}}"
+                                    />
 
 
                                 <Border

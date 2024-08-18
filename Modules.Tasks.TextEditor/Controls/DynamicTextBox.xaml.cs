@@ -57,7 +57,7 @@ public partial class DynamicTextBox : UserControl
 
                     if (escape && wasEmpty)
                     {
-                        Keyboard.ClearFocus();
+                        // TODO: clear focus
                     }
                 }
             }

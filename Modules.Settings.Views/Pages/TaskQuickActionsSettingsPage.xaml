@@ -76,7 +76,7 @@
                 <!--  Switch button  -->
                 <controls:ToggleButtonSettingControl
                     Description="Switch mode button"
-                    Icon="{StaticResource IconSwitch}"
+                    Icon="{StaticResource IconPlainText}"
                     IsChecked="{Binding AppSettings.TaskQuickActionSettings.SwitchFormattedPlainTextModeEnabled, Source={StaticResource AppSettings}, Mode=TwoWay}" />
 
                 <!--  Details button  -->
@@ -132,7 +132,7 @@
 
                                                 <DataTemplate x:Key="SwitchButtonTemplate">
                                                     <Button
-                                                        Content="{StaticResource IconSwitch}"
+                                                        Content="{StaticResource IconPlainText}"
                                                         Style="{StaticResource ButtonQuickActionStyle}"
                                                         ToolTip="Switch formatted / plain text mode" />
                                                 </DataTemplate>

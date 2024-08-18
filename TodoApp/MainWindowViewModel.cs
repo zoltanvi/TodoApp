@@ -2,7 +2,6 @@
 using Modules.Common.Cqrs.Events;
 using Modules.Common.DataBinding;
 using Modules.Common.Events;
-using Modules.Common.OBSOLETE.Mediator;
 using Modules.Common.Services;
 using Modules.Common.Services.Navigation;
 using Modules.Common.ViewModel;
@@ -268,8 +267,6 @@ public class MainWindowViewModel : BaseViewModel
     {
         Key key = e.Key;
 
-        //if (key == Key.Escape) IoC.OneEditorOpenService.EditMode(null);
-
         if (Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
         {
             switch (key)
@@ -291,30 +288,22 @@ public class MainWindowViewModel : BaseViewModel
                 }
                 case Key.Subtract:
                 {
+                    // Ctrl + -
                     _uiScaler.ZoomOut();
                     break;
                 }
                 case Key.Add:
                 {
+                    // Ctrl + +
                     _uiScaler.ZoomIn();
                     break;
                 }
-                case Key.E:
+                case Key.N:
                 {
-                    // TODO:
-                    // Ctrl + E
+                    // Ctrl + Space
                     // Set focus on task page bottom text editor
-                    MediatorOBSOLETE.NotifyClients(ViewModelMessages.FocusBottomTextEditor);
+                    _eventAggregator.GetEvent<HotkeyPressedCtrlSpaceEvent>().Publish();
                     break;
-                }
-            }
-
-            if (Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
-            {
-                // Ctrl + Shift + J, Ctrl + Shift + L
-                if (key == Key.J || key == Key.L)
-                {
-                    // TODO: think about it
                 }
             }
         }

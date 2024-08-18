@@ -1,6 +1,6 @@
-﻿using System.ComponentModel;
-using Modules.Common.OBSOLETE.Mediator;
+﻿using Modules.Common.Events;
 using Modules.Settings.Contracts.ViewModels;
+using Prism.Events;
 using System.Windows;
 using Application = System.Windows.Application;
 
@@ -12,15 +12,18 @@ namespace TodoApp.Themes;
 public class ThemeManager
 {
     private readonly MaterialThemeManagerService _materialThemeManagerService;
+    private readonly IEventAggregator _eventAggregator;
 
     private const string DarkTheme = "pack://application:,,,/TodoApp;component/Themes/DarkTheme.xaml";
     private const string LightTheme = "pack://application:,,,/TodoApp;component/Themes/LightTheme.xaml";
 
-    public ThemeManager(MaterialThemeManagerService materialThemeManagerService)
+    public ThemeManager(MaterialThemeManagerService materialThemeManagerService, IEventAggregator eventAggregator)
     {
         ArgumentNullException.ThrowIfNull(materialThemeManagerService);
+        ArgumentNullException.ThrowIfNull(eventAggregator);
 
         _materialThemeManagerService = materialThemeManagerService;
+        _eventAggregator = eventAggregator;
         _materialThemeManagerService.UpdateTheme();
 
         AppSettings.Instance.ThemeSettings.SettingsChanged += OnThemeSettingsChanged;
@@ -49,7 +52,7 @@ public class ThemeManager
             ChangeTheme(from: DarkTheme, to: LightTheme);
         }
 
-        MediatorOBSOLETE.NotifyClients(ViewModelMessages.ThemeChanged);
+        _eventAggregator.GetEvent<ThemeChangedEvent>().Publish();
     }
 
     private void ChangeTheme(string from, string to)

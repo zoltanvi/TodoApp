@@ -1,6 +1,5 @@
 ﻿using Modules.Common;
 using Modules.Common.DataBinding;
-using Modules.Common.OBSOLETE.Mediator;
 using Modules.Common.Views.Services;
 using Modules.Common.Views.ValueConverters;
 using Modules.Settings.Contracts.ViewModels;
@@ -236,8 +235,6 @@ public class FormattedTextBox : RichTextBox
     private void OnPreviewKeyDown(object sender, KeyEventArgs e)
     {
         var keyArrowUp = e.Key == Key.Up;
-        var keyL = e.Key == Key.L;
-        var keyN = e.Key == Key.N;
         var enter = e.Key == Key.Enter;
         var escape = e.Key == Key.Escape;
         var shiftPressed = Keyboard.Modifiers.HasFlag(ModifierKeys.Shift);
@@ -257,18 +254,8 @@ public class FormattedTextBox : RichTextBox
 
                 if (escape && wasEmpty)
                 {
-                    Keyboard.ClearFocus();
+                    // TODO: clear focus
                 }
-            }
-        }
-
-        if (ctrlPressed && shiftPressed && (keyL || keyN))
-        {
-            e.Handled = true;
-
-            if (keyL)
-            {
-                MediatorOBSOLETE.NotifyClients(ViewModelMessages.NextThemeWithHotkeyRequested);
             }
         }
 

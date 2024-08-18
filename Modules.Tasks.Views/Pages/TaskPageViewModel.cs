@@ -103,8 +103,9 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         _eventAggregator.GetEvent<TagsChangedOnTaskItemEvent>().Subscribe(OnTagsChangedOnTaskItem);
         _eventAggregator.GetEvent<TaskSortingRequestedEvent>().Subscribe(OnSortingRequested);
         _eventAggregator.GetEvent<TaskItemVersionRestoredEvent>().Subscribe(OnVersionRestored);
-        _eventAggregator.GetEvent<HotkeyPressedCtrlFEvent>().Subscribe(OnCtrlFPressed);
         _eventAggregator.GetEvent<TagItemDeletedEvent>().Subscribe(OnTagItemDeleted);
+        _eventAggregator.GetEvent<HotkeyPressedCtrlFEvent>().Subscribe(OnCtrlFPressed);
+        _eventAggregator.GetEvent<HotkeyPressedCtrlSpaceEvent>().Subscribe(OnCtrlSpacePressed);
 
 
         _oneEditorOpenService.ChangedToDisplayMode += FocusAddNewTaskTextEditor;
@@ -511,6 +512,11 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         SearchBoxViewModel.TriggerSearchBoxFocus = true;
     }
 
+    private void OnCtrlSpacePressed()
+    {
+        NewContentViewModel.TriggerFocus = true;
+    }
+
     private void OnTagItemDeleted(int tagId)
     {
         // Remove deleted tag from every tasks
@@ -537,8 +543,9 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         _eventAggregator.GetEvent<TagsChangedOnTaskItemEvent>().Unsubscribe(OnTagsChangedOnTaskItem);
         _eventAggregator.GetEvent<TaskSortingRequestedEvent>().Unsubscribe(OnSortingRequested);
         _eventAggregator.GetEvent<TaskItemVersionRestoredEvent>().Unsubscribe(OnVersionRestored);
-        _eventAggregator.GetEvent<HotkeyPressedCtrlFEvent>().Unsubscribe(OnCtrlFPressed);
         _eventAggregator.GetEvent<TagItemDeletedEvent>().Unsubscribe(OnTagItemDeleted);
+        _eventAggregator.GetEvent<HotkeyPressedCtrlFEvent>().Unsubscribe(OnCtrlFPressed);
+        _eventAggregator.GetEvent<HotkeyPressedCtrlSpaceEvent>().Unsubscribe(OnCtrlSpacePressed);
 
         _oneEditorOpenService.ChangedToDisplayMode -= FocusAddNewTaskTextEditor;
         SearchBoxViewModel.SearchTermsChanged -= OnSearchTermsChanged;
