@@ -7,6 +7,7 @@
     xmlns:valueConverters="clr-namespace:Modules.Common.Views.ValueConverters;assembly=Modules.Common.Views"
     xmlns:local="clr-namespace:Modules.RecycleBin.Views.Controls"
     xmlns:controls="clr-namespace:Modules.Tasks.TextEditor.Controls;assembly=Modules.Tasks.TextEditor"
+    xmlns:controls1="clr-namespace:Modules.Common.Views.Controls;assembly=Modules.Common.Views"
     d:DataContext="{d:DesignInstance local:RecycleBinTaskItemViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -236,23 +237,18 @@
             </Grid>
         </Border>
 
-        <Button
+        <controls1:TwoStateButton
             Grid.Column="2"
+            FirstCommand="{Binding ToggleDetailsCommand}"
+            FirstContent="{StaticResource IconInfo}"
+            FirstToolTip="Show details"
+            IsInSecondState="{Binding DetailsVisible}"
+            SecondCommand="{Binding ToggleDetailsCommand}"
+            SecondContent="{StaticResource IconHideInfo}"
+            SecondToolTip="Hide details"
+            MaxHeight="{Binding UIScaler.ColorPickerHeight, Source={StaticResource UIScaler}}"
             Margin="4 0 0 0"
-            Command="{Binding ToggleDetailsCommand}"
-            Content="{StaticResource IconInfo}"
-            Style="{StaticResource ButtonQuickActionStyle}"
-            ToolTip="Show details"
-            Visibility="{Binding DetailsVisible, Converter={StaticResource BoolToVisibilityNegatedConverter}}" />
-
-        <Button
-            Grid.Column="2"
-            Margin="4 0 0 0"
-            Command="{Binding ToggleDetailsCommand}"
-            Content="{StaticResource IconHideInfo}"
-            Style="{StaticResource ButtonQuickActionStyle}"
-            ToolTip="Hide details"
-            Visibility="{Binding DetailsVisible, Converter={StaticResource BoolToVisibilityConverter}}" />
+            />
 
         <Button
             Grid.Column="3"

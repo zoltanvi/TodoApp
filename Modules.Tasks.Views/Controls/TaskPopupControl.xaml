@@ -70,10 +70,10 @@
                         FirstCommand="{Binding Cmd.PinItemCommand}"
                         FirstContent="{StaticResource IconPin}"
                         FirstToolTip="Pin task"
+                        IsInSecondState="{Binding Pinned}"
                         SecondCommand="{Binding Cmd.UnpinItemCommand}"
                         SecondContent="{StaticResource IconUnpin}"
-                        SecondToolTip="Unpin task"
-                        IsInSecondState="{Binding Pinned}" />
+                        SecondToolTip="Unpin task" />
                 </DataTemplate>
 
                 <DataTemplate x:Key="SwitchFormatButtonTemplate">
@@ -86,21 +86,15 @@
                 </DataTemplate>
 
                 <DataTemplate x:Key="ShowDetailsButtonTemplate">
-                    <Button
-                        Command="{Binding Cmd.ToggleDetailsCommand}"
-                        Content="{StaticResource IconInfo}"
+                    <controls:TwoStateButton
                         DataContext="{Binding ElementName=Root, Path=DataContext}"
-                        Style="{StaticResource ButtonQuickActionStyle}"
-                        ToolTip="Show details" />
-                </DataTemplate>
-
-                <DataTemplate x:Key="HideDetailsButtonTemplate">
-                    <Button
-                        Command="{Binding Cmd.ToggleDetailsCommand}"
-                        Content="{StaticResource IconHideInfo}"
-                        DataContext="{Binding ElementName=Root, Path=DataContext}"
-                        Style="{StaticResource ButtonQuickActionStyle}"
-                        ToolTip="Hide details" />
+                        FirstCommand="{Binding Cmd.ToggleDetailsCommand}"
+                        FirstContent="{StaticResource IconInfo}"
+                        FirstToolTip="Show details"
+                        IsInSecondState="{Binding DetailsVisible}"
+                        SecondCommand="{Binding Cmd.ToggleDetailsCommand}"
+                        SecondContent="{StaticResource IconHideInfo}"
+                        SecondToolTip="Hide details" />
                 </DataTemplate>
 
                 <DataTemplate x:Key="TrashButtonTemplate">
@@ -183,8 +177,7 @@
                     CanShow="{Binding AppSettings.TaskQuickActionSettings.PinEnabled, Source={StaticResource AppSettings}}"
                     DataContext="{Binding ElementName=Root, Path=DataContext}"
                     Id="Popup pin toggle button"
-                    TemplateToShow="{StaticResource PinButtonTemplate}"
-                    />
+                    TemplateToShow="{StaticResource PinButtonTemplate}" />
 
                 <!--  Switch formatted / plain text mode  -->
                 <controls:ShowHideControl
@@ -197,17 +190,8 @@
                 <controls:ShowHideControl
                     CanShow="{Binding AppSettings.TaskQuickActionSettings.DetailsEnabled, Source={StaticResource AppSettings}}"
                     DataContext="{Binding ElementName=Root, Path=DataContext}"
-                    Id="Popup show details button"
-                    TemplateToShow="{StaticResource ShowDetailsButtonTemplate}"
-                    Visibility="{Binding DetailsVisible, Converter={StaticResource BoolToVisibilityNegatedConverter}}" />
-
-                <!--  Hide details  -->
-                <controls:ShowHideControl
-                    CanShow="{Binding AppSettings.TaskQuickActionSettings.DetailsEnabled, Source={StaticResource AppSettings}}"
-                    DataContext="{Binding ElementName=Root, Path=DataContext}"
-                    Id="Popup hide details button"
-                    TemplateToShow="{StaticResource HideDetailsButtonTemplate}"
-                    Visibility="{Binding DetailsVisible, Converter={StaticResource BoolToVisibilityConverter}}" />
+                    Id="Popup toggle details button"
+                    TemplateToShow="{StaticResource ShowDetailsButtonTemplate}" />
 
                 <!--  Trash button  -->
                 <controls:ShowHideControl
