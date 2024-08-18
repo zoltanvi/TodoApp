@@ -505,7 +505,11 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         updatedTask.Versions = dbTask.Versions.MapToViewModelList(_mediator);
     }
 
-    private void OnCtrlFPressed() => SearchBoxViewModel.IsSearchBoxOpen = true;
+    private void OnCtrlFPressed()
+    {
+        SearchBoxViewModel.IsSearchBoxOpen = true;
+        SearchBoxViewModel.TriggerSearchBoxFocus = true;
+    }
 
     private void OnTagItemDeleted(int tagId)
     {

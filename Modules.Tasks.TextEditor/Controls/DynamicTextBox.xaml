@@ -17,21 +17,30 @@
             x:Key="PlainTextTemplate"
             DataType="{x:Type local:DynamicTextBoxViewModel}">
 
+            <!--
+                IMPORTANT: SetFocusOn Attached property must be
+                after Visibility property (if defined) in order to work!
+                
+                Focusable property is needed to exit edit mode on enter keypress.
+            -->
             <TextBox
                 x:Name="TextBoxElement"
                 Padding="2"
                 VerticalContentAlignment="Center"
-                attachedProperties:FocusSetter.Value="{Binding TextBoxNeedsFocus}"
+                attachedProperties:SetFocusOn.SelectAllOnFocus="False"
+                attachedProperties:SetFocusOn.Trigger="{Binding TriggerFocus}"
+                attachedProperties:SetFocusOn.CaretAtEndOnFocus="True"
                 d:DataContext="{d:DesignInstance local:DynamicTextBoxViewModel}"
                 AcceptsReturn="True"
                 AcceptsTab="{Binding TextBoxAcceptsTab}"
                 BorderBrush="Transparent"
                 DataContext="{Binding DataContext, ElementName=Root}"
+                Focusable="{Binding Focusable}"
                 FontFamily="{Binding Path=AppSettings.TaskSettings.FontFamily, Source={StaticResource AppSettings}, Converter={StaticResource EnumToFontFamilyConverter}}"
                 FontSize="{Binding Path=AppSettings.TaskSettings.FontSize, Source={StaticResource AppSettings}, Converter={StaticResource FontSizeScaler}}"
                 IsReadOnly="{Binding IsReadOnly, ElementName=Root}"
-                PreviewKeyDown="TextBoxElement_OnPreviewKeyDown"
                 Opacity="{Binding TextOpacity}"
+                PreviewKeyDown="TextBoxElement_OnPreviewKeyDown"
                 Style="{StaticResource SidePageAddNewTextBoxStyle}"
                 Tag="{Binding WatermarkText}"
                 Text="{Binding PlainTextContent, UpdateSourceTrigger=PropertyChanged}" />

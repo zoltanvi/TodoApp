@@ -15,6 +15,7 @@ public class DynamicTextBoxViewModel : BaseViewModel
     private readonly bool _enterActionOnLostFocus;
     private readonly bool _toolbarCloseOnLostFocus;
     private bool _isPlainTextMode;
+    private bool _triggerFocus;
 
     public DynamicTextBoxViewModel(
         bool focusOnEditMode = false,
@@ -35,8 +36,6 @@ public class DynamicTextBoxViewModel : BaseViewModel
         EnterAction = enterAction;
     }
 
-    // TODO:
-    public bool TextBoxNeedsFocus { get; set; }
     public bool TextBoxAcceptsTab { get; set; } = true;
 
     public bool IsPlainTextMode
@@ -58,7 +57,22 @@ public class DynamicTextBoxViewModel : BaseViewModel
     }
 
     public bool Focusable { get; set; }
-    public bool NeedFocus { get; set; }
+
+    public bool TriggerFocus
+    {
+        get => _triggerFocus;
+        set
+        {
+            if (value)
+            {
+                _triggerFocus = value;
+            }
+
+            // Auto reset to false. It is only used to notify the view about the change
+            _triggerFocus = false;
+        }
+    }
+
     public bool AcceptsTab { get; set; }
     public bool IsFormattedPasteEnabled => AppSettings.Instance.TaskPageSettings.FormattedPasteEnabled;
     public string WatermarkText { get; set; }
@@ -71,8 +85,13 @@ public class DynamicTextBoxViewModel : BaseViewModel
             if (FocusOnEditMode)
             {
                 Focusable = value;
-                NeedFocus = value;
+    
+                if (value)
+                {
+                    TriggerFocus = value;
+                }
             }
+
         }
     }
 
@@ -89,7 +108,7 @@ public class DynamicTextBoxViewModel : BaseViewModel
     public void SetContent(bool isPlainTextContent, string content)
     {
         IsPlainTextMode = isPlainTextContent;
-        
+
         if (IsPlainTextMode)
         {
             PlainTextContent = content;

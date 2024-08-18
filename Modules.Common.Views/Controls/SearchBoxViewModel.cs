@@ -12,6 +12,7 @@ public class SearchBoxViewModel : BaseViewModel
     private string _searchText = string.Empty;
     private List<string> _searchTerms = [];
     private bool _isSearchBoxOpen;
+    private bool _triggerSearchBoxFocus;
 
     public SearchBoxViewModel()
     {
@@ -39,6 +40,21 @@ public class SearchBoxViewModel : BaseViewModel
             }
 
             _isSearchBoxOpen = value;
+        }
+    }
+
+    public bool TriggerSearchBoxFocus
+    {
+        get => _triggerSearchBoxFocus;
+        set
+        {
+            if (value)
+            {
+                _triggerSearchBoxFocus = value;
+            }
+
+            // Auto reset to false. It is only used to notify the view about the change
+            _triggerSearchBoxFocus = false;
         }
     }
 

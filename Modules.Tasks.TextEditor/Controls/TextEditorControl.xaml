@@ -2,7 +2,7 @@
     x:Class="Modules.Tasks.TextEditor.Controls.TextEditorControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:attachedProperties="clr-namespace:Modules.Common.Views.AttachedProperties;assembly=Modules.Common.Views"
+    xmlns:attached="clr-namespace:Modules.Common.Views.AttachedProperties;assembly=Modules.Common.Views"
     xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:dataBinding="clr-namespace:Modules.Common.Views.DataBinding;assembly=Modules.Common.Views"
@@ -65,7 +65,7 @@
                 SnapsToDevicePixels="True">
 
                 <!--
-                    IMPORTANT: FocusSetter Attached property must be
+                    IMPORTANT: SetFocusOn Attached property must be
                     after Visibility property (if defined) in order to work!
                     
                     Focusable property is needed to exit edit mode on enter keypress.
@@ -73,7 +73,9 @@
                 <local:FormattedTextBox
                     x:Name="PartTextEditor"
                     DocumentContent="{Binding DocumentContent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                    attachedProperties:FocusSetter.Value="{Binding NeedFocus}"
+                    attached:SetFocusOn.Trigger="{Binding TriggerFocus}"
+                    attached:SetFocusOn.SelectAllOnFocus="False"
+                    attached:SetFocusOn.CaretAtEndOnFocus="True"
                     AcceptsTab="{Binding AcceptsTab}"
                     Background="Transparent"
                     EmptyContentUpArrowAction="{Binding OnQuickEditRequestedAction}"
@@ -94,10 +96,6 @@
                             <behaviors:InvokeCommandAction Command="{Binding LostFocusCommand}" />
                         </behaviors:EventTrigger>
                     </behaviors:Interaction.Triggers>
-
-                    <behaviors:Interaction.Behaviors>
-                        <attachedProperties:PutCaretAtTheEndRTBBehavior />
-                    </behaviors:Interaction.Behaviors>
 
                     <dataBinding:PushBindingManager.PushBindings>
                         <dataBinding:PushBinding
