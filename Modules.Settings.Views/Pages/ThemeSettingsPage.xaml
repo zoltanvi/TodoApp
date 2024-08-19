@@ -94,14 +94,17 @@
                             Style="{StaticResource SettingsDescriptionStyle}"
                             Text="Theme base color" />
 
-                        <colorpicker:PortableColorPicker
-                            Grid.Column="2"
-                            Width="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
-                            Height="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
-                            Cursor="Hand"
-                            SelectedColor="{Binding AppSettings.ThemeSettings.SeedColor, Source={StaticResource AppSettings}, Mode=TwoWay}"
-                            Style="{StaticResource DefaultColorPickerStyle}"
-                            ToolTip="Pick theme color" />
+                        <Border Grid.Column="2" CornerRadius="4" BorderBrush="{DynamicResource Outline}" BorderThickness="1">
+                            <colorpicker:PortableColorPicker
+                                Width="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                Height="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                Cursor="Hand"
+                                SelectedColor="{Binding AppSettings.ThemeSettings.SeedColor, Source={StaticResource AppSettings}, Mode=TwoWay}"
+                                Style="{StaticResource DefaultColorPickerStyle}"
+                                BorderThickness="0"
+                                BorderBrush="Transparent"
+                                ToolTip="Pick theme color" />
+                        </Border>
                     </Grid>
                 </Border>
 

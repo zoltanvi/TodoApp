@@ -33,5 +33,7 @@ public enum ThemeStyle
 
     Clock,
 
-    ClockVibrant
+    ClockVibrant,
+
+    SingleColor
 }

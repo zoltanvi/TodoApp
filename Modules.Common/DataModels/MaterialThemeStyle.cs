@@ -11,5 +11,6 @@ public enum MaterialThemeStyle
     Content,
     Monochromatic,
     Clock,
-    ClockVibrant
+    ClockVibrant,
+    SingleColor
 }

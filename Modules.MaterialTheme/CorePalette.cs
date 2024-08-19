@@ -122,6 +122,13 @@ public class CorePalette
                 Neutral = new TonalPalette(hue, 0);
                 NeutralVariant = new TonalPalette(hue, 0);
                 break;
+            case ThemeStyle.SingleColor:
+                Primary = new TonalPalette(hue, chroma);
+                Secondary = new TonalPalette(hue, chroma);
+                Tertiary = new TonalPalette(hue, chroma);
+                Neutral = new TonalPalette(hue, chroma);
+                NeutralVariant = new TonalPalette(hue, chroma);
+            break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(style), style, null);
         }

@@ -61,6 +61,7 @@ public class MaterialThemeManagerService
         MaterialThemeStyle.Monochromatic => ThemeStyle.Monochromatic,
         MaterialThemeStyle.Clock => ThemeStyle.Clock,
         MaterialThemeStyle.ClockVibrant => ThemeStyle.ClockVibrant,
+        MaterialThemeStyle.SingleColor => ThemeStyle.SingleColor,
         _ => throw new ArgumentOutOfRangeException(nameof(style))
     };
 }
