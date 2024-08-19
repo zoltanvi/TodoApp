@@ -62,7 +62,7 @@ public class TaskHistoryPageViewModel : BaseViewModel, IParameterReceiver, IClos
             .OrderByDescending(x => x.VersionDate);
 
         HistoryItems = new ObservableCollection<TaskItemVersionViewModel>(history);
-        CurrentItemList = [current];
+        CurrentItem = current;
     }
 
     public void ReceiveParameter(object parameter)
@@ -89,13 +89,13 @@ public class TaskHistoryPageViewModel : BaseViewModel, IParameterReceiver, IClos
                 .OrderByDescending(x => x.VersionDate);
 
             HistoryItems = new ObservableCollection<TaskItemVersionViewModel>(history);
-            CurrentItemList = [current];
+            CurrentItem = current;
         }
     }
 
     public ObservableCollection<TaskItemVersionViewModel> HistoryItems { get; set; }
 
-    public ObservableCollection<TaskItemVersionViewModel> CurrentItemList { get; set; }
+    public TaskItemVersionViewModel CurrentItem { get; set; }
     public ICommand ClosePageCommand { get; set; }
 
     protected override void OnDispose()

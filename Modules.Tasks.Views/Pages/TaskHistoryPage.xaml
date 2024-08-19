@@ -67,98 +67,56 @@
                             Foreground="{DynamicResource Primary}"
                             Text="Task content" />
 
-                        <!--  CURRENT CONTENT - workaround for a bug where the item does not refresh on the BasicTextEditorBox  -->
-                        <ListView
-                            Margin="0"
-                            HorizontalContentAlignment="Stretch"
-                            Background="Transparent"
-                            BorderThickness="0"
-                            ItemsSource="{Binding CurrentItemList}"
-                            ScrollViewer.CanContentScroll="True"
-                            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                            ScrollViewer.VerticalScrollBarVisibility="Auto"
-                            Template="{DynamicResource NonScrollableListBoxControlTemplate}">
+                        <!--  CURRENT CONTENT  -->
 
-                            <ListView.ItemContainerStyle>
-                                <Style TargetType="ListViewItem">
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate TargetType="ListViewItem">
-                                                <ContentPresenter />
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Style>
-                            </ListView.ItemContainerStyle>
+                        <Border
+                            BorderBrush="{DynamicResource OutlineVariant}"
+                            BorderThickness="1"
+                            CornerRadius="3">
 
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <Grid Margin="3 3">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
 
-                                        <Border
-                                            Grid.Column="0"
-                                            BorderBrush="{DynamicResource OutlineVariant}"
-                                            BorderThickness="1"
-                                            CornerRadius="3">
+                                <controls:DynamicTextBox
+                                    Grid.Row="0"
+                                    Margin="0 6"
+                                    Padding="7 0"
+                                    DataContext="{Binding CurrentItem.Content}"
+                                    IsPlainTextMode="{Binding IsPlainTextMode}"
+                                    IsReadOnly="True"
+                                />
 
-                                            <Grid>
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition Height="*" />
-                                                    <RowDefinition Height="Auto" />
-                                                    <RowDefinition Height="Auto" />
-                                                </Grid.RowDefinitions>
+                                <Border
+                                    Grid.Row="1"
+                                    Height="1"
+                                    Background="{DynamicResource OutlineVariant}" />
 
-                                                <controls:DynamicTextBox
-                                                    Grid.Row="0"
-                                                    Margin="0 6"
-                                                    Padding="7 0"
-                                                    DataContext="{Binding Content}"
-                                                    IsPlainTextMode="{Binding IsPlainTextMode}"
-                                                    IsReadOnly="True"
-                                                />
+                                <Grid
+                                    Grid.Row="2"
+                                    Background="{DynamicResource Surface1}">
+                                    <Label
+                                        HorizontalAlignment="Right"
+                                        Style="{StaticResource TaskPropertyLabelRightStyle}">
+                                        <Label.Content>
+                                            <MultiBinding>
+                                                <MultiBinding.Converter>
+                                                    <valueConverters:CurrentDateTimeFormatMultiConverter />
+                                                </MultiBinding.Converter>
+                                                <Binding Path="CurrentItem.VersionDate" />
+                                                <Binding
+                                                    Path="AppSettings.DateTimeSettings.TaskCreationDateFormat"
+                                                    Source="{StaticResource AppSettings}" />
+                                            </MultiBinding>
+                                        </Label.Content>
+                                    </Label>
+                                </Grid>
+                            </Grid>
+                        </Border>
 
-                                                <Border
-                                                    Grid.Row="1"
-                                                    Height="1"
-                                                    Background="{DynamicResource OutlineVariant}" />
-
-                                                <Grid
-                                                    Grid.Row="2"
-                                                    Background="{DynamicResource Surface1}">
-                                                    <Label
-                                                        HorizontalAlignment="Right"
-                                                        Style="{StaticResource TaskPropertyLabelRightStyle}">
-                                                        <Label.Content>
-                                                            <MultiBinding>
-                                                                <MultiBinding.Converter>
-                                                                    <valueConverters:CurrentDateTimeFormatMultiConverter />
-                                                                </MultiBinding.Converter>
-                                                                <Binding Path="VersionDate" />
-                                                                <Binding
-                                                                    Path="AppSettings.DateTimeSettings.TaskCreationDateFormat"
-                                                                    Source="{StaticResource AppSettings}" />
-                                                            </MultiBinding>
-                                                        </Label.Content>
-                                                    </Label>
-                                                </Grid>
-                                            </Grid>
-                                        </Border>
-                                    </Grid>
-
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-
-                            <ListView.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <WrapPanel Orientation="Vertical" />
-                                </ItemsPanelTemplate>
-                            </ListView.ItemsPanel>
-
-                        </ListView>
 
                     </StackPanel>
                 </Grid>
