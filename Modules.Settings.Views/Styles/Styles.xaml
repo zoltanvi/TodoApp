@@ -250,6 +250,11 @@
         BasedOn="{StaticResource CustomToggleStyle}"
         TargetType="{x:Type ToggleButton}">
         <Setter Property="HorizontalAlignment" Value="Right" />
+        <Style.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Opacity" Value="0.65"/>
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
     <Style
@@ -262,6 +267,11 @@
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="FontSize" Value="{Binding UIScaler.FontSize.Small, Source={StaticResource UIScaler}}" />
         <Setter Property="Foreground" Value="{DynamicResource OnSurface}" />
+        <Style.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Opacity" Value="0.65" />
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
 

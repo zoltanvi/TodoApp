@@ -43,8 +43,14 @@
                 <controls:ToggleButtonSettingControl
                     Description="Dark mode"
                     Icon="{StaticResource IconPalette}"
-                    IsChecked="{Binding AppSettings.ThemeSettings.DarkMode, Source={StaticResource AppSettings}, Mode=TwoWay}" />
+                    IsChecked="{Binding AppSettings.ThemeSettings.DarkMode, Source={StaticResource AppSettings}, Mode=TwoWay}"
+                    IsEnabled="{Binding AppSettings.ThemeSettings.HighContrast, Source={StaticResource AppSettings}, Converter={StaticResource BoolNegatedConverter}}" />
 
+                <!--  HIGH CONTRAST MODE  -->
+                <controls:ToggleButtonSettingControl
+                    Description="High contrast mode"
+                    Icon="{StaticResource IconBrightness}"
+                    IsChecked="{Binding AppSettings.ThemeSettings.HighContrast, Source={StaticResource AppSettings}, Mode=TwoWay}" />
 
                 <!--  STYLE  -->
                 <Border Style="{StaticResource SettingsItemStyle}">
@@ -94,15 +100,19 @@
                             Style="{StaticResource SettingsDescriptionStyle}"
                             Text="Theme base color" />
 
-                        <Border Grid.Column="2" CornerRadius="4" BorderBrush="{DynamicResource Outline}" BorderThickness="1">
+                        <Border
+                            Grid.Column="2"
+                            BorderBrush="{DynamicResource Outline}"
+                            BorderThickness="1"
+                            CornerRadius="4">
                             <colorpicker:PortableColorPicker
                                 Width="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
                                 Height="{Binding UIScaler.PortableColorPickerWidth, Source={StaticResource UIScaler}}"
+                                BorderBrush="Transparent"
+                                BorderThickness="0"
                                 Cursor="Hand"
                                 SelectedColor="{Binding AppSettings.ThemeSettings.SeedColor, Source={StaticResource AppSettings}, Mode=TwoWay}"
                                 Style="{StaticResource DefaultColorPickerStyle}"
-                                BorderThickness="0"
-                                BorderBrush="Transparent"
                                 ToolTip="Pick theme color" />
                         </Border>
                     </Grid>
@@ -175,8 +185,8 @@
                 <!--  DEV SETTINGS  -->
                 <StackPanel
                     IsEnabled="False"
-                    Visibility="Collapsed"
-                    Orientation="Vertical">
+                    Orientation="Vertical"
+                    Visibility="Collapsed">
 
                     <Border Style="{StaticResource SettingsItemStyle}">
                         <Button

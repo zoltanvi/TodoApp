@@ -60,6 +60,7 @@
     <system:String x:Key="IconHideInfo">&#xECE4;</system:String>
     <system:String x:Key="IconTag">&#xE8EC;</system:String>
     <system:String x:Key="IconPlainText">&#xE763;</system:String>
+    <system:String x:Key="IconBrightness">&#xE706;</system:String>
 
     <system:String x:Key="IconNotCompleted">&#xE003;</system:String>
     <system:String x:Key="IconCompleted">&#xE65F;</system:String>

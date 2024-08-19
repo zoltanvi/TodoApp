@@ -19,15 +19,23 @@ public class MaterialThemeManagerService
         SeedColor = MaterialColorHelper.HexToDecimal(ThemeSettings.SeedColor);
         var corePalette = CorePalette.Of(SeedColor, MapThemeStyle(ThemeSettings.ThemeStyle));
 
-        if (ThemeSettings.DarkMode)
+        if (ThemeSettings.HighContrast)
         {
-            var darkScheme = new DarkSchemeMapper().Map(corePalette);
-            CurrentScheme = darkScheme.Convert(MaterialColorHelper.DecimalToHex);
+            var highContrastScheme = new HighContrastSchemeMapper().Map(corePalette);
+            CurrentScheme = highContrastScheme.Convert(MaterialColorHelper.DecimalToHex);
         }
         else
         {
-            var lightScheme = new LightSchemeMapper().Map(corePalette);
-            CurrentScheme = lightScheme.Convert(MaterialColorHelper.DecimalToHex);
+            if (ThemeSettings.DarkMode)
+            {
+                var darkScheme = new DarkSchemeMapper().Map(corePalette);
+                CurrentScheme = darkScheme.Convert(MaterialColorHelper.DecimalToHex);
+            }
+            else
+            {
+                var lightScheme = new LightSchemeMapper().Map(corePalette);
+                CurrentScheme = lightScheme.Convert(MaterialColorHelper.DecimalToHex);
+            }
         }
 
         UpdateResources();
