@@ -16,7 +16,6 @@
     d:DataContext="{d:DesignInstance taskItemView:TaskItemViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
-    dd:DragDrop.IsDragSource="{Binding Content.IsEditMode}"
     ContextMenu="{StaticResource TaskListItemContextMenu}"
     mc:Ignorable="d">
 
