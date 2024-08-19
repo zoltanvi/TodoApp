@@ -39,6 +39,8 @@ public class ThemeManager
         {
             CheckAndSwitchLightAndDark();
         }
+
+        _eventAggregator.GetEvent<ThemeChangedEvent>().Publish();
     }
 
     private void CheckAndSwitchLightAndDark()
@@ -51,8 +53,6 @@ public class ThemeManager
         {
             ChangeTheme(from: DarkTheme, to: LightTheme);
         }
-
-        _eventAggregator.GetEvent<ThemeChangedEvent>().Publish();
     }
 
     private void ChangeTheme(string from, string to)
