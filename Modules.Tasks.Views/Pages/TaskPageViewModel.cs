@@ -54,17 +54,9 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         _oneEditorOpenService = oneEditorOpenService;
         _eventAggregator = eventAggregator;
 
-        AppSettings.Instance.PageTitleSettings.SettingsChanged += OnPageTitleSettingsChanged;
         var activeCategoryInfo = _mediator.Send(new GetActiveCategoryInfoQuery()).Result;
 
         ActiveCategoryName = activeCategoryInfo.Name;
-
-        EditCategoryCommand = new RelayCommand(EditCategory);
-        FinishCategoryEditCommand = new RelayCommand(FinishCategoryEdit);
-        ToggleBottomPanelCommand = new RelayCommand(() => IsBottomPanelOpen ^= true);
-        AddTaskItemCommand = new RelayCommand(AddTaskItem);
-        TextBoxFocusedCommand = new RelayCommand(OnTextBoxFocused);
-        SwitchFormatMode = new RelayCommand(() => NewContentViewModel.IsPlainTextMode ^= true);
 
         NewContentViewModel = new DynamicTextBoxViewModel(
             focusOnEditMode: false,
@@ -87,7 +79,13 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         Items = new ObservableCollection<TaskItemViewModel>(
             orderedTasks.MapToViewModelList(_mediator, oneEditorOpenService, _eventAggregator));
 
-        Items.CollectionChanged += ItemsOnCollectionChanged;
+        EditCategoryCommand = new RelayCommand(EditCategory);
+        FinishCategoryEditCommand = new RelayCommand(FinishCategoryEdit);
+        ToggleBottomPanelCommand = new RelayCommand(() => IsBottomPanelOpen ^= true);
+        AddTaskItemCommand = new RelayCommand(AddTaskItem);
+        TextBoxFocusedCommand = new RelayCommand(OnTextBoxFocused);
+        SwitchFormatMode = new RelayCommand(() => NewContentViewModel.IsPlainTextMode ^= true);
+
         SetFirstItem();
         RecalculateProgress();
 
@@ -95,41 +93,10 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         ItemsView = CollectionViewSource.GetDefaultView(Items);
         ItemsView.Filter = FilterTaskItems;
 
-        _eventAggregator.GetEvent<TaskItemDeleteClickedEvent>().Subscribe(OnDeleteTaskItemRequestedEvent);
-        _eventAggregator.GetEvent<TaskItemPinClickedEvent>().Subscribe(OnPinTaskItemRequested);
-        _eventAggregator.GetEvent<TaskItemUnpinClickedEvent>().Subscribe(OnUnpinTaskItemRequested);
-        _eventAggregator.GetEvent<TaskItemCheckedEvent>().Subscribe(OnFinishTaskItemRequested);
-        _eventAggregator.GetEvent<TaskItemUncheckedEvent>().Subscribe(OnUnfinishTaskItemRequested);
-        _eventAggregator.GetEvent<TagsChangedOnTaskItemEvent>().Subscribe(OnTagsChangedOnTaskItem);
-        _eventAggregator.GetEvent<TaskSortingRequestedEvent>().Subscribe(OnSortingRequested);
-        _eventAggregator.GetEvent<TaskItemVersionRestoredEvent>().Subscribe(OnVersionRestored);
-        _eventAggregator.GetEvent<TagItemDeletedEvent>().Subscribe(OnTagItemDeleted);
-        _eventAggregator.GetEvent<HotkeyPressedCtrlFEvent>().Subscribe(OnCtrlFPressed);
-        _eventAggregator.GetEvent<HotkeyPressedCtrlSpaceEvent>().Subscribe(OnCtrlSpacePressed);
-
-
-        _oneEditorOpenService.ChangedToDisplayMode += FocusAddNewTaskTextEditor;
-        SearchBoxViewModel.SearchTermsChanged += OnSearchTermsChanged;
+       SubscribeToEvents();
     }
 
     public SearchBoxViewModel SearchBoxViewModel { get; set; }
-
-    private bool FilterTaskItems(object obj)
-    {
-        if (string.IsNullOrWhiteSpace(SearchBoxViewModel.SearchText)) return true;
-
-        if (obj is TaskItemViewModel taskItem)
-        {
-            var plainTextContent = taskItem.Content.GetContentInPlainText();
-
-            var res = SearchBoxViewModel.SearchTerms
-                .All(term => plainTextContent.Contains(term, StringComparison.OrdinalIgnoreCase));
-
-            return res;
-        }
-
-        return false;
-    }
 
     public ObservableCollection<TaskItemViewModel> Items { get; }
 
@@ -160,7 +127,68 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
     public ICommand TextBoxFocusedCommand { get; }
     public ICommand SwitchFormatMode { get; }
 
+    private void SubscribeToEvents()
+    {
+        AppSettings.Instance.PageTitleSettings.SettingsChanged += OnPageTitleSettingsChanged;
+        Items.CollectionChanged += ItemsOnCollectionChanged;
+
+        _eventAggregator.GetEvent<TaskItemDeleteClickedEvent>().Subscribe(OnDeleteTaskItemRequestedEvent);
+        _eventAggregator.GetEvent<TaskItemPinClickedEvent>().Subscribe(OnPinTaskItemRequested);
+        _eventAggregator.GetEvent<TaskItemUnpinClickedEvent>().Subscribe(OnUnpinTaskItemRequested);
+        _eventAggregator.GetEvent<TaskItemCheckedEvent>().Subscribe(OnFinishTaskItemRequested);
+        _eventAggregator.GetEvent<TaskItemUncheckedEvent>().Subscribe(OnUnfinishTaskItemRequested);
+        _eventAggregator.GetEvent<TagsChangedOnTaskItemEvent>().Subscribe(OnTagsChangedOnTaskItem);
+        _eventAggregator.GetEvent<TaskSortingRequestedEvent>().Subscribe(OnSortingRequested);
+        _eventAggregator.GetEvent<TaskItemVersionRestoredEvent>().Subscribe(OnVersionRestored);
+        _eventAggregator.GetEvent<TagItemDeletedEvent>().Subscribe(OnTagItemDeleted);
+        _eventAggregator.GetEvent<HotkeyPressedCtrlFEvent>().Subscribe(OnCtrlFPressed);
+        _eventAggregator.GetEvent<HotkeyPressedCtrlSpaceEvent>().Subscribe(OnCtrlSpacePressed);
+        _eventAggregator.GetEvent<ThemeChangedEvent>().Subscribe(OnThemeChanged);
+
+        _oneEditorOpenService.ChangedToDisplayMode += FocusAddNewTaskTextEditor;
+        SearchBoxViewModel.SearchTermsChanged += OnSearchTermsChanged;
+    }
+
+    private void UnsubscribeFromEvents()
+    {
+        AppSettings.Instance.PageTitleSettings.SettingsChanged -= OnPageTitleSettingsChanged;
+        Items.CollectionChanged -= ItemsOnCollectionChanged;
+
+        _eventAggregator.GetEvent<TaskItemDeleteClickedEvent>().Unsubscribe(OnDeleteTaskItemRequestedEvent);
+        _eventAggregator.GetEvent<TaskItemPinClickedEvent>().Unsubscribe(OnPinTaskItemRequested);
+        _eventAggregator.GetEvent<TaskItemUnpinClickedEvent>().Unsubscribe(OnUnpinTaskItemRequested);
+        _eventAggregator.GetEvent<TaskItemCheckedEvent>().Unsubscribe(OnFinishTaskItemRequested);
+        _eventAggregator.GetEvent<TaskItemUncheckedEvent>().Unsubscribe(OnUnfinishTaskItemRequested);
+        _eventAggregator.GetEvent<TagsChangedOnTaskItemEvent>().Unsubscribe(OnTagsChangedOnTaskItem);
+        _eventAggregator.GetEvent<TaskSortingRequestedEvent>().Unsubscribe(OnSortingRequested);
+        _eventAggregator.GetEvent<TaskItemVersionRestoredEvent>().Unsubscribe(OnVersionRestored);
+        _eventAggregator.GetEvent<TagItemDeletedEvent>().Unsubscribe(OnTagItemDeleted);
+        _eventAggregator.GetEvent<HotkeyPressedCtrlFEvent>().Unsubscribe(OnCtrlFPressed);
+        _eventAggregator.GetEvent<HotkeyPressedCtrlSpaceEvent>().Unsubscribe(OnCtrlSpacePressed);
+        _eventAggregator.GetEvent<ThemeChangedEvent>().Unsubscribe(OnThemeChanged);
+
+        _oneEditorOpenService.ChangedToDisplayMode -= FocusAddNewTaskTextEditor;
+        SearchBoxViewModel.SearchTermsChanged -= OnSearchTermsChanged;
+    }
+
     private void OnTextBoxFocused() => _oneEditorOpenService.EditModeWithoutTask();
+
+    private bool FilterTaskItems(object obj)
+    {
+        if (string.IsNullOrWhiteSpace(SearchBoxViewModel.SearchText)) return true;
+
+        if (obj is TaskItemViewModel taskItem)
+        {
+            var plainTextContent = taskItem.Content.GetContentInPlainText();
+
+            var res = SearchBoxViewModel.SearchTerms
+                .All(term => plainTextContent.Contains(term, StringComparison.OrdinalIgnoreCase));
+
+            return res;
+        }
+
+        return false;
+    }
 
     private void AddTaskItem()
     {
@@ -517,6 +545,11 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         NewContentViewModel.TriggerFocus = true;
     }
 
+    private void OnThemeChanged()
+    {
+        ItemsView.Refresh();
+    }
+
     private void OnTagItemDeleted(int tagId)
     {
         // Remove deleted tag from every tasks
@@ -530,24 +563,5 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         }
     }
 
-    protected override void OnDispose()
-    {
-        AppSettings.Instance.PageTitleSettings.SettingsChanged -= OnPageTitleSettingsChanged;
-        Items.CollectionChanged -= ItemsOnCollectionChanged;
-
-        _eventAggregator.GetEvent<TaskItemDeleteClickedEvent>().Unsubscribe(OnDeleteTaskItemRequestedEvent);
-        _eventAggregator.GetEvent<TaskItemPinClickedEvent>().Unsubscribe(OnPinTaskItemRequested);
-        _eventAggregator.GetEvent<TaskItemUnpinClickedEvent>().Unsubscribe(OnUnpinTaskItemRequested);
-        _eventAggregator.GetEvent<TaskItemCheckedEvent>().Unsubscribe(OnFinishTaskItemRequested);
-        _eventAggregator.GetEvent<TaskItemUncheckedEvent>().Unsubscribe(OnUnfinishTaskItemRequested);
-        _eventAggregator.GetEvent<TagsChangedOnTaskItemEvent>().Unsubscribe(OnTagsChangedOnTaskItem);
-        _eventAggregator.GetEvent<TaskSortingRequestedEvent>().Unsubscribe(OnSortingRequested);
-        _eventAggregator.GetEvent<TaskItemVersionRestoredEvent>().Unsubscribe(OnVersionRestored);
-        _eventAggregator.GetEvent<TagItemDeletedEvent>().Unsubscribe(OnTagItemDeleted);
-        _eventAggregator.GetEvent<HotkeyPressedCtrlFEvent>().Unsubscribe(OnCtrlFPressed);
-        _eventAggregator.GetEvent<HotkeyPressedCtrlSpaceEvent>().Unsubscribe(OnCtrlSpacePressed);
-
-        _oneEditorOpenService.ChangedToDisplayMode -= FocusAddNewTaskTextEditor;
-        SearchBoxViewModel.SearchTermsChanged -= OnSearchTermsChanged;
-    }
+    protected override void OnDispose() => UnsubscribeFromEvents();
 }
