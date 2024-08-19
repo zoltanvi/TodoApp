@@ -40,10 +40,12 @@ public partial class DynamicTextBox : UserControl
 
     private void TextBoxElement_OnPreviewKeyDown(object sender, KeyEventArgs e)
     {
+        var keyArrowUp = e.Key == Key.Up;
         var enter = e.Key == Key.Enter;
         var escape = e.Key == Key.Escape;
         var shiftPressed = Keyboard.Modifiers.HasFlag(ModifierKeys.Shift);
         var ctrlPressed = Keyboard.Modifiers.HasFlag(ModifierKeys.Control);
+        var altPressed = Keyboard.Modifiers.HasFlag(ModifierKeys.Alt);
 
         if (escape || enter && !shiftPressed)
         {
@@ -61,6 +63,13 @@ public partial class DynamicTextBox : UserControl
                     }
                 }
             }
+        }
+
+        if (keyArrowUp && !shiftPressed && !ctrlPressed && !altPressed &&
+            DataContext is DynamicTextBoxViewModel { IsEmpty: true } vm)
+        {
+            e.Handled = true;
+            vm.OnQuickEditRequestedAction?.Invoke();
         }
     }
 }

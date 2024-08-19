@@ -91,7 +91,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
 
         SearchBoxViewModel = new SearchBoxViewModel();
         ItemsView = CollectionViewSource.GetDefaultView(Items);
-        ItemsView.Filter = FilterTaskItems;
+        ItemsView.Filter = FilterTaskItem;
 
        SubscribeToEvents();
     }
@@ -173,7 +173,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
 
     private void OnTextBoxFocused() => _oneEditorOpenService.EditModeWithoutTask();
 
-    private bool FilterTaskItems(object obj)
+    private bool FilterTaskItem(object obj)
     {
         if (string.IsNullOrWhiteSpace(SearchBoxViewModel.SearchText)) return true;
 
@@ -221,12 +221,14 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
     private void OnQuickEditRequested()
     {
         var lastAddedTaskItem = Items.FirstOrDefault(x => x.Id == _oneEditorOpenService.LastEditedTaskId);
-
-        if (lastAddedTaskItem != null)
+        
+        // If null, then the item is not in the list.
+        // The filter is checked to see if the item is visible
+        if (lastAddedTaskItem != null && FilterTaskItem(lastAddedTaskItem))
         {
             int index = Items.IndexOf(lastAddedTaskItem);
-            lastAddedTaskItem.Cmd.EditItemCommand.Execute(null);
             ScrollIntoViewRequested?.Invoke(index);
+            lastAddedTaskItem.Cmd.EditItemCommand.Execute(null);
         }
     }
 
