@@ -55,7 +55,6 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-
                 <Grid Grid.Row="1">
                     <StackPanel Orientation="Vertical">
 
@@ -227,12 +226,6 @@
 
                         </DataTemplate>
                     </ListView.ItemTemplate>
-
-                    <ListView.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel Orientation="Vertical" />
-                        </ItemsPanelTemplate>
-                    </ListView.ItemsPanel>
 
                 </ListView>
 

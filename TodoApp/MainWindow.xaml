@@ -165,14 +165,9 @@
                         BorderThickness="1"
                         CornerRadius="6">
 
-                        <ScrollViewer
-                            HorizontalScrollBarVisibility="Auto"
-                            Style="{StaticResource TodoAppScrollViewer}"
-                            VerticalScrollBarVisibility="Disabled">
-                            <Frame
-                                x:Name="OverlayFrame"
-                                attached:NoFrameHistory.Value="True" />
-                        </ScrollViewer>
+                        <Frame
+                            x:Name="OverlayFrame"
+                            attached:NoFrameHistory.Value="True" />
 
                     </Border>
 
