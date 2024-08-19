@@ -300,9 +300,9 @@ public class MainWindowViewModel : BaseViewModel
                 }
                 case Key.N:
                 {
-                    // Ctrl + Space
+                    // Ctrl + N
                     // Set focus on task page bottom text editor
-                    _eventAggregator.GetEvent<HotkeyPressedCtrlSpaceEvent>().Publish();
+                    _eventAggregator.GetEvent<HotkeyPressedCtrlNEvent>().Publish();
                     break;
                 }
             }

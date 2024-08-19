@@ -4,4 +4,4 @@ namespace Modules.Common.Events;
 
 public class HotkeyPressedCtrlFEvent : PubSubEvent;
 
-public class HotkeyPressedCtrlSpaceEvent : PubSubEvent;
+public class HotkeyPressedCtrlNEvent : PubSubEvent;

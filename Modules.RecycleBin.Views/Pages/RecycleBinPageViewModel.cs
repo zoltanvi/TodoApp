@@ -46,11 +46,7 @@ public class RecycleBinPageViewModel : BaseViewModel
         SearchBoxViewModel = new SearchBoxViewModel();
         InitializeGroupItems();
 
-        _eventAggregator.GetEvent<CategoryDeletedEvent>().Subscribe(OnCategoryDeleted);
-        _eventAggregator.GetEvent<TaskRestoredEvent>().Subscribe(OnTaskRestored);
-        _eventAggregator.GetEvent<AllTasksInCategoryRestoredEvent>().Subscribe(OnAllTasksInCategoryRestored);
-        _eventAggregator.GetEvent<HotkeyPressedCtrlFEvent>().Subscribe(OnCtrlFPressed);
-        SearchBoxViewModel.SearchTermsChanged += OnSearchTermsChanged;
+        SubscribeToEvents();
     }
 
     public ObservableCollection<RecycleBinGroupItemViewModel> GroupItems { get; } = new();
@@ -59,6 +55,26 @@ public class RecycleBinPageViewModel : BaseViewModel
     public bool IsEmpty => GroupItems.Count == 0;
 
     public SearchBoxViewModel SearchBoxViewModel { get; set; }
+
+    private void SubscribeToEvents()
+    {
+        _eventAggregator.GetEvent<CategoryDeletedEvent>().Subscribe(OnCategoryDeleted);
+        _eventAggregator.GetEvent<TaskRestoredEvent>().Subscribe(OnTaskRestored);
+        _eventAggregator.GetEvent<AllTasksInCategoryRestoredEvent>().Subscribe(OnAllTasksInCategoryRestored);
+        _eventAggregator.GetEvent<HotkeyPressedCtrlFEvent>().Subscribe(OnCtrlFPressed);
+
+        SearchBoxViewModel.SearchTermsChanged += OnSearchTermsChanged;
+    }
+
+    private void UnsubscribeFromEvents()
+    {
+        _eventAggregator.GetEvent<TaskRestoredEvent>().Unsubscribe(OnTaskRestored);
+        _eventAggregator.GetEvent<CategoryDeletedEvent>().Unsubscribe(OnCategoryDeleted);
+        _eventAggregator.GetEvent<AllTasksInCategoryRestoredEvent>().Unsubscribe(OnAllTasksInCategoryRestored);
+        _eventAggregator.GetEvent<HotkeyPressedCtrlFEvent>().Unsubscribe(OnCtrlFPressed);
+
+        SearchBoxViewModel.SearchTermsChanged -= OnSearchTermsChanged;
+    }
 
     private void OnTaskRestored(TaskRestoredPayload payload)
     {
@@ -191,6 +207,7 @@ public class RecycleBinPageViewModel : BaseViewModel
     private void OnCtrlFPressed()
     {
         SearchBoxViewModel.IsSearchBoxOpen = true;
+        SearchBoxViewModel.TriggerSearchBoxFocus = true;
     }
 
     private void OnSearchTermsChanged()
@@ -198,14 +215,7 @@ public class RecycleBinPageViewModel : BaseViewModel
         GroupItemsView.Refresh();
     }
 
-    protected override void OnDispose()
-    {
-        _eventAggregator.GetEvent<TaskRestoredEvent>().Unsubscribe(OnTaskRestored);
-        _eventAggregator.GetEvent<CategoryDeletedEvent>().Unsubscribe(OnCategoryDeleted);
-        _eventAggregator.GetEvent<AllTasksInCategoryRestoredEvent>().Unsubscribe(OnAllTasksInCategoryRestored);
-        _eventAggregator.GetEvent<HotkeyPressedCtrlFEvent>().Unsubscribe(OnCtrlFPressed);
-        SearchBoxViewModel.SearchTermsChanged -= OnSearchTermsChanged;
-    }
+    protected override void OnDispose() => UnsubscribeFromEvents();
 
     private int GetTotalLength(IEnumerable<RecycleBinTaskItemViewModel> items) => 
         items.Sum(item => item.Content.GetContentInPlainText().Length);

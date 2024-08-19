@@ -142,7 +142,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         _eventAggregator.GetEvent<TaskItemVersionRestoredEvent>().Subscribe(OnVersionRestored);
         _eventAggregator.GetEvent<TagItemDeletedEvent>().Subscribe(OnTagItemDeleted);
         _eventAggregator.GetEvent<HotkeyPressedCtrlFEvent>().Subscribe(OnCtrlFPressed);
-        _eventAggregator.GetEvent<HotkeyPressedCtrlSpaceEvent>().Subscribe(OnCtrlSpacePressed);
+        _eventAggregator.GetEvent<HotkeyPressedCtrlNEvent>().Subscribe(OnCtrlNPressed);
         _eventAggregator.GetEvent<ThemeChangedEvent>().Subscribe(OnThemeChanged);
 
         _oneEditorOpenService.ChangedToDisplayMode += FocusAddNewTaskTextEditor;
@@ -164,7 +164,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         _eventAggregator.GetEvent<TaskItemVersionRestoredEvent>().Unsubscribe(OnVersionRestored);
         _eventAggregator.GetEvent<TagItemDeletedEvent>().Unsubscribe(OnTagItemDeleted);
         _eventAggregator.GetEvent<HotkeyPressedCtrlFEvent>().Unsubscribe(OnCtrlFPressed);
-        _eventAggregator.GetEvent<HotkeyPressedCtrlSpaceEvent>().Unsubscribe(OnCtrlSpacePressed);
+        _eventAggregator.GetEvent<HotkeyPressedCtrlNEvent>().Unsubscribe(OnCtrlNPressed);
         _eventAggregator.GetEvent<ThemeChangedEvent>().Unsubscribe(OnThemeChanged);
 
         _oneEditorOpenService.ChangedToDisplayMode -= FocusAddNewTaskTextEditor;
@@ -542,7 +542,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         SearchBoxViewModel.TriggerSearchBoxFocus = true;
     }
 
-    private void OnCtrlSpacePressed()
+    private void OnCtrlNPressed()
     {
         NewContentViewModel.TriggerFocus = true;
     }
