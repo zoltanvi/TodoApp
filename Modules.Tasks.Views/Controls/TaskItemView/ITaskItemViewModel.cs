@@ -8,4 +8,5 @@ internal interface ITaskItemViewModel
 {
     void EditItem();
     void UpdateTask();
+    void UpdateHistory();
 }

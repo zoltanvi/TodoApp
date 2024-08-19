@@ -51,6 +51,7 @@ public class TaskItemCommandsViewModel : BaseViewModel
         {
             _taskItem.Content.IsPlainTextMode ^= true;
             _taskItemInternal.UpdateTask();
+            _taskItemInternal.UpdateHistory();
         });
 
         SortByStateCommand = CreateSortCommand(TaskSortingRequestedPayload.SortByProperty.State);

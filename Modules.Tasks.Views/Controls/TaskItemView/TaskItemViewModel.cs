@@ -136,6 +136,15 @@ public class TaskItemViewModel : BaseViewModel, ITaskItemViewModel
         _oneEditorOpenService.DisplayMode(this);
     }
 
+    void ITaskItemViewModel.UpdateHistory()
+    {
+        var versionList = _mediator.Send(new TaskItemVersionsQuery { TaskId = Id }).Result;
+        Versions = versionList.MapToViewModelList(_mediator);
+
+        OnPropertyChanged(nameof(Versions));
+        OnPropertyChanged(nameof(VersionCount));
+    }
+
     void ITaskItemViewModel.UpdateTask() => UpdateTask();
 
     private void UpdateTask() => _mediator.Send(new UpdateTaskCommand { Task = this.Map() });
