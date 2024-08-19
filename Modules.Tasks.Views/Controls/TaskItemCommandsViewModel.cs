@@ -54,6 +54,8 @@ public class TaskItemCommandsViewModel : BaseViewModel
             _taskItemInternal.UpdateHistory();
         });
 
+        SplitLinesCommand = new RelayCommand(() => _mediator.Send(new SplitTaskLinesCommand { TaskId = _taskItem.Id }));
+
         SortByStateCommand = CreateSortCommand(TaskSortingRequestedPayload.SortByProperty.State);
         SortByCreationDateCommand = CreateSortCommand(TaskSortingRequestedPayload.SortByProperty.CreationDate, true);
         SortByCreationDateDescCommand = CreateSortCommand(TaskSortingRequestedPayload.SortByProperty.CreationDate);

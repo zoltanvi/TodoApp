@@ -144,6 +144,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         _eventAggregator.GetEvent<HotkeyPressedCtrlFEvent>().Subscribe(OnCtrlFPressed);
         _eventAggregator.GetEvent<HotkeyPressedCtrlNEvent>().Subscribe(OnCtrlNPressed);
         _eventAggregator.GetEvent<ThemeChangedEvent>().Subscribe(OnThemeChanged);
+        _eventAggregator.GetEvent<TaskSplittedByLinesEvent>().Subscribe(OnTaskSplitted);
 
         _oneEditorOpenService.ChangedToDisplayMode += FocusAddNewTaskTextEditor;
         SearchBoxViewModel.SearchTermsChanged += OnSearchTermsChanged;
@@ -166,6 +167,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         _eventAggregator.GetEvent<HotkeyPressedCtrlFEvent>().Unsubscribe(OnCtrlFPressed);
         _eventAggregator.GetEvent<HotkeyPressedCtrlNEvent>().Unsubscribe(OnCtrlNPressed);
         _eventAggregator.GetEvent<ThemeChangedEvent>().Unsubscribe(OnThemeChanged);
+        _eventAggregator.GetEvent<TaskSplittedByLinesEvent>().Unsubscribe(OnTaskSplitted);
 
         _oneEditorOpenService.ChangedToDisplayMode -= FocusAddNewTaskTextEditor;
         SearchBoxViewModel.SearchTermsChanged -= OnSearchTermsChanged;
@@ -563,6 +565,22 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
     private void OnThemeChanged()
     {
         ItemsView.Refresh();
+    }
+
+    private void OnTaskSplitted(int categoryId)
+    {
+        var activeCategoryInfo = _mediator.Send(new GetActiveCategoryInfoQuery()).Result;
+        if (activeCategoryInfo.Id == categoryId)
+        {
+            var tasks = _taskItemRepository.GetActiveTasksFromCategory(activeCategoryInfo.Id, includeNavigation: true);
+
+            Items.Clear();
+
+            foreach (var taskItem in tasks)
+            {
+                Items.Add(taskItem.MapToViewModel(_mediator, _oneEditorOpenService, _eventAggregator));
+            }
+        }
     }
 
     private void OnTagItemDeleted(int tagId)

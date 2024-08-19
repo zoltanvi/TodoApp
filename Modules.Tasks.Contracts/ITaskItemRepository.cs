@@ -5,7 +5,7 @@ namespace Modules.Tasks.Contracts;
 public interface ITaskItemRepository
 {
     TaskItem AddTask(TaskItem task);
-
+    List<TaskItem> AddTasks(List<TaskItem> tasks);
     TaskItem AddTagToTask(TaskItem task, TagItem tag);
     TaskItem RemoveTagsFromTask(TaskItem task);
     TaskItem RemoveTagFromTask(TaskItem task, TagItem tag);

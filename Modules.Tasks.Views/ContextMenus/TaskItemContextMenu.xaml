@@ -56,11 +56,11 @@
 
 
         <!--  Set reminder  -->
-        <MenuItem
+        <!--<MenuItem
             Command="{Binding Cmd.OpenReminderCommand}"
             DataContext="{Binding Path=PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
             Header="Set reminder"
-            Icon="{StaticResource CtxIconReminder}" />
+            Icon="{StaticResource CtxIconReminder}" />-->
 
         <!--  ============================================================  -->
         <Separator />

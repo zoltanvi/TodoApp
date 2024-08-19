@@ -26,6 +26,20 @@ public class TaskItemRepository : ITaskItemRepository
         return task;
     }
 
+    public List<TaskItem> AddTasks(List<TaskItem> tasks)
+    {
+        foreach (var taskItem in tasks)
+        {
+            taskItem.CreationDate = DateTime.Now;
+            taskItem.ModificationDate = DateTime.Now;
+            _context.Tasks.Add(taskItem);
+        }
+
+        _context.SaveChanges();
+
+        return tasks;
+    }
+
     public TaskItem AddTagToTask(TaskItem task, TagItem tag)
     {
         var dbTask = _context.Tasks
