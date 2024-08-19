@@ -195,6 +195,8 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         if (!NewContentViewModel.IsEmpty)
         {
             var activeCategory = _mediator.Send(new GetActiveCategoryInfoQuery()).Result;
+            var newListOrder = _mediator.Send(new TaskCreationListOrderQuery{ CategoryId = activeCategory.Id }).Result;
+            var isLastItem = newListOrder == Items.Count;
 
             var task = new TaskItem
             {
@@ -202,16 +204,27 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
                 ContentPreview = NewContentViewModel.GetContentInPlainText(),
                 IsContentPlainText = NewContentViewModel.IsPlainTextMode,
                 CategoryId = activeCategory.Id,
-                // TODO
-                ListOrder = Items.Count
+                ListOrder = newListOrder
             };
 
             var addedTask = _taskItemRepository.AddTask(task);
 
             _oneEditorOpenService.LastEditedTaskId = addedTask.Id;
 
-            Items.Add(addedTask.MapToViewModel(_mediator, _oneEditorOpenService, _eventAggregator));
-            ScrollIntoViewRequested?.Invoke(Items.Count - 1);
+            Items.Insert(newListOrder, addedTask.MapToViewModel(_mediator, _oneEditorOpenService, _eventAggregator));
+
+            if (!isLastItem)
+            {
+                // Fix list orders
+                for (var i = 0; i < Items.Count; i++)
+                {
+                    Items[i].ListOrder = i;
+                }
+
+                _taskItemRepository.UpdateTaskListOrders(Items.MapList());
+            }
+
+            ScrollIntoViewRequested?.Invoke(newListOrder);
             RecalculateProgress();
 
             NewContentViewModel.SetContent(NewContentViewModel.IsPlainTextMode, string.Empty);

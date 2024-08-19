@@ -14,6 +14,12 @@ public partial class TaskPage : ITaskPage, IDisposable
 
     private void OnScrollIntoViewRequested(int index)
     {
+        if (TaskListListView.Items.Count < index)
+        {
+            // The list is filtered. so ignore.
+            return;
+        }
+
         var itemToScrollTo = TaskListListView.Items.GetItemAt(index);
         if (itemToScrollTo != null)
         {
