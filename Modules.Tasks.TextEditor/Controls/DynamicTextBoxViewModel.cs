@@ -23,6 +23,7 @@ public class DynamicTextBoxViewModel : BaseViewModel
         bool toolbarCloseOnLostFocus = false,
         bool acceptsTab = true,
         bool isPlainTextMode = true,
+        bool isReadOnly = false,
         Action? enterAction = null)
     {
         _enterActionOnLostFocus = enterActionOnLostFocus;
@@ -32,12 +33,13 @@ public class DynamicTextBoxViewModel : BaseViewModel
         LostFocusCommand = new RelayCommand(OnLostFocus);
         AcceptsTab = acceptsTab;
         IsPlainTextMode = isPlainTextMode;
+        IsReadOnly = isReadOnly;
 
         EnterAction = enterAction;
     }
 
     public bool TextBoxAcceptsTab { get; set; } = true;
-
+    public bool IsReadOnly { get; set; }
     public bool IsPlainTextMode
     {
         get => _isPlainTextMode;

@@ -29,7 +29,7 @@ public class TaskItemVersionViewModel : BaseViewModel
         
         _mediator = mediator;
 
-        Content = new DynamicTextBoxViewModel();
+        Content = new DynamicTextBoxViewModel(isReadOnly: true);
         Content.SetContent(isContentPlainText, content);
 
         RestoreToThisCommand = new RelayCommand(() => _mediator.Send(

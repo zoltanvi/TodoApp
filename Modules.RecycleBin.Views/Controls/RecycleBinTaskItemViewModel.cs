@@ -37,7 +37,7 @@ public class RecycleBinTaskItemViewModel : BaseViewModel
         ToggleDetailsCommand = new RelayCommand(() => DetailsVisible ^= true);
         RestoreTaskItemCommand = new RelayCommand(() => mediator.Send(new RestoreTaskItemCommand { TaskId = Id }));
 
-        Content = new DynamicTextBoxViewModel();
+        Content = new DynamicTextBoxViewModel(isReadOnly: true);
         Content.SetContent(isContentPlainText, content);
     }
 }

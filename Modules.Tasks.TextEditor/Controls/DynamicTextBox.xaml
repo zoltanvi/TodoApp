@@ -38,7 +38,7 @@
                 Focusable="{Binding Focusable}"
                 FontFamily="{Binding Path=AppSettings.TaskSettings.FontFamily, Source={StaticResource AppSettings}, Converter={StaticResource EnumToFontFamilyConverter}}"
                 FontSize="{Binding Path=AppSettings.TaskSettings.FontSize, Source={StaticResource AppSettings}, Converter={StaticResource FontSizeScaler}}"
-                IsReadOnly="{Binding IsReadOnly, ElementName=Root}"
+                IsReadOnly="{Binding IsReadOnly}"
                 Opacity="{Binding TextOpacity}"
                 PreviewKeyDown="TextBoxElement_OnPreviewKeyDown"
                 Style="{StaticResource SidePageAddNewTextBoxStyle}"
@@ -59,7 +59,7 @@
                 x:Name="RichTextEditorControlElement"
                 d:DataContext="{d:DesignInstance local:DynamicTextBoxViewModel}"
                 DataContext="{Binding DataContext, ElementName=Root}"
-                IsReadOnly="{Binding IsReadOnly, ElementName=Root}" />
+                IsReadOnly="{Binding IsReadOnly}" />
         </DataTemplate>
 
     </UserControl.Resources>

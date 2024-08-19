@@ -40,7 +40,7 @@
                 Grid.Row="0"
                 Grid.Column="0"
                 Background="Transparent"
-                IsEnabled="{Binding ElementName=Root, Path=IsReadOnly, Converter={StaticResource BoolNegatedConverter}}">
+                IsEnabled="{Binding IsReadOnly, Converter={StaticResource BoolNegatedConverter}}">
 
                 <DockPanel>
 
@@ -72,17 +72,17 @@
                 -->
                 <local:FormattedTextBox
                     x:Name="PartTextEditor"
-                    DocumentContent="{Binding DocumentContent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                    attached:SetFocusOn.Trigger="{Binding TriggerFocus}"
-                    attached:SetFocusOn.SelectAllOnFocus="False"
                     attached:SetFocusOn.CaretAtEndOnFocus="True"
+                    attached:SetFocusOn.SelectAllOnFocus="False"
+                    attached:SetFocusOn.Trigger="{Binding TriggerFocus}"
                     AcceptsTab="{Binding AcceptsTab}"
                     Background="Transparent"
+                    DocumentContent="{Binding DocumentContent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     EmptyContentUpArrowAction="{Binding OnQuickEditRequestedAction}"
                     EnterAction="{Binding EnterAction}"
                     Focusable="{Binding Focusable}"
                     IsFormattedPasteEnabled="{Binding IsFormattedPasteEnabled}"
-                    IsReadOnly="{Binding ElementName=Root, Path=IsReadOnly}"
+                    IsReadOnly="{Binding IsReadOnly}"
                     Opacity="{Binding TextOpacity}"
                     RenderOptions.ClearTypeHint="Enabled"
                     ScrollViewer.CanContentScroll="False"
@@ -113,27 +113,30 @@
                 Grid.Row="0"
                 Grid.RowSpan="2"
                 Grid.Column="1"
-                Width="{Binding UIScaler.TextEditorToggleWidth, Source={StaticResource UIScaler}}"
-                HorizontalAlignment="right"
-                IsEnabled="{Binding ElementName=Root, Path=IsReadOnly, Converter={StaticResource BoolNegatedConverter}}">
+                Visibility="{Binding IsReadOnly, Converter={StaticResource BoolToVisibilityNegatedConverter}}">
+                <Border
+                    Width="{Binding UIScaler.TextEditorToggleWidth, Source={StaticResource UIScaler}}"
+                    HorizontalAlignment="right"
+                    IsEnabled="{Binding IsReadOnly, Converter={StaticResource BoolNegatedConverter}}">
+                    <Border.Visibility>
+                        <MultiBinding>
+                            <MultiBinding.Converter>
+                                <valueConverters:BoolToVisibilityOrConverter />
+                            </MultiBinding.Converter>
+                            <Binding Path="IsEditMode" />
+                            <Binding
+                                ElementName="PartTextEditor"
+                                Path="IsFocused" />
+                        </MultiBinding>
+                    </Border.Visibility>
 
-                <Border.Visibility>
-                    <MultiBinding>
-                        <MultiBinding.Converter>
-                            <valueConverters:BoolToVisibilityOrConverter />
-                        </MultiBinding.Converter>
-                        <Binding Path="IsEditMode" />
-                        <Binding
-                            ElementName="PartTextEditor"
-                            Path="IsFocused" />
-                    </MultiBinding>
-                </Border.Visibility>
+                    <ToggleButton
+                        x:Name="IsEditorOpenToggle"
+                        Margin="0 2 0 0"
+                        IsChecked="{Binding IsToolbarOpen}"
+                        Style="{StaticResource TextEditorArrowToggleButtonStyle}" />
+                </Border>
 
-                <ToggleButton
-                    x:Name="IsEditorOpenToggle"
-                    Margin="0 2 0 0"
-                    IsChecked="{Binding IsToolbarOpen}"
-                    Style="{StaticResource TextEditorArrowToggleButtonStyle}" />
             </Border>
 
             <!--  Watermark text  -->
