@@ -145,6 +145,8 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         _eventAggregator.GetEvent<HotkeyPressedCtrlNEvent>().Subscribe(OnCtrlNPressed);
         _eventAggregator.GetEvent<ThemeChangedEvent>().Subscribe(OnThemeChanged);
         _eventAggregator.GetEvent<TaskSplittedByLinesEvent>().Subscribe(OnTaskSplitted);
+        _eventAggregator.GetEvent<TaskItemMoveToTopClickedEvent>().Subscribe(OnMoveToTopRequested);
+        _eventAggregator.GetEvent<TaskItemMoveToBottomClickedEvent>().Subscribe(OnMoveToBottomRequested);
 
         _oneEditorOpenService.ChangedToDisplayMode += FocusAddNewTaskTextEditor;
         SearchBoxViewModel.SearchTermsChanged += OnSearchTermsChanged;
@@ -168,6 +170,8 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         _eventAggregator.GetEvent<HotkeyPressedCtrlNEvent>().Unsubscribe(OnCtrlNPressed);
         _eventAggregator.GetEvent<ThemeChangedEvent>().Unsubscribe(OnThemeChanged);
         _eventAggregator.GetEvent<TaskSplittedByLinesEvent>().Unsubscribe(OnTaskSplitted);
+        _eventAggregator.GetEvent<TaskItemMoveToTopClickedEvent>().Unsubscribe(OnMoveToTopRequested);
+        _eventAggregator.GetEvent<TaskItemMoveToBottomClickedEvent>().Unsubscribe(OnMoveToBottomRequested);
 
         _oneEditorOpenService.ChangedToDisplayMode -= FocusAddNewTaskTextEditor;
         SearchBoxViewModel.SearchTermsChanged -= OnSearchTermsChanged;
@@ -582,6 +586,39 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
             }
         }
     }
+
+    private void OnMoveToTopRequested(int taskId)
+    {
+        var taskItem = Items.FirstOrDefault(x => x.Id == taskId);
+        ArgumentNullException.ThrowIfNull(taskItem);
+
+        var query = new TaskDragDropInsertPositionQuery
+        {
+            TaskId = taskId,
+            RequestedInsertPosition = 0
+        };
+
+        var newIndex = _mediator.Send(query).Result;
+
+        MoveTaskItem(newIndex, taskItem);
+    }
+
+    private void OnMoveToBottomRequested(int taskId)
+    {
+        var taskItem = Items.FirstOrDefault(x => x.Id == taskId);
+        ArgumentNullException.ThrowIfNull(taskItem);
+
+        var query = new TaskDragDropInsertPositionQuery
+        {
+            TaskId = taskId,
+            RequestedInsertPosition = Items.Count - 1
+        };
+
+        var newIndex = _mediator.Send(query).Result;
+
+        MoveTaskItem(newIndex, taskItem);
+    }
+
 
     private void OnTagItemDeleted(int tagId)
     {

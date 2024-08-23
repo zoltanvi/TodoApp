@@ -2,6 +2,7 @@
 using Modules.Common.DataBinding;
 using Modules.Common.ViewModel;
 using Modules.Tasks.Contracts.Cqrs.Commands;
+using Modules.Tasks.Contracts.Events;
 using Modules.Tasks.Views.Controls.TaskItemView;
 using Modules.Tasks.Views.Events;
 using Prism.Events;
@@ -53,6 +54,9 @@ public class TaskItemCommandsViewModel : BaseViewModel
             _taskItemInternal.UpdateTask();
             _taskItemInternal.UpdateHistory();
         });
+
+        MoveToTopCommand = new RelayCommand(() => _eventAggregator.GetEvent<TaskItemMoveToTopClickedEvent>().Publish(_taskItem.Id));
+        MoveToBottomCommand = new RelayCommand(() => _eventAggregator.GetEvent<TaskItemMoveToBottomClickedEvent>().Publish(_taskItem.Id));
 
         SplitLinesCommand = new RelayCommand(() => _mediator.Send(new SplitTaskLinesCommand { TaskId = _taskItem.Id }));
 
