@@ -10,6 +10,15 @@ public partial class DynamicTextBox : UserControl
     public DynamicTextBox()
     {
         InitializeComponent();
+        DataContextChanged += OnDataContextChanged;
+    }
+
+    // When the listview virtualization mode is set to recycle,
+    // the DataContext is changed to display a different item on the same list item.
+    // Therefore, we handle the dataContext change to display the correct data on the item.
+    private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+    {
+        ContentControlElement.ContentTemplateSelector = new DynamicTextBoxSelector();
     }
 
     public static readonly DependencyProperty IsPlainTextModeProperty = DependencyProperty.Register(nameof(IsPlainTextMode), typeof(bool), typeof(DynamicTextBox), new PropertyMetadata(true, OnIsPlainTextModeChanged));
