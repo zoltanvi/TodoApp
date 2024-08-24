@@ -17,4 +17,15 @@ public static class EnumerableExtensions
 
         return result;
     }
+
+    public static void RemoveAll<T>(this ObservableCollection<T> source, IEnumerable<T> itemsToRemove)
+    {
+        ArgumentNullException.ThrowIfNull(source);
+        ArgumentNullException.ThrowIfNull(itemsToRemove);
+
+        foreach (var item in itemsToRemove)
+        {
+            source.Remove(item);
+        }
+    }
 }

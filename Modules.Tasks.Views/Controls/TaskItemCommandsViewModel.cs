@@ -74,6 +74,10 @@ public class TaskItemCommandsViewModel : BaseViewModel
         ResetBackgroundColorsCommand = CreateResetCommand(TaskResetRequestedPayload.Subject.BackgroundColor);
         ResetBorderColorsCommand = CreateResetCommand(TaskResetRequestedPayload.Subject.BorderColor);
         ResetTagsCommand = CreateResetCommand(TaskResetRequestedPayload.Subject.Tag);
+
+        DeleteAllCommand = CreateDeleteAllCommand(TaskDeleteAllRequestedPayload.Mode.All);
+        DeleteCompletedCommand = CreateDeleteAllCommand(TaskDeleteAllRequestedPayload.Mode.Completed);
+        DeleteIncompleteCommand = CreateDeleteAllCommand(TaskDeleteAllRequestedPayload.Mode.Incomplete);
     }
 
     private void HandleIsDoneModified()
@@ -129,7 +133,7 @@ public class TaskItemCommandsViewModel : BaseViewModel
     public ICommand ResetBorderColorsCommand { get; }
     public ICommand ResetTagsCommand { get; }
 
-
+    // Delete all
     public ICommand DeleteAllCommand { get; }
     public ICommand DeleteCompletedCommand { get; }
     public ICommand DeleteIncompleteCommand { get; }
@@ -151,5 +155,12 @@ public class TaskItemCommandsViewModel : BaseViewModel
         return new RelayCommand(() =>
             _eventAggregator.GetEvent<TaskResetRequestedEvent>()
                 .Publish(new TaskResetRequestedPayload { ResetSubject = subject }));
+    }
+
+    private ICommand CreateDeleteAllCommand(TaskDeleteAllRequestedPayload.Mode mode)
+    {
+        return new RelayCommand(() =>
+            _eventAggregator.GetEvent<TaskDeleteAllRequestedEvent>()
+                .Publish(new TaskDeleteAllRequestedPayload { DeleteMode = mode }));
     }
 }

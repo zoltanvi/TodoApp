@@ -4,6 +4,7 @@ using Modules.Categories.Contracts.Cqrs.Queries;
 using Modules.Common;
 using Modules.Common.DataBinding;
 using Modules.Common.Events;
+using Modules.Common.Extensions;
 using Modules.Common.ViewModel;
 using Modules.Common.Views.Controls;
 using Modules.Common.Views.DragDrop;
@@ -149,6 +150,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         _eventAggregator.GetEvent<TaskItemMoveToTopClickedEvent>().Subscribe(OnMoveToTopRequested);
         _eventAggregator.GetEvent<TaskItemMoveToBottomClickedEvent>().Subscribe(OnMoveToBottomRequested);
         _eventAggregator.GetEvent<TaskResetRequestedEvent>().Subscribe(OnTaskResetRequested);
+        _eventAggregator.GetEvent<TaskDeleteAllRequestedEvent>().Subscribe(OnDeleteAllRequested);
 
         _oneEditorOpenService.ChangedToDisplayMode += FocusAddNewTaskTextEditor;
         SearchBoxViewModel.SearchTermsChanged += OnSearchTermsChanged;
@@ -175,6 +177,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         _eventAggregator.GetEvent<TaskItemMoveToTopClickedEvent>().Unsubscribe(OnMoveToTopRequested);
         _eventAggregator.GetEvent<TaskItemMoveToBottomClickedEvent>().Unsubscribe(OnMoveToBottomRequested);
         _eventAggregator.GetEvent<TaskResetRequestedEvent>().Unsubscribe(OnTaskResetRequested);
+        _eventAggregator.GetEvent<TaskDeleteAllRequestedEvent>().Unsubscribe(OnDeleteAllRequested);
 
         _oneEditorOpenService.ChangedToDisplayMode -= FocusAddNewTaskTextEditor;
         SearchBoxViewModel.SearchTermsChanged -= OnSearchTermsChanged;
@@ -681,6 +684,38 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
                 RecalculateProgress();
             }
         }
+    }
+
+    private void OnDeleteAllRequested(TaskDeleteAllRequestedPayload payload)
+    {
+        List<TaskItem> itemsToDelete;
+
+        if (payload.DeleteMode == TaskDeleteAllRequestedPayload.Mode.All)
+        {
+            itemsToDelete = Items.MapList();
+            Items.Clear();
+        }
+        else if (payload.DeleteMode == TaskDeleteAllRequestedPayload.Mode.Completed)
+        {
+            var query = Items.Where(x => x.IsDone);
+            itemsToDelete = query.MapList();
+            Items.RemoveAll(query.ToList());
+            
+        }
+        else if (payload.DeleteMode == TaskDeleteAllRequestedPayload.Mode.Incomplete)
+        {
+            var query = Items.Where(x => !x.IsDone);
+            itemsToDelete = query.MapList();
+            Items.RemoveAll(query.ToList());
+        }
+        else
+        {
+            throw new NotImplementedException("This delete mode is not implemented!");
+        }
+
+        _taskItemRepository.DeleteTasks(itemsToDelete);
+
+        RecalculateProgress();
     }
 
     private void OnTagItemDeleted(int tagId)
