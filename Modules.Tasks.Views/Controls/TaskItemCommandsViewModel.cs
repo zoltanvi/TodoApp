@@ -67,6 +67,13 @@ public class TaskItemCommandsViewModel : BaseViewModel
         SortByModificationDateDescCommand = CreateSortCommand(TaskSortingRequestedPayload.SortByProperty.ModificationDate);
         SortByContentCommand = CreateSortCommand(TaskSortingRequestedPayload.SortByProperty.Content, true);
         SortByContentDescCommand = CreateSortCommand(TaskSortingRequestedPayload.SortByProperty.Content);
+
+        ResetAllStatesCommand = CreateResetCommand(TaskResetRequestedPayload.Subject.State);
+        ResetAllColorsCommand = CreateResetCommand(TaskResetRequestedPayload.Subject.AllColors);
+        ResetMarkerColorsCommand = CreateResetCommand(TaskResetRequestedPayload.Subject.MarkerColor);
+        ResetBackgroundColorsCommand = CreateResetCommand(TaskResetRequestedPayload.Subject.BackgroundColor);
+        ResetBorderColorsCommand = CreateResetCommand(TaskResetRequestedPayload.Subject.BorderColor);
+        ResetTagsCommand = CreateResetCommand(TaskResetRequestedPayload.Subject.Tag);
     }
 
     private void HandleIsDoneModified()
@@ -113,11 +120,16 @@ public class TaskItemCommandsViewModel : BaseViewModel
     public ICommand MoveAllToCategoryCommand { get; }
     public ICommand MoveAllCompletedToCategoryCommand { get; }
     public ICommand MoveAllIncompleteToCategoryCommand { get; }
+
+    // Reset all
     public ICommand ResetAllStatesCommand { get; }
     public ICommand ResetAllColorsCommand { get; }
-    public ICommand ResetColorsCommand { get; }
+    public ICommand ResetMarkerColorsCommand { get; }
     public ICommand ResetBackgroundColorsCommand { get; }
     public ICommand ResetBorderColorsCommand { get; }
+    public ICommand ResetTagsCommand { get; }
+
+
     public ICommand DeleteAllCommand { get; }
     public ICommand DeleteCompletedCommand { get; }
     public ICommand DeleteIncompleteCommand { get; }
@@ -134,4 +146,10 @@ public class TaskItemCommandsViewModel : BaseViewModel
                 }));
     }
 
+    private ICommand CreateResetCommand(TaskResetRequestedPayload.Subject subject)
+    {
+        return new RelayCommand(() =>
+            _eventAggregator.GetEvent<TaskResetRequestedEvent>()
+                .Publish(new TaskResetRequestedPayload { ResetSubject = subject }));
+    }
 }

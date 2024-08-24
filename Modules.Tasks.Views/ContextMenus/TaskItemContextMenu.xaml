@@ -305,16 +305,19 @@
                 ToolTip="Resets completed and pinned states." />
             <MenuItem
                 Command="{Binding Cmd.ResetAllColorsCommand}"
-                Header="colors" />
+                Header="color" />
             <MenuItem
-                Command="{Binding Cmd.ResetColorsCommand}"
-                Header="marker colors" />
+                Command="{Binding Cmd.ResetMarkerColorsCommand}"
+                Header="marker color" />
             <MenuItem
                 Command="{Binding Cmd.ResetBackgroundColorsCommand}"
-                Header="background colors" />
+                Header="background color" />
             <MenuItem
                 Command="{Binding Cmd.ResetBorderColorsCommand}"
-                Header="border colors" />
+                Header="border color" />
+            <MenuItem
+                Command="{Binding Cmd.ResetTagsCommand}"
+                Header="tag" />
         </MenuItem>
 
         <!--  Delete all  -->

@@ -98,6 +98,25 @@ public class TaskItemRepository : ITaskItemRepository
         return dbTask;
     }
 
+    public void RemoveTagsFromTasks(IEnumerable<TaskItem> taskList)
+    {
+        foreach (var taskItem in taskList)
+        {
+            var dbTask = _context.Tasks
+                .Include(x => x.Tags)
+                .FirstOrDefault(x => x.Id == taskItem.Id);
+
+            ArgumentNullException.ThrowIfNull(dbTask);
+
+            if (dbTask.Tags.Count != 0)
+            {
+                dbTask.Tags.Clear();
+            }
+        }
+
+        _context.SaveChanges();
+    }
+
     public TaskItem? GetTaskById(int id, bool includeNavigation = false)
     {
         if (includeNavigation)
@@ -179,38 +198,21 @@ public class TaskItemRepository : ITaskItemRepository
 
     public TaskItem UpdateTaskItem(TaskItem task)
     {
-        var dbTask = _context.Tasks.Find(task.Id);
-        ArgumentNullException.ThrowIfNull(dbTask);
-
-        dbTask.ListOrder = task.ListOrder;
-        dbTask.Pinned = task.Pinned;
-        dbTask.IsDone = task.IsDone;
-        dbTask.MarkerColor = task.MarkerColor;
-        dbTask.BorderColor = task.BorderColor;
-        dbTask.BackgroundColor = task.BackgroundColor;
-
-        if (!dbTask.Content.Equals(task.Content))
-        {
-            var oldVersion = new TaskItemVersion
-            {
-                TaskId = dbTask.Id,
-                Content = dbTask.Content,
-                IsContentPlainText = dbTask.IsContentPlainText,
-                ContentPreview = dbTask.ContentPreview,
-                VersionDate = dbTask.ModificationDate
-            };
-
-            _context.TaskItemVersions.Add(oldVersion);
-        }
-
-        dbTask.Content = task.Content;
-        dbTask.ContentPreview = task.ContentPreview;
-        dbTask.IsContentPlainText = task.IsContentPlainText;
-        dbTask.ModificationDate = DateTime.Now;
+        TaskItem updatedTask = UpdateTaskItemWithoutContextSave(task);
 
         _context.SaveChanges();
 
-        return dbTask;
+        return updatedTask;
+    }
+
+    public void UpdateTaskItems(IEnumerable<TaskItem> taskItems)
+    {
+        foreach (var task in taskItems)
+        {
+            UpdateTaskItemWithoutContextSave(task);
+        }
+
+        _context.SaveChanges();
     }
 
     public void DeleteTask(TaskItem task)
@@ -318,6 +320,40 @@ public class TaskItemRepository : ITaskItemRepository
         dbTask.ModificationDate = DateTime.Now;
 
         _context.SaveChanges();
+
+        return dbTask;
+    }
+
+    private TaskItem UpdateTaskItemWithoutContextSave(TaskItem taskItem)
+    {
+        var dbTask = _context.Tasks.Find(taskItem.Id);
+        ArgumentNullException.ThrowIfNull(dbTask);
+
+        dbTask.ListOrder = taskItem.ListOrder;
+        dbTask.Pinned = taskItem.Pinned;
+        dbTask.IsDone = taskItem.IsDone;
+        dbTask.MarkerColor = taskItem.MarkerColor;
+        dbTask.BorderColor = taskItem.BorderColor;
+        dbTask.BackgroundColor = taskItem.BackgroundColor;
+
+        if (!dbTask.Content.Equals(taskItem.Content))
+        {
+            var oldVersion = new TaskItemVersion
+            {
+                TaskId = dbTask.Id,
+                Content = dbTask.Content,
+                IsContentPlainText = dbTask.IsContentPlainText,
+                ContentPreview = dbTask.ContentPreview,
+                VersionDate = dbTask.ModificationDate
+            };
+
+            _context.TaskItemVersions.Add(oldVersion);
+        }
+
+        dbTask.Content = taskItem.Content;
+        dbTask.ContentPreview = taskItem.ContentPreview;
+        dbTask.IsContentPlainText = taskItem.IsContentPlainText;
+        dbTask.ModificationDate = DateTime.Now;
 
         return dbTask;
     }
