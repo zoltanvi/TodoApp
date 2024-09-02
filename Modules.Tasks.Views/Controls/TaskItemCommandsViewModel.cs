@@ -88,6 +88,7 @@ public class TaskItemCommandsViewModel : BaseViewModel
     private void MoveToCategory(MoveToCategoryViewModel viewModel) => 
         _mediator.Send(new MoveTaskToCategoryCommand { TaskId = _taskItem.Id, CategoryId = viewModel.Id });
 
+    // TODO: cache
     public ObservableCollection<MoveToCategoryViewModel> InactiveCategories
     {
         get

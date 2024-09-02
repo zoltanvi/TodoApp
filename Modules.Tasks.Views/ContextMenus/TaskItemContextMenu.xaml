@@ -235,7 +235,7 @@
             ItemsSource="{Binding Cmd.InactiveCategories}">
             <MenuItem.ItemContainerStyle>
                 <Style TargetType="MenuItem">
-                    <Setter Property="Header" Value="{Binding Name}" />
+                    <Setter Property="Header" Value="{Binding Name, Converter={StaticResource MoveToCategoryNameConverter}}" />
                     <Setter Property="Command" Value="{Binding Path=PlacementTarget.DataContext.Cmd.MoveToCategoryCommand, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}" />
                     <Setter Property="CommandParameter" Value="{Binding}">
                         <!--<Setter.Value>
