@@ -56,7 +56,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         _oneEditorOpenService = oneEditorOpenService;
         _eventAggregator = eventAggregator;
 
-        var activeCategoryInfo = _mediator.Send(new GetActiveCategoryInfoQuery()).Result;
+        var activeCategoryInfo = _mediator.Send(new GetSelectedCategoryQuery()).Result;
 
         ActiveCategoryName = activeCategoryInfo.Name;
 
@@ -151,6 +151,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         _eventAggregator.GetEvent<TaskItemMoveToBottomClickedEvent>().Subscribe(OnMoveToBottomRequested);
         _eventAggregator.GetEvent<TaskResetRequestedEvent>().Subscribe(OnTaskResetRequested);
         _eventAggregator.GetEvent<TaskDeleteAllRequestedEvent>().Subscribe(OnDeleteAllRequested);
+        _eventAggregator.GetEvent<TaskItemCategoryChangedEvent>().Subscribe(OnTaskCategoryChanged);
 
         _oneEditorOpenService.ChangedToDisplayMode += FocusAddNewTaskTextEditor;
         SearchBoxViewModel.SearchTermsChanged += OnSearchTermsChanged;
@@ -178,6 +179,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         _eventAggregator.GetEvent<TaskItemMoveToBottomClickedEvent>().Unsubscribe(OnMoveToBottomRequested);
         _eventAggregator.GetEvent<TaskResetRequestedEvent>().Unsubscribe(OnTaskResetRequested);
         _eventAggregator.GetEvent<TaskDeleteAllRequestedEvent>().Unsubscribe(OnDeleteAllRequested);
+        _eventAggregator.GetEvent<TaskItemCategoryChangedEvent>().Unsubscribe(OnTaskCategoryChanged);
 
         _oneEditorOpenService.ChangedToDisplayMode -= FocusAddNewTaskTextEditor;
         SearchBoxViewModel.SearchTermsChanged -= OnSearchTermsChanged;
@@ -206,7 +208,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
     {
         if (!NewContentViewModel.IsEmpty)
         {
-            var activeCategory = _mediator.Send(new GetActiveCategoryInfoQuery()).Result;
+            var activeCategory = _mediator.Send(new GetSelectedCategoryQuery()).Result;
             var newListOrder = _mediator.Send(new TaskCreationListOrderQuery { CategoryId = activeCategory.Id }).Result;
             var isLastItem = newListOrder == Items.Count;
 
@@ -260,7 +262,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
     private void EditCategory()
     {
         IsCategoryInEditMode = true;
-        var activeCategory = _mediator.Send(new GetActiveCategoryInfoQuery()).Result;
+        var activeCategory = _mediator.Send(new GetSelectedCategoryQuery()).Result;
         RenameCategoryContent = activeCategory.Name;
     }
 
@@ -579,7 +581,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
 
     private void OnTaskSplitted(int categoryId)
     {
-        var activeCategoryInfo = _mediator.Send(new GetActiveCategoryInfoQuery()).Result;
+        var activeCategoryInfo = _mediator.Send(new GetSelectedCategoryQuery()).Result;
         if (activeCategoryInfo.Id == categoryId)
         {
             var tasks = _taskItemRepository.GetActiveTasksFromCategory(activeCategoryInfo.Id, includeNavigation: true);
@@ -700,7 +702,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
             var query = Items.Where(x => x.IsDone);
             itemsToDelete = query.MapList();
             Items.RemoveAll(query.ToList());
-            
+
         }
         else if (payload.DeleteMode == TaskDeleteAllRequestedPayload.Mode.Incomplete)
         {
@@ -716,6 +718,18 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         _taskItemRepository.DeleteTasks(itemsToDelete);
 
         RecalculateProgress();
+    }
+
+    private void OnTaskCategoryChanged(TaskItemCategoryChangedPayload payload)
+    {
+        var activeCategory = _mediator.Send(new GetSelectedCategoryQuery()).Result;
+        if (activeCategory.Id != payload.NewCategoryId)
+        {
+            var task = Items.FirstOrDefault(x => x.Id == payload.TaskId);
+            ArgumentNullException.ThrowIfNull(task);
+            
+            Items.Remove(task);
+        }
     }
 
     private void OnTagItemDeleted(int tagId)

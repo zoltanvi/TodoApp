@@ -215,6 +215,16 @@ public class TaskItemRepository : ITaskItemRepository
         _context.SaveChanges();
     }
 
+    public void MoveTaskToCategory(TaskItem taskItem, int categoryId)
+    {
+        var dbTask = _context.Tasks.Find(taskItem.Id);
+        ArgumentNullException.ThrowIfNull(dbTask);
+
+        dbTask.CategoryId = categoryId;
+
+        _context.SaveChanges();
+    }
+
     public void DeleteTask(TaskItem task)
     {
         var dbTask = _context.Tasks.Find(task.Id);

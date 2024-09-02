@@ -232,11 +232,11 @@
         <MenuItem
             DataContext="{Binding Path=PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
             Header="Move to category:"
-            ItemsSource="{Binding InactiveCategories}">
+            ItemsSource="{Binding Cmd.InactiveCategories}">
             <MenuItem.ItemContainerStyle>
                 <Style TargetType="MenuItem">
                     <Setter Property="Header" Value="{Binding Name}" />
-                    <Setter Property="Command" Value="{Binding Cmd.MoveToCategoryCommand}" />
+                    <Setter Property="Command" Value="{Binding Path=PlacementTarget.DataContext.Cmd.MoveToCategoryCommand, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}" />
                     <Setter Property="CommandParameter" Value="{Binding}">
                         <!--<Setter.Value>
                             <MultiBinding Converter="{local:TaskContextMenuCommandParameterConverter}">
@@ -260,7 +260,7 @@
             Icon="{StaticResource CtxIconMoveTo}">
             <MenuItem
                 Header="items to"
-                ItemsSource="{Binding InactiveCategories}">
+                ItemsSource="{Binding Cmd.InactiveCategories}">
                 <MenuItem.ItemContainerStyle>
                     <Style TargetType="MenuItem">
                         <Setter Property="Header" Value="{Binding Name}" />
@@ -271,7 +271,7 @@
             </MenuItem>
             <MenuItem
                 Header="completed items to"
-                ItemsSource="{Binding InactiveCategories}">
+                ItemsSource="{Binding Cmd.InactiveCategories}">
                 <MenuItem.ItemContainerStyle>
                     <Style TargetType="MenuItem">
                         <Setter Property="Header" Value="{Binding Name}" />
@@ -282,7 +282,7 @@
             </MenuItem>
             <MenuItem
                 Header="incomplete items to"
-                ItemsSource="{Binding InactiveCategories}">
+                ItemsSource="{Binding Cmd.InactiveCategories}">
                 <MenuItem.ItemContainerStyle>
                     <Style TargetType="MenuItem">
                         <Setter Property="Header" Value="{Binding Name}" />

@@ -1,12 +1,15 @@
 ﻿using MediatR;
+using Modules.Categories.Contracts.Cqrs.Queries;
 using Modules.Common.DataBinding;
 using Modules.Common.ViewModel;
 using Modules.Tasks.Contracts.Cqrs.Commands;
 using Modules.Tasks.Contracts.Events;
+using Modules.Tasks.Views.Controls.ContextMenu;
 using Modules.Tasks.Views.Controls.TaskItemView;
 using Modules.Tasks.Views.Events;
 using Prism.Events;
 using PropertyChanged;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 namespace Modules.Tasks.Views.Controls;
@@ -78,20 +81,26 @@ public class TaskItemCommandsViewModel : BaseViewModel
         DeleteAllCommand = CreateDeleteAllCommand(TaskDeleteAllRequestedPayload.Mode.All);
         DeleteCompletedCommand = CreateDeleteAllCommand(TaskDeleteAllRequestedPayload.Mode.Completed);
         DeleteIncompleteCommand = CreateDeleteAllCommand(TaskDeleteAllRequestedPayload.Mode.Incomplete);
+
+        MoveToCategoryCommand = new RelayParameterizedCommand<MoveToCategoryViewModel>(MoveToCategory);
     }
 
-    private void HandleIsDoneModified()
+    private void MoveToCategory(MoveToCategoryViewModel viewModel) => 
+        _mediator.Send(new MoveTaskToCategoryCommand { TaskId = _taskItem.Id, CategoryId = viewModel.Id });
+
+    public ObservableCollection<MoveToCategoryViewModel> InactiveCategories
     {
-        if (_taskItem.IsDone)
+        get
         {
-            _eventAggregator.GetEvent<TaskItemCheckedEvent>().Publish(_taskItem.Id);
-        }
-        else
-        {
-            _eventAggregator.GetEvent<TaskItemUncheckedEvent>().Publish(_taskItem.Id);
+            var inactiveCategoryInfos = _mediator.Send(new GetInactiveCategoriesQuery()).Result;
+            var inactiveCategories =
+                new ObservableCollection<MoveToCategoryViewModel>(inactiveCategoryInfos.Select(x =>
+                    new MoveToCategoryViewModel { Id = x.Id, Name = x.Name }));
+
+            return inactiveCategories;
         }
     }
-    
+
     public ICommand IsDoneModifiedCommand { get; set; }
     public ICommand EditItemCommand { get; }
     public ICommand ToggleIsDoneCommand { get; }
@@ -137,6 +146,18 @@ public class TaskItemCommandsViewModel : BaseViewModel
     public ICommand DeleteAllCommand { get; }
     public ICommand DeleteCompletedCommand { get; }
     public ICommand DeleteIncompleteCommand { get; }
+
+    private void HandleIsDoneModified()
+    {
+        if (_taskItem.IsDone)
+        {
+            _eventAggregator.GetEvent<TaskItemCheckedEvent>().Publish(_taskItem.Id);
+        }
+        else
+        {
+            _eventAggregator.GetEvent<TaskItemUncheckedEvent>().Publish(_taskItem.Id);
+        }
+    }
 
     private ICommand CreateSortCommand(TaskSortingRequestedPayload.SortByProperty sortBy, bool ascending = false)
     {
