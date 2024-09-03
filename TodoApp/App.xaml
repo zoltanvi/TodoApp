@@ -16,6 +16,7 @@
                 <ResourceDictionary Source="pack://application:,,,/Modules.Settings.Views;component/Resources/Version.xaml" />
 
 
+                <ResourceDictionary Source="Resources/BindingProxies.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Modules.Settings.Views;component/Resources/BindingProxies.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Modules.Common.Views;component/Resources/BindingProxies.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Modules.Tasks.Views;component/Resources/BindingProxies.xaml" />

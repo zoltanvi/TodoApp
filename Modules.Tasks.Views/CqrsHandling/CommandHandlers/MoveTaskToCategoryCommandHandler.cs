@@ -42,7 +42,7 @@ public class MoveTaskToCategoryCommandHandler : IRequestHandler<MoveTaskToCatego
 
         if (request.CategoryId == dbTask.CategoryId)
         {
-            throw new InvalidOperationException("The source and destination category is the same.");
+            return Task.CompletedTask;
         }
 
         var oldCategoryId = dbTask.CategoryId;

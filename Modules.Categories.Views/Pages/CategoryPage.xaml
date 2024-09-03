@@ -83,7 +83,7 @@
                     Grid.Column="0"
                     Grid.ColumnSpan="2"
                     HorizontalContentAlignment="Stretch"
-                    dd:DragDrop.DropHandler="{Binding Handler, Source={StaticResource CustomDropHandler}}"
+                    dd:DragDrop.DropHandler="{Binding Handler, Source={StaticResource TaskToCategoryDropHandler}}"
                     dd:DragDrop.IsDragSource="True"
                     dd:DragDrop.IsDropTarget="True"
                     Background="Transparent"
