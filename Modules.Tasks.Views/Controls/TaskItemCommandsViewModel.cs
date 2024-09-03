@@ -83,10 +83,16 @@ public class TaskItemCommandsViewModel : BaseViewModel
         DeleteIncompleteCommand = CreateDeleteAllCommand(TaskDeleteAllRequestedPayload.Mode.Incomplete);
 
         MoveToCategoryCommand = new RelayParameterizedCommand<MoveToCategoryViewModel>(MoveToCategory);
+        MoveAllToCategoryCommand = new RelayParameterizedCommand<MoveToCategoryViewModel>(MoveAllToCategory);
     }
 
     private void MoveToCategory(MoveToCategoryViewModel viewModel) => 
-        _mediator.Send(new MoveTaskToCategoryCommand { TaskId = _taskItem.Id, CategoryId = viewModel.Id });
+        _mediator.Send(new MoveTaskToNewCategoryCommand { TaskId = _taskItem.Id, CategoryId = viewModel.Id });
+
+    private void MoveAllToCategory(MoveToCategoryViewModel viewModel)
+    {
+        _mediator.Send(new MoveActiveTasksToNewCategoryCommand { OldCategoryId = _taskItem.CategoryId , NewCategoryId = viewModel.Id });
+    }
 
     // TODO: cache
     public ObservableCollection<MoveToCategoryViewModel> InactiveCategories

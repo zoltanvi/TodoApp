@@ -18,6 +18,7 @@ public interface ITaskItemRepository
     TaskItem UpdateTaskItem(TaskItem task);
     void UpdateTaskItems(IEnumerable<TaskItem> taskItems);
     void MoveTaskToCategory(TaskItem taskItem, int categoryId);
+    void MoveTasksToCategory(IEnumerable<TaskItem> taskItems, int categoryId);
     void DeleteTask(TaskItem task);
     void DeleteTasks(IEnumerable<TaskItem> itemsToDelete);
     void DeleteTasksInCategory(int categoryId);

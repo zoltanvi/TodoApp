@@ -225,6 +225,19 @@ public class TaskItemRepository : ITaskItemRepository
         _context.SaveChanges();
     }
 
+    public void MoveTasksToCategory(IEnumerable<TaskItem> taskItems, int categoryId)
+    {
+        foreach (var taskItem in taskItems)
+        {
+            var dbTask = _context.Tasks.Find(taskItem.Id);
+            ArgumentNullException.ThrowIfNull(dbTask);
+
+            dbTask.CategoryId = categoryId;
+        }
+
+        _context.SaveChanges();
+    }
+
     public void DeleteTask(TaskItem task)
     {
         var dbTask = _context.Tasks.Find(task.Id);
@@ -248,7 +261,7 @@ public class TaskItemRepository : ITaskItemRepository
             dbTask.IsDeleted = true;
             dbTask.ListOrder = -1;
         }
-        
+
         _context.SaveChanges();
     }
 

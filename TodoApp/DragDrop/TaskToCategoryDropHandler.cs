@@ -37,7 +37,7 @@ public class TaskToCategoryDropHandler : DefaultDropHandler
             var mediator = ServiceLocator.GetService<IMediator>();
             ArgumentNullException.ThrowIfNull(mediator);
 
-            mediator.Send(new MoveTaskToCategoryCommand { TaskId = task.Id, CategoryId = category.Id });
+            mediator.Send(new MoveTaskToNewCategoryCommand { TaskId = task.Id, CategoryId = category.Id });
         }
         else
         {

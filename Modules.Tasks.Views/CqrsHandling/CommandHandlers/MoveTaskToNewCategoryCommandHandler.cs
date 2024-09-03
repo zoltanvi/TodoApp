@@ -8,14 +8,14 @@ using Prism.Events;
 
 namespace Modules.Tasks.Views.CqrsHandling.CommandHandlers;
 
-public class MoveTaskToCategoryCommandHandler : IRequestHandler<MoveTaskToCategoryCommand>
+public class MoveTaskToNewCategoryCommandHandler : IRequestHandler<MoveTaskToNewCategoryCommand>
 {
     private readonly ITaskItemRepository _taskItemRepository;
     private readonly ICategoriesRepository _categoriesRepository;
     private readonly IEventAggregator _eventAggregator;
     private readonly IMediator _mediator;
 
-    public MoveTaskToCategoryCommandHandler(
+    public MoveTaskToNewCategoryCommandHandler(
         ITaskItemRepository taskItemRepository,
         ICategoriesRepository categoriesRepository,
         IEventAggregator eventAggregator,
@@ -32,7 +32,7 @@ public class MoveTaskToCategoryCommandHandler : IRequestHandler<MoveTaskToCatego
         _mediator = mediator;
     }
 
-    public Task Handle(MoveTaskToCategoryCommand request, CancellationToken cancellationToken)
+    public Task Handle(MoveTaskToNewCategoryCommand request, CancellationToken cancellationToken)
     {
         var dbTask = _taskItemRepository.GetTaskById(request.TaskId);
         ArgumentNullException.ThrowIfNull(dbTask);
@@ -49,35 +49,48 @@ public class MoveTaskToCategoryCommandHandler : IRequestHandler<MoveTaskToCatego
         var newCategoryId = request.CategoryId;
 
         // The moved task should be inserted to the correct position
-        var newListOrder = _mediator.Send(new TaskCreationListOrderQuery { CategoryId = newCategoryId }, cancellationToken).Result;
+        var newListOrder = _mediator.Send(
+            new TaskMoveToCategoryInsertPositionQuery
+            {
+                TaskId = dbTask.Id,
+                CategoryId = newCategoryId
+            }, cancellationToken).Result;
 
         // Filter out the task that we want to insert into the correct position
-        var otherTasksInCategory = _taskItemRepository.GetActiveTasksFromCategory(newCategoryId)
+        var newCategoryTasks = _taskItemRepository.GetActiveTasksFromCategory(newCategoryId)
             .Where(x => x.Id != dbTask.Id)
             .ToList();
 
         // Insert into the correct position in local list
-        otherTasksInCategory.Insert(newListOrder, dbTask);
-
-        // Fix list orders
-        for (var i = 0; i < otherTasksInCategory.Count; i++)
-        {
-            otherTasksInCategory[i].ListOrder = i;
-        }
-
+        newCategoryTasks.Insert(newListOrder, dbTask);
+        
         // Move to category
         _taskItemRepository.MoveTaskToCategory(dbTask, newCategoryId);
 
+        // Fix list orders
+        for (var i = 0; i < newCategoryTasks.Count; i++)
+        {
+            newCategoryTasks[i].ListOrder = i;
+        }
+
+        // Fix list orders in old category
+        var oldCategoryTasks = _taskItemRepository.GetActiveTasksFromCategory(oldCategoryId).ToList();
+        for (var i = 0; i < oldCategoryTasks.Count; i++)
+        {
+            oldCategoryTasks[i].ListOrder = i;
+        }
+
         // Update fixed list orders
-        _taskItemRepository.UpdateTaskListOrders(otherTasksInCategory);
+        _taskItemRepository.UpdateTaskListOrders(newCategoryTasks);
 
         // Notify view
-        _eventAggregator.GetEvent<TaskItemCategoryChangedEvent>().Publish(new TaskItemCategoryChangedPayload
-        {
-            TaskId = dbTask.Id,
-            OldCategoryId = oldCategoryId,
-            NewCategoryId = newCategoryId
-        });
+        _eventAggregator.GetEvent<TaskItemCategoryChangedEvent>().Publish(
+            new TaskItemCategoryChangedPayload
+            {
+                TaskId = dbTask.Id,
+                OldCategoryId = oldCategoryId,
+                NewCategoryId = newCategoryId
+            });
 
         return Task.CompletedTask;
     }

@@ -36,6 +36,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
     private readonly OneEditorOpenService _oneEditorOpenService;
     private readonly IEventAggregator _eventAggregator;
     private bool _sortingInProgress;
+    private bool _categoryChangeInProgress;
 
     public event EventHandler? FocusAddNewTaskTextEditorRequested;
     public event Action<int>? ScrollIntoViewRequested;
@@ -152,6 +153,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         _eventAggregator.GetEvent<TaskResetRequestedEvent>().Subscribe(OnTaskResetRequested);
         _eventAggregator.GetEvent<TaskDeleteAllRequestedEvent>().Subscribe(OnDeleteAllRequested);
         _eventAggregator.GetEvent<TaskItemCategoryChangedEvent>().Subscribe(OnTaskCategoryChanged);
+        _eventAggregator.GetEvent<TaskItemsCategoryChangedEvent>().Subscribe(OnTasksCategoryChanged);
 
         _oneEditorOpenService.ChangedToDisplayMode += FocusAddNewTaskTextEditor;
         SearchBoxViewModel.SearchTermsChanged += OnSearchTermsChanged;
@@ -180,6 +182,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         _eventAggregator.GetEvent<TaskResetRequestedEvent>().Unsubscribe(OnTaskResetRequested);
         _eventAggregator.GetEvent<TaskDeleteAllRequestedEvent>().Unsubscribe(OnDeleteAllRequested);
         _eventAggregator.GetEvent<TaskItemCategoryChangedEvent>().Unsubscribe(OnTaskCategoryChanged);
+        _eventAggregator.GetEvent<TaskItemsCategoryChangedEvent>().Unsubscribe(OnTasksCategoryChanged);
 
         _oneEditorOpenService.ChangedToDisplayMode -= FocusAddNewTaskTextEditor;
         SearchBoxViewModel.SearchTermsChanged -= OnSearchTermsChanged;
@@ -298,7 +301,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
 
     private void ItemsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs? e)
     {
-        if (_sortingInProgress) return;
+        if (_sortingInProgress || _categoryChangeInProgress) return;
 
         for (var i = 0; i < Items.Count; i++)
         {
@@ -727,9 +730,31 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         {
             var task = Items.FirstOrDefault(x => x.Id == payload.TaskId);
             ArgumentNullException.ThrowIfNull(task);
-            
+
+            _categoryChangeInProgress = true;
             Items.Remove(task);
+            _categoryChangeInProgress = false;
+            SetFirstItem();
         }
+    }
+
+    private void OnTasksCategoryChanged(TaskItemsCategoryChangedPayload payload)
+    {
+        _categoryChangeInProgress = true;
+
+        var activeCategory = _mediator.Send(new GetSelectedCategoryQuery()).Result;
+        if (activeCategory.Id != payload.NewCategoryId)
+        {
+            foreach (var taskId in payload.TaskIds)
+            {
+                var task = Items.FirstOrDefault(x => x.Id == taskId);
+                ArgumentNullException.ThrowIfNull(task);
+                Items.Remove(task);
+            }
+            SetFirstItem();
+        }
+
+        _categoryChangeInProgress = false;
     }
 
     private void OnTagItemDeleted(int tagId)
