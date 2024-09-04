@@ -14,7 +14,7 @@ public interface ITaskItemRepository
     List<TaskItem> GetDeletedTasksFromCategory(int categoryId, bool includeNavigation = false);
     TaskItem? GetTaskById(int id, bool includeNavigation = false);
     List<TaskItemVersion> GetTaskItemVersions(int taskId);
-    void UpdateTaskListOrders(List<TaskItem> taskItems);
+    void UpdateTaskListOrders(IEnumerable<TaskItem> taskItems);
     TaskItem UpdateTaskItem(TaskItem task);
     void UpdateTaskItems(IEnumerable<TaskItem> taskItems);
     void MoveTaskToCategory(TaskItem taskItem, int categoryId);

@@ -183,7 +183,7 @@ public class TaskItemRepository : ITaskItemRepository
             .ToList();
     }
 
-    public void UpdateTaskListOrders(List<TaskItem> taskItems)
+    public void UpdateTaskListOrders(IEnumerable<TaskItem> taskItems)
     {
         foreach (var updatedTaskItem in taskItems)
         {

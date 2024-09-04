@@ -8,30 +8,21 @@ public class DefaultDataCreator
 {
     private readonly ICategoriesDbInfoRepository _categoriesDbInfoRepository;
     private readonly ICategoriesRepository _categoriesRepository;
-    //private readonly INotesDbInfoRepository _notesDbInfoRepository;
-    //private readonly INotesRepository _notesRepository;
 
     public DefaultDataCreator(
         ICategoriesDbInfoRepository categoriesDbInfoRepository,
         ICategoriesRepository categoriesRepository)
-        //INotesDbInfoRepository notesDbInfoRepository,
-        //INotesRepository notesRepository)
     {
         ArgumentNullException.ThrowIfNull(categoriesDbInfoRepository);
         ArgumentNullException.ThrowIfNull(categoriesRepository);
-        //ArgumentNullException.ThrowIfNull(notesDbInfoRepository);
-        //ArgumentNullException.ThrowIfNull(notesRepository);
 
         _categoriesDbInfoRepository = categoriesDbInfoRepository;
         _categoriesRepository = categoriesRepository;
-        //_notesDbInfoRepository = notesDbInfoRepository;
-        //_notesRepository = notesRepository;
     }
 
     public void CreateDefaultsIfNeeded()
     {
         CreateDefaultCategory();
-        //CreateDefaultNote();
     }
 
     private void CreateDefaultCategory()
@@ -51,14 +42,4 @@ public class DefaultDataCreator
 
         }
     }
-
-    //private void CreateDefaultNote()
-    //{
-    //    if (!_notesDbInfoRepository.Initialized)
-    //    {
-    //        _notesDbInfoRepository.Initialized = true;
-
-    //        _notesRepository.AddNote(new Note { Title = "Empty note", });
-    //    }
-    //}
 }

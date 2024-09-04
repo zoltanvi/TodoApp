@@ -16,6 +16,7 @@ using Modules.Tasks.Contracts.Models;
 using Modules.Tasks.TextEditor.Controls;
 using Modules.Tasks.Views.Controls.TaskItemView;
 using Modules.Tasks.Views.Events;
+using Modules.Tasks.Views.Extensions;
 using Modules.Tasks.Views.Mappings;
 using Modules.Tasks.Views.Services;
 using Prism.Events;
@@ -35,8 +36,10 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
     private readonly ITaskItemRepository _taskItemRepository;
     private readonly OneEditorOpenService _oneEditorOpenService;
     private readonly IEventAggregator _eventAggregator;
-    private bool _sortingInProgress;
-    private bool _categoryChangeInProgress;
+
+    // For improved performance, the code which updates Items in a loop
+    // should be surrounded with an '_ignoreCollectionChange = true scope' and update Items after that ONCE.
+    private bool _ignoreCollectionChange;
 
     public event EventHandler? FocusAddNewTaskTextEditorRequested;
     public event Action<int>? ScrollIntoViewRequested;
@@ -233,6 +236,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
             if (!isLastItem)
             {
                 // Fix list orders
+                Items.SetListOrdersToIndex();
                 for (var i = 0; i < Items.Count; i++)
                 {
                     Items[i].ListOrder = i;
@@ -301,15 +305,9 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
 
     private void ItemsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs? e)
     {
-        if (_sortingInProgress || _categoryChangeInProgress) return;
+        if (_ignoreCollectionChange) return;
 
-        for (var i = 0; i < Items.Count; i++)
-        {
-            Items[i].ListOrder = i;
-            Items[i].IsFirstItem = i == 0;
-        }
-
-        _taskItemRepository.UpdateTaskListOrders(Items.MapList());
+        FixItemsListOrders(persist: true);
     }
 
     private List<TaskItem> OrderTasksByState(List<TaskItem> tasks)
@@ -324,10 +322,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         orderedTasks.AddRange(activeItems);
         orderedTasks.AddRange(doneItems);
 
-        for (var i = 0; i < orderedTasks.Count; i++)
-        {
-            orderedTasks[i].ListOrder = i;
-        }
+        orderedTasks.SetListOrdersToIndex();
 
         _taskItemRepository.UpdateTaskListOrders(orderedTasks);
 
@@ -540,7 +535,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
 
         sortedItems = sortedItems.ToList();
 
-        _sortingInProgress = true;
+        _ignoreCollectionChange = true;
 
         Items.Clear();
         foreach (var taskItem in sortedItems)
@@ -548,8 +543,9 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
             Items.Add(taskItem);
         }
 
-        _sortingInProgress = false;
-        ItemsOnCollectionChanged(null, null);
+        FixItemsListOrders(persist: true);
+
+        _ignoreCollectionChange = false;
     }
 
     private void OnVersionRestored(int taskId)
@@ -589,12 +585,18 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         {
             var tasks = _taskItemRepository.GetActiveTasksFromCategory(activeCategoryInfo.Id, includeNavigation: true);
 
+            _ignoreCollectionChange = true;
+
             Items.Clear();
 
             foreach (var taskItem in tasks)
             {
                 Items.Add(taskItem.MapToViewModel(_mediator, _oneEditorOpenService, _eventAggregator));
             }
+
+            FixItemsListOrders(persist: true);
+
+            _ignoreCollectionChange = false;
         }
     }
 
@@ -695,6 +697,8 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
     {
         List<TaskItem> itemsToDelete;
 
+        _ignoreCollectionChange = true;
+
         if (payload.DeleteMode == TaskDeleteAllRequestedPayload.Mode.All)
         {
             itemsToDelete = Items.MapList();
@@ -705,7 +709,6 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
             var query = Items.Where(x => x.IsDone);
             itemsToDelete = query.MapList();
             Items.RemoveAll(query.ToList());
-
         }
         else if (payload.DeleteMode == TaskDeleteAllRequestedPayload.Mode.Incomplete)
         {
@@ -718,8 +721,11 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
             throw new NotImplementedException("This delete mode is not implemented!");
         }
 
-        _taskItemRepository.DeleteTasks(itemsToDelete);
+        FixItemsListOrders(persist: true);
 
+        _ignoreCollectionChange = false;
+
+        _taskItemRepository.DeleteTasks(itemsToDelete);
         RecalculateProgress();
     }
 
@@ -731,30 +737,33 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
             var task = Items.FirstOrDefault(x => x.Id == payload.TaskId);
             ArgumentNullException.ThrowIfNull(task);
 
-            _categoryChangeInProgress = true;
+            _ignoreCollectionChange = true;
+            
             Items.Remove(task);
-            _categoryChangeInProgress = false;
-            SetFirstItem();
+            FixItemsListOrders();
+            
+            _ignoreCollectionChange = false;
         }
     }
 
     private void OnTasksCategoryChanged(TaskItemsCategoryChangedPayload payload)
     {
-        _categoryChangeInProgress = true;
-
         var activeCategory = _mediator.Send(new GetSelectedCategoryQuery()).Result;
         if (activeCategory.Id != payload.NewCategoryId)
         {
+            _ignoreCollectionChange = true;
+
             foreach (var taskId in payload.TaskIds)
             {
                 var task = Items.FirstOrDefault(x => x.Id == taskId);
                 ArgumentNullException.ThrowIfNull(task);
                 Items.Remove(task);
             }
-            SetFirstItem();
-        }
 
-        _categoryChangeInProgress = false;
+            FixItemsListOrders();
+
+            _ignoreCollectionChange = false;
+        }
     }
 
     private void OnTagItemDeleted(int tagId)
@@ -767,6 +776,20 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
             {
                 item.Tags.Remove(tag);
             }
+        }
+    }
+
+    private void FixItemsListOrders(bool persist = false)
+    {
+        for (var i = 0; i < Items.Count; i++)
+        {
+            Items[i].ListOrder = i;
+            Items[i].IsFirstItem = i == 0;
+        }
+
+        if (persist)
+        {
+            _taskItemRepository.UpdateTaskListOrders(Items.MapList());
         }
     }
 

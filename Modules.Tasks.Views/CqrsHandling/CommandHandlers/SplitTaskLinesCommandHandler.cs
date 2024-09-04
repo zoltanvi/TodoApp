@@ -5,6 +5,7 @@ using Modules.Tasks.Contracts.Cqrs.Queries;
 using Modules.Tasks.Contracts.Events;
 using Modules.Tasks.Contracts.Models;
 using Modules.Tasks.TextEditor.Helpers;
+using Modules.Tasks.Views.Extensions;
 using Prism.Events;
 
 namespace Modules.Tasks.Views.CqrsHandling.CommandHandlers;
@@ -83,10 +84,7 @@ public class SplitTaskLinesCommandHandler : IRequestHandler<SplitTaskLinesComman
         }
 
         // Fix list orders
-        for (var i = 0; i < otherTasksInCategory.Count; i++)
-        {
-            otherTasksInCategory[i].ListOrder = i;
-        }
+        otherTasksInCategory.SetListOrdersToIndex();
 
         _taskItemRepository.UpdateTaskListOrders(otherTasksInCategory);
 

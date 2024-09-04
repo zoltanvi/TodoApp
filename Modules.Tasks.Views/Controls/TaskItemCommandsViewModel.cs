@@ -84,14 +84,8 @@ public class TaskItemCommandsViewModel : BaseViewModel
 
         MoveToCategoryCommand = new RelayParameterizedCommand<MoveToCategoryViewModel>(MoveToCategory);
         MoveAllToCategoryCommand = new RelayParameterizedCommand<MoveToCategoryViewModel>(MoveAllToCategory);
-    }
-
-    private void MoveToCategory(MoveToCategoryViewModel viewModel) => 
-        _mediator.Send(new MoveTaskToNewCategoryCommand { TaskId = _taskItem.Id, CategoryId = viewModel.Id });
-
-    private void MoveAllToCategory(MoveToCategoryViewModel viewModel)
-    {
-        _mediator.Send(new MoveActiveTasksToNewCategoryCommand { OldCategoryId = _taskItem.CategoryId , NewCategoryId = viewModel.Id });
+        MoveAllCompletedToCategoryCommand = new RelayParameterizedCommand<MoveToCategoryViewModel>(MoveAllCompletedToCategory);
+        MoveAllIncompleteToCategoryCommand = new RelayParameterizedCommand<MoveToCategoryViewModel>(MoveAllIncompleteToCategory);
     }
 
     // TODO: cache
@@ -153,6 +147,18 @@ public class TaskItemCommandsViewModel : BaseViewModel
     public ICommand DeleteAllCommand { get; }
     public ICommand DeleteCompletedCommand { get; }
     public ICommand DeleteIncompleteCommand { get; }
+
+    private void MoveToCategory(MoveToCategoryViewModel viewModel) =>
+        _mediator.Send(new MoveTaskToNewCategoryCommand { TaskId = _taskItem.Id, CategoryId = viewModel.Id });
+
+    private void MoveAllToCategory(MoveToCategoryViewModel viewModel) =>
+        _mediator.Send(new MoveActiveTasksToNewCategoryCommand { OldCategoryId = _taskItem.CategoryId, NewCategoryId = viewModel.Id });
+
+    private void MoveAllCompletedToCategory(MoveToCategoryViewModel viewModel) =>
+        _mediator.Send(new MoveCompletedTasksToNewCategoryCommand { OldCategoryId = _taskItem.CategoryId, NewCategoryId = viewModel.Id });
+
+    private void MoveAllIncompleteToCategory(MoveToCategoryViewModel viewModel) =>
+        _mediator.Send(new MoveIncompleteTasksToNewCategoryCommand { OldCategoryId = _taskItem.CategoryId, NewCategoryId = viewModel.Id });
 
     private void HandleIsDoneModified()
     {

@@ -4,6 +4,7 @@ using Modules.Tasks.Contracts;
 using Modules.Tasks.Contracts.Cqrs.Commands;
 using Modules.Tasks.Contracts.Cqrs.Queries;
 using Modules.Tasks.Views.Events;
+using Modules.Tasks.Views.Extensions;
 using Prism.Events;
 
 namespace Modules.Tasks.Views.CqrsHandling.CommandHandlers;
@@ -63,25 +64,20 @@ public class MoveTaskToNewCategoryCommandHandler : IRequestHandler<MoveTaskToNew
 
         // Insert into the correct position in local list
         newCategoryTasks.Insert(newListOrder, dbTask);
-        
         // Move to category
         _taskItemRepository.MoveTaskToCategory(dbTask, newCategoryId);
 
-        // Fix list orders
-        for (var i = 0; i < newCategoryTasks.Count; i++)
-        {
-            newCategoryTasks[i].ListOrder = i;
-        }
+        var oldCategoryTasks = _taskItemRepository.GetActiveTasksFromCategory(oldCategoryId).ToList();
+        ArgumentNullException.ThrowIfNull(oldCategoryTasks);
 
         // Fix list orders in old category
-        var oldCategoryTasks = _taskItemRepository.GetActiveTasksFromCategory(oldCategoryId).ToList();
-        for (var i = 0; i < oldCategoryTasks.Count; i++)
-        {
-            oldCategoryTasks[i].ListOrder = i;
-        }
+        oldCategoryTasks.SetListOrdersToIndex();
 
-        // Update fixed list orders
-        _taskItemRepository.UpdateTaskListOrders(newCategoryTasks);
+        // Fix list orders in new category
+        newCategoryTasks.SetListOrdersToIndex();
+
+        // Update list orders in old + in new category
+        _taskItemRepository.UpdateTaskListOrders(oldCategoryTasks.Union(newCategoryTasks));
 
         // Notify view
         _eventAggregator.GetEvent<TaskItemCategoryChangedEvent>().Publish(

@@ -6,6 +6,7 @@ using Modules.Tasks.Contracts.Cqrs.Commands;
 using Modules.Tasks.Contracts.Cqrs.Queries;
 using Modules.Tasks.Contracts.Events;
 using Modules.Tasks.Contracts.Models;
+using Modules.Tasks.Views.Extensions;
 using Prism.Events;
 
 namespace Modules.Tasks.Views.CqrsHandling.CommandHandlers;
@@ -84,10 +85,7 @@ public class RestoreTaskItemsInCategoryCommandHandler : IRequestHandler<RestoreT
         otherTasksInCategory.InsertRange(newStartIndex, deletedTasks);
 
         // Fix list orders
-        for (int i = 0; i < otherTasksInCategory.Count; i++)
-        {
-            otherTasksInCategory[i].ListOrder = i;
-        }
+        otherTasksInCategory.SetListOrdersToIndex();
 
         _taskItemRepository.UpdateTaskListOrders(otherTasksInCategory);
     }

@@ -264,7 +264,7 @@
                 <MenuItem.ItemContainerStyle>
                     <Style TargetType="MenuItem">
                         <Setter Property="Header" Value="{Binding Name}" />
-                        <Setter Property="Command" Value="{Binding Cmd.MoveAllCompletedToCategoryCommand}" />
+                        <Setter Property="Command" Value="{Binding Path=PlacementTarget.DataContext.Cmd.MoveAllCompletedToCategoryCommand, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}" />
                         <Setter Property="CommandParameter" Value="{Binding}" />
                     </Style>
                 </MenuItem.ItemContainerStyle>
@@ -275,7 +275,7 @@
                 <MenuItem.ItemContainerStyle>
                     <Style TargetType="MenuItem">
                         <Setter Property="Header" Value="{Binding Name}" />
-                        <Setter Property="Command" Value="{Binding Cmd.MoveAllIncompleteToCategoryCommand}" />
+                        <Setter Property="Command" Value="{Binding Path=PlacementTarget.DataContext.Cmd.MoveAllIncompleteToCategoryCommand, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}" />
                         <Setter Property="CommandParameter" Value="{Binding}" />
                     </Style>
                 </MenuItem.ItemContainerStyle>
