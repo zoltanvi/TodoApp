@@ -9,7 +9,7 @@ using Modules.Tasks.Contracts.Models;
 using Modules.Tasks.Services.Extensions;
 using Prism.Events;
 
-namespace Modules.Tasks.Views.CqrsHandling.CommandHandlers;
+namespace Modules.Tasks.Services.CqrsHandling.CommandHandlers;
 
 public class RestoreTaskItemCommandHandler : IRequestHandler<RestoreTaskItemCommand>
 {

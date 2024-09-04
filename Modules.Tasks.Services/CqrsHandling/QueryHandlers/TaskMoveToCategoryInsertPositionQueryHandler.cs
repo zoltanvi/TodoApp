@@ -3,7 +3,7 @@ using Modules.Settings.Contracts.ViewModels;
 using Modules.Tasks.Contracts;
 using Modules.Tasks.Contracts.Cqrs.Queries;
 
-namespace Modules.Tasks.Views.CqrsHandling.QueryHandlers;
+namespace Modules.Tasks.Services.CqrsHandling.QueryHandlers;
 
 /// <summary>
 /// Returns the index where the task should be inserted in the new category.

@@ -3,7 +3,7 @@ using Modules.Settings.Contracts.ViewModels;
 using Modules.Tasks.Contracts;
 using Modules.Tasks.Contracts.Cqrs.Queries;
 
-namespace Modules.Tasks.Views.CqrsHandling.QueryHandlers;
+namespace Modules.Tasks.Services.CqrsHandling.QueryHandlers;
 
 public class TaskCreationListOrderQueryHandler : IRequestHandler<TaskCreationListOrderQuery, int>
 {

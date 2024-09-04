@@ -3,7 +3,7 @@ using Modules.Tasks.Contracts;
 using Modules.Tasks.Contracts.Cqrs.Queries;
 using Modules.Tasks.Contracts.Models;
 
-namespace Modules.Tasks.Views.CqrsHandling.QueryHandlers;
+namespace Modules.Tasks.Services.CqrsHandling.QueryHandlers;
 
 public class TaskItemVersionsQueryHandler : IRequestHandler<TaskItemVersionsQuery, List<TaskItemVersion>>
 {

@@ -2,7 +2,7 @@
 using Modules.Tasks.Contracts;
 using Modules.Tasks.Contracts.Cqrs.Commands;
 
-namespace Modules.Tasks.Views.CqrsHandling.CommandHandlers;
+namespace Modules.Tasks.Services.CqrsHandling.CommandHandlers;
 
 public class UpdateTaskCommandHandler : IRequestHandler<UpdateTaskCommand>
 {

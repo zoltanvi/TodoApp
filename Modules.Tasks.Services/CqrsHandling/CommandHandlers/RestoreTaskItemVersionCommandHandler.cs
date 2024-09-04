@@ -1,10 +1,10 @@
 ﻿using MediatR;
 using Modules.Tasks.Contracts;
 using Modules.Tasks.Contracts.Cqrs.Commands;
-using Modules.Tasks.Views.Events;
+using Modules.Tasks.Services.Events;
 using Prism.Events;
 
-namespace Modules.Tasks.Views.CqrsHandling.CommandHandlers;
+namespace Modules.Tasks.Services.CqrsHandling.CommandHandlers;
 
 public class RestoreTaskItemVersionCommandHandler : IRequestHandler<RestoreTaskItemVersionCommand>
 {

@@ -3,7 +3,7 @@ using Modules.Common.Navigation;
 using Modules.Common.Services.Navigation;
 using Modules.Tasks.Contracts.Cqrs.Commands;
 
-namespace Modules.Tasks.Views.CqrsHandling.CommandHandlers;
+namespace Modules.Tasks.Services.CqrsHandling.CommandHandlers;
 
 public class OpenHistoryCommandHandler : IRequestHandler<OpenHistoryCommand>
 {

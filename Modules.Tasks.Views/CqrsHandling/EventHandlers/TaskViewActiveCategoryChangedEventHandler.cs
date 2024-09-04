@@ -2,7 +2,7 @@
 using Modules.Categories.Contracts.Cqrs.Events;
 using Modules.Tasks.Views.Services;
 
-namespace Modules.Tasks.Views.CqrsHandling;
+namespace Modules.Tasks.Views.CqrsHandling.EventHandlers;
 
 public class TaskViewActiveCategoryChangedEventHandler : INotificationHandler<ActiveCategoryChangedEvent>
 {

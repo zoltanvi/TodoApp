@@ -3,6 +3,7 @@ using Modules.Common.Navigation;
 using Modules.Common.ViewModel;
 using Modules.Tasks.Contracts;
 using Modules.Tasks.Contracts.Models;
+using Modules.Tasks.Services.Events;
 using Modules.Tasks.Views.Controls;
 using Modules.Tasks.Views.Events;
 using Modules.Tasks.Views.Mappings;

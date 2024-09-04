@@ -4,35 +4,33 @@ using Modules.Tasks.Contracts.Cqrs.Commands;
 using Modules.Tasks.Contracts.Events;
 using Prism.Events;
 
-namespace Modules.Tasks.Views.CqrsHandling.CommandHandlers;
+namespace Modules.Tasks.Services.CqrsHandling.CommandHandlers;
 
-public class UpdateTagItemCommandHandler : IRequestHandler<UpdateTagItemCommand>
+public class DeleteTagItemCommandHandler : IRequestHandler<DeleteTagItemCommand>
 {
     private readonly IEventAggregator _eventAggregator;
     private readonly ITagItemRepository _tagItemRepository;
 
-    public UpdateTagItemCommandHandler(
+    public DeleteTagItemCommandHandler(
         IEventAggregator eventAggregator,
         ITagItemRepository tagItemRepository)
     {
         ArgumentNullException.ThrowIfNull(eventAggregator);
         ArgumentNullException.ThrowIfNull(tagItemRepository);
-
+        
         _eventAggregator = eventAggregator;
         _tagItemRepository = tagItemRepository;
     }
 
-    public Task Handle(UpdateTagItemCommand request, CancellationToken cancellationToken)
+    public Task Handle(DeleteTagItemCommand request, CancellationToken cancellationToken)
     {
         var dbTag = _tagItemRepository.GetTagById(request.TagId);
         ArgumentNullException.ThrowIfNull(dbTag);
 
-        dbTag.Name = request.NewName;
-        dbTag.Color = request.Color;
+        _tagItemRepository.DeleteTag(dbTag);
 
-        _tagItemRepository.UpdateTag(dbTag);
-
-        _eventAggregator.GetEvent<TagItemUpdatedEvent>().Publish(request.TagId);
+        // Notify view
+        _eventAggregator.GetEvent<TagItemDeletedEvent>().Publish(request.TagId);
 
         return Task.CompletedTask;
     }
