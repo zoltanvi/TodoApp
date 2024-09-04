@@ -231,7 +231,7 @@
         <!--  Move this item to  -->
         <MenuItem
             DataContext="{Binding Path=PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
-            Header="Move to category:"
+            Header="Move task to category"
             ItemsSource="{Binding Cmd.InactiveCategories}">
             <MenuItem.ItemContainerStyle>
                 <Style TargetType="MenuItem">
@@ -245,10 +245,10 @@
         <!--  Move all  -->
         <MenuItem
             DataContext="{Binding Path=PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
-            Header="Move all"
+            Header="Move"
             Icon="{StaticResource CtxIconMoveTo}">
             <MenuItem
-                Header="items to"
+                Header="all tasks to"
                 ItemsSource="{Binding Cmd.InactiveCategories}">
                 <MenuItem.ItemContainerStyle>
                     <Style TargetType="MenuItem">
@@ -259,7 +259,7 @@
                 </MenuItem.ItemContainerStyle>
             </MenuItem>
             <MenuItem
-                Header="completed items to"
+                Header="completed tasks to"
                 ItemsSource="{Binding Cmd.InactiveCategories}">
                 <MenuItem.ItemContainerStyle>
                     <Style TargetType="MenuItem">
@@ -270,7 +270,7 @@
                 </MenuItem.ItemContainerStyle>
             </MenuItem>
             <MenuItem
-                Header="incomplete items to"
+                Header="incomplete tasks to"
                 ItemsSource="{Binding Cmd.InactiveCategories}">
                 <MenuItem.ItemContainerStyle>
                     <Style TargetType="MenuItem">
@@ -290,23 +290,23 @@
             Icon="{StaticResource CtxIconReset}">
             <MenuItem
                 Command="{Binding Cmd.ResetAllStatesCommand}"
-                Header="state"
+                Header="states"
                 ToolTip="Resets completed and pinned states." />
             <MenuItem
                 Command="{Binding Cmd.ResetAllColorsCommand}"
-                Header="color" />
+                Header="colors" />
             <MenuItem
                 Command="{Binding Cmd.ResetMarkerColorsCommand}"
-                Header="marker color" />
+                Header="marker colors" />
             <MenuItem
                 Command="{Binding Cmd.ResetBackgroundColorsCommand}"
-                Header="background color" />
+                Header="background colors" />
             <MenuItem
                 Command="{Binding Cmd.ResetBorderColorsCommand}"
-                Header="border color" />
+                Header="border colors" />
             <MenuItem
                 Command="{Binding Cmd.ResetTagsCommand}"
-                Header="tag" />
+                Header="tags" />
         </MenuItem>
 
         <!--  Delete all  -->
