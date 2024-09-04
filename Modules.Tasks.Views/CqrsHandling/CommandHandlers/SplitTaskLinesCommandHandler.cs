@@ -5,7 +5,7 @@ using Modules.Tasks.Contracts.Cqrs.Queries;
 using Modules.Tasks.Contracts.Events;
 using Modules.Tasks.Contracts.Models;
 using Modules.Tasks.TextEditor.Helpers;
-using Modules.Tasks.Views.Extensions;
+using Modules.Tasks.Services.Extensions;
 using Prism.Events;
 
 namespace Modules.Tasks.Views.CqrsHandling.CommandHandlers;

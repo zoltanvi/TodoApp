@@ -1,6 +1,6 @@
 ﻿using Prism.Events;
 
-namespace Modules.Tasks.Views.Events;
+namespace Modules.Tasks.Services.Events;
 
 public class TaskItemCategoryChangedEvent : PubSubEvent<TaskItemCategoryChangedPayload>;
 

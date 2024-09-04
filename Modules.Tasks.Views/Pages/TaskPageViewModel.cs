@@ -13,6 +13,8 @@ using Modules.Tasks.Contracts;
 using Modules.Tasks.Contracts.Cqrs.Queries;
 using Modules.Tasks.Contracts.Events;
 using Modules.Tasks.Contracts.Models;
+using Modules.Tasks.Services.Events;
+using Modules.Tasks.Services.Extensions;
 using Modules.Tasks.TextEditor.Controls;
 using Modules.Tasks.Views.Controls.TaskItemView;
 using Modules.Tasks.Views.Events;

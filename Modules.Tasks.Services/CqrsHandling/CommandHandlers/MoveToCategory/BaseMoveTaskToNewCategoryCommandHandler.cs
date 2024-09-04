@@ -3,11 +3,11 @@ using Modules.Categories.Contracts;
 using Modules.Tasks.Contracts;
 using Modules.Tasks.Contracts.Cqrs.Queries;
 using Modules.Tasks.Contracts.Models;
-using Modules.Tasks.Views.Events;
-using Modules.Tasks.Views.Extensions;
+using Modules.Tasks.Services.Events;
+using Modules.Tasks.Services.Extensions;
 using Prism.Events;
 
-namespace Modules.Tasks.Views.CqrsHandling.CommandHandlers;
+namespace Modules.Tasks.Services.CqrsHandling.CommandHandlers.MoveToCategory;
 
 public abstract class BaseMoveTaskToNewCategoryCommandHandler
 {
@@ -71,10 +71,10 @@ public abstract class BaseMoveTaskToNewCategoryCommandHandler
 
         // Fix list orders in old category
         stayedInOldCategoryTasks.SetListOrdersToIndex();
-        
+
         // Fix list orders in new category
         newCategoryTasks.SetListOrdersToIndex();
-        
+
         // Update list orders in old + in new category
         TaskItemRepository.UpdateTaskListOrders(stayedInOldCategoryTasks.Union(newCategoryTasks));
 

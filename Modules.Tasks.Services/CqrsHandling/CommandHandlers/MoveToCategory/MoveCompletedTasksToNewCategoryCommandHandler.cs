@@ -5,12 +5,12 @@ using Modules.Tasks.Contracts.Cqrs.Commands;
 using Modules.Tasks.Contracts.Models;
 using Prism.Events;
 
-namespace Modules.Tasks.Views.CqrsHandling.CommandHandlers;
+namespace Modules.Tasks.Services.CqrsHandling.CommandHandlers.MoveToCategory;
 
-public class MoveIncompleteTasksToNewCategoryCommandHandler
-    : BaseMoveTaskToNewCategoryCommandHandler, IRequestHandler<MoveIncompleteTasksToNewCategoryCommand>
+public class MoveCompletedTasksToNewCategoryCommandHandler :
+    BaseMoveTaskToNewCategoryCommandHandler, IRequestHandler<MoveCompletedTasksToNewCategoryCommand>
 {
-    public MoveIncompleteTasksToNewCategoryCommandHandler(
+    public MoveCompletedTasksToNewCategoryCommandHandler(
         ITaskItemRepository taskItemRepository,
         ICategoriesRepository categoriesRepository,
         IEventAggregator eventAggregator,
@@ -19,7 +19,7 @@ public class MoveIncompleteTasksToNewCategoryCommandHandler
     {
     }
 
-    public Task Handle(MoveIncompleteTasksToNewCategoryCommand request, CancellationToken cancellationToken)
+    public Task Handle(MoveCompletedTasksToNewCategoryCommand request, CancellationToken cancellationToken)
     {
         return HandleInternal(request.OldCategoryId, request.NewCategoryId, cancellationToken);
     }
@@ -29,7 +29,7 @@ public class MoveIncompleteTasksToNewCategoryCommandHandler
         var oldCategoryTasks = TaskItemRepository.GetActiveTasksFromCategory(oldCategoryId);
         ArgumentNullException.ThrowIfNull(oldCategoryTasks);
 
-        oldCategoryTasks = oldCategoryTasks.Where(x => !x.IsDone).ToList();
+        oldCategoryTasks = oldCategoryTasks.Where(x => x.IsDone).ToList();
         return oldCategoryTasks;
     }
 }

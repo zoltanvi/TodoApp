@@ -5,7 +5,7 @@ using Modules.Tasks.Contracts.Cqrs.Commands;
 using Modules.Tasks.Contracts.Models;
 using Prism.Events;
 
-namespace Modules.Tasks.Views.CqrsHandling.CommandHandlers;
+namespace Modules.Tasks.Services.CqrsHandling.CommandHandlers.MoveToCategory;
 
 public class MoveActiveTasksToNewCategoryCommandHandler :
     BaseMoveTaskToNewCategoryCommandHandler, IRequestHandler<MoveActiveTasksToNewCategoryCommand>
@@ -38,18 +38,18 @@ public class MoveActiveTasksToNewCategoryCommandHandler :
 
         // Move pinned tasks to category
         InsertTasksToList(
-            sourceList: oldPinnedTasks, 
-            destinationList: newCategoryTasks, 
-            destinationCategoryId: newCategoryId, 
+            sourceList: oldPinnedTasks,
+            destinationList: newCategoryTasks,
+            destinationCategoryId: newCategoryId,
             cancellationToken);
 
         TaskItemRepository.MoveTasksToCategory(oldPinnedTasks, newCategoryId);
 
         // Move non-pinned tasks to category
         InsertTasksToList(
-            sourceList: oldNonPinnedTasks, 
-            destinationList: newCategoryTasks, 
-            destinationCategoryId: newCategoryId, 
+            sourceList: oldNonPinnedTasks,
+            destinationList: newCategoryTasks,
+            destinationCategoryId: newCategoryId,
             cancellationToken);
 
         TaskItemRepository.MoveTasksToCategory(oldNonPinnedTasks, newCategoryId);
@@ -60,4 +60,3 @@ public class MoveActiveTasksToNewCategoryCommandHandler :
         return HandleInternal(request.OldCategoryId, request.NewCategoryId, cancellationToken);
     }
 }
-

@@ -22,6 +22,7 @@
     <ProjectReference Include="..\Modules.Common.Views\Modules.Common.Views.csproj" />
     <ProjectReference Include="..\Modules.Settings.Contracts\Modules.Settings.Contracts.csproj" />
     <ProjectReference Include="..\Modules.Tasks.Contracts\Modules.Tasks.Contracts.csproj" />
+    <ProjectReference Include="..\Modules.Tasks.Services\Modules.Tasks.Services.csproj" />
     <ProjectReference Include="..\Modules.Tasks.TextEditor\Modules.Tasks.TextEditor.csproj" />
   </ItemGroup>
 

@@ -3,11 +3,11 @@ using Modules.Categories.Contracts;
 using Modules.Tasks.Contracts;
 using Modules.Tasks.Contracts.Cqrs.Commands;
 using Modules.Tasks.Contracts.Cqrs.Queries;
-using Modules.Tasks.Views.Events;
-using Modules.Tasks.Views.Extensions;
+using Modules.Tasks.Services.Events;
+using Modules.Tasks.Services.Extensions;
 using Prism.Events;
 
-namespace Modules.Tasks.Views.CqrsHandling.CommandHandlers;
+namespace Modules.Tasks.Services.CqrsHandling.CommandHandlers.MoveToCategory;
 
 public class MoveTaskToNewCategoryCommandHandler : IRequestHandler<MoveTaskToNewCategoryCommand>
 {

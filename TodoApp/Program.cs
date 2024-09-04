@@ -26,6 +26,7 @@ using Modules.Settings.Views;
 using Modules.Settings.Views.Pages;
 using Modules.Settings.Views.Services;
 using Modules.Tasks.Repositories;
+using Modules.Tasks.Services.CqrsHandling;
 using Modules.Tasks.Views.CqrsHandling;
 using Modules.Tasks.Views.Pages;
 using Modules.Tasks.Views.Services;
@@ -82,6 +83,7 @@ public static class Program
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<PopupMessageCqrsRegistration>());
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<CategoriesCqrsRegistration>());
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<TasksCqrsRegistration>());
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<TaskServicesCqrsRegistration>());
     }
 
     public static void InitializeDatabase(this IServiceProvider serviceProvider)
