@@ -13,6 +13,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
@@ -47,6 +48,7 @@
             </Border>
 
             <ComboBox
+                Visibility="Collapsed"
                 Grid.Column="1"
                 Margin="4 0 0 7"
                 ItemsSource="{Binding Source={StaticResource TagColorProvider}}"
@@ -84,8 +86,12 @@
         </Grid>
 
 
+        <Grid Grid.Row="1">
+            <local:TagColorSelector />
+        </Grid>
+
         <!--  Add tag  -->
-        <Border Grid.Row="1">
+        <Border Grid.Row="2">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
