@@ -11,4 +11,6 @@ public class ThemeSettings : SettingsBase
     public string SeedColor { get; set; } = "#1D64DD";
     public string AppBorderColor { get; set; } = "#5C6BC0";
     public Thickness AppBorderThickness { get; set; } = Thickness.Thin;
+
+    public bool DarkModeOrHighContrast => DarkMode || HighContrast;
 }

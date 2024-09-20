@@ -18,13 +18,13 @@ internal class MessageTypeToBrushConverter : BaseValueConverter
             switch (messageType)
             {
                 case MessageType.Warning:
-                    return _tagColorConverter.Convert(TagPresetColor.Lime);
+                    return _tagColorConverter.Convert(TagColor.Yellow);
                 case MessageType.Info:
-                    return _tagColorConverter.Convert(TagPresetColor.Geekblue);
+                    return _tagColorConverter.Convert(TagColor.Blue);
                 case MessageType.Error:
-                    return _tagColorConverter.Convert(TagPresetColor.Magenta);
+                    return _tagColorConverter.Convert(TagColor.Red);
                 case MessageType.Success:
-                    return _tagColorConverter.Convert(TagPresetColor.Green);
+                    return _tagColorConverter.Convert(TagColor.Green);
             }
         }
 

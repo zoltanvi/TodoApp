@@ -26,7 +26,7 @@ public static class TagSelectionItemViewModelMappings
         return new TagSelectionItemViewModel(eventAggregator) {
             Id = tagItem.Id,
             Name = tagItem.Name,
-            Color = (TagPresetColor)Enum.Parse(typeof(TagPresetColor), tagItem.Color),
+            Color = (TagColor)Enum.Parse(typeof(TagColor), tagItem.Color),
         };
     }
 

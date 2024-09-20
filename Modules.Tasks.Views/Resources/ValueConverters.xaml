@@ -32,13 +32,9 @@
     <valueConverters1:TagColorConverter
         x:Key="TagForegroundConverter"
         ColorType="Foreground" />
-    <valueConverters1:TagColorConverter
-        x:Key="TagBackgroundConverter"
-        ColorType="Background" />
-    <valueConverters1:TagColorConverter
-        x:Key="TagBorderConverter"
-        ColorType="Border" />
 
-    <valueConverters:MoveToCategoryNameConverter x:Key="MoveToCategoryNameConverter"/>
+    <valueConverters1:TagOpacityConverter x:Key="TagOpacityConverter"/>
+
+    <valueConverters:MoveToCategoryNameConverter x:Key="MoveToCategoryNameConverter" />
 
 </ResourceDictionary>

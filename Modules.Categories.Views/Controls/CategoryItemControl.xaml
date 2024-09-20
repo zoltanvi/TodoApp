@@ -78,7 +78,7 @@
                                         CommandParameter="{Binding DataContext, ElementName=CategoryListItem}"
                                         Cursor="Hand"
                                         FontSize="{Binding UIScaler.FontSize.Small, Source={StaticResource UIScaler}}"
-                                        Style="{StaticResource ButtonIconHoverCategoryDeleteStyle}"
+                                        Style="{StaticResource ButtonIconCloseStyle}"
                                         Visibility="Hidden">
 
                                         <Label

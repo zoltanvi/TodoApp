@@ -35,7 +35,7 @@ public class TagCreatorViewModel : BaseViewModel
         AddNewTagCommand = new RelayCommand(AddTag);
     }
 
-    public TagPresetColor SelectedColor { get; set; }
+    public TagColor SelectedColor { get; set; }
 
     public string PendingAddNewTagText { get; set; } = string.Empty;
 

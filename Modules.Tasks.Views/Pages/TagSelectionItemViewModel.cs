@@ -28,7 +28,7 @@ public class TagSelectionItemViewModel : BaseViewModel
 
     public int Id { get; init; }
     public required string Name { get; init; }
-    public TagPresetColor Color { get; set; }
+    public TagColor Color { get; set; }
     public bool IsSelected { get; set; }
     public ICommand SelectTagCommand { get; }
 }

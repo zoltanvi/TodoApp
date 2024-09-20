@@ -80,7 +80,7 @@ public static class TaskItemViewModelMappings
         return tags.Select(x => new TagItemOnTaskViewModel
         {
             Id = x.Id,
-            Color = (TagPresetColor)Enum.Parse(typeof(TagPresetColor), x.Color),
+            Color = (TagColor)Enum.Parse(typeof(TagColor), x.Color),
             Name = x.Name
         }).ToObservableCollection();
     }

@@ -144,22 +144,32 @@
                                         SelectedItem="{Binding Color, Mode=TwoWay}">
                                         <ComboBox.ItemTemplate>
                                             <DataTemplate>
-                                                <Border
-                                                    Width="{Binding UIScaler.ColorPickerItemSize, Source={StaticResource UIScaler}}"
-                                                    Height="{Binding UIScaler.ColorPickerItemSize, Source={StaticResource UIScaler}}"
-                                                    Background="{Binding ., Converter={StaticResource TagBackgroundConverter}}"
-                                                    BorderBrush="{Binding ., Converter={StaticResource TagBorderConverter}}"
-                                                    BorderThickness="1"
-                                                    CornerRadius="4">
-                                                    <Label
-                                                        Margin="0"
-                                                        Padding="0"
-                                                        HorizontalAlignment="Center"
-                                                        VerticalAlignment="Center"
-                                                        Content="A"
-                                                        FontSize="{Binding UIScaler.FontSize.Smallest, Source={StaticResource UIScaler}}"
-                                                        Foreground="{Binding ., Converter={StaticResource TagForegroundConverter}}" />
-                                                </Border>
+
+                                                <commonControls:TagControl TagTitle="A" TagColor="{Binding}"/>
+
+                                                <!--<Grid>
+                                                    <Border
+                                                        Width="{Binding UIScaler.ColorPickerItemSize, Source={StaticResource UIScaler}}"
+                                                        Height="{Binding UIScaler.ColorPickerItemSize, Source={StaticResource UIScaler}}"
+                                                        Background="{Binding ., Converter={StaticResource TagForegroundConverter}}"
+                                                        CornerRadius="4"
+                                                        Opacity="{Binding AppSettings.ThemeSettings.DarkModeOrHighContrast, Source={StaticResource AppSettings}, Converter={StaticResource TagOpacityConverter}}" />
+
+                                                    <Border
+                                                        Width="{Binding UIScaler.ColorPickerItemSize, Source={StaticResource UIScaler}}"
+                                                        Height="{Binding UIScaler.ColorPickerItemSize, Source={StaticResource UIScaler}}"
+                                                        CornerRadius="4">
+                                                        <Label
+                                                            Margin="0"
+                                                            Padding="0"
+                                                            HorizontalAlignment="Center"
+                                                            VerticalAlignment="Center"
+                                                            Content="A"
+                                                            FontSize="{Binding UIScaler.FontSize.Smallest, Source={StaticResource UIScaler}}"
+                                                            Foreground="{Binding ., Converter={StaticResource TagForegroundConverter}}" />
+                                                    </Border>
+                                                </Grid>-->
+                                               
                                             </DataTemplate>
                                         </ComboBox.ItemTemplate>
                                     </ComboBox>

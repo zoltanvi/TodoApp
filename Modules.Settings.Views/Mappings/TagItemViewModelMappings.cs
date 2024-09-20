@@ -29,7 +29,7 @@ public static class TagItemViewModelMappings
             mediator, 
             tagItem.Id, 
             tagItem.Name,
-            (TagPresetColor)Enum.Parse(typeof(TagPresetColor), tagItem.Color));
+            (TagColor)Enum.Parse(typeof(TagColor), tagItem.Color));
     }
 
     public static List<TagItemViewModel> MapToViewModelList(

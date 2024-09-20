@@ -48,7 +48,7 @@
                     Margin="5 0 10 0"
                     Command="{Binding CloseSearchBoxCommand}"
                     Cursor="Hand"
-                    Style="{StaticResource ButtonIconHoverCategoryDeleteStyle}">
+                    Style="{StaticResource ButtonIconCloseStyle}">
                     <Label
                         Grid.Column="0"
                         Margin="3 0"

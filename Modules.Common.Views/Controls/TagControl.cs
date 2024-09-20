@@ -7,7 +7,7 @@ namespace Modules.Common.Views.Controls;
 public class TagControl : Label
 {
     public static readonly DependencyProperty TagTitleProperty = DependencyProperty.Register(nameof(TagTitle), typeof(string), typeof(TagControl), new PropertyMetadata());
-    public static readonly DependencyProperty TagColorProperty = DependencyProperty.Register(nameof(TagColor), typeof(TagPresetColor), typeof(TagControl), new PropertyMetadata());
+    public static readonly DependencyProperty TagColorProperty = DependencyProperty.Register(nameof(TagColor), typeof(TagColor), typeof(TagControl), new PropertyMetadata());
 
     public string TagTitle
     {
@@ -15,9 +15,9 @@ public class TagControl : Label
         set { SetValue(TagTitleProperty, value); }
     }
 
-    public TagPresetColor TagColor
+    public TagColor TagColor
     {
-        get { return (TagPresetColor)GetValue(TagColorProperty); }
+        get { return (TagColor)GetValue(TagColorProperty); }
         set { SetValue(TagColorProperty, value); }
     }
 }

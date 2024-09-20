@@ -17,7 +17,9 @@
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
                         CornerRadius="4">
-                        <ContentPresenter Content="{TemplateBinding Content}" Margin="10 5" />
+                        <ContentPresenter
+                            Content="{TemplateBinding Content}"
+                            Margin="10 5" />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
@@ -33,6 +35,33 @@
         <Setter Property="FontWeight" Value="UltraLight" />
     </Style>
 
+
+    <Style
+        x:Key="ButtonIconCloseStyle"
+        TargetType="{x:Type Button}">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Foreground" Value="{DynamicResource OnBackground}" />
+        <Setter Property="Opacity" Value="0.4" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border
+                        Padding="{TemplateBinding Padding}"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Opacity" Value="1" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
 
     <Style
         x:Key="ButtonIconHoverRectangleStyle"
@@ -81,46 +110,54 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type controls:TagControl}">
-                    <Border
-                        Margin="2 2"
-                        Background="{TemplateBinding TagColor,
-                                                     Converter={StaticResource TagBackgroundConverter}}"
-                        BorderBrush="{TemplateBinding TagColor,
-                                                      Converter={StaticResource TagBorderConverter}}"
-                        BorderThickness="1"
-                        CornerRadius="4"
-                        Opacity="{TemplateBinding Opacity}">
-                        <StackPanel
-                            Margin="6 0"
-                            HorizontalAlignment="Center"
-                            Orientation="Horizontal">
+                    <Grid>
+                        <!--  BACKGROUND BORDER  -->
+                        <Border
+                            Margin="2 2"
+                            Background="{TemplateBinding TagColor,
+                                                         Converter={StaticResource TagForegroundConverter}}"
+                            CornerRadius="4"
+                            Opacity="{Binding AppSettings.ThemeSettings.DarkModeOrHighContrast, Source={StaticResource AppSettings}, Converter={StaticResource TagOpacityConverter}}" />
 
-                            <!--  TITLE  -->
-                            <Label
-                                Margin="0 2"
-                                Padding="0"
+                        <Border
+                            Margin="2 2"
+                            BorderThickness="1"
+                            CornerRadius="4"
+                            Opacity="{TemplateBinding Opacity}">
+                            <StackPanel
+                                Margin="6 0"
                                 HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Content="{TemplateBinding TagTitle}"
-                                FontFamily="{Binding AppSettings.TaskSettings.FontFamily, Source={StaticResource AppSettings}, Converter={StaticResource EnumToFontFamilyConverter}}"
-                                FontSize="{Binding UIScaler.FontSize.Smaller, Source={StaticResource UIScaler}}"
-                                FontWeight="Bold"
-                                Foreground="{TemplateBinding TagColor,
-                                                             Converter={StaticResource TagForegroundConverter}}" />
+                                Orientation="Horizontal">
 
-                            <!--  BODY  -->
-                            <Label
-                                Margin="0 2"
-                                Padding="0"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Content="{TemplateBinding Content}"
-                                FontFamily="{Binding AppSettings.TaskSettings.FontFamily, Source={StaticResource AppSettings}, Converter={StaticResource EnumToFontFamilyConverter}}"
-                                FontSize="{Binding UIScaler.FontSize.Smaller, Source={StaticResource UIScaler}}"
-                                Foreground="{TemplateBinding TagColor,
-                                                             Converter={StaticResource TagForegroundConverter}}" />
-                        </StackPanel>
-                    </Border>
+                                <!--  TITLE  -->
+                                <Label
+                                    Margin="0 2"
+                                    Padding="0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Content="{TemplateBinding TagTitle}"
+                                    FontFamily="{Binding AppSettings.TaskSettings.FontFamily, Source={StaticResource AppSettings}, Converter={StaticResource EnumToFontFamilyConverter}}"
+                                    FontSize="{Binding UIScaler.FontSize.Smaller, Source={StaticResource UIScaler}}"
+                                    FontWeight="Bold"
+                                    Foreground="{TemplateBinding TagColor,
+                                                                 Converter={StaticResource TagForegroundConverter}}" />
+
+                                <!--  BODY  -->
+                                <Label
+                                    Margin="0 2"
+                                    Padding="0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Content="{TemplateBinding Content}"
+                                    FontFamily="{Binding AppSettings.TaskSettings.FontFamily, Source={StaticResource AppSettings}, Converter={StaticResource EnumToFontFamilyConverter}}"
+                                    FontSize="{Binding UIScaler.FontSize.Smaller, Source={StaticResource UIScaler}}"
+                                    Foreground="{TemplateBinding TagColor,
+                                                                 Converter={StaticResource TagForegroundConverter}}" />
+                            </StackPanel>
+                        </Border>
+
+                    </Grid>
+
 
                 </ControlTemplate>
             </Setter.Value>
@@ -133,7 +170,7 @@
         <Setter Property="Background" Value="{DynamicResource Surface1}" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="Margin" Value="2 0" />
-        <Setter Property="Padding" Value="3"/>
+        <Setter Property="Padding" Value="3" />
         <Setter Property="FontSize" Value="{Binding UIScaler.FontSize.RegularIcon, Source={StaticResource UIScaler}}" />
         <Setter Property="FontFamily" Value="{StaticResource IconFont}" />
         <Setter Property="Foreground" Value="{DynamicResource OnBackground}" />

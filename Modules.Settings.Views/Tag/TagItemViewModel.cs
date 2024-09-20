@@ -12,16 +12,16 @@ namespace Modules.Settings.Views.Tag;
 public class TagItemViewModel : BaseViewModel
 {
     private readonly IMediator _mediator;
-    private readonly TagPresetColor _originalColor;
+    private readonly TagColor _originalColor;
     private readonly string _originalName;
-    private TagPresetColor _color;
+    private TagColor _color;
     private string _name;
 
     public TagItemViewModel(
         IMediator mediator,
         int id,
         string name,
-        TagPresetColor color)
+        TagColor color)
     {
         ArgumentNullException.ThrowIfNull(mediator);
 
@@ -51,7 +51,7 @@ public class TagItemViewModel : BaseViewModel
         }
     }
 
-    public TagPresetColor Color
+    public TagColor Color
     {
         get => _color;
         set

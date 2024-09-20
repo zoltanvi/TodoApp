@@ -7,7 +7,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     d:DesignHeight="450"
     d:DesignWidth="800"
-    mc:Ignorable="d" d:DataContext="{d:DesignInstance local:TagCreatorViewModel}">
+    mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance local:TagCreatorViewModel}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -52,22 +53,30 @@
                 SelectedItem="{Binding SelectedColor, Mode=TwoWay}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
-                        <Border
-                            Width="{Binding UIScaler.ColorPickerItemSize, Source={StaticResource UIScaler}}"
-                            Height="{Binding UIScaler.ColorPickerItemSize, Source={StaticResource UIScaler}}"
-                            Background="{Binding ., Converter={StaticResource TagBackgroundConverter}}"
-                            BorderBrush="{Binding ., Converter={StaticResource TagBorderConverter}}"
-                            BorderThickness="1"
-                            CornerRadius="4">
-                            <Label
-                                Margin="0"
-                                Padding="0"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Content="A"
-                                FontSize="{Binding UIScaler.FontSize.Smallest, Source={StaticResource UIScaler}}"
-                                Foreground="{Binding ., Converter={StaticResource TagForegroundConverter}}" />
-                        </Border>
+
+                        <Grid>
+                            <Border
+                                Width="{Binding UIScaler.ColorPickerItemSize, Source={StaticResource UIScaler}}"
+                                Height="{Binding UIScaler.ColorPickerItemSize, Source={StaticResource UIScaler}}"
+                                Background="{Binding ., Converter={StaticResource TagForegroundConverter}}"
+                                CornerRadius="4"
+                                Opacity="{Binding AppSettings.ThemeSettings.DarkModeOrHighContrast, Source={StaticResource AppSettings}, Converter={StaticResource TagOpacityConverter}}" />
+
+                            <Border
+                                Width="{Binding UIScaler.ColorPickerItemSize, Source={StaticResource UIScaler}}"
+                                Height="{Binding UIScaler.ColorPickerItemSize, Source={StaticResource UIScaler}}"
+                                CornerRadius="4">
+                                <Label
+                                    Margin="0"
+                                    Padding="0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Content="A"
+                                    FontSize="{Binding UIScaler.FontSize.Smallest, Source={StaticResource UIScaler}}"
+                                    Foreground="{Binding ., Converter={StaticResource TagForegroundConverter}}" />
+                            </Border>
+                        </Grid>
+
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>

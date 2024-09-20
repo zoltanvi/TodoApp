@@ -9,5 +9,5 @@ public class TagItemOnTaskViewModel : BaseViewModel
 {
     public int Id { get; set; }
     public required string Name { get; set; }
-    public TagPresetColor Color { get; set; }
+    public TagColor Color { get; set; }
 }

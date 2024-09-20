@@ -11,7 +11,7 @@ public class TagColorConverter : BaseValueConverter
 
     public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        if (value is TagPresetColor tagColor)
+        if (value is TagColor tagColor)
         {
             return Convert(tagColor);
         }
@@ -23,17 +23,17 @@ public class TagColorConverter : BaseValueConverter
 #endif
     }
 
-    public Brush Convert(TagPresetColor tagColor)
+    public Brush Convert(TagColor tagColor)
     {
         string resourceName = $"Tag{tagColor}";
 
         if (ColorType == ColorType.Background)
         {
-            resourceName += "Bg";
+            //resourceName += "Bg";
         }
         else if (ColorType == ColorType.Border)
         {
-            resourceName += "Border";
+            //resourceName += "Border";
         }
 
         var resource = Application.Current.TryFindResource(resourceName);

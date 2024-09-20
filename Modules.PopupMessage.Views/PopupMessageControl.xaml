@@ -12,70 +12,88 @@
     mc:Ignorable="d">
 
     <Grid
-        MinWidth="150"
+        MinWidth="100"
         HorizontalAlignment="Center"
         animations:SlideInOutAnimation.Duration="{Binding MessageDuration}"
         animations:SlideInOutAnimation.IsAnimating="{Binding TriggerAnimation}"
         animations:SlideInOutAnimation.IsClosed="{Binding Closed}">
 
-        <Border
-            Margin="10"
-            Padding="4 0"
-            Background="{Binding MessageType, Converter={StaticResource MessageBackgroundConverter}}"
-            BorderBrush="{Binding MessageType, Converter={StaticResource MessageBorderConverter}}"
-            BorderThickness="{Binding UIScaler.ScaleValue, Source={StaticResource UIScaler}}"
-            CornerRadius="4"
-            SnapsToDevicePixels="True">
+        <Grid Margin="10">
 
-            <Border.Effect>
-                <DropShadowEffect
-                    BlurRadius="12"
-                    Opacity="0.5"
-                    ShadowDepth="0"
-                    Color="Black" />
-            </Border.Effect>
+            <!--
+                BorderBrush="{Binding MessageType, Converter={StaticResource MessageBorderConverter}}"
+                BorderThickness="{Binding UIScaler.ScaleValue, Source={StaticResource UIScaler}}"
+            -->
+            <Border
+                Background="{DynamicResource Background}"
+                CornerRadius="4"
+                SnapsToDevicePixels="True">
+                <Border
+                    Background="{Binding MessageType, Converter={StaticResource MessageForegroundConverter}}"
+                    CornerRadius="4"
+                    SnapsToDevicePixels="True"
+                    Opacity="{Binding AppSettings.ThemeSettings.DarkModeOrHighContrast, Source={StaticResource AppSettings}, Converter={StaticResource TagOpacityConverter}}">
+                    <Border.Effect>
+                        <DropShadowEffect
+                            BlurRadius="12"
+                            Opacity="0.5"
+                            ShadowDepth="0"
+                            Color="Black" />
+                    </Border.Effect>
+                </Border>
+            </Border>
 
-            <Grid Margin="0 4">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
+            <Border CornerRadius="4">
 
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
+                <Grid Margin="0 4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
 
-                <!--placeholder-->
-                <Border Grid.Row="0" Grid.Column="0" Width="{Binding ActualWidth, ElementName=CloseButton}"/>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
 
-                <TextBlock
-                    Grid.Row="0"
-                    Grid.RowSpan="2"
-                    Grid.Column="1"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    FontFamily="{DynamicResource UIFont}"
-                    FontSize="{Binding UIScaler.FontSize.Regular, Source={StaticResource UIScaler}}"
-                    FontWeight="Bold"
-                    Foreground="{Binding MessageType, Converter={StaticResource MessageForegroundConverter}}"
-                    Text="{Binding Message}"
-                    TextWrapping="Wrap" />
+                    <!--  placeholder  -->
+                    <Border
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Width="{Binding ActualWidth, ElementName=CloseButton}" />
 
-                <Button
-                    Name="CloseButton"
-                    Grid.Row="0"
-                    Grid.Column="2"
-                    Padding="5"
-                    VerticalAlignment="Center"
-                    VerticalContentAlignment="Center"
-                    Command="{Binding CloseMessageCommand}"
-                    Content="{StaticResource IconClose}"
-                    Style="{StaticResource ButtonIconHoverRectangleStyle}"
-                    ToolTip="Close" />
-            </Grid>
+                    <TextBlock
+                        Grid.Row="0"
+                        Grid.RowSpan="2"
+                        Grid.Column="1"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontFamily="{DynamicResource UIFont}"
+                        FontSize="{Binding UIScaler.FontSize.Regular, Source={StaticResource UIScaler}}"
+                        FontWeight="Bold"
+                        Foreground="{Binding MessageType, Converter={StaticResource MessageForegroundConverter}}"
+                        Text="{Binding Message}"
+                        TextWrapping="Wrap" />
 
-        </Border>
+                    <Button
+                        Name="CloseButton"
+                        Grid.Row="0"
+                        Grid.Column="2"
+                        Padding="5"
+                        Margin="5 0"
+                        VerticalAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        Command="{Binding CloseMessageCommand}"
+                        Content="{StaticResource IconDeleteX}"
+                        Style="{StaticResource ButtonIconCloseStyle}"
+                        FontFamily="{StaticResource IconFont}"
+                        FontSize="{Binding UIScaler.FontSize.Medium, Source={StaticResource UIScaler}}"
+                        ToolTip="Close" />
+                </Grid>
+
+            </Border>
+        </Grid>
+
     </Grid>
 </UserControl>
