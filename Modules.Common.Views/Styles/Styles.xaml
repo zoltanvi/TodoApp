@@ -126,13 +126,17 @@
                             BorderThickness="1"
                             CornerRadius="4"
                             Opacity="{TemplateBinding Opacity}">
-                            <StackPanel
-                                Margin="6 0"
-                                HorizontalAlignment="Center"
-                                Orientation="Horizontal">
+
+                            <Grid Margin="6 0">
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
 
                                 <!--  TITLE  -->
                                 <Label
+                                    Grid.Column="0"
                                     Margin="0 2"
                                     Padding="0"
                                     HorizontalAlignment="Center"
@@ -146,16 +150,16 @@
 
                                 <!--  BODY  -->
                                 <Label
+                                    Grid.Column="1"
                                     Margin="0 2"
                                     Padding="0"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
+                                    HorizontalContentAlignment="Stretch"
                                     Content="{TemplateBinding Content}"
                                     FontFamily="{Binding AppSettings.TaskSettings.FontFamily, Source={StaticResource AppSettings}, Converter={StaticResource EnumToFontFamilyConverter}}"
                                     FontSize="{Binding UIScaler.FontSize.Smaller, Source={StaticResource UIScaler}}"
                                     Foreground="{TemplateBinding TagColor,
                                                                  Converter={StaticResource TagForegroundConverter}}" />
-                            </StackPanel>
+                            </Grid>
                         </Border>
 
                     </Grid>

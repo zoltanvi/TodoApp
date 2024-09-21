@@ -5,9 +5,11 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Modules.Common.Views.Controls"
+    xmlns:valueConverters="clr-namespace:Modules.Common.Views.ValueConverters"
     mc:Ignorable="d"
     d:DesignHeight="450"
-    d:DesignWidth="800">
+    d:DesignWidth="800"
+    x:Name="Root">
     <Grid>
         <ListView
             ItemsSource="{Binding Source={StaticResource TagColorProvider}}"
@@ -29,9 +31,23 @@
                         Margin="3"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
-                        Background="{Binding Path=., Converter={StaticResource TagForegroundConverter}}"
+                        Background="{Binding Converter={StaticResource TagForegroundConverter}}"
                         Style="{StaticResource TagColorSelectorButtonStyle}"
-                        />
+                        Checked="ToggleButton_OnChecked"
+                        Tag="{Binding}"
+                        >
+                        <CheckBox.IsChecked>
+                            <MultiBinding Mode="OneWay">
+                                <MultiBinding.Converter>
+                                    <valueConverters:EqualityConverter />
+                                </MultiBinding.Converter>
+                                <Binding Path="." />
+                                <Binding
+                                    ElementName="Root"
+                                    Path="SelectedColor" />
+                            </MultiBinding>
+                        </CheckBox.IsChecked>
+                    </CheckBox>
 
                 </DataTemplate>
             </ListView.ItemTemplate>
