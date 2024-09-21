@@ -35,7 +35,8 @@ public class ThemeManager
     {
         _materialThemeManagerService.UpdateTheme();
 
-        if (e.PropertyName == nameof(ThemeSettings.DarkMode))
+        if (e.PropertyName == nameof(ThemeSettings.DarkMode) ||
+            e.PropertyName == nameof(ThemeSettings.HighContrast))
         {
             CheckAndSwitchLightAndDark();
         }
@@ -45,7 +46,8 @@ public class ThemeManager
 
     private void CheckAndSwitchLightAndDark()
     {
-        if (AppSettings.Instance.ThemeSettings.DarkMode)
+        if (AppSettings.Instance.ThemeSettings.DarkMode ||
+            AppSettings.Instance.ThemeSettings.HighContrast)
         {
             ChangeTheme(from: LightTheme, to: DarkTheme);
         }
