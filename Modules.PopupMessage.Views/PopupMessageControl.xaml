@@ -31,8 +31,17 @@
                 <Border
                     Background="{Binding MessageType, Converter={StaticResource MessageForegroundConverter}}"
                     CornerRadius="4"
-                    SnapsToDevicePixels="True"
-                    Opacity="{Binding AppSettings.ThemeSettings.DarkModeOrHighContrast, Source={StaticResource AppSettings}, Converter={StaticResource TagOpacityConverter}}">
+                    SnapsToDevicePixels="True">
+                    <Border.Opacity>
+                        <MultiBinding Converter="{StaticResource TagOpacityConverter}">
+                            <Binding
+                                Path="AppSettings.ThemeSettings.DarkMode"
+                                Source="{StaticResource AppSettings}" />
+                            <Binding
+                                Path="AppSettings.ThemeSettings.HighContrast"
+                                Source="{StaticResource AppSettings}" />
+                        </MultiBinding>
+                    </Border.Opacity>
                     <Border.Effect>
                         <DropShadowEffect
                             BlurRadius="12"

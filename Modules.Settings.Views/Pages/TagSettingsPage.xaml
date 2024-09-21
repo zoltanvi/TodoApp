@@ -89,100 +89,82 @@
                                 BorderThickness="1"
                                 CornerRadius="3">
                                 <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="Auto" />
-                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
 
-                                    <!--  SAVE BUTTON  -->
-                                    <Button
-                                        x:Name="SaveButton"
-                                        Grid.Column="0"
-                                        Command="{Binding SaveModificationsCommand}"
-                                        Content="{StaticResource IconSave}"
-                                        Style="{StaticResource ButtonQuickActionStyle}"
-                                        ToolTip="Save changes"
-                                        Visibility="{Binding NotSaved, Converter={StaticResource BoolToVisibilityHiddenConverter}}" />
+                                    <Grid Grid.Row="0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
 
-                                    <WrapPanel
-                                        Grid.Column="1"
-                                        Margin="20 0"
-                                        HorizontalAlignment="Center">
+                                        <!--  SAVE BUTTON  -->
+                                        <Button
+                                            x:Name="SaveButton"
+                                            Grid.Column="0"
+                                            Command="{Binding SaveModificationsCommand}"
+                                            Content="{StaticResource IconSave}"
+                                            Style="{StaticResource ButtonQuickActionStyle}"
+                                            ToolTip="Save changes"
+                                            Visibility="{Binding NotSaved, Converter={StaticResource BoolToVisibilityHiddenConverter}}" />
 
-                                        <!--  TAG CONTROL  -->
-                                        <commonControls:TagControl
-                                            MinWidth="30"
-                                            TagColor="{Binding Color}">
-                                            <TextBox
-                                                Padding="0"
-                                                VerticalAlignment="Stretch"
-                                                HorizontalContentAlignment="Center"
-                                                BorderBrush="{DynamicResource Outline}"
-                                                FontSize="{Binding UIScaler.FontSize.Smaller, Source={StaticResource UIScaler}}"
-                                                Foreground="{Binding Color, Converter={StaticResource TagForegroundConverter}}"
-                                                MaxLength="15"
-                                                Style="{StaticResource SidePageAddNewTextBoxStyle}"
-                                                Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
-                                                TextWrapping="NoWrap">
-                                                <TextBox.InputBindings>
-                                                    <KeyBinding
-                                                        Key="Return"
-                                                        Command="{Binding SaveModificationsCommand}" />
-                                                </TextBox.InputBindings>
-                                            </TextBox>
-                                        </commonControls:TagControl>
-                                    </WrapPanel>
+                                        <WrapPanel
+                                            Grid.Column="1"
+                                            Margin="20 0"
+                                            HorizontalAlignment="Center">
 
-                                    <!--  TAG COLOR  -->
-                                    <ComboBox
-                                        Grid.Column="2"
-                                        Margin="4 0"
-                                        ItemsSource="{Binding Source={StaticResource TagColorProvider}}"
-                                        SelectedItem="{Binding Color, Mode=TwoWay}">
-                                        <ComboBox.ItemTemplate>
-                                            <DataTemplate>
+                                            <!--  TAG CONTROL  -->
+                                            <commonControls:TagControl
+                                                MinWidth="30"
+                                                TagColor="{Binding Color}">
+                                                <TextBox
+                                                    Padding="0"
+                                                    VerticalAlignment="Stretch"
+                                                    HorizontalContentAlignment="Center"
+                                                    BorderBrush="{DynamicResource Outline}"
+                                                    FontSize="{Binding UIScaler.FontSize.Smaller, Source={StaticResource UIScaler}}"
+                                                    Foreground="{Binding Color, Converter={StaticResource TagForegroundConverter}}"
+                                                    MaxLength="15"
+                                                    Style="{StaticResource SidePageAddNewTextBoxStyle}"
+                                                    Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                                                    TextWrapping="NoWrap">
+                                                    <TextBox.InputBindings>
+                                                        <KeyBinding
+                                                            Key="Return"
+                                                            Command="{Binding SaveModificationsCommand}" />
+                                                    </TextBox.InputBindings>
+                                                </TextBox>
+                                            </commonControls:TagControl>
+                                        </WrapPanel>
 
-                                                <commonControls:TagControl TagTitle="A" TagColor="{Binding}"/>
+                                        <Button
+                                            Grid.Column="2"
+                                            Margin="4 0 0 0"
+                                            Command="{Binding EditTagColorCommand}"
+                                            Content="{StaticResource IconEdit}"
+                                            Style="{StaticResource ButtonQuickActionStyle}"
+                                            ToolTip="Edit color" />
 
-                                                <!--<Grid>
-                                                    <Border
-                                                        Width="{Binding UIScaler.ColorPickerItemSize, Source={StaticResource UIScaler}}"
-                                                        Height="{Binding UIScaler.ColorPickerItemSize, Source={StaticResource UIScaler}}"
-                                                        Background="{Binding ., Converter={StaticResource TagForegroundConverter}}"
-                                                        CornerRadius="4"
-                                                        Opacity="{Binding AppSettings.ThemeSettings.DarkModeOrHighContrast, Source={StaticResource AppSettings}, Converter={StaticResource TagOpacityConverter}}" />
+                                        <!--  DELETE BUTTON  -->
+                                        <Button
+                                            Grid.Column="3"
+                                            Margin="4 0 0 0"
+                                            Command="{Binding DeleteTagCommand}"
+                                            Content="{StaticResource IconTrash}"
+                                            Style="{StaticResource ButtonQuickActionStyle}"
+                                            ToolTip="Delete" />
+                                    </Grid>
 
-                                                    <Border
-                                                        Width="{Binding UIScaler.ColorPickerItemSize, Source={StaticResource UIScaler}}"
-                                                        Height="{Binding UIScaler.ColorPickerItemSize, Source={StaticResource UIScaler}}"
-                                                        CornerRadius="4">
-                                                        <Label
-                                                            Margin="0"
-                                                            Padding="0"
-                                                            HorizontalAlignment="Center"
-                                                            VerticalAlignment="Center"
-                                                            Content="A"
-                                                            FontSize="{Binding UIScaler.FontSize.Smallest, Source={StaticResource UIScaler}}"
-                                                            Foreground="{Binding ., Converter={StaticResource TagForegroundConverter}}" />
-                                                    </Border>
-                                                </Grid>-->
-                                               
-                                            </DataTemplate>
-                                        </ComboBox.ItemTemplate>
-                                    </ComboBox>
-
-                                    <!--  DELETE BUTTON  -->
-                                    <Button
-                                        Grid.Column="3"
-                                        Margin="4 0 0 0"
-                                        Command="{Binding DeleteTagCommand}"
-                                        Content="{StaticResource IconTrash}"
-                                        Style="{StaticResource ButtonQuickActionStyle}"
-                                        ToolTip="Delete tag" />
+                                    <Grid Grid.Row="1" Visibility="{Binding IsColorEditMode, Converter={StaticResource BoolToVisibilityConverter}}">
+                                        <commonControls:TagColorSelector SelectedColor="{Binding Color, Mode=TwoWay}" Margin="0 0 0 5" />
+                                    </Grid>
                                 </Grid>
+
 
                             </Border>
 

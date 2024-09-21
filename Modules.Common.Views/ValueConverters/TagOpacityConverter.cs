@@ -2,15 +2,15 @@
 
 namespace Modules.Common.Views.ValueConverters;
 
-public class TagOpacityConverter : BaseValueConverter
+public class TagOpacityConverter : BaseMultiValueConverter<TagOpacityConverter>
 {
     public override object Convert(
-        object value,
+        object[] values,
         Type targetType,
         object parameter,
         CultureInfo culture)
     {
-        if (value is bool isDarkMode && isDarkMode)
+        if (values.Length == 2 && values.Cast<bool>().Any(x => x == true))
         {
             return 0.24;
         }

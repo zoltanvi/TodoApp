@@ -36,10 +36,12 @@ public class TagItemViewModel : BaseViewModel
         Color = color;
 
         DeleteTagCommand = new RelayCommand(() => mediator.Send(new DeleteTagItemCommand { TagId = Id }));
+        EditTagColorCommand = new RelayCommand(() => IsColorEditMode ^= true);
         SaveModificationsCommand = new RelayCommand(SaveModifications);
     }
 
     public int Id { get; set; }
+    public bool IsColorEditMode { get; set; }
     public bool NotSaved { get; set; }
     public string Name
     {
@@ -62,6 +64,7 @@ public class TagItemViewModel : BaseViewModel
     }
 
     public ICommand DeleteTagCommand { get; set; }
+    public ICommand EditTagColorCommand { get; set; }
     public ICommand SaveModificationsCommand { get; set; }
 
     private void CheckSaveState()

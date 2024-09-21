@@ -21,14 +21,24 @@
                     Style="{StaticResource SettingsDescriptionStyle}"
                     Text="{Binding Description, RelativeSource={RelativeSource AncestorType=UserControl}}" />
 
-                <StackPanel Orientation="Horizontal" Grid.Column="2">
-                    <local:ShortcutKey Content="{Binding Key1, RelativeSource={RelativeSource AncestorType=UserControl}}" Visibility="{Binding Key1, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource StringToVisibilityConverter}}" />
+                <StackPanel
+                    Orientation="Horizontal"
+                    Grid.Column="2">
+                    <local:ShortcutKey
+                        Content="{Binding Key1, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                        Visibility="{Binding Key1, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource StringToVisibilityConverter}}" />
                     <local:ShortcutSeparator Visibility="{Binding Key2, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource StringToVisibilityConverter}}" />
-                    <local:ShortcutKey Content="{Binding Key2, RelativeSource={RelativeSource AncestorType=UserControl}}" Visibility="{Binding Key2, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource StringToVisibilityConverter}}" />
+                    <local:ShortcutKey
+                        Content="{Binding Key2, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                        Visibility="{Binding Key2, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource StringToVisibilityConverter}}" />
                     <local:ShortcutSeparator Visibility="{Binding Key3, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource StringToVisibilityConverter}}" />
-                    <local:ShortcutKey Content="{Binding Key3, RelativeSource={RelativeSource AncestorType=UserControl}}" Visibility="{Binding Key3, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource StringToVisibilityConverter}}" />
+                    <local:ShortcutKey
+                        Content="{Binding Key3, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                        Visibility="{Binding Key3, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource StringToVisibilityConverter}}" />
                     <local:ShortcutSeparator Visibility="{Binding Key4, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource StringToVisibilityConverter}}" />
-                    <local:ShortcutKey Content="{Binding Key4, RelativeSource={RelativeSource AncestorType=UserControl}}" Visibility="{Binding Key4, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource StringToVisibilityConverter}}" />
+                    <local:ShortcutKey
+                        Content="{Binding Key4, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                        Visibility="{Binding Key4, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource StringToVisibilityConverter}}" />
                 </StackPanel>
 
             </Grid>

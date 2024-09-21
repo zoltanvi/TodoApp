@@ -116,10 +116,19 @@
                         <!--  BACKGROUND BORDER  -->
                         <Border
                             Margin="2 2"
-                            Background="{TemplateBinding TagColor,
-                                                         Converter={StaticResource TagForegroundConverter}}"
-                            CornerRadius="4"
-                            Opacity="{Binding AppSettings.ThemeSettings.DarkModeOrHighContrast, Source={StaticResource AppSettings}, Converter={StaticResource TagOpacityConverter}}" />
+                            Background="{TemplateBinding TagColor, Converter={StaticResource TagForegroundConverter}}"
+                            CornerRadius="4">
+                            <Border.Opacity>
+                                <MultiBinding Converter="{StaticResource TagOpacityConverter}">
+                                    <Binding
+                                        Path="AppSettings.ThemeSettings.DarkMode"
+                                        Source="{StaticResource AppSettings}" />
+                                    <Binding
+                                        Path="AppSettings.ThemeSettings.HighContrast"
+                                        Source="{StaticResource AppSettings}" />
+                                </MultiBinding>
+                            </Border.Opacity>
+                        </Border>
 
                         <Border
                             Margin="2 2"
@@ -130,8 +139,8 @@
                             <Grid Margin="6 0">
 
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
 
                                 <!--  TITLE  -->
@@ -145,8 +154,7 @@
                                     FontFamily="{Binding AppSettings.TaskSettings.FontFamily, Source={StaticResource AppSettings}, Converter={StaticResource EnumToFontFamilyConverter}}"
                                     FontSize="{Binding UIScaler.FontSize.Smaller, Source={StaticResource UIScaler}}"
                                     FontWeight="Bold"
-                                    Foreground="{TemplateBinding TagColor,
-                                                                 Converter={StaticResource TagForegroundConverter}}" />
+                                    Foreground="{TemplateBinding TagColor, Converter={StaticResource TagForegroundConverter}}" />
 
                                 <!--  BODY  -->
                                 <Label
@@ -157,8 +165,7 @@
                                     Content="{TemplateBinding Content}"
                                     FontFamily="{Binding AppSettings.TaskSettings.FontFamily, Source={StaticResource AppSettings}, Converter={StaticResource EnumToFontFamilyConverter}}"
                                     FontSize="{Binding UIScaler.FontSize.Smaller, Source={StaticResource UIScaler}}"
-                                    Foreground="{TemplateBinding TagColor,
-                                                                 Converter={StaticResource TagForegroundConverter}}" />
+                                    Foreground="{TemplateBinding TagColor, Converter={StaticResource TagForegroundConverter}}" />
                             </Grid>
                         </Border>
 
@@ -233,7 +240,7 @@
 
                         <Grid x:Name="checkMarkParentGrid">
 
-                            <!--SELECTED-->
+                            <!--  SELECTED  -->
                             <Border
                                 x:Name="PART_selected"
                                 Width="22"
@@ -255,7 +262,7 @@
                                     SnapsToDevicePixels="False" />
                             </Border>
 
-                            <!--NOT SELECTED-->
+                            <!--  NOT SELECTED  -->
                             <Border
                                 x:Name="PART_default"
                                 Width="22"
@@ -264,8 +271,7 @@
                                 VerticalAlignment="Center"
                                 CornerRadius="30"
                                 Background="{Binding Background, RelativeSource={RelativeSource TemplatedParent}}"
-                                SnapsToDevicePixels="False">
-                            </Border>
+                                SnapsToDevicePixels="False" />
 
                         </Grid>
 

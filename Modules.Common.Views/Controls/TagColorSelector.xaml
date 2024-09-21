@@ -16,6 +16,7 @@
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             BorderThickness="0"
+            Template="{StaticResource NonScrollableListBoxControlTemplate}"
             Background="Transparent">
             <!--  Use a StackPanel for horizontal layout  -->
             <ListView.ItemsPanel>
