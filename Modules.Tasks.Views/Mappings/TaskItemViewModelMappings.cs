@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Modules.Common.DataModels;
 using Modules.Common.Extensions;
+using Modules.Common.Helpers;
 using Modules.Tasks.Contracts.Models;
 using Modules.Tasks.Views.Controls;
 using Modules.Tasks.Views.Controls.TaskItemView;
@@ -80,7 +81,7 @@ public static class TaskItemViewModelMappings
         return tags.Select(x => new TagItemOnTaskViewModel
         {
             Id = x.Id,
-            Color = (TagColor)Enum.Parse(typeof(TagColor), x.Color),
+            Color = EnumHelper.ConvertTo<TagColor>(x.Color),
             Name = x.Name
         }).ToObservableCollection();
     }

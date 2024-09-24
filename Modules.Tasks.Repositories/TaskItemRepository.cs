@@ -98,6 +98,18 @@ public class TaskItemRepository : ITaskItemRepository
         return dbTask;
     }
 
+    public TagItem? GetTagById(int tagId, bool includeNavigation = false)
+    {
+        if (includeNavigation)
+        {
+            return _context.Tags
+                .Include(x => x.TaskItems)
+                .FirstOrDefault(x => x.Id == tagId);
+        }
+
+        return _context.Tags.Find(tagId);
+    }
+
     public void RemoveTagsFromTasks(IEnumerable<TaskItem> taskList)
     {
         foreach (var taskItem in taskList)

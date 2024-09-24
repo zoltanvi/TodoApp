@@ -9,6 +9,7 @@ public interface ITaskItemRepository
     TaskItem AddTagToTask(TaskItem task, TagItem tag);
     TaskItem RemoveTagFromTask(TaskItem task, TagItem tag);
     TaskItem RemoveTagsFromTask(TaskItem task);
+    TagItem? GetTagById(int tagId, bool includeNavigation = false);
     void RemoveTagsFromTasks(IEnumerable<TaskItem> taskList);
     List<TaskItem> GetActiveTasksFromCategory(int categoryId, bool includeNavigation = false);
     List<TaskItem> GetDeletedTasksFromCategory(int categoryId, bool includeNavigation = false);

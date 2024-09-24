@@ -1,4 +1,5 @@
 ﻿using Modules.Common.DataModels;
+using Modules.Common.Helpers;
 using Modules.Tasks.Contracts.Models;
 using Modules.Tasks.Views.Pages;
 using Prism.Events;
@@ -26,7 +27,7 @@ public static class TagSelectionItemViewModelMappings
         return new TagSelectionItemViewModel(eventAggregator) {
             Id = tagItem.Id,
             Name = tagItem.Name,
-            Color = (TagColor)Enum.Parse(typeof(TagColor), tagItem.Color),
+            Color = EnumHelper.ConvertTo<TagColor>(tagItem.Color),
         };
     }
 

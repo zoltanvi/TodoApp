@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Modules.Common.DataModels;
+using Modules.Common.Helpers;
 using Modules.Settings.Views.Tag;
 using Modules.Tasks.Contracts.Models;
 
@@ -29,7 +30,7 @@ public static class TagItemViewModelMappings
             mediator, 
             tagItem.Id, 
             tagItem.Name,
-            (TagColor)Enum.Parse(typeof(TagColor), tagItem.Color));
+            EnumHelper.ConvertTo<TagColor>(tagItem.Color));
     }
 
     public static List<TagItemViewModel> MapToViewModelList(
