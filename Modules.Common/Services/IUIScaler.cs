@@ -5,7 +5,6 @@ namespace Modules.Common.Services;
 
 public interface IUIScaler
 {
-    double ColorPickerDropDownWidth { get; }
     double ColorPickerHeight { get; }
     double ColorPickerItemSize { get; }
     double ColorPickerWidth { get; }
@@ -21,9 +20,7 @@ public interface IUIScaler
     double SliderThumbHeight { get; }
     double SliderThumbWidth { get; }
     double ScrollbarWidth { get; }
-    double SideMenuMinimumWidth { get; }
-    double ColorPickerHalfWidth { get; }
-    double NotePageBoxWidth { get; }
+    double DbLocationTextBoxWidth { get; }
     double TaskProgressBarHeight { get; }
 
     void Setup(IMediator mediator, IEventAggregator eventAggregator);

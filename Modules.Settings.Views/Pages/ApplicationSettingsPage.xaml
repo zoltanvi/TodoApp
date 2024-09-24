@@ -131,6 +131,7 @@
                             Grid.Column="0"
                             Grid.ColumnSpan="3"
                             Background="{DynamicResource Surface5}"
+                            MaxWidth="{Binding UIScaler.DbLocationTextBoxWidth, Source={StaticResource UIScaler}}"
                             CornerRadius="4">
                             <TextBox
                                 Margin="5 5"
