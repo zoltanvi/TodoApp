@@ -96,4 +96,6 @@ public class CategoriesRepository : ICategoriesRepository
             .Where(x => !x.IsDeleted)
             .Count(x => x.Id != Constants.RecycleBinCategoryId);
     }
+
+    public Category? GetRecycleBin() => _context.Categories.Find(Constants.RecycleBinCategoryId);
 }

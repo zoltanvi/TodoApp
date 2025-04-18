@@ -13,4 +13,5 @@ public interface ICategoriesRepository
     Category UpdateCategory(Category category);
     void UpdateCategoryListOrders(List<Category> categories);
     int GetActiveCategoriesCount();
+    Category? GetRecycleBin();
 }
