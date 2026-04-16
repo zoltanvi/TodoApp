@@ -50,9 +50,9 @@ public class TaskItemRepository : ITaskItemRepository
         var dbTag = _context.Tags.Find(tag.Id);
         ArgumentNullException.ThrowIfNull(dbTag);
 
-        if (dbTask.Tags.Contains(tag))
+        if (dbTask.Tags.Any(t => t.Id == dbTag.Id))
         {
-            throw new ArgumentException($"Task is already tagged with {tag.Name}");
+            throw new ArgumentException($"Task is already tagged with {dbTag.Name}");
         }
 
         dbTask.Tags.Add(dbTag);
