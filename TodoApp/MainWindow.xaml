@@ -151,16 +151,10 @@
                     Name="OverlayFrameGrid"
                     Visibility="Collapsed">
 
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-
                     <Border
-                        Grid.Column="1"
-                        Margin="10"
-                        HorizontalAlignment="Center"
+                        Margin="40 10"
+                        MaxWidth="800"
+                        HorizontalAlignment="Stretch"
                         Background="{DynamicResource Background}"
                         BorderBrush="{DynamicResource Outline}"
                         BorderThickness="1"
@@ -172,7 +166,6 @@
                             attached:NoFrameHistory.Value="True" />
 
                     </Border>
-
 
                 </Grid>
 
