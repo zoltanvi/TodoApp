@@ -28,7 +28,7 @@ public class RenameActiveCategoryCommandHandler : IRequestHandler<RenameActiveCa
         _eventAggregator = eventAggregator;
     }
 
-    public Task<string> Handle(RenameActiveCategoryCommand request, CancellationToken cancellationToken)
+    public async Task<string> Handle(RenameActiveCategoryCommand request, CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(request.Name))
         {
@@ -45,12 +45,12 @@ public class RenameActiveCategoryCommandHandler : IRequestHandler<RenameActiveCa
         // TODO: show "do you want to merge it?" message instead
         if (duplicateCategory != null)
         {
-            _mediator.Send(new ShowMessageErrorCommand
+            await _mediator.Send(new ShowMessageErrorCommand
             {
                 Message = $"[{request.Name}] category already exist!"
             }, cancellationToken);
 
-            return Task.FromResult(category.Name);
+            return category.Name;
         }
         
         category.Name = request.Name;
@@ -64,6 +64,6 @@ public class RenameActiveCategoryCommandHandler : IRequestHandler<RenameActiveCa
                 CategoryName = updatedCategory.Name
             });
 
-        return Task.FromResult(updatedCategory.Name);
+        return updatedCategory.Name;
     }
 }
