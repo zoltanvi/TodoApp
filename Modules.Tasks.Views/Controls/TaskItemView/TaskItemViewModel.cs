@@ -89,7 +89,7 @@ public class TaskItemViewModel : BaseViewModel, ITaskItemViewModel
 
     public bool DetailsVisible { get; set; }
 
-    public List<TaskItemVersionViewModel> Versions { get; set; }
+    public List<TaskItemVersionViewModel> Versions { get; set; } = [];
 
     public ObservableCollection<TagItemOnTaskViewModel> Tags { get; set; }
     public int VersionCount => Versions.Count;
