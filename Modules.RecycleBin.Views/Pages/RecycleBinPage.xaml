@@ -93,46 +93,36 @@
                     </ListView.ItemTemplate>
                 </ListView>
 
-                <!--  EMPTY RECYCLE BIN LABEL  -->
+                <!--  EMPTY RECYCLE BIN  -->
                 <Grid
                     Grid.Row="1"
+                    IsHitTestVisible="False"
                     Visibility="{Binding IsEmpty, Converter={StaticResource BoolToVisibilityConverter}}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-
-                    <Viewbox
-                        Grid.Row="1"
-                        Grid.Column="1">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-
-                            <Label
-                                Grid.Row="0"
-                                HorizontalAlignment="Center"
-                                Content="{StaticResource IconTrash}"
-                                Style="{StaticResource LabelIconStyle}" />
-
-                            <Label
-                                Grid.Row="1"
-                                Padding="0"
-                                HorizontalAlignment="Center"
-                                Content="Empty"
-                                Foreground="{DynamicResource OnBackground}" />
-                        </Grid>
-                    </Viewbox>
-
+                    <StackPanel
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Opacity="0.45">
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            FontFamily="{StaticResource IconFont}"
+                            FontSize="{Binding UIScaler.FontSize.Giant, Source={StaticResource UIScaler}}"
+                            Foreground="{DynamicResource OnSurfaceVariant}"
+                            Text="{StaticResource IconTrash}" />
+                        <TextBlock
+                            Margin="0 10 0 0"
+                            HorizontalAlignment="Center"
+                            FontFamily="{DynamicResource UIFont}"
+                            FontSize="{Binding UIScaler.FontSize.Large, Source={StaticResource UIScaler}}"
+                            Foreground="{DynamicResource OnSurfaceVariant}"
+                            Text="Recycle bin is empty" />
+                        <TextBlock
+                            Margin="0 4 0 0"
+                            HorizontalAlignment="Center"
+                            FontFamily="{DynamicResource UIFont}"
+                            FontSize="{Binding UIScaler.FontSize.Small, Source={StaticResource UIScaler}}"
+                            Foreground="{DynamicResource Outline}"
+                            Text="Deleted tasks will appear here" />
+                    </StackPanel>
                 </Grid>
 
             </Grid>

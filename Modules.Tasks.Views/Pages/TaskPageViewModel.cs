@@ -125,6 +125,8 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
     public bool IsCategoryNameTitleVisible => AppSettings.Instance.PageTitleSettings.Visible && !IsCategoryInEditMode;
     public bool IsCategoryNameTitleEditorVisible => AppSettings.Instance.PageTitleSettings.Visible && IsCategoryInEditMode;
 
+    public bool IsEmpty => Items.Count == 0;
+
     public int TaskCount { get; private set; } = 1000;
     public int FinishedTaskCount { get; private set; } = 555;
 
@@ -326,6 +328,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
     {
         TaskCount = Items.Count;
         FinishedTaskCount = Items.Count(x => x.IsDone);
+        OnPropertyChanged(nameof(IsEmpty));
     }
 
     private void OnPageTitleSettingsChanged(object? sender, SettingsChangedEventArgs e)
@@ -665,6 +668,8 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
                 FixItemsListOrders(persist: true);
 
                 _ignoreCollectionChange = false;
+
+                RecalculateProgress();
             }
         }
         catch (Exception ex)
@@ -833,6 +838,8 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
                 FixItemsListOrders();
             
                 _ignoreCollectionChange = false;
+
+                RecalculateProgress();
             }
         }
         catch (Exception ex)
@@ -861,6 +868,8 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
                 FixItemsListOrders();
 
                 _ignoreCollectionChange = false;
+
+                RecalculateProgress();
             }
         }
         catch (Exception ex)

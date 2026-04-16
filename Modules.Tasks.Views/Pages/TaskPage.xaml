@@ -193,6 +193,38 @@
                 </ListView>
 
 
+                <!--  EMPTY STATE  -->
+                <Grid
+                    Grid.Row="1"
+                    IsHitTestVisible="False"
+                    Visibility="{Binding IsEmpty, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <StackPanel
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Opacity="0.45">
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            FontFamily="{StaticResource IconFont}"
+                            FontSize="{Binding UIScaler.FontSize.Giant, Source={StaticResource UIScaler}}"
+                            Foreground="{DynamicResource OnSurfaceVariant}"
+                            Text="&#xE133;" />
+                        <TextBlock
+                            Margin="0 10 0 0"
+                            HorizontalAlignment="Center"
+                            FontFamily="{DynamicResource UIFont}"
+                            FontSize="{Binding UIScaler.FontSize.Large, Source={StaticResource UIScaler}}"
+                            Foreground="{DynamicResource OnSurfaceVariant}"
+                            Text="No tasks yet" />
+                        <TextBlock
+                            Margin="0 4 0 0"
+                            HorizontalAlignment="Center"
+                            FontFamily="{DynamicResource UIFont}"
+                            FontSize="{Binding UIScaler.FontSize.Small, Source={StaticResource UIScaler}}"
+                            Foreground="{DynamicResource Outline}"
+                            Text="Add a new task below to get started" />
+                    </StackPanel>
+                </Grid>
+
                 <!--  PROGRESS BAR  -->
                 <Grid
                     Grid.Row="2"
