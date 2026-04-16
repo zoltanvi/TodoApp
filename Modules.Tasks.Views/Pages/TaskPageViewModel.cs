@@ -522,7 +522,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
             {
                 sortedItems = request.Ascending
                     ? Items.OrderBy(x => x.Content.GetContentInPlainText())
-                    : Items.OrderByDescending(x => x.Content.PlainTextContent);
+                    : Items.OrderByDescending(x => x.Content.GetContentInPlainText());
                 break;
             }
             default:
