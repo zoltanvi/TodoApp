@@ -90,19 +90,22 @@ public static class Program
     {
         DbConfiguration.Initialize(serviceProvider.GetRequiredService<IConfiguration>());
 
-        var migrationService = serviceProvider.GetRequiredService<IMigrationService>();
+        using var scope = serviceProvider.CreateScope();
+        var scopedProvider = scope.ServiceProvider;
+
+        var migrationService = scopedProvider.GetRequiredService<IMigrationService>();
 
         var dbContextList = new List<DbContext>
         {
-            serviceProvider.GetRequiredService<SettingDbContext>(),
-            serviceProvider.GetRequiredService<CategoryDbContext>(),
-            serviceProvider.GetRequiredService<TaskItemDbContext>()
+            scopedProvider.GetRequiredService<SettingDbContext>(),
+            scopedProvider.GetRequiredService<CategoryDbContext>(),
+            scopedProvider.GetRequiredService<TaskItemDbContext>()
         };
 
         migrationService.Run(dbContextList);
 
         // Create default data
-        var defaultDataCreator = serviceProvider.GetRequiredService<DefaultDataCreator>();
+        var defaultDataCreator = scopedProvider.GetRequiredService<DefaultDataCreator>();
         defaultDataCreator.CreateDefaultsIfNeeded();
     }
 

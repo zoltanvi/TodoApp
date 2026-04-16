@@ -1,4 +1,5 @@
-﻿using Modules.Common.Views.Services;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Modules.Common.Views.Services;
 using Modules.Settings.Contracts.ViewModels;
 using Modules.Settings.Services;
 
@@ -6,12 +7,12 @@ namespace Modules.Settings.Views.Services;
 
 public class AppSettingsAutoSaveService : IAppSettingsAutoSaveService
 {
-    private readonly IAppSettingsService _appSettingsService;
+    private readonly IServiceProvider _serviceProvider;
 
-    public AppSettingsAutoSaveService(IAppSettingsService appSettingsService)
+    public AppSettingsAutoSaveService(IServiceProvider serviceProvider)
     {
-        ArgumentNullException.ThrowIfNull(appSettingsService);
-        _appSettingsService = appSettingsService;
+        ArgumentNullException.ThrowIfNull(serviceProvider);
+        _serviceProvider = serviceProvider;
     }
 
     public void StartService()
@@ -23,7 +24,9 @@ public class AppSettingsAutoSaveService : IAppSettingsAutoSaveService
     {
         if (AppSettings.Instance.IsDirty())
         {
-            _appSettingsService.UpdateDatabaseFromAppSettings(AppSettings.Instance);
+            using var scope = _serviceProvider.CreateScope();
+            var appSettingsService = scope.ServiceProvider.GetRequiredService<IAppSettingsService>();
+            appSettingsService.UpdateDatabaseFromAppSettings(AppSettings.Instance);
             AppSettings.Instance.Clean();
         }
     }
