@@ -39,6 +39,8 @@ public class RecycleBinRepository
 
         dbTask.IsDeleted = false;
         dbTask.DeletedDate = null;
+        dbTask.IsDone = false;
+        dbTask.Pinned = false;
         dbTask.ListOrder = newListOrder;
 
         _context.SaveChanges();
