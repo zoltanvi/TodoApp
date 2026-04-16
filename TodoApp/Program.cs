@@ -78,12 +78,14 @@ public static class Program
 
     private static void AddMediatR(IServiceCollection services)
     {
-        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<App>());
-        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<SettingsCqrsRegistration>());
-        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<PopupMessageCqrsRegistration>());
-        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<CategoriesCqrsRegistration>());
-        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<TasksCqrsRegistration>());
-        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<TaskServicesCqrsRegistration>());
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(
+            typeof(App).Assembly,
+            typeof(SettingsCqrsRegistration).Assembly,
+            typeof(PopupMessageCqrsRegistration).Assembly,
+            typeof(CategoriesCqrsRegistration).Assembly,
+            typeof(TasksCqrsRegistration).Assembly,
+            typeof(TaskServicesCqrsRegistration).Assembly
+        ));
     }
 
     public static void InitializeDatabase(this IServiceProvider serviceProvider)
