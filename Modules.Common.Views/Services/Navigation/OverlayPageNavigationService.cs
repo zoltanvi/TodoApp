@@ -22,8 +22,8 @@ public class OverlayPageNavigationService : NavigationService, IOverlayPageNavig
         Background = background as UIElement;
         Grid = grid as UIElement;
 
-        ArgumentNullException.ThrowIfNull(background);
-        ArgumentNullException.ThrowIfNull(grid);
+        ArgumentNullException.ThrowIfNull(Background);
+        ArgumentNullException.ThrowIfNull(Grid);
 
         // Add mouse down trigger to the background that closes the overlay page.
         var eventTrigger = new EventTrigger("MouseDown");
