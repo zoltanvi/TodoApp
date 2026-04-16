@@ -151,6 +151,9 @@ public class RecycleBinPageViewModel : BaseViewModel
 
     private void InitializeGroupItems()
     {
+        GroupItemsView = CollectionViewSource.GetDefaultView(GroupItems);
+        GroupItemsView.Filter = FilterGroupItems;
+
         var deletedTasksGroupByCategory = _recycleBinRepository.GetDeletedTasksGroupByCategory();
 
         if (deletedTasksGroupByCategory.Count == 0) return;
@@ -178,9 +181,6 @@ public class RecycleBinPageViewModel : BaseViewModel
                 CategoryName = category.Name,
             });
         }
-
-        GroupItemsView = CollectionViewSource.GetDefaultView(GroupItems);
-        GroupItemsView.Filter = FilterGroupItems;
 
         OnPropertyChanged(nameof(IsEmpty));
     }
