@@ -27,8 +27,12 @@ public class CategoriesRepository : ICategoriesRepository
 
     public Category? GetCategoryById(int id) => _context.Categories.Find(id);
 
-    public Category? GetCategoryByName(string name) =>
-        _context.Categories.FirstOrDefault(c => c.Name.ToUpper() == name.ToUpper());
+    public Category? GetCategoryByName(string name)
+    {
+        ArgumentNullException.ThrowIfNull(name);
+
+        return _context.Categories.FirstOrDefault(c => c.Name.ToUpper() == name.ToUpper());
+    }
 
     public List<Category> GetActiveCategories()
     {
