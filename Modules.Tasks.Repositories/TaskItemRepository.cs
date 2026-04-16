@@ -386,7 +386,7 @@ public class TaskItemRepository : ITaskItemRepository
         dbTask.BorderColor = taskItem.BorderColor;
         dbTask.BackgroundColor = taskItem.BackgroundColor;
 
-        if (!dbTask.Content.Equals(taskItem.Content))
+        if (!string.Equals(dbTask.Content, taskItem.Content, StringComparison.Ordinal))
         {
             var oldVersion = new TaskItemVersion
             {
