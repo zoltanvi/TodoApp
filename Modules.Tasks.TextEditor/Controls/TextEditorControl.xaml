@@ -134,7 +134,8 @@
                         x:Name="IsEditorOpenToggle"
                         Margin="0 2 0 0"
                         IsChecked="{Binding IsToolbarOpen}"
-                        Style="{StaticResource TextEditorArrowToggleButtonStyle}" />
+                        Style="{StaticResource TextEditorArrowToggleButtonStyle}"
+                        ToolTip="Toggle formatting toolbar" />
                 </Border>
 
             </Border>

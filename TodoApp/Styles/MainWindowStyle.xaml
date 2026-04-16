@@ -94,7 +94,8 @@
                                                     Grid.Column="0"
                                                     Command="{Binding ToggleSideMenuCommand}"
                                                     Style="{StaticResource ButtonTitleBarLeftStyle}"
-                                                    Tag="{Binding IsRoundedCornersAllowed}">
+                                                    Tag="{Binding IsRoundedCornersAllowed}"
+                                                    ToolTip="Toggle sidebar">
                                                     <Grid
                                                         HorizontalAlignment="Center"
                                                         VerticalAlignment="Center">
@@ -179,7 +180,8 @@
                                                     <Button
                                                         Name="MinimizeWindow"
                                                         Command="{Binding MinimizeCommand}"
-                                                        Style="{StaticResource ButtonTitleBarStyle}">
+                                                        Style="{StaticResource ButtonTitleBarStyle}"
+                                                        ToolTip="Minimize">
                                                         <Viewbox
                                                             Width="11"
                                                             Height="12">
@@ -193,7 +195,8 @@
                                                     <!--  MAXIMIZE  -->
                                                     <Button
                                                         Command="{Binding MaximizeCommand}"
-                                                        Style="{DynamicResource ButtonTitleBarStyle}">
+                                                        Style="{DynamicResource ButtonTitleBarStyle}"
+                                                        ToolTip="Maximize">
                                                         <Grid>
                                                             <Viewbox
                                                                 Width="11"
@@ -222,7 +225,8 @@
                                                         Name="CloseWindow"
                                                         Command="{Binding CloseCommand}"
                                                         Style="{StaticResource ButtonTitleBarCloseWindowStyle}"
-                                                        Tag="{Binding IsRoundedCornersAllowed}">
+                                                        Tag="{Binding IsRoundedCornersAllowed}"
+                                                        ToolTip="Close">
                                                         <Viewbox
                                                             Width="11"
                                                             Height="11">

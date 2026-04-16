@@ -79,6 +79,7 @@
                                         Cursor="Hand"
                                         FontSize="{Binding UIScaler.FontSize.Small, Source={StaticResource UIScaler}}"
                                         Style="{StaticResource ButtonIconCloseStyle}"
+                                        ToolTip="Delete category"
                                         Visibility="Hidden">
 
                                         <Label
