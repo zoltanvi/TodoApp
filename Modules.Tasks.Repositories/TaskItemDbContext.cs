@@ -29,6 +29,11 @@ public class TaskItemDbContext : DbContext
             v => DateTime.ParseExact(v, Constants.SortableDateFormat, null)
         );
 
+        var nullableDateTimeConverter = new ValueConverter<DateTime?, string?>(
+            v => v.HasValue ? v.Value.ToString(Constants.SortableDateFormat) : null,
+            v => v != null ? DateTime.ParseExact(v, Constants.SortableDateFormat, null) : null
+        );
+
         modelBuilder.Entity<TaskItem>(entity =>
         {
             entity.HasKey(e => e.Id);
@@ -70,7 +75,7 @@ public class TaskItemDbContext : DbContext
 
             entity
                 .Property(e => e.DeletedDate)
-                .HasConversion(dateTimeConverter);
+                .HasConversion(nullableDateTimeConverter);
 
             entity
                 .HasMany(e => e.Reminders)
