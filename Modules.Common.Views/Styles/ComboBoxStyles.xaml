@@ -93,9 +93,9 @@
                             Margin="10 3 0 3"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Center"
-                            Background="#FFC15C5C"
+                            Background="{DynamicResource SurfaceVariant}"
                             Focusable="True"
-                            Foreground="LightBlue"
+                            Foreground="{DynamicResource OnSurface}"
                             IsReadOnly="{TemplateBinding IsReadOnly}"
                             Style="{x:Null}"
                             Template="{StaticResource ComboBoxTextBox}"
@@ -131,7 +131,7 @@
                             <Setter TargetName="DropDownBorder" Property="MinHeight" Value="95" />
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="false">
-                            <Setter Property="Foreground" Value="#888888" />
+                            <Setter Property="Foreground" Value="{DynamicResource OnSurfaceVariant}" />
                         </Trigger>
                         <Trigger Property="IsGrouping" Value="true">
                             <Setter Property="ScrollViewer.CanContentScroll" Value="false" />

@@ -104,12 +104,10 @@
         <ControlTemplate.Triggers>
             <Trigger Property="TickPlacement" Value="TopLeft">
                 <Setter TargetName="TopTick" Property="Visibility" Value="Visible" />
-                <Setter TargetName="Thumb" Property="Template" Value="{StaticResource SliderThumbHorizontalTop}" />
                 <Setter TargetName="TrackBackground" Property="Margin" Value="5 2 5 0" />
             </Trigger>
             <Trigger Property="TickPlacement" Value="BottomRight">
                 <Setter TargetName="BottomTick" Property="Visibility" Value="Visible" />
-                <Setter TargetName="Thumb" Property="Template" Value="{StaticResource SliderThumbHorizontalBottom}" />
                 <Setter TargetName="TrackBackground" Property="Margin" Value="5 0 5 2" />
             </Trigger>
             <Trigger Property="TickPlacement" Value="Both">
@@ -120,7 +118,7 @@
                 <Setter TargetName="PART_SelectionRange" Property="Visibility" Value="Visible" />
             </Trigger>
             <Trigger Property="IsKeyboardFocused" Value="true">
-                <Setter TargetName="Thumb" Property="Foreground" Value="yellow" />
+                <Setter TargetName="Thumb" Property="Foreground" Value="{DynamicResource Primary}" />
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
@@ -132,7 +130,7 @@
         <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="{DynamicResource Outline}" />
-        <Setter Property="Foreground" Value="Lime" />
+        <Setter Property="Foreground" Value="{DynamicResource Outline}" />
         <Setter Property="Template" Value="{StaticResource SliderHorizontal}" />
     </Style>
 

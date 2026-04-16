@@ -57,7 +57,7 @@
                 <!--  Close side menu on page change  -->
                 <controls:ToggleButtonSettingControl
                     Description="Close side menu on page change"
-                    Icon="{StaticResource IconMinimizeToTray}"
+                    Icon="{StaticResource IconList}"
                     IsChecked="{Binding AppSettings.ApplicationSettings.CloseSideMenuOnPageChange, Source={StaticResource AppSettings}, Mode=TwoWay}" />
 
 

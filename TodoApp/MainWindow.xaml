@@ -50,7 +50,7 @@
             <Border
                 x:Name="ReferenceBorder"
                 Grid.Column="0"
-                Background="#00000000" />
+                Background="Transparent" />
         </Grid>
         <Grid x:Name="Grid">
 
