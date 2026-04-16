@@ -152,7 +152,7 @@
                         <ContentPresenter
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
-                            TextOptions.TextFormattingMode="Display"
+                            TextOptions.TextFormattingMode="Ideal"
                             TextOptions.TextHintingMode="Fixed"
                             TextOptions.TextRenderingMode="ClearType" />
                     </Grid>

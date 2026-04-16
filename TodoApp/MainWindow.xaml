@@ -14,6 +14,7 @@
     MinHeight="{Binding WindowMinimumHeight}"
     d:DataContext="{d:DesignInstance Type=todoApp:MainWindowViewModel}"
     AllowsTransparency="True"
+    UseLayoutRounding="True"
     WindowStartupLocation="CenterScreen"
     WindowStyle="None"
     mc:Ignorable="d">

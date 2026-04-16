@@ -83,7 +83,7 @@
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
                         CornerRadius="4"
-                        TextOptions.TextFormattingMode="Display"
+                        TextOptions.TextFormattingMode="Ideal"
                         TextOptions.TextHintingMode="Fixed"
                         TextOptions.TextRenderingMode="ClearType">
                         <ContentPresenter
@@ -183,7 +183,7 @@
         <Setter Property="Background" Value="{DynamicResource Surface1}" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="Margin" Value="2 0" />
-        <Setter Property="Padding" Value="3" />
+        <Setter Property="Padding" Value="2" />
         <Setter Property="FontSize" Value="{Binding UIScaler.FontSize.RegularIcon, Source={StaticResource UIScaler}}" />
         <Setter Property="FontFamily" Value="{StaticResource IconFont}" />
         <Setter Property="Foreground" Value="{DynamicResource OnBackground}" />
@@ -206,7 +206,7 @@
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Margin="{TemplateBinding Padding}"
-                            TextOptions.TextFormattingMode="Display"
+                            TextOptions.TextFormattingMode="Ideal"
                             TextOptions.TextHintingMode="Fixed"
                             TextOptions.TextRenderingMode="ClearType" />
                     </Grid>

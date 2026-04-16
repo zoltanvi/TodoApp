@@ -239,7 +239,7 @@
                             <Border Grid.Column="0">
                                 <Border
                                     Name="PaddingBorder"
-                                    Padding="3"
+                                    Padding="2"
                                     Background="Transparent">
                                     <Border
                                         x:Name="PART_selectedColorBorder"
