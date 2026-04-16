@@ -82,7 +82,7 @@ public class RecycleBinPageViewModel : BaseViewModel
         ArgumentNullException.ThrowIfNull(group);
 
         var task = group.Items.First(x => x.Id == payload.TaskId);
-        ArgumentNullException.ThrowIfNull(group);
+        ArgumentNullException.ThrowIfNull(task);
 
         group.Items.Remove(task);
 
