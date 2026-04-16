@@ -58,7 +58,7 @@ public class RestoreTaskItemsInCategoryCommandHandler : IRequestHandler<RestoreT
             PositionChangeReason = PositionChangeReason.Restored
         };
 
-        var newStartIndex = _mediator.Send(query, cancellationToken).Result;
+        var newStartIndex = await _mediator.Send(query, cancellationToken);
 
         _taskItemRepository.RestoreTasksInCategory(request.CategoryId, newStartIndex);
 

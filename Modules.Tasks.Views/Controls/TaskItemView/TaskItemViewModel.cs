@@ -111,7 +111,7 @@ public class TaskItemViewModel : BaseViewModel, ITaskItemViewModel
         _oneEditorOpenService.EditMode(this);
     }
 
-    public void ExitEditItem()
+    public async void ExitEditItem()
     {
         if (Content.IsEmpty)
         {
@@ -120,11 +120,10 @@ public class TaskItemViewModel : BaseViewModel, ITaskItemViewModel
         }
         else if (Content.GetContent() != _contentRollback)
         {
-            //Modifications are accepted, update task
             ModificationDate = DateTime.Now;
             UpdateTask();
 
-            var versionList = _mediator.Send(new TaskItemVersionsQuery { TaskId = Id }).Result;
+            var versionList = await _mediator.Send(new TaskItemVersionsQuery { TaskId = Id });
             Versions = versionList.MapToViewModelList(_mediator);
 
             OnPropertyChanged(nameof(Versions));
@@ -136,9 +135,9 @@ public class TaskItemViewModel : BaseViewModel, ITaskItemViewModel
         _oneEditorOpenService.DisplayMode(this);
     }
 
-    void ITaskItemViewModel.UpdateHistory()
+    async void ITaskItemViewModel.UpdateHistory()
     {
-        var versionList = _mediator.Send(new TaskItemVersionsQuery { TaskId = Id }).Result;
+        var versionList = await _mediator.Send(new TaskItemVersionsQuery { TaskId = Id });
         Versions = versionList.MapToViewModelList(_mediator);
 
         OnPropertyChanged(nameof(Versions));

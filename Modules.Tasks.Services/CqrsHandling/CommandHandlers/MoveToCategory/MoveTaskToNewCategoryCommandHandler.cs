@@ -33,7 +33,7 @@ public class MoveTaskToNewCategoryCommandHandler : IRequestHandler<MoveTaskToNew
         _mediator = mediator;
     }
 
-    public Task Handle(MoveTaskToNewCategoryCommand request, CancellationToken cancellationToken)
+    public async Task Handle(MoveTaskToNewCategoryCommand request, CancellationToken cancellationToken)
     {
         var dbTask = _taskItemRepository.GetTaskById(request.TaskId);
         ArgumentNullException.ThrowIfNull(dbTask);
@@ -43,19 +43,18 @@ public class MoveTaskToNewCategoryCommandHandler : IRequestHandler<MoveTaskToNew
 
         if (request.CategoryId == dbTask.CategoryId)
         {
-            return Task.CompletedTask;
+            return;
         }
 
         var oldCategoryId = dbTask.CategoryId;
         var newCategoryId = request.CategoryId;
 
-        // The moved task should be inserted to the correct position
-        var newListOrder = _mediator.Send(
+        var newListOrder = await _mediator.Send(
             new TaskMoveToCategoryInsertPositionQuery
             {
                 TaskId = dbTask.Id,
                 CategoryId = newCategoryId
-            }, cancellationToken).Result;
+            }, cancellationToken);
 
         // Filter out the task that we want to insert into the correct position
         var newCategoryTasks = _taskItemRepository.GetActiveTasksFromCategory(newCategoryId)
@@ -87,8 +86,6 @@ public class MoveTaskToNewCategoryCommandHandler : IRequestHandler<MoveTaskToNew
                 OldCategoryId = oldCategoryId,
                 NewCategoryId = newCategoryId
             });
-
-        return Task.CompletedTask;
     }
 }
 

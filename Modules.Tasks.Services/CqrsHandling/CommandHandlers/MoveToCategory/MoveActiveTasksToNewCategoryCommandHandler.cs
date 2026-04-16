@@ -27,7 +27,7 @@ public class MoveActiveTasksToNewCategoryCommandHandler :
         return oldCategoryTasks;
     }
 
-    protected override void InsertTasksToNewCategory(
+    protected override async Task InsertTasksToNewCategory(
         int newCategoryId,
         List<TaskItem> oldCategoryTasks,
         List<TaskItem> newCategoryTasks,
@@ -37,7 +37,7 @@ public class MoveActiveTasksToNewCategoryCommandHandler :
         var oldNonPinnedTasks = oldCategoryTasks.Where(x => !x.Pinned).ToList();
 
         // Move pinned tasks to category
-        InsertTasksToList(
+        await InsertTasksToList(
             sourceList: oldPinnedTasks,
             destinationList: newCategoryTasks,
             destinationCategoryId: newCategoryId,
@@ -46,7 +46,7 @@ public class MoveActiveTasksToNewCategoryCommandHandler :
         TaskItemRepository.MoveTasksToCategory(oldPinnedTasks, newCategoryId);
 
         // Move non-pinned tasks to category
-        InsertTasksToList(
+        await InsertTasksToList(
             sourceList: oldNonPinnedTasks,
             destinationList: newCategoryTasks,
             destinationCategoryId: newCategoryId,

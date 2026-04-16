@@ -31,7 +31,7 @@ public class SplitTaskLinesCommandHandler : IRequestHandler<SplitTaskLinesComman
         _eventAggregator = eventAggregator;
     }
 
-    public Task Handle(SplitTaskLinesCommand request, CancellationToken cancellationToken)
+    public async Task Handle(SplitTaskLinesCommand request, CancellationToken cancellationToken)
     {
         var dbTask = _taskItemRepository.GetTaskById(request.TaskId);
         ArgumentNullException.ThrowIfNull(dbTask);
@@ -47,8 +47,7 @@ public class SplitTaskLinesCommandHandler : IRequestHandler<SplitTaskLinesComman
             splitContent = FlowDocumentSplitByLineHelper.SplitByLines(dbTask.Content);
         }
 
-        // The first new listOrder
-        var startingListOrder = _mediator.Send(new TaskCreationListOrderQuery { CategoryId = dbTask.CategoryId }, cancellationToken).Result;
+        var startingListOrder = await _mediator.Send(new TaskCreationListOrderQuery { CategoryId = dbTask.CategoryId }, cancellationToken);
 
         var taskList = new List<TaskItem>();
         foreach (var lineContent in splitContent)
@@ -91,7 +90,5 @@ public class SplitTaskLinesCommandHandler : IRequestHandler<SplitTaskLinesComman
         _taskItemRepository.UpdateTaskListOrders(otherTasksInCategory);
 
         _eventAggregator.GetEvent<TaskSplittedByLinesEvent>().Publish(dbTask.CategoryId);
-
-        return Task.CompletedTask;
     }
 }

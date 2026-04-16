@@ -93,7 +93,8 @@ public class TaskItemCommandsViewModel : BaseViewModel
     {
         get
         {
-            var inactiveCategoryInfos = _mediator.Send(new GetInactiveCategoriesQuery()).Result;
+            var inactiveCategoryInfos = _mediator.Send(new GetInactiveCategoriesQuery())
+                .ConfigureAwait(false).GetAwaiter().GetResult();
             var inactiveCategories =
                 new ObservableCollection<MoveToCategoryViewModel>(inactiveCategoryInfos.Select(x =>
                     new MoveToCategoryViewModel { Id = x.Id, Name = x.Name }));

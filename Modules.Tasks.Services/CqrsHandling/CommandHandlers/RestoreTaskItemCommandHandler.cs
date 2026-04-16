@@ -54,7 +54,7 @@ public class RestoreTaskItemCommandHandler : IRequestHandler<RestoreTaskItemComm
             PositionChangeReason = PositionChangeReason.Restored
         };
 
-        var newIndex = _mediator.Send(query, cancellationToken).Result;
+        var newIndex = await _mediator.Send(query, cancellationToken);
 
         _taskItemRepository.RestoreTask(dbTask, newIndex);
 

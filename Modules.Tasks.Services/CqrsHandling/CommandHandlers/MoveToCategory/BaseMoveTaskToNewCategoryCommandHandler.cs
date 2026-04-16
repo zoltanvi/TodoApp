@@ -36,24 +36,24 @@ public abstract class BaseMoveTaskToNewCategoryCommandHandler
 
     protected abstract List<TaskItem> GetOldCategoryTasks(int oldCategoryId);
 
-    protected virtual void InsertTasksToNewCategory(
+    protected virtual async Task InsertTasksToNewCategory(
         int newCategoryId,
         List<TaskItem> oldCategoryTasks,
         List<TaskItem> newCategoryTasks,
         CancellationToken cancellationToken)
     {
-        InsertTasksToList(oldCategoryTasks, newCategoryTasks, newCategoryId, cancellationToken);
+        await InsertTasksToList(oldCategoryTasks, newCategoryTasks, newCategoryId, cancellationToken);
         TaskItemRepository.MoveTasksToCategory(oldCategoryTasks, newCategoryId);
     }
 
-    protected Task HandleInternal(
+    protected async Task HandleInternal(
         int oldCategoryId,
         int newCategoryId,
         CancellationToken cancellationToken)
     {
         if (oldCategoryId == newCategoryId)
         {
-            return Task.CompletedTask;
+            return;
         }
 
         var dbCategory = _categoriesRepository.GetCategoryById(newCategoryId);
@@ -64,7 +64,7 @@ public abstract class BaseMoveTaskToNewCategoryCommandHandler
         var newCategoryTasks = TaskItemRepository.GetActiveTasksFromCategory(newCategoryId);
         ArgumentNullException.ThrowIfNull(newCategoryTasks);
 
-        InsertTasksToNewCategory(newCategoryId, oldCategoryTasks, newCategoryTasks, cancellationToken);
+        await InsertTasksToNewCategory(newCategoryId, oldCategoryTasks, newCategoryTasks, cancellationToken);
 
         var stayedInOldCategoryTasks = TaskItemRepository.GetActiveTasksFromCategory(oldCategoryId);
         ArgumentNullException.ThrowIfNull(stayedInOldCategoryTasks);
@@ -85,11 +85,9 @@ public abstract class BaseMoveTaskToNewCategoryCommandHandler
             OldCategoryId = oldCategoryId,
             NewCategoryId = newCategoryId
         });
-
-        return Task.CompletedTask;
     }
 
-    protected void InsertTasksToList(
+    protected async Task InsertTasksToList(
         List<TaskItem> sourceList,
         List<TaskItem> destinationList,
         int destinationCategoryId,
@@ -97,14 +95,13 @@ public abstract class BaseMoveTaskToNewCategoryCommandHandler
     {
         if (sourceList.Count != 0)
         {
-            var startingIndex = _mediator.Send(
+            var startingIndex = await _mediator.Send(
                 new TaskMoveToCategoryInsertPositionQuery
                 {
                     TaskId = sourceList.First().Id,
                     CategoryId = destinationCategoryId
-                }, cancellationToken).Result;
+                }, cancellationToken);
 
-            // Insert the pinned tasks into the correct position in local list
             foreach (TaskItem taskItem in sourceList)
             {
                 destinationList.Insert(startingIndex, taskItem);

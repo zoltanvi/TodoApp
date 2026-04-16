@@ -64,7 +64,8 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         _oneEditorOpenService = oneEditorOpenService;
         _eventAggregator = eventAggregator;
 
-        var activeCategoryInfo = _mediator.Send(new GetSelectedCategoryQuery()).Result;
+        var activeCategoryInfo = _mediator.Send(new GetSelectedCategoryQuery())
+            .ConfigureAwait(false).GetAwaiter().GetResult();
 
         ActiveCategoryName = activeCategoryInfo.Name;
 
@@ -226,12 +227,12 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         return false;
     }
 
-    private void AddTaskItem()
+    private async void AddTaskItem()
     {
         if (!NewContentViewModel.IsEmpty)
         {
-            var activeCategory = _mediator.Send(new GetSelectedCategoryQuery()).Result;
-            var newListOrder = _mediator.Send(new TaskCreationListOrderQuery { CategoryId = activeCategory.Id }).Result;
+            var activeCategory = await _mediator.Send(new GetSelectedCategoryQuery());
+            var newListOrder = await _mediator.Send(new TaskCreationListOrderQuery { CategoryId = activeCategory.Id });
             var isLastItem = newListOrder == Items.Count;
 
             var task = new TaskItem
@@ -282,18 +283,18 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         }
     }
 
-    private void EditCategory()
+    private async void EditCategory()
     {
         IsCategoryInEditMode = true;
-        var activeCategory = _mediator.Send(new GetSelectedCategoryQuery()).Result;
+        var activeCategory = await _mediator.Send(new GetSelectedCategoryQuery());
         RenameCategoryContent = activeCategory.Name;
     }
 
-    private void FinishCategoryEdit()
+    private async void FinishCategoryEdit()
     {
         if (ActiveCategoryName != RenameCategoryContent)
         {
-            var newName = _mediator.Send(new RenameActiveCategoryCommand { Name = RenameCategoryContent }).Result;
+            var newName = await _mediator.Send(new RenameActiveCategoryCommand { Name = RenameCategoryContent });
             ActiveCategoryName = newName;
         }
 
@@ -364,7 +365,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
             RequestedInsertPosition = dropIndex
         };
 
-        return _mediator.Send(query).Result;
+        return _mediator.Send(query).ConfigureAwait(false).GetAwaiter().GetResult();
     }
 
     private void SetFirstItem()
@@ -389,7 +390,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         _taskItemRepository.DeleteTask(taskItem.Map());
     }
 
-    private void OnPinTaskItemRequested(int taskId)
+    private async void OnPinTaskItemRequested(int taskId)
     {
         var taskItem = Items.FirstOrDefault(x => x.Id == taskId);
         ArgumentNullException.ThrowIfNull(taskItem);
@@ -406,12 +407,12 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
             PositionChangeReason = PositionChangeReason.Pinned
         };
 
-        var newIndex = _mediator.Send(query).Result;
+        var newIndex = await _mediator.Send(query);
 
         MoveTaskItem(newIndex, taskItem);
     }
 
-    private void OnUnpinTaskItemRequested(int taskId)
+    private async void OnUnpinTaskItemRequested(int taskId)
     {
         var taskItem = Items.FirstOrDefault(x => x.Id == taskId);
         ArgumentNullException.ThrowIfNull(taskItem);
@@ -426,12 +427,12 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
             PositionChangeReason = PositionChangeReason.Unpinned
         };
 
-        var newIndex = _mediator.Send(query).Result;
+        var newIndex = await _mediator.Send(query);
 
         MoveTaskItem(newIndex, taskItem);
     }
 
-    private void OnFinishTaskItemRequested(int taskId)
+    private async void OnFinishTaskItemRequested(int taskId)
     {
         var taskItem = Items.FirstOrDefault(x => x.Id == taskId);
         ArgumentNullException.ThrowIfNull(taskItem);
@@ -448,12 +449,12 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
             PositionChangeReason = PositionChangeReason.Done
         };
 
-        var newIndex = _mediator.Send(query).Result;
+        var newIndex = await _mediator.Send(query);
 
         MoveTaskItem(newIndex, taskItem);
     }
 
-    private void OnUnfinishTaskItemRequested(int taskId)
+    private async void OnUnfinishTaskItemRequested(int taskId)
     {
         var taskItem = Items.FirstOrDefault(x => x.Id == taskId);
         ArgumentNullException.ThrowIfNull(taskItem);
@@ -469,7 +470,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
             PositionChangeReason = PositionChangeReason.Undone
         };
 
-        var newIndex = _mediator.Send(query).Result;
+        var newIndex = await _mediator.Send(query);
 
         MoveTaskItem(newIndex, taskItem);
     }
@@ -594,9 +595,9 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         ItemsView.Refresh();
     }
 
-    private void OnTaskSplitted(int categoryId)
+    private async void OnTaskSplitted(int categoryId)
     {
-        var activeCategoryInfo = _mediator.Send(new GetSelectedCategoryQuery()).Result;
+        var activeCategoryInfo = await _mediator.Send(new GetSelectedCategoryQuery());
         if (activeCategoryInfo.Id == categoryId)
         {
             var tasks = _taskItemRepository.GetActiveTasksFromCategory(activeCategoryInfo.Id, includeNavigation: true);
@@ -616,7 +617,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         }
     }
 
-    private void OnMoveToTopRequested(int taskId)
+    private async void OnMoveToTopRequested(int taskId)
     {
         var taskItem = Items.FirstOrDefault(x => x.Id == taskId);
         ArgumentNullException.ThrowIfNull(taskItem);
@@ -627,12 +628,12 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
             RequestedInsertPosition = 0
         };
 
-        var newIndex = _mediator.Send(query).Result;
+        var newIndex = await _mediator.Send(query);
 
         MoveTaskItem(newIndex, taskItem);
     }
 
-    private void OnMoveToBottomRequested(int taskId)
+    private async void OnMoveToBottomRequested(int taskId)
     {
         var taskItem = Items.FirstOrDefault(x => x.Id == taskId);
         ArgumentNullException.ThrowIfNull(taskItem);
@@ -643,7 +644,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
             RequestedInsertPosition = Items.Count - 1
         };
 
-        var newIndex = _mediator.Send(query).Result;
+        var newIndex = await _mediator.Send(query);
 
         MoveTaskItem(newIndex, taskItem);
     }
@@ -745,9 +746,9 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         RecalculateProgress();
     }
 
-    private void OnTaskCategoryChanged(TaskItemCategoryChangedPayload payload)
+    private async void OnTaskCategoryChanged(TaskItemCategoryChangedPayload payload)
     {
-        var activeCategory = _mediator.Send(new GetSelectedCategoryQuery()).Result;
+        var activeCategory = await _mediator.Send(new GetSelectedCategoryQuery());
         if (activeCategory.Id != payload.NewCategoryId)
         {
             var task = Items.FirstOrDefault(x => x.Id == payload.TaskId);
@@ -762,9 +763,9 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         }
     }
 
-    private void OnTasksCategoryChanged(TaskItemsCategoryChangedPayload payload)
+    private async void OnTasksCategoryChanged(TaskItemsCategoryChangedPayload payload)
     {
-        var activeCategory = _mediator.Send(new GetSelectedCategoryQuery()).Result;
+        var activeCategory = await _mediator.Send(new GetSelectedCategoryQuery());
         if (activeCategory.Id != payload.NewCategoryId)
         {
             _ignoreCollectionChange = true;
