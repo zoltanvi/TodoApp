@@ -62,12 +62,12 @@
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
                                         Content="{StaticResource IconList}"
-                                        FontSize="14"
+                                        FontSize="12"
                                         Style="{StaticResource IconLabelStyle}" />
 
                                     <ContentPresenter
                                         Grid.Column="1"
-                                        Margin="10 6"
+                                        Margin="6 4"
                                         HorizontalAlignment="Stretch"
                                         VerticalAlignment="Center" />
 
@@ -88,7 +88,7 @@
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Center"
                                             Content="{StaticResource IconDeleteX}"
-                                            FontSize="14"
+                                            FontSize="12"
                                             Style="{StaticResource IconLabelStyle}" />
                                     </Button>
 
@@ -132,7 +132,7 @@
         </Button.Style>
 
         <TextBlock
-            FontSize="16"
+            FontSize="13"
             FontWeight="Normal"
             Text="{Binding Name}">
 
