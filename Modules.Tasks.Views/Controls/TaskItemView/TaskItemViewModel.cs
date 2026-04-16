@@ -113,35 +113,52 @@ public class TaskItemViewModel : BaseViewModel, ITaskItemViewModel
 
     public async void ExitEditItem()
     {
-        if (Content.IsEmpty)
+        try
         {
-            // Empty content is rejected, roll back the previous content.
-            Content.SetContent(Content.IsPlainTextMode, _contentRollback);
-        }
-        else if (Content.GetContent() != _contentRollback)
-        {
-            ModificationDate = DateTime.Now;
-            UpdateTask();
+            if (Content.IsEmpty)
+            {
+                // Empty content is rejected, roll back the previous content.
+                Content.SetContent(Content.IsPlainTextMode, _contentRollback);
+            }
+            else if (Content.GetContent() != _contentRollback)
+            {
+                ModificationDate = DateTime.Now;
+                UpdateTask();
 
+                var versionList = await _mediator.Send(new TaskItemVersionsQuery { TaskId = Id });
+                Versions = versionList.MapToViewModelList(_mediator);
+
+                OnPropertyChanged(nameof(Versions));
+                OnPropertyChanged(nameof(VersionCount));
+            }
+
+            Content.IsEditMode = false;
+            Content.IsToolbarOpen = false;
+            _oneEditorOpenService.DisplayMode(this);
+        }
+        catch (Exception ex)
+        {
+            Content.IsEditMode = false;
+            Content.IsToolbarOpen = false;
+            _oneEditorOpenService.DisplayMode(this);
+            System.Diagnostics.Trace.TraceError($"{nameof(ExitEditItem)} failed: {ex}");
+        }
+    }
+
+    async void ITaskItemViewModel.UpdateHistory()
+    {
+        try
+        {
             var versionList = await _mediator.Send(new TaskItemVersionsQuery { TaskId = Id });
             Versions = versionList.MapToViewModelList(_mediator);
 
             OnPropertyChanged(nameof(Versions));
             OnPropertyChanged(nameof(VersionCount));
         }
-
-        Content.IsEditMode = false;
-        Content.IsToolbarOpen = false;
-        _oneEditorOpenService.DisplayMode(this);
-    }
-
-    async void ITaskItemViewModel.UpdateHistory()
-    {
-        var versionList = await _mediator.Send(new TaskItemVersionsQuery { TaskId = Id });
-        Versions = versionList.MapToViewModelList(_mediator);
-
-        OnPropertyChanged(nameof(Versions));
-        OnPropertyChanged(nameof(VersionCount));
+        catch (Exception ex)
+        {
+            System.Diagnostics.Trace.TraceError($"UpdateHistory failed: {ex}");
+        }
     }
 
     void ITaskItemViewModel.UpdateTask() => UpdateTask();

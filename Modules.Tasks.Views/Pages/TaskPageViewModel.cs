@@ -229,43 +229,50 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
 
     private async void AddTaskItem()
     {
-        if (!NewContentViewModel.IsEmpty)
+        try
         {
-            var activeCategory = await _mediator.Send(new GetSelectedCategoryQuery());
-            var newListOrder = await _mediator.Send(new TaskCreationListOrderQuery { CategoryId = activeCategory.Id });
-            var isLastItem = newListOrder == Items.Count;
-
-            var task = new TaskItem
+            if (!NewContentViewModel.IsEmpty)
             {
-                Content = NewContentViewModel.GetContent(),
-                ContentPreview = NewContentViewModel.GetContentInPlainText(),
-                IsContentPlainText = NewContentViewModel.IsPlainTextMode,
-                CategoryId = activeCategory.Id,
-                ListOrder = newListOrder
-            };
+                var activeCategory = await _mediator.Send(new GetSelectedCategoryQuery());
+                var newListOrder = await _mediator.Send(new TaskCreationListOrderQuery { CategoryId = activeCategory.Id });
+                var isLastItem = newListOrder == Items.Count;
 
-            var addedTask = _taskItemRepository.AddTask(task);
-
-            _oneEditorOpenService.LastEditedTaskId = addedTask.Id;
-
-            Items.Insert(newListOrder, addedTask.MapToViewModel(_mediator, _oneEditorOpenService, _eventAggregator));
-
-            if (!isLastItem)
-            {
-                // Fix list orders
-                Items.SetListOrdersToIndex();
-                for (var i = 0; i < Items.Count; i++)
+                var task = new TaskItem
                 {
-                    Items[i].ListOrder = i;
+                    Content = NewContentViewModel.GetContent(),
+                    ContentPreview = NewContentViewModel.GetContentInPlainText(),
+                    IsContentPlainText = NewContentViewModel.IsPlainTextMode,
+                    CategoryId = activeCategory.Id,
+                    ListOrder = newListOrder
+                };
+
+                var addedTask = _taskItemRepository.AddTask(task);
+
+                _oneEditorOpenService.LastEditedTaskId = addedTask.Id;
+
+                Items.Insert(newListOrder, addedTask.MapToViewModel(_mediator, _oneEditorOpenService, _eventAggregator));
+
+                if (!isLastItem)
+                {
+                    // Fix list orders
+                    Items.SetListOrdersToIndex();
+                    for (var i = 0; i < Items.Count; i++)
+                    {
+                        Items[i].ListOrder = i;
+                    }
+
+                    _taskItemRepository.UpdateTaskListOrders(Items.MapList());
                 }
 
-                _taskItemRepository.UpdateTaskListOrders(Items.MapList());
+                ScrollIntoViewRequested?.Invoke(newListOrder);
+                RecalculateProgress();
+
+                NewContentViewModel.SetContent(NewContentViewModel.IsPlainTextMode, string.Empty);
             }
-
-            ScrollIntoViewRequested?.Invoke(newListOrder);
-            RecalculateProgress();
-
-            NewContentViewModel.SetContent(NewContentViewModel.IsPlainTextMode, string.Empty);
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Trace.TraceError($"{nameof(AddTaskItem)} failed: {ex}");
         }
     }
 
@@ -285,20 +292,34 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
 
     private async void EditCategory()
     {
-        IsCategoryInEditMode = true;
-        var activeCategory = await _mediator.Send(new GetSelectedCategoryQuery());
-        RenameCategoryContent = activeCategory.Name;
+        try
+        {
+            IsCategoryInEditMode = true;
+            var activeCategory = await _mediator.Send(new GetSelectedCategoryQuery());
+            RenameCategoryContent = activeCategory.Name;
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Trace.TraceError($"{nameof(EditCategory)} failed: {ex}");
+        }
     }
 
     private async void FinishCategoryEdit()
     {
-        if (ActiveCategoryName != RenameCategoryContent)
+        try
         {
-            var newName = await _mediator.Send(new RenameActiveCategoryCommand { Name = RenameCategoryContent });
-            ActiveCategoryName = newName;
-        }
+            if (ActiveCategoryName != RenameCategoryContent)
+            {
+                var newName = await _mediator.Send(new RenameActiveCategoryCommand { Name = RenameCategoryContent });
+                ActiveCategoryName = newName;
+            }
 
-        IsCategoryInEditMode = false;
+            IsCategoryInEditMode = false;
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Trace.TraceError($"{nameof(FinishCategoryEdit)} failed: {ex}");
+        }
     }
 
     private void RecalculateProgress()
@@ -392,87 +413,115 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
 
     private async void OnPinTaskItemRequested(int taskId)
     {
-        var taskItem = Items.FirstOrDefault(x => x.Id == taskId);
-        ArgumentNullException.ThrowIfNull(taskItem);
-
-        taskItem.Pinned = true;
-        taskItem.IsDone = false;
-
-        var updatedDbTask = _taskItemRepository.UpdateTaskItem(taskItem.Map());
-        taskItem.ModificationDate = updatedDbTask.ModificationDate;
-
-        var query = new TaskInsertPositionQuery
+        try
         {
-            TaskId = taskId,
-            PositionChangeReason = PositionChangeReason.Pinned
-        };
+            var taskItem = Items.FirstOrDefault(x => x.Id == taskId);
+            ArgumentNullException.ThrowIfNull(taskItem);
 
-        var newIndex = await _mediator.Send(query);
+            taskItem.Pinned = true;
+            taskItem.IsDone = false;
 
-        MoveTaskItem(newIndex, taskItem);
+            var updatedDbTask = _taskItemRepository.UpdateTaskItem(taskItem.Map());
+            taskItem.ModificationDate = updatedDbTask.ModificationDate;
+
+            var query = new TaskInsertPositionQuery
+            {
+                TaskId = taskId,
+                PositionChangeReason = PositionChangeReason.Pinned
+            };
+
+            var newIndex = await _mediator.Send(query);
+
+            MoveTaskItem(newIndex, taskItem);
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Trace.TraceError($"{nameof(OnPinTaskItemRequested)} failed: {ex}");
+        }
     }
 
     private async void OnUnpinTaskItemRequested(int taskId)
     {
-        var taskItem = Items.FirstOrDefault(x => x.Id == taskId);
-        ArgumentNullException.ThrowIfNull(taskItem);
-
-        taskItem.Pinned = false;
-        var updatedDbTask = _taskItemRepository.UpdateTaskItem(taskItem.Map());
-        taskItem.ModificationDate = updatedDbTask.ModificationDate;
-
-        var query = new TaskInsertPositionQuery
+        try
         {
-            TaskId = taskId,
-            PositionChangeReason = PositionChangeReason.Unpinned
-        };
+            var taskItem = Items.FirstOrDefault(x => x.Id == taskId);
+            ArgumentNullException.ThrowIfNull(taskItem);
 
-        var newIndex = await _mediator.Send(query);
+            taskItem.Pinned = false;
+            var updatedDbTask = _taskItemRepository.UpdateTaskItem(taskItem.Map());
+            taskItem.ModificationDate = updatedDbTask.ModificationDate;
 
-        MoveTaskItem(newIndex, taskItem);
+            var query = new TaskInsertPositionQuery
+            {
+                TaskId = taskId,
+                PositionChangeReason = PositionChangeReason.Unpinned
+            };
+
+            var newIndex = await _mediator.Send(query);
+
+            MoveTaskItem(newIndex, taskItem);
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Trace.TraceError($"{nameof(OnUnpinTaskItemRequested)} failed: {ex}");
+        }
     }
 
     private async void OnFinishTaskItemRequested(int taskId)
     {
-        var taskItem = Items.FirstOrDefault(x => x.Id == taskId);
-        ArgumentNullException.ThrowIfNull(taskItem);
-
-        taskItem.IsDone = true;
-        taskItem.Pinned = false;
-        var updatedDbTask = _taskItemRepository.UpdateTaskItem(taskItem.Map());
-        taskItem.ModificationDate = updatedDbTask.ModificationDate;
-        RecalculateProgress();
-
-        var query = new TaskInsertPositionQuery
+        try
         {
-            TaskId = taskId,
-            PositionChangeReason = PositionChangeReason.Done
-        };
+            var taskItem = Items.FirstOrDefault(x => x.Id == taskId);
+            ArgumentNullException.ThrowIfNull(taskItem);
 
-        var newIndex = await _mediator.Send(query);
+            taskItem.IsDone = true;
+            taskItem.Pinned = false;
+            var updatedDbTask = _taskItemRepository.UpdateTaskItem(taskItem.Map());
+            taskItem.ModificationDate = updatedDbTask.ModificationDate;
+            RecalculateProgress();
 
-        MoveTaskItem(newIndex, taskItem);
+            var query = new TaskInsertPositionQuery
+            {
+                TaskId = taskId,
+                PositionChangeReason = PositionChangeReason.Done
+            };
+
+            var newIndex = await _mediator.Send(query);
+
+            MoveTaskItem(newIndex, taskItem);
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Trace.TraceError($"{nameof(OnFinishTaskItemRequested)} failed: {ex}");
+        }
     }
 
     private async void OnUnfinishTaskItemRequested(int taskId)
     {
-        var taskItem = Items.FirstOrDefault(x => x.Id == taskId);
-        ArgumentNullException.ThrowIfNull(taskItem);
-
-        taskItem.IsDone = false;
-        var updatedDbTask = _taskItemRepository.UpdateTaskItem(taskItem.Map());
-        taskItem.ModificationDate = updatedDbTask.ModificationDate;
-        RecalculateProgress();
-
-        var query = new TaskInsertPositionQuery
+        try
         {
-            TaskId = taskId,
-            PositionChangeReason = PositionChangeReason.Undone
-        };
+            var taskItem = Items.FirstOrDefault(x => x.Id == taskId);
+            ArgumentNullException.ThrowIfNull(taskItem);
 
-        var newIndex = await _mediator.Send(query);
+            taskItem.IsDone = false;
+            var updatedDbTask = _taskItemRepository.UpdateTaskItem(taskItem.Map());
+            taskItem.ModificationDate = updatedDbTask.ModificationDate;
+            RecalculateProgress();
 
-        MoveTaskItem(newIndex, taskItem);
+            var query = new TaskInsertPositionQuery
+            {
+                TaskId = taskId,
+                PositionChangeReason = PositionChangeReason.Undone
+            };
+
+            var newIndex = await _mediator.Send(query);
+
+            MoveTaskItem(newIndex, taskItem);
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Trace.TraceError($"{nameof(OnUnfinishTaskItemRequested)} failed: {ex}");
+        }
     }
 
     private void OnTagsChangedOnTaskItem(int taskId)
@@ -597,56 +646,78 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
 
     private async void OnTaskSplitted(int categoryId)
     {
-        var activeCategoryInfo = await _mediator.Send(new GetSelectedCategoryQuery());
-        if (activeCategoryInfo.Id == categoryId)
+        try
         {
-            var tasks = _taskItemRepository.GetActiveTasksFromCategory(activeCategoryInfo.Id, includeNavigation: true);
-
-            _ignoreCollectionChange = true;
-
-            Items.Clear();
-
-            foreach (var taskItem in tasks)
+            var activeCategoryInfo = await _mediator.Send(new GetSelectedCategoryQuery());
+            if (activeCategoryInfo.Id == categoryId)
             {
-                Items.Add(taskItem.MapToViewModel(_mediator, _oneEditorOpenService, _eventAggregator));
+                var tasks = _taskItemRepository.GetActiveTasksFromCategory(activeCategoryInfo.Id, includeNavigation: true);
+
+                _ignoreCollectionChange = true;
+
+                Items.Clear();
+
+                foreach (var taskItem in tasks)
+                {
+                    Items.Add(taskItem.MapToViewModel(_mediator, _oneEditorOpenService, _eventAggregator));
+                }
+
+                FixItemsListOrders(persist: true);
+
+                _ignoreCollectionChange = false;
             }
-
-            FixItemsListOrders(persist: true);
-
+        }
+        catch (Exception ex)
+        {
             _ignoreCollectionChange = false;
+            System.Diagnostics.Trace.TraceError($"{nameof(OnTaskSplitted)} failed: {ex}");
         }
     }
 
     private async void OnMoveToTopRequested(int taskId)
     {
-        var taskItem = Items.FirstOrDefault(x => x.Id == taskId);
-        ArgumentNullException.ThrowIfNull(taskItem);
-
-        var query = new TaskDragDropInsertPositionQuery
+        try
         {
-            TaskId = taskId,
-            RequestedInsertPosition = 0
-        };
+            var taskItem = Items.FirstOrDefault(x => x.Id == taskId);
+            ArgumentNullException.ThrowIfNull(taskItem);
 
-        var newIndex = await _mediator.Send(query);
+            var query = new TaskDragDropInsertPositionQuery
+            {
+                TaskId = taskId,
+                RequestedInsertPosition = 0
+            };
 
-        MoveTaskItem(newIndex, taskItem);
+            var newIndex = await _mediator.Send(query);
+
+            MoveTaskItem(newIndex, taskItem);
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Trace.TraceError($"{nameof(OnMoveToTopRequested)} failed: {ex}");
+        }
     }
 
     private async void OnMoveToBottomRequested(int taskId)
     {
-        var taskItem = Items.FirstOrDefault(x => x.Id == taskId);
-        ArgumentNullException.ThrowIfNull(taskItem);
-
-        var query = new TaskDragDropInsertPositionQuery
+        try
         {
-            TaskId = taskId,
-            RequestedInsertPosition = Items.Count - 1
-        };
+            var taskItem = Items.FirstOrDefault(x => x.Id == taskId);
+            ArgumentNullException.ThrowIfNull(taskItem);
 
-        var newIndex = await _mediator.Send(query);
+            var query = new TaskDragDropInsertPositionQuery
+            {
+                TaskId = taskId,
+                RequestedInsertPosition = Items.Count - 1
+            };
 
-        MoveTaskItem(newIndex, taskItem);
+            var newIndex = await _mediator.Send(query);
+
+            MoveTaskItem(newIndex, taskItem);
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Trace.TraceError($"{nameof(OnMoveToBottomRequested)} failed: {ex}");
+        }
     }
 
     private void OnTaskResetRequested(TaskResetRequestedPayload payload)
@@ -748,38 +819,54 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
 
     private async void OnTaskCategoryChanged(TaskItemCategoryChangedPayload payload)
     {
-        var activeCategory = await _mediator.Send(new GetSelectedCategoryQuery());
-        if (activeCategory.Id != payload.NewCategoryId)
+        try
         {
-            var task = Items.FirstOrDefault(x => x.Id == payload.TaskId);
-            ArgumentNullException.ThrowIfNull(task);
+            var activeCategory = await _mediator.Send(new GetSelectedCategoryQuery());
+            if (activeCategory.Id != payload.NewCategoryId)
+            {
+                var task = Items.FirstOrDefault(x => x.Id == payload.TaskId);
+                ArgumentNullException.ThrowIfNull(task);
 
-            _ignoreCollectionChange = true;
+                _ignoreCollectionChange = true;
             
-            Items.Remove(task);
-            FixItemsListOrders();
+                Items.Remove(task);
+                FixItemsListOrders();
             
+                _ignoreCollectionChange = false;
+            }
+        }
+        catch (Exception ex)
+        {
             _ignoreCollectionChange = false;
+            System.Diagnostics.Trace.TraceError($"{nameof(OnTaskCategoryChanged)} failed: {ex}");
         }
     }
 
     private async void OnTasksCategoryChanged(TaskItemsCategoryChangedPayload payload)
     {
-        var activeCategory = await _mediator.Send(new GetSelectedCategoryQuery());
-        if (activeCategory.Id != payload.NewCategoryId)
+        try
         {
-            _ignoreCollectionChange = true;
-
-            foreach (var taskId in payload.TaskIds)
+            var activeCategory = await _mediator.Send(new GetSelectedCategoryQuery());
+            if (activeCategory.Id != payload.NewCategoryId)
             {
-                var task = Items.FirstOrDefault(x => x.Id == taskId);
-                ArgumentNullException.ThrowIfNull(task);
-                Items.Remove(task);
+                _ignoreCollectionChange = true;
+
+                foreach (var taskId in payload.TaskIds)
+                {
+                    var task = Items.FirstOrDefault(x => x.Id == taskId);
+                    ArgumentNullException.ThrowIfNull(task);
+                    Items.Remove(task);
+                }
+
+                FixItemsListOrders();
+
+                _ignoreCollectionChange = false;
             }
-
-            FixItemsListOrders();
-
+        }
+        catch (Exception ex)
+        {
             _ignoreCollectionChange = false;
+            System.Diagnostics.Trace.TraceError($"{nameof(OnTasksCategoryChanged)} failed: {ex}");
         }
     }
 
