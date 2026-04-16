@@ -162,7 +162,9 @@ public class WindowService : BaseViewModel, IWindowService
     }
 
     public void Minimize() => _window.WindowState = WindowState.Minimized;
-    public void Maximize() => _window.WindowState ^= WindowState.Maximized;
+    public void Maximize() => _window.WindowState = _window.WindowState == WindowState.Maximized
+        ? WindowState.Normal
+        : WindowState.Maximized;
 
     /// <summary>
     /// If the window resizes to a special position (docked or maximized)
