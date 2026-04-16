@@ -69,11 +69,12 @@ public class SplitTaskLinesCommandHandler : IRequestHandler<SplitTaskLinesComman
             taskList.Add(task);
         }
         
+        _taskItemRepository.DeleteTask(dbTask);
         _taskItemRepository.AddTasks(taskList);
 
         var idList = taskList.Select(x => x.Id).ToHashSet();
 
-        // Filter out the task that we want to insert into the correct position
+        // Filter out the new tasks to insert them into the correct position
         var otherTasksInCategory = _taskItemRepository.GetActiveTasksFromCategory(dbTask.CategoryId)
             .Where(x => !idList.Contains(x.Id))
             .ToList();
