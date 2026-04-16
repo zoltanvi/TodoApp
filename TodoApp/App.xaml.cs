@@ -12,6 +12,7 @@ using Modules.PopupMessage.Views;
 using Modules.Settings.Contracts.ViewModels;
 using Modules.Settings.Views.Services;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows;
 using System.Windows.Threading;
@@ -26,11 +27,34 @@ namespace TodoApp;
 /// 
 public partial class App : Application
 {
-    private readonly IHost _host;
-    private IServiceProvider ServiceProvider => _host.Services;
+    private const string MutexName = "TodoApp_SingleInstance_Mutex";
+    private static Mutex? _mutex;
+
+    private readonly IHost? _host;
+    private IServiceProvider ServiceProvider => _host!.Services;
+
+    [DllImport("user32.dll")]
+    private static extern bool SetForegroundWindow(nint hWnd);
+
+    [DllImport("user32.dll")]
+    private static extern bool ShowWindow(nint hWnd, int nCmdShow);
+
+    [DllImport("user32.dll")]
+    private static extern bool IsIconic(nint hWnd);
+
+    private const int SW_RESTORE = 9;
 
     public App()
     {
+        _mutex = new Mutex(true, MutexName, out bool isNewInstance);
+
+        if (!isNewInstance)
+        {
+            ActivateExistingInstance();
+            Shutdown();
+            return;
+        }
+
         // Subscribe to exception handling
         DispatcherUnhandledException += App_DispatcherUnhandledException;
         AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
@@ -59,6 +83,8 @@ public partial class App : Application
     protected override void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
+
+        if (_host == null) return;
 
         // Set app version info
         var version = (string)Current.TryFindResource(Constants.CurrentVersion);
@@ -106,6 +132,26 @@ public partial class App : Application
         }
 
         sideMenuPageNavigation.NavigateTo<ICategoryListPage>();
+    }
+
+    private static void ActivateExistingInstance()
+    {
+        var currentProcess = System.Diagnostics.Process.GetCurrentProcess();
+        var processes = System.Diagnostics.Process.GetProcessesByName(currentProcess.ProcessName);
+
+        foreach (var process in processes)
+        {
+            if (process.Id != currentProcess.Id && process.MainWindowHandle != nint.Zero)
+            {
+                if (IsIconic(process.MainWindowHandle))
+                {
+                    ShowWindow(process.MainWindowHandle, SW_RESTORE);
+                }
+
+                SetForegroundWindow(process.MainWindowHandle);
+                break;
+            }
+        }
     }
 
     private void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e) => LogException(e.Exception);
