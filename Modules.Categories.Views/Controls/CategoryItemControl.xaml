@@ -16,7 +16,18 @@
         <ContextMenu>
             <MenuItem
                 Command="{Binding Path=PlacementTarget.DataContext.DeleteCategoryCommand, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
-                Header="Delete" />
+                Header="Delete">
+                <MenuItem.Icon>
+                    <Label
+                        Content="{StaticResource IconTrash}"
+                        Foreground="{DynamicResource OnSurfaceVariant}"
+                        FontFamily="{StaticResource IconFont}"
+                        FontSize="12"
+                        Padding="0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center" />
+                </MenuItem.Icon>
+            </MenuItem>
         </ContextMenu>
     </UserControl.ContextMenu>
 

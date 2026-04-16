@@ -74,42 +74,43 @@
 
         <Separator />
 
-        <MenuItem
-            HorizontalAlignment="Center"
-            Foreground="{DynamicResource OnSurface}"
-            Header="Colors"
-            IsEnabled="False" />
-
         <!--  Marker color  -->
         <MenuItem
             DataContext="{Binding Path=PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
             Header="Marker">
             <MenuItem.Template>
                 <ControlTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
+                    <Border
+                        Padding="6 3"
+                        CornerRadius="6"
+                        Background="Transparent">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="24" SharedSizeGroup="Icon" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
 
-                        <Label
-                            Grid.Column="0"
-                            Content="{StaticResource CtxIconColor1}" />
-                        <Label
-                            Grid.Column="1"
-                            Content="Marker"
-                            Style="{DynamicResource BaseLabelClearTypeStyle}" />
-                        <controls1:SingletonColorPicker
-                            Grid.Column="3"
-                            Width="{Binding UIScaler.ColorPickerWidth, Source={StaticResource UIScaler}}"
-                            Height="{Binding UIScaler.ColorPickerHeight, Source={StaticResource UIScaler}}"
-                            Margin="4 0 0 0"
-                            ColorChangedNotification="{Binding ColorChangedNotification, Mode=OneWay}"
-                            SelectedColorString="{Binding MarkerColor, Mode=TwoWay}"
-                            ToolTip="Marker color" />
-                    </Grid>
+                            <Label
+                                Grid.Column="0"
+                                Content="{StaticResource CtxIconColor1}"
+                                HorizontalAlignment="Center" />
+                            <Label
+                                Grid.Column="1"
+                                Margin="4 0 0 0"
+                                Content="Marker"
+                                Foreground="{DynamicResource OnSurface}"
+                                Style="{DynamicResource BaseLabelClearTypeStyle}" />
+                            <controls1:SingletonColorPicker
+                                Grid.Column="2"
+                                Width="{Binding UIScaler.ColorPickerWidth, Source={StaticResource UIScaler}}"
+                                Height="{Binding UIScaler.ColorPickerHeight, Source={StaticResource UIScaler}}"
+                                Margin="12 0 0 0"
+                                ColorChangedNotification="{Binding ColorChangedNotification, Mode=OneWay}"
+                                SelectedColorString="{Binding MarkerColor, Mode=TwoWay}"
+                                ToolTip="Marker color" />
+                        </Grid>
+                    </Border>
                 </ControlTemplate>
             </MenuItem.Template>
         </MenuItem>
@@ -120,30 +121,37 @@
             Header="Background">
             <MenuItem.Template>
                 <ControlTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
+                    <Border
+                        Padding="6 3"
+                        CornerRadius="6"
+                        Background="Transparent">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="24" SharedSizeGroup="Icon" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
 
-                        <Label
-                            Grid.Column="0"
-                            Content="{StaticResource CtxIconColor2}" />
-                        <Label
-                            Grid.Column="1"
-                            Content="Background"
-                            Style="{DynamicResource BaseLabelClearTypeStyle}" />
-                        <controls1:SingletonColorPicker
-                            Grid.Column="3"
-                            Width="{Binding UIScaler.ColorPickerWidth, Source={StaticResource UIScaler}}"
-                            Height="{Binding UIScaler.ColorPickerHeight, Source={StaticResource UIScaler}}"
-                            Margin="4 0 0 0"
-                            ColorChangedNotification="{Binding ColorChangedNotification, Mode=OneWay}"
-                            SelectedColorString="{Binding BackgroundColor, Mode=TwoWay}"
-                            ToolTip="Background color" />
-                    </Grid>
+                            <Label
+                                Grid.Column="0"
+                                Content="{StaticResource CtxIconColor2}"
+                                HorizontalAlignment="Center" />
+                            <Label
+                                Grid.Column="1"
+                                Margin="4 0 0 0"
+                                Content="Background"
+                                Foreground="{DynamicResource OnSurface}"
+                                Style="{DynamicResource BaseLabelClearTypeStyle}" />
+                            <controls1:SingletonColorPicker
+                                Grid.Column="2"
+                                Width="{Binding UIScaler.ColorPickerWidth, Source={StaticResource UIScaler}}"
+                                Height="{Binding UIScaler.ColorPickerHeight, Source={StaticResource UIScaler}}"
+                                Margin="12 0 0 0"
+                                ColorChangedNotification="{Binding ColorChangedNotification, Mode=OneWay}"
+                                SelectedColorString="{Binding BackgroundColor, Mode=TwoWay}"
+                                ToolTip="Background color" />
+                        </Grid>
+                    </Border>
                 </ControlTemplate>
             </MenuItem.Template>
         </MenuItem>
@@ -154,30 +162,37 @@
             Header="Border">
             <MenuItem.Template>
                 <ControlTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
+                    <Border
+                        Padding="6 3"
+                        CornerRadius="6"
+                        Background="Transparent">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="24" SharedSizeGroup="Icon" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
 
-                        <Label
-                            Grid.Column="0"
-                            Content="{StaticResource CtxIconColor3}" />
-                        <Label
-                            Grid.Column="1"
-                            Content="Border"
-                            Style="{DynamicResource BaseLabelClearTypeStyle}" />
-                        <controls1:SingletonColorPicker
-                            Grid.Column="3"
-                            Width="{Binding UIScaler.ColorPickerWidth, Source={StaticResource UIScaler}}"
-                            Height="{Binding UIScaler.ColorPickerHeight, Source={StaticResource UIScaler}}"
-                            Margin="4 0 0 0"
-                            ColorChangedNotification="{Binding ColorChangedNotification, Mode=OneWay}"
-                            SelectedColorString="{Binding BorderColor, Mode=TwoWay}"
-                            ToolTip="Border color" />
-                    </Grid>
+                            <Label
+                                Grid.Column="0"
+                                Content="{StaticResource CtxIconColor3}"
+                                HorizontalAlignment="Center" />
+                            <Label
+                                Grid.Column="1"
+                                Margin="4 0 0 0"
+                                Content="Border"
+                                Foreground="{DynamicResource OnSurface}"
+                                Style="{DynamicResource BaseLabelClearTypeStyle}" />
+                            <controls1:SingletonColorPicker
+                                Grid.Column="2"
+                                Width="{Binding UIScaler.ColorPickerWidth, Source={StaticResource UIScaler}}"
+                                Height="{Binding UIScaler.ColorPickerHeight, Source={StaticResource UIScaler}}"
+                                Margin="12 0 0 0"
+                                ColorChangedNotification="{Binding ColorChangedNotification, Mode=OneWay}"
+                                SelectedColorString="{Binding BorderColor, Mode=TwoWay}"
+                                ToolTip="Border color" />
+                        </Grid>
+                    </Border>
                 </ControlTemplate>
             </MenuItem.Template>
         </MenuItem>
@@ -232,6 +247,7 @@
         <MenuItem
             DataContext="{Binding Path=PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
             Header="Move task to category"
+            Icon="{StaticResource CtxIconMoveTo}"
             ItemsSource="{Binding Cmd.InactiveCategories}">
             <MenuItem.ItemContainerStyle>
                 <Style TargetType="MenuItem">
