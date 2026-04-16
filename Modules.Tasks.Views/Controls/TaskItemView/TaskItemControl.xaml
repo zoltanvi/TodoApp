@@ -19,10 +19,7 @@
     ContextMenu="{StaticResource TaskListItemContextMenu}"
     mc:Ignorable="d">
 
-    <Grid
-        attachedProperties:FirstTaskItemMarginScaler.IsFirstItem="{Binding IsFirstItem}"
-        attachedProperties:FirstTaskItemMarginScaler.ScaleValue="{Binding UIScaler.ScaleValue, Source={StaticResource UIScaler}}"
-        attachedProperties:FirstTaskItemMarginScaler.TopMargin="22">
+    <Grid>
         <Grid
             Margin="{Binding AppSettings.TaskPageSettings.TaskListMargin, Source={StaticResource AppSettings}, Converter={StaticResource TaskListItemMarginConverter}}"
             Background="Transparent">

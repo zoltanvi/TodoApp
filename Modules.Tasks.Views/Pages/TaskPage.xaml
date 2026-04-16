@@ -19,7 +19,7 @@
     x:TypeArguments="pages:TaskPageViewModel"
     mc:Ignorable="d">
 
-    <Border Margin="0 10 0 0">
+    <Border>
 
         <Grid>
 

@@ -17,7 +17,7 @@
         <Border
             Height="{Binding UIScaler.TaskPopupHeight, Source={StaticResource UIScaler}}"
             attached:TaskPopupMarginScaler.HorizontalOffset="5"
-            attached:TaskPopupMarginScaler.VerticalOffset="20"
+            attached:TaskPopupMarginScaler.VerticalOffset="0"
             attached:TaskPopupMarginScaler.ScaleValue="{Binding UIScaler.ScaleValue, Source={StaticResource UIScaler}}"
             Padding="4 2"
             HorizontalAlignment="Right"

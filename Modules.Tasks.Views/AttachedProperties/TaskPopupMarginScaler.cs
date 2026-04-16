@@ -4,41 +4,20 @@ namespace Modules.Tasks.Views.AttachedProperties;
 
 public static class TaskPopupMarginScaler
 {
-    public static readonly DependencyProperty VerticalOffsetProperty = DependencyProperty.RegisterAttached("VerticalOffset", typeof(double), typeof(TaskPopupMarginScaler), new PropertyMetadata(0.0, OnOffsetsChanged));
-    public static readonly DependencyProperty HorizontalOffsetProperty = DependencyProperty.RegisterAttached("HorizontalOffset", typeof(double), typeof(TaskPopupMarginScaler), new PropertyMetadata(0.0, OnOffsetsChanged));
-    public static readonly DependencyProperty ScaleValueProperty = DependencyProperty.RegisterAttached("ScaleValue", typeof(double), typeof(TaskPopupMarginScaler), new PropertyMetadata(1.0, OnScaleValueChanged));
+    public static readonly DependencyProperty VerticalOffsetProperty = DependencyProperty.RegisterAttached("VerticalOffset", typeof(double), typeof(TaskPopupMarginScaler), new PropertyMetadata(0.0, OnPropertyChanged));
+    public static readonly DependencyProperty HorizontalOffsetProperty = DependencyProperty.RegisterAttached("HorizontalOffset", typeof(double), typeof(TaskPopupMarginScaler), new PropertyMetadata(0.0, OnPropertyChanged));
+    public static readonly DependencyProperty ScaleValueProperty = DependencyProperty.RegisterAttached("ScaleValue", typeof(double), typeof(TaskPopupMarginScaler), new PropertyMetadata(1.0, OnPropertyChanged));
 
-    public static void SetVerticalOffset(UIElement element, double value)
-    {
-        element.SetValue(VerticalOffsetProperty, value);
-    }
+    public static void SetVerticalOffset(UIElement element, double value) => element.SetValue(VerticalOffsetProperty, value);
+    public static double GetVerticalOffset(UIElement element) => (double)element.GetValue(VerticalOffsetProperty);
 
-    public static double GetVerticalOffset(UIElement element)
-    {
-        return (double)element.GetValue(VerticalOffsetProperty);
-    }
+    public static void SetHorizontalOffset(UIElement element, double value) => element.SetValue(HorizontalOffsetProperty, value);
+    public static double GetHorizontalOffset(UIElement element) => (double)element.GetValue(HorizontalOffsetProperty);
 
-    public static void SetHorizontalOffset(UIElement element, double value)
-    {
-        element.SetValue(HorizontalOffsetProperty, value);
-    }
+    public static void SetScaleValue(UIElement element, double value) => element.SetValue(ScaleValueProperty, value);
+    public static double GetScaleValue(UIElement element) => (double)element.GetValue(ScaleValueProperty);
 
-    public static double GetHorizontalOffset(UIElement element)
-    {
-        return (double)element.GetValue(HorizontalOffsetProperty);
-    }
-
-    public static void SetScaleValue(UIElement element, double value)
-    {
-        element.SetValue(ScaleValueProperty, value);
-    }
-
-    public static double GetScaleValue(UIElement element)
-    {
-        return (double)element.GetValue(ScaleValueProperty);
-    }
-
-    private static void OnOffsetsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    private static void OnPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         if (d is FrameworkElement element)
         {
@@ -46,15 +25,6 @@ public static class TaskPopupMarginScaler
         }
     }
 
-    private static void OnScaleValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-    {
-        if (d is FrameworkElement element)
-        {
-            UpdateMargin(element);
-        }
-    }
-
-    // Update the Margin based on the offsets and scale value
     private static void UpdateMargin(FrameworkElement element)
     {
         double verticalOffset = GetVerticalOffset(element);
