@@ -67,7 +67,7 @@ public abstract class BaseMoveTaskToNewCategoryCommandHandler
         InsertTasksToNewCategory(newCategoryId, oldCategoryTasks, newCategoryTasks, cancellationToken);
 
         var stayedInOldCategoryTasks = TaskItemRepository.GetActiveTasksFromCategory(oldCategoryId);
-        ArgumentNullException.ThrowIfNull(oldCategoryTasks);
+        ArgumentNullException.ThrowIfNull(stayedInOldCategoryTasks);
 
         // Fix list orders in old category
         stayedInOldCategoryTasks.SetListOrdersToIndex();
