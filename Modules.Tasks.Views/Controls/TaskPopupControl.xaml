@@ -19,13 +19,14 @@
             attached:TaskPopupMarginScaler.HorizontalOffset="5"
             attached:TaskPopupMarginScaler.VerticalOffset="20"
             attached:TaskPopupMarginScaler.ScaleValue="{Binding UIScaler.ScaleValue, Source={StaticResource UIScaler}}"
-            Padding="2 1"
+            Padding="4 2"
             HorizontalAlignment="Right"
             VerticalAlignment="Top"
-            Background="{DynamicResource Surface1}"
+            Background="{DynamicResource Surface2}"
             BorderBrush="{DynamicResource OutlineVariant}"
             BorderThickness="1"
             CornerRadius="6"
+            Effect="{StaticResource Elevation1}"
             Visibility="{Binding AppSettings.TaskQuickActionSettings.AnyEnabled, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}">
 
             <Border.Resources>
