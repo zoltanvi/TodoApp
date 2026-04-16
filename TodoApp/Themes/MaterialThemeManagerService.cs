@@ -54,8 +54,16 @@ public class MaterialThemeManagerService
         }
     }
 
-    private static Color HexToColor(string value) =>
-        (Color)ColorConverter.ConvertFromString(value);
+    private static Color HexToColor(string value)
+    {
+        var result = ColorConverter.ConvertFromString(value);
+        if (result is Color color)
+        {
+            return color;
+        }
+
+        return Colors.Transparent;
+    }
 
     private static ThemeStyle MapThemeStyle(MaterialThemeStyle style) => style switch
     {

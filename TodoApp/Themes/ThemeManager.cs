@@ -71,7 +71,7 @@ public class ThemeManager
         if (rootDictionary.MergedDictionaries.Count > 0)
         {
             ResourceDictionary foundDictionary = rootDictionary.MergedDictionaries
-                .FirstOrDefault(i => oldDictionary.AbsoluteUri.EndsWith(i.Source.OriginalString));
+                .FirstOrDefault(i => i.Source != null && oldDictionary.AbsoluteUri.EndsWith(i.Source.OriginalString));
 
             if (foundDictionary != null)
             {

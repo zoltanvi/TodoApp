@@ -155,7 +155,7 @@ public partial class App : Application
     }
 
     private void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e) => LogException(e.Exception);
-    private void TaskScheduler_UnobservedTaskException(object? sender, UnobservedTaskExceptionEventArgs e) => LogException(e.Exception.InnerException);
+    private void TaskScheduler_UnobservedTaskException(object? sender, UnobservedTaskExceptionEventArgs e) => LogException(e.Exception);
     private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e) => LogException(e.ExceptionObject as Exception);
 
     private void LogException(Exception? ex)
