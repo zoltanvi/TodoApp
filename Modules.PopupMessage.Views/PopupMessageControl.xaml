@@ -43,11 +43,7 @@
                         </MultiBinding>
                     </Border.Opacity>
                     <Border.Effect>
-                        <DropShadowEffect
-                            BlurRadius="12"
-                            Opacity="0.5"
-                            ShadowDepth="0"
-                            Color="Black" />
+                        <StaticResource ResourceKey="Elevation3" />
                     </Border.Effect>
                 </Border>
             </Border>

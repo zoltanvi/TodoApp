@@ -26,7 +26,8 @@
             Background="{DynamicResource Surface1}"
             BorderBrush="{DynamicResource OutlineVariant}"
             BorderThickness="1"
-            CornerRadius="6">
+            CornerRadius="6"
+            Effect="{StaticResource Elevation2}">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />

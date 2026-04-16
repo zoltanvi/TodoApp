@@ -9,4 +9,10 @@
         <GradientStop Offset="1" Color="#FFFFFFFF" />
     </LinearGradientBrush>
 
+    <!--  Elevation shadow system: increasing prominence from 1 (subtle) to 4 (maximum)  -->
+    <DropShadowEffect x:Key="Elevation1" x:Shared="False" BlurRadius="4"  Opacity="0.10" ShadowDepth="0" Color="Black" />
+    <DropShadowEffect x:Key="Elevation2" x:Shared="False" BlurRadius="8"  Opacity="0.16" ShadowDepth="0" Color="Black" />
+    <DropShadowEffect x:Key="Elevation3" x:Shared="False" BlurRadius="16" Opacity="0.24" ShadowDepth="0" Color="Black" />
+    <DropShadowEffect x:Key="Elevation4" x:Shared="False" BlurRadius="24" Opacity="0.32" ShadowDepth="0" Color="Black" />
+
 </ResourceDictionary>

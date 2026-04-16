@@ -164,7 +164,8 @@
                         Background="{DynamicResource Background}"
                         BorderBrush="{DynamicResource Outline}"
                         BorderThickness="1"
-                        CornerRadius="6">
+                        CornerRadius="6"
+                        Effect="{StaticResource Elevation3}">
 
                         <Frame
                             x:Name="OverlayFrame"
