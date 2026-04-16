@@ -28,6 +28,7 @@ public class RecycleBinRepository
         return _context.Tasks
             .Where(x => x.IsDeleted)
             .Include(x => x.Reminders)
+            .ToList()
             .GroupBy(x => x.CategoryId)
             .ToList();
     }

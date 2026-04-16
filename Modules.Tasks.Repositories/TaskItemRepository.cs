@@ -112,14 +112,15 @@ public class TaskItemRepository : ITaskItemRepository
 
     public void RemoveTagsFromTasks(IEnumerable<TaskItem> taskList)
     {
-        foreach (var taskItem in taskList)
+        var taskIds = taskList.Select(x => x.Id).ToList();
+
+        var dbTasks = _context.Tasks
+            .Include(x => x.Tags)
+            .Where(x => taskIds.Contains(x.Id))
+            .ToList();
+
+        foreach (var dbTask in dbTasks)
         {
-            var dbTask = _context.Tasks
-                .Include(x => x.Tags)
-                .FirstOrDefault(x => x.Id == taskItem.Id);
-
-            ArgumentNullException.ThrowIfNull(dbTask);
-
             if (dbTask.Tags.Count != 0)
             {
                 dbTask.Tags.Clear();
