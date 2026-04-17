@@ -32,13 +32,11 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
-                    <!--  CATEGORY NAME  -->
+                    <!--  CATEGORY NAME (chevron is rendered inside the button template)  -->
                     <Border
                         Grid.Column="0"
                         Background="{DynamicResource Surface3}"
-                        CornerRadius="0"
-                        
-                        />
+                        CornerRadius="0" />
 
                     <Button
                         Grid.Column="0"
@@ -52,7 +50,7 @@
                             Grid.Column="1"
                             Width="{Binding UIScaler.FontSize.Large, Source={StaticResource UIScaler}}"
                             Margin="2 0" />
-
+                    
                     <!--  RESTORE CATEGORY  -->
                     <Button
                         Grid.Column="2"

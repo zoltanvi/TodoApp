@@ -158,42 +158,26 @@ public class RecycleBinPageViewModel : BaseViewModel
         var tasksByCategoryId = deletedTasksGroupByCategory.ToDictionary(g => g.Key, g => g.ToList());
         var categoriesById = deletedCategories.ToDictionary(c => c.Id);
 
-        var categoryIdsWithTasks = new HashSet<int>(tasksByCategoryId.Keys);
-        var categoryIdsWithDeletedTasks = new HashSet<int>(categoryIdsWithTasks);
-
-        // For each category with tasks, find deleted ancestors to build full hierarchy paths
-        foreach (var categoryId in categoryIdsWithDeletedTasks)
-        {
-            CollectDeletedAncestors(categoryId, categoriesById, categoryIdsWithTasks);
-        }
-
-        // Find root groups: deleted categories that are either root-level or whose parent is not deleted
-        var rootCategoryIds = categoryIdsWithTasks
-            .Where(id => categoriesById.ContainsKey(id))
+        // Root deleted categories: no parent, or parent is not itself deleted
+        var rootCategoryIds = categoriesById.Keys
             .Where(id =>
             {
                 var cat = categoriesById[id];
-                return cat.ParentCategoryId == null ||
-                       !categoriesById.ContainsKey(cat.ParentCategoryId.Value) ||
-                       !categoryIdsWithTasks.Contains(cat.ParentCategoryId.Value);
+                return cat.ParentCategoryId == null || !categoriesById.ContainsKey(cat.ParentCategoryId.Value);
             })
-            .ToList();
-
-        // Also include categories with tasks that are NOT deleted (tasks were individually deleted)
-        var nonDeletedCategoryIdsWithTasks = tasksByCategoryId.Keys
-            .Where(id => !categoriesById.ContainsKey(id))
             .ToList();
 
         foreach (var rootId in rootCategoryIds)
         {
-            var group = BuildGroupTree(rootId, categoriesById, tasksByCategoryId, categoryIdsWithTasks);
-            if (group != null && group.HasAnyContent())
-            {
-                GroupItems.Add(group);
-            }
+            var group = BuildGroupTree(rootId, categoriesById, tasksByCategoryId);
+            GroupItems.Add(group);
         }
 
-        // Add flat groups for tasks in non-deleted categories
+        // Flat groups for tasks in categories that are not themselves deleted
+        var nonDeletedCategoryIdsWithTasks = tasksByCategoryId.Keys
+            .Where(id => !categoriesById.ContainsKey(id))
+            .ToList();
+
         foreach (var categoryId in nonDeletedCategoryIdsWithTasks)
         {
             var items = CreateTaskItemVMs(tasksByCategoryId[categoryId]);
@@ -212,13 +196,12 @@ public class RecycleBinPageViewModel : BaseViewModel
         }
     }
 
-    private RecycleBinGroupItemViewModel? BuildGroupTree(
+    private RecycleBinGroupItemViewModel BuildGroupTree(
         int categoryId,
         Dictionary<int, Category> categoriesById,
-        Dictionary<int, List<TaskItem>> tasksByCategoryId,
-        HashSet<int> relevantCategoryIds)
+        Dictionary<int, List<TaskItem>> tasksByCategoryId)
     {
-        if (!categoriesById.TryGetValue(categoryId, out var category)) return null;
+        var category = categoriesById[categoryId];
 
         var items = tasksByCategoryId.TryGetValue(categoryId, out var tasks)
             ? CreateTaskItemVMs(tasks)
@@ -232,38 +215,21 @@ public class RecycleBinPageViewModel : BaseViewModel
         {
             CategoryId = category.Id,
             CategoryName = category.Name,
+            IsDeletedCategory = true,
         };
 
-        // Find child categories that are relevant (deleted and part of a hierarchy with tasks)
-        var childIds = relevantCategoryIds
-            .Where(id => categoriesById.ContainsKey(id) && categoriesById[id].ParentCategoryId == categoryId)
+        // Include ALL deleted child categories, including empty ones
+        var childIds = categoriesById.Keys
+            .Where(id => categoriesById[id].ParentCategoryId == categoryId)
             .ToList();
 
         foreach (var childId in childIds)
         {
-            var childGroup = BuildGroupTree(childId, categoriesById, tasksByCategoryId, relevantCategoryIds);
-            if (childGroup != null && childGroup.HasAnyContent())
-            {
-                group.Children.Add(childGroup);
-            }
+            var childGroup = BuildGroupTree(childId, categoriesById, tasksByCategoryId);
+            group.Children.Add(childGroup);
         }
 
         return group;
-    }
-
-    private static void CollectDeletedAncestors(
-        int categoryId,
-        Dictionary<int, Category> categoriesById,
-        HashSet<int> categoryIdsToInclude)
-    {
-        if (!categoriesById.TryGetValue(categoryId, out var category)) return;
-
-        var parentId = category.ParentCategoryId;
-        while (parentId.HasValue && categoriesById.ContainsKey(parentId.Value))
-        {
-            categoryIdsToInclude.Add(parentId.Value);
-            parentId = categoriesById[parentId.Value].ParentCategoryId;
-        }
     }
 
     private ObservableCollection<RecycleBinTaskItemViewModel> CreateTaskItemVMs(List<TaskItem> tasks)

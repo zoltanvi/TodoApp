@@ -17,6 +17,7 @@ public class RecycleBinGroupItemViewModel : BaseViewModel
 
     public required int CategoryId { get; init; }
     public required string CategoryName { get; init; }
+    public bool IsDeletedCategory { get; init; }
     
     public ObservableCollection<RecycleBinTaskItemViewModel> Items { get; set; }
     public ICollectionView ItemsView { get; set; }
@@ -123,7 +124,7 @@ public class RecycleBinGroupItemViewModel : BaseViewModel
 
     public bool HasAnyContent()
     {
-        return Items.Count > 0 || Children.Any(c => c.HasAnyContent());
+        return IsDeletedCategory || Items.Count > 0 || Children.Any(c => c.HasAnyContent());
     }
 
     public List<int> GetAllCategoryIds()
