@@ -310,7 +310,6 @@ public class TaskItemRepository : ITaskItemRepository
         {
             dbTask.DeletedDate = null;
             dbTask.IsDeleted = false;
-            dbTask.IsDone = false;
             dbTask.Pinned = false;
             dbTask.ListOrder = listOrder;
 
@@ -327,7 +326,6 @@ public class TaskItemRepository : ITaskItemRepository
 
         dbTask.DeletedDate = null;
         dbTask.IsDeleted = false;
-        dbTask.IsDone = false;
         dbTask.Pinned = false;
         dbTask.ListOrder = newListOrder;
 
