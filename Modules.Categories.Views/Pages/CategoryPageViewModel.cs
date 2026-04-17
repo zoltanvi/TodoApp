@@ -65,6 +65,9 @@ public class CategoryPageViewModel : BaseViewModel
 
         var activeCategories = categoriesRepository.GetActiveCategories();
         _treeRoots = activeCategories.BuildTree(_eventAggregator);
+        
+        RestoreExpandedStates();
+        
         FlattenedItems = new ObservableCollection<CategoryItemViewModel>();
         RebuildFlatList();
 
@@ -180,6 +183,29 @@ public class CategoryPageViewModel : BaseViewModel
         parent.IsExpanded = true;
     }
 
+    private void RestoreExpandedStates()
+    {
+        var expandedIds = AppSettings.Instance.SessionSettings.GetExpandedCategoryIds();
+        if (expandedIds.Count == 0) return;
+
+        foreach (var category in GetAllCategoriesFlat())
+        {
+            if (expandedIds.Contains(category.Id) && category.HasChildren)
+            {
+                category.IsExpanded = true;
+            }
+        }
+    }
+
+    private void SaveExpandedStates()
+    {
+        var expandedIds = GetAllCategoriesFlat()
+            .Where(c => c.IsExpanded && c.HasChildren)
+            .Select(c => c.Id);
+
+        AppSettings.Instance.SessionSettings.SetExpandedCategoryIds(expandedIds);
+    }
+
     private void RemoveFromTree(int categoryId)
     {
         var parent = FindParentOf(categoryId);
@@ -270,6 +296,7 @@ public class CategoryPageViewModel : BaseViewModel
                 parentVm.Children.Add(vm);
                 parentVm.HasChildren = true;
                 parentVm.IsExpanded = true;
+                SaveExpandedStates();
             }
         }
         else
@@ -394,6 +421,7 @@ public class CategoryPageViewModel : BaseViewModel
             ArgumentNullException.ThrowIfNull(category);
 
             EnsureAncestorsExpanded(category.ParentCategoryId);
+            SaveExpandedStates();
             RebuildFlatList();
         }
 
@@ -418,6 +446,7 @@ public class CategoryPageViewModel : BaseViewModel
         if (category == null || !category.HasChildren || category.IsExpanded) return;
 
         category.IsExpanded = true;
+        SaveExpandedStates();
         RebuildFlatList();
     }
 
@@ -427,6 +456,7 @@ public class CategoryPageViewModel : BaseViewModel
         if (category == null || !category.IsExpanded) return;
 
         category.IsExpanded = false;
+        SaveExpandedStates();
         RebuildFlatList();
     }
 
@@ -453,6 +483,7 @@ public class CategoryPageViewModel : BaseViewModel
         if (category == null) return;
 
         category.IsExpanded = !category.IsExpanded;
+        SaveExpandedStates();
         RebuildFlatList();
     }
 
@@ -512,8 +543,7 @@ public class CategoryPageViewModel : BaseViewModel
         var activeCategories = _categoriesRepository.GetActiveCategories();
         _treeRoots = activeCategories.BuildTree(_eventAggregator);
 
-        // Restore expand states from the old flattened list won't be possible after full reload,
-        // so we expand ancestors of the active category
+        RestoreExpandedStates();
         EnsureAncestorsExpanded(FindInTree(ActiveCategoryId)?.ParentCategoryId);
 
         RebuildFlatList();
