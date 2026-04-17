@@ -19,13 +19,13 @@
             Grid.Row="0"
             Margin="10"
             HorizontalAlignment="Center"
-            FontSize="16"
+            FontSize="{Binding UIScaler.FontSize.Medium, Source={StaticResource UIScaler}}"
             Text="{Binding Title}" />
         <TextBox
             Grid.Row="1"
             Margin="10"
             AcceptsReturn="True"
-            FontSize="14"
+            FontSize="{Binding UIScaler.FontSize.Small, Source={StaticResource UIScaler}}"
             IsReadOnly="True"
             ScrollViewer.HorizontalScrollBarVisibility="Auto"
             ScrollViewer.VerticalScrollBarVisibility="Auto"

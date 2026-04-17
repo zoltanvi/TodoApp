@@ -14,10 +14,10 @@
         </Grid.RowDefinitions>
 
         <TextBlock
-            Grid.Row="0" Text="{Binding Title}" Margin="10" FontSize="16"
+            Grid.Row="0" Text="{Binding Title}" Margin="10" FontSize="{Binding UIScaler.FontSize.Medium, Source={StaticResource UIScaler}}"
             HorizontalAlignment="Center" />
         <TextBox
-            Grid.Row="1" Text="{Binding ErrorMessage}" Margin="10" FontSize="14"
+            Grid.Row="1" Text="{Binding ErrorMessage}" Margin="10" FontSize="{Binding UIScaler.FontSize.Small, Source={StaticResource UIScaler}}"
             AcceptsReturn="True" ScrollViewer.HorizontalScrollBarVisibility="Auto"
             ScrollViewer.VerticalScrollBarVisibility="Auto"
             IsReadOnly="True"

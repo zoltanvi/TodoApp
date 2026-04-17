@@ -29,7 +29,7 @@
                                 Margin="0 0 4 0"
                                 VerticalAlignment="Center"
                                 FontFamily="{StaticResource IconFont}"
-                                FontSize="10"
+                                FontSize="{Binding UIScaler.FontSize.Smallest, Source={StaticResource UIScaler}}"
                                 FontWeight="Normal"
                                 Foreground="{TemplateBinding Foreground}"
                                 Text="{Binding IsOpen, Converter={StaticResource ChevronConverter}}"

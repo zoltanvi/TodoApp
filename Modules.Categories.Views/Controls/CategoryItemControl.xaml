@@ -22,7 +22,7 @@
                         Content="{StaticResource IconAdd}"
                         Foreground="{DynamicResource OnSurfaceVariant}"
                         FontFamily="{StaticResource IconFont}"
-                        FontSize="12"
+                        FontSize="{Binding UIScaler.FontSize.Smaller, Source={StaticResource UIScaler}}"
                         Padding="0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center" />
@@ -36,7 +36,7 @@
                         Content="{StaticResource IconEdit}"
                         Foreground="{DynamicResource OnSurfaceVariant}"
                         FontFamily="{StaticResource IconFont}"
-                        FontSize="12"
+                        FontSize="{Binding UIScaler.FontSize.Smaller, Source={StaticResource UIScaler}}"
                         Padding="0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center" />
@@ -50,7 +50,7 @@
                         Content="{StaticResource IconTrash}"
                         Foreground="{DynamicResource OnSurfaceVariant}"
                         FontFamily="{StaticResource IconFont}"
-                        FontSize="12"
+                        FontSize="{Binding UIScaler.FontSize.Smaller, Source={StaticResource UIScaler}}"
                         Padding="0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center" />
@@ -66,7 +66,7 @@
                         Content="{StaticResource IconMoveTo}"
                         Foreground="{DynamicResource OnSurfaceVariant}"
                         FontFamily="{StaticResource IconFont}"
-                        FontSize="12"
+                        FontSize="{Binding UIScaler.FontSize.Smaller, Source={StaticResource UIScaler}}"
                         Padding="0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center" />
@@ -147,7 +147,7 @@
                                             Padding="0"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Center"
-                                            FontSize="10"
+                                            FontSize="{Binding UIScaler.FontSize.Smallest, Source={StaticResource UIScaler}}"
                                             Style="{StaticResource IconLabelStyle}">
                                             <Label.Content>
                                                 <Binding Path="IsExpanded">
@@ -185,7 +185,7 @@
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Center"
                                             Content="{StaticResource IconDeleteX}"
-                                            FontSize="12"
+                                            FontSize="{Binding UIScaler.FontSize.Smaller, Source={StaticResource UIScaler}}"
                                             Style="{StaticResource IconLabelStyle}" />
                                     </Button>
 
@@ -245,7 +245,7 @@
         <Grid>
             <!-- Normal display: category name -->
             <TextBlock
-                FontSize="13"
+                FontSize="{Binding UIScaler.FontSize.Smaller, Source={StaticResource UIScaler}}"
                 FontWeight="Normal"
                 Text="{Binding Name}"
                 Visibility="{Binding IsRenaming, Converter={StaticResource BoolToVisibilityNegatedConverter}}">
@@ -284,7 +284,7 @@
             <!-- Rename mode: editable textbox -->
             <TextBox
                 x:Name="RenameTextBox"
-                FontSize="13"
+                FontSize="{Binding UIScaler.FontSize.Smaller, Source={StaticResource UIScaler}}"
                 Text="{Binding RenameText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 Visibility="{Binding IsRenaming, Converter={StaticResource BoolToVisibilityConverter}}"
                 local:RenameBehavior.IsInRenameMode="{Binding IsRenaming}" />

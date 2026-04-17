@@ -166,7 +166,7 @@
                                                     HorizontalAlignment="Center"
                                                     VerticalAlignment="Center"
                                                     Content="{StaticResource IconTrash}"
-                                                    FontSize="13"
+                                                    FontSize="{Binding UIScaler.FontSize.Smaller, Source={StaticResource UIScaler}}"
                                                     Style="{StaticResource IconLabelStyle}" />
 
                                                 <ContentPresenter
@@ -204,7 +204,7 @@
                     </Button.Style>
 
                     <TextBlock
-                        FontSize="13"
+                        FontSize="{Binding UIScaler.FontSize.Smaller, Source={StaticResource UIScaler}}"
                         Text="Recycle bin">
 
                         <TextBlock.Style>

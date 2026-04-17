@@ -142,7 +142,7 @@
                             x:Name="onLabel"
                             Margin="4 -1 0 0"
                             Content="ON"
-                            FontSize="9"
+                            FontSize="{Binding UIScaler.FontSize.Smallest, Source={StaticResource UIScaler}}"
                             Foreground="{TemplateBinding BorderBrush}"
                             Opacity="0" />
 
@@ -151,7 +151,7 @@
                             x:Name="offLabel"
                             Margin="15 -1 0 0"
                             Content="OFF"
-                            FontSize="9"
+                            FontSize="{Binding UIScaler.FontSize.Smallest, Source={StaticResource UIScaler}}"
                             Foreground="{DynamicResource Outline}"
                             Opacity="0" />
 
