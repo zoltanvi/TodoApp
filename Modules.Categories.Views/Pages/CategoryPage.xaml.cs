@@ -92,6 +92,16 @@ public partial class CategoryPage : GenericBasePage<CategoryPageViewModel>, ICat
                 }
                 e.Handled = true;
                 break;
+
+            case Key.F2:
+                if (focusedIndex >= 0)
+                {
+                    var item = items[focusedIndex];
+                    item.RenameText = item.Name;
+                    item.IsRenaming = true;
+                }
+                e.Handled = true;
+                break;
         }
     }
 

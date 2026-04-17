@@ -126,6 +126,31 @@
                 <Border Height="{Binding UIScaler.FontSize.Small, Source={StaticResource UIScaler}}" />
 
                 <Label
+                    Content="Category sidebar shortcuts"
+                    Style="{StaticResource BaseLabelClearTypeStyle}"
+                    FontSize="{Binding UIScaler.FontSize.Large, Source={StaticResource UIScaler}}" />
+                <Border Height="{Binding UIScaler.FontSize.Smaller, Source={StaticResource UIScaler}}" />
+
+                <controls:ShortcutItemControl
+                    Description="Rename focused category"
+                    Key1="F2" />
+
+                <controls:ShortcutItemControl
+                    Description="Navigate up/down"
+                    Key1="Up / Down arrow" />
+
+                <controls:ShortcutItemControl
+                    Description="Expand/collapse category"
+                    Key1="Right / Left arrow" />
+
+                <controls:ShortcutItemControl
+                    Description="Select focused category"
+                    Key1="Enter"
+                    Key2="Space" />
+
+                <Border Height="{Binding UIScaler.FontSize.Small, Source={StaticResource UIScaler}}" />
+
+                <Label
                     Content="Global shortcuts"
                     Style="{StaticResource BaseLabelClearTypeStyle}"
                     FontSize="{Binding UIScaler.FontSize.Large, Source={StaticResource UIScaler}}" />
