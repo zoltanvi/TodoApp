@@ -21,3 +21,4 @@ public interface ITaskQuickActionsSettingsPage : IPage;
 public interface ITextEditorQuickActionsSettingsPage : IPage;
 public interface IDateTimeSettingsPage : IPage;
 public interface IShortcutsPage : IPage;
+public interface ICategorySettingsPage : IPage;

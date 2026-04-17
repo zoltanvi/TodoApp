@@ -18,6 +18,7 @@ public static class SettingsViewsServiceCollectionExtensions
         services.AddTransient<PageTitleSettingsPageViewModel>();
         services.AddTransient<DateTimeSettingsPageViewModel>();
         services.AddTransient<ShortcutsPageViewModel>();
+        services.AddTransient<CategorySettingsPageViewModel>();
 
         services.AddTransient<ITaskItemSettingsPage, TaskItemSettingsPage>();
         services.AddTransient<ITagSettingsPage, TagSettingsPage>();
@@ -29,6 +30,7 @@ public static class SettingsViewsServiceCollectionExtensions
         services.AddTransient<IPageTitleSettingsPage, PageTitleSettingsPage>();
         services.AddTransient<IDateTimeSettingsPage, DateTimeSettingsPage>();
         services.AddTransient<IShortcutsPage, ShortcutsPage>();
+        services.AddTransient<ICategorySettingsPage, CategorySettingsPage>();
 
         return services;
     }

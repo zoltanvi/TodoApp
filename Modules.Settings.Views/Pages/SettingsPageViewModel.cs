@@ -33,6 +33,7 @@ public class SettingsPageViewModel : BaseViewModel, ICloseRequester
             new() { Id = 6, Name = "TAGS", NavigateAction = () => _navigation.NavigateTo<ITagSettingsPage>() },
             new() { Id = 7, Name = "QUICK ACTIONS", NavigateAction = () => _navigation.NavigateTo<ITaskQuickActionsSettingsPage>() },
             new() { Id = 8, Name = "EDITOR", NavigateAction = () => _navigation.NavigateTo<ITextEditorQuickActionsSettingsPage>() },
+            new() { Id = 9, Name = "CATEGORIES", NavigateAction = () => _navigation.NavigateTo<ICategorySettingsPage>() },
             new() { Id = 10, Name = "DATE TIME", NavigateAction = () => _navigation.NavigateTo<IDateTimeSettingsPage>() },
             new() { Id = 11, Name = "SHORTCUTS", NavigateAction = () => _navigation.NavigateTo<IShortcutsPage>() }
         };

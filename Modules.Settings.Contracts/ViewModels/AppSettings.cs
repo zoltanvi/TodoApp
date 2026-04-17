@@ -15,6 +15,7 @@ public sealed class AppSettings : SettingsBase
     public WindowSettings WindowSettings { get; set; } = new();
     public DateTimeSettings DateTimeSettings { get; set; } = new();
     public SessionSettings SessionSettings { get; set; } = new();
+    public CategorySettings CategorySettings { get; set; } = new();
 
     public override bool IsDirty() =>
         ApplicationSettings.IsDirty() ||
@@ -27,7 +28,8 @@ public sealed class AppSettings : SettingsBase
         NoteSettings.IsDirty() ||
         WindowSettings.IsDirty() ||
         DateTimeSettings.IsDirty() ||
-        SessionSettings.IsDirty();
+        SessionSettings.IsDirty() ||
+        CategorySettings.IsDirty();
 
     public override void Clean()
     {
@@ -42,6 +44,7 @@ public sealed class AppSettings : SettingsBase
         WindowSettings.Clean();
         DateTimeSettings.Clean();
         SessionSettings.Clean();
+        CategorySettings.Clean();
     }
 
     private AppSettings() { }
