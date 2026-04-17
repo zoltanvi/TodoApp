@@ -18,7 +18,7 @@ public class RecycleBinRepository
     {
         return _context.Tasks
             .Where(x => x.CategoryId == categoryId)
-            .Where(x => x.IsDeleted)
+            .Where(x => x.DeletedDate != null)
             .Include(x => x.Reminders)
             .ToList();
     }
@@ -26,7 +26,7 @@ public class RecycleBinRepository
     public List<IGrouping<int, TaskItem>> GetDeletedTasksGroupByCategory()
     {
         return _context.Tasks
-            .Where(x => x.IsDeleted)
+            .Where(x => x.DeletedDate != null)
             .Include(x => x.Reminders)
             .ToList()
             .GroupBy(x => x.CategoryId)

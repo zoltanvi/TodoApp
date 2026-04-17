@@ -160,7 +160,7 @@ public class TaskItemRepository : ITaskItemRepository
         {
             return _context.Tasks
                 .Where(x => x.CategoryId == categoryId)
-                .Where(x => !x.IsDeleted)
+                .Where(x => x.DeletedDate == null)
                 .Include(x => x.Reminders)
                 .Include(x => x.Versions)
                 .Include(x => x.Tags)
@@ -170,7 +170,7 @@ public class TaskItemRepository : ITaskItemRepository
 
         return _context.Tasks
             .Where(x => x.CategoryId == categoryId)
-            .Where(x => !x.IsDeleted)
+            .Where(x => x.DeletedDate == null)
             .OrderBy(x => x.ListOrder)
             .ToList();
     }
@@ -181,7 +181,7 @@ public class TaskItemRepository : ITaskItemRepository
         {
             return _context.Tasks
                 .Where(x => x.CategoryId == categoryId)
-                .Where(x => x.IsDeleted)
+                .Where(x => x.DeletedDate != null)
                 .Include(x => x.Reminders)
                 .Include(x => x.Versions)
                 .Include(x => x.Tags)
@@ -191,7 +191,7 @@ public class TaskItemRepository : ITaskItemRepository
 
         return _context.Tasks
             .Where(x => x.CategoryId == categoryId)
-            .Where(x => x.IsDeleted)
+            .Where(x => x.DeletedDate != null)
             .OrderBy(x => x.ListOrder)
             .ToList();
     }
@@ -279,7 +279,7 @@ public class TaskItemRepository : ITaskItemRepository
     public void DeleteTasksInCategory(int categoryId)
     {
         var dbTasks = _context.Tasks
-            .Where(x => x.CategoryId == categoryId && !x.IsDeleted)
+            .Where(x => x.CategoryId == categoryId && x.DeletedDate == null)
             .ToList();
 
         if (dbTasks.Count == 0) return;
@@ -296,7 +296,7 @@ public class TaskItemRepository : ITaskItemRepository
     public void RestoreTasksInCategory(int categoryId, int startingListOrder)
     {
         var dbTasks = _context.Tasks
-            .Where(x => x.CategoryId == categoryId && x.IsDeleted)
+            .Where(x => x.CategoryId == categoryId && x.DeletedDate != null)
             .ToList();
 
         if (dbTasks.Count == 0) return;

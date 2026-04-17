@@ -8,5 +8,7 @@ public class Category
     public int ListOrder { get; set; }
     public DateTime CreationDate { get; set; }
     public DateTime ModificationDate { get; set; }
-    public bool IsDeleted { get; set; }
+    public DateTime? DeletedDate { get; set; }
+
+    public bool IsDeleted => DeletedDate.HasValue;
 }

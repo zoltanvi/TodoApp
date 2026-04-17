@@ -26,6 +26,11 @@ public class CategoryDbContext : DbContext
             v => DateTime.ParseExact(v, Constants.SortableDateFormat, null)
         );
 
+        var nullableDateTimeConverter = new ValueConverter<DateTime?, string?>(
+            v => v.HasValue ? v.Value.ToString(Constants.SortableDateFormat) : null,
+            v => v != null ? DateTime.ParseExact(v, Constants.SortableDateFormat, null) : null
+        );
+
         modelBuilder.Entity<Category>(entity =>
         {
             entity.HasKey(e => e.Id);
@@ -54,8 +59,11 @@ public class CategoryDbContext : DbContext
             .HasConversion(dateTimeConverter);
 
             entity
-            .Property(e => e.IsDeleted)
-            .IsRequired();
+            .Property(e => e.DeletedDate)
+            .HasConversion(nullableDateTimeConverter);
+
+            entity
+            .Ignore(e => e.IsDeleted);
         });
 
         modelBuilder.Entity<CategoriesDbInfo>(entity =>

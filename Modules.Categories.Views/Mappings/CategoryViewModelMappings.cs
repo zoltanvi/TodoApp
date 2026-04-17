@@ -17,7 +17,7 @@ public static class CategoryViewModelMappings
             ListOrder = vm.ListOrder,
             CreationDate = vm.CreationDate,
             ModificationDate = vm.ModificationDate,
-            IsDeleted = vm.IsDeleted,
+            DeletedDate = vm.DeletedDate,
         };
     }
 
@@ -34,7 +34,7 @@ public static class CategoryViewModelMappings
             ListOrder = category.ListOrder,
             CreationDate = category.CreationDate,
             ModificationDate = category.ModificationDate,
-            IsDeleted = category.IsDeleted
+            DeletedDate = category.DeletedDate
         };
     }
 

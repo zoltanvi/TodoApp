@@ -46,7 +46,7 @@ public class CategoriesRepository : ICategoriesRepository
     public List<Category> GetActiveCategories()
     {
         return _context.Categories
-            .Where(x => !x.IsDeleted)
+            .Where(x => x.DeletedDate == null)
             .Where(x => x.Id != Constants.RecycleBinCategoryId)
             .OrderBy(x => x.ListOrder)
             .ToList();
@@ -55,7 +55,7 @@ public class CategoriesRepository : ICategoriesRepository
     public List<Category> GetRootCategories()
     {
         return _context.Categories
-            .Where(x => !x.IsDeleted)
+            .Where(x => x.DeletedDate == null)
             .Where(x => x.Id != Constants.RecycleBinCategoryId)
             .Where(x => x.ParentCategoryId == null)
             .OrderBy(x => x.ListOrder)
@@ -65,7 +65,7 @@ public class CategoriesRepository : ICategoriesRepository
     public List<Category> GetChildCategories(int parentCategoryId)
     {
         return _context.Categories
-            .Where(x => !x.IsDeleted)
+            .Where(x => x.DeletedDate == null)
             .Where(x => x.ParentCategoryId == parentCategoryId)
             .OrderBy(x => x.ListOrder)
             .ToList();
@@ -91,17 +91,17 @@ public class CategoriesRepository : ICategoriesRepository
         var dbCategory = _context.Categories.Find(category.Id);
         ArgumentNullException.ThrowIfNull(dbCategory);
 
-        dbCategory.IsDeleted = true;
+        dbCategory.DeletedDate = DateTime.Now;
         dbCategory.ListOrder = -1;
 
         // Cascade soft-delete to children
         var children = _context.Categories
-            .Where(x => x.ParentCategoryId == dbCategory.Id && !x.IsDeleted)
+            .Where(x => x.ParentCategoryId == dbCategory.Id && x.DeletedDate == null)
             .ToList();
 
         foreach (var child in children)
         {
-            child.IsDeleted = true;
+            child.DeletedDate = DateTime.Now;
             child.ListOrder = -1;
             CascadeDeleteChildren(child.Id);
         }
@@ -112,12 +112,12 @@ public class CategoriesRepository : ICategoriesRepository
     private void CascadeDeleteChildren(int parentId)
     {
         var children = _context.Categories
-            .Where(x => x.ParentCategoryId == parentId && !x.IsDeleted)
+            .Where(x => x.ParentCategoryId == parentId && x.DeletedDate == null)
             .ToList();
 
         foreach (var child in children)
         {
-            child.IsDeleted = true;
+            child.DeletedDate = DateTime.Now;
             child.ListOrder = -1;
             CascadeDeleteChildren(child.Id);
         }
@@ -128,7 +128,7 @@ public class CategoriesRepository : ICategoriesRepository
         var dbCategory = _context.Categories.Find(category.Id);
         ArgumentNullException.ThrowIfNull(dbCategory);
 
-        dbCategory.IsDeleted = false;
+        dbCategory.DeletedDate = null;
         dbCategory.ListOrder = newListOrder;
 
         _context.SaveChanges();
@@ -171,7 +171,7 @@ public class CategoriesRepository : ICategoriesRepository
     private void CollectDescendants(int parentId, List<int> result)
     {
         var childIds = _context.Categories
-            .Where(x => x.ParentCategoryId == parentId && !x.IsDeleted)
+            .Where(x => x.ParentCategoryId == parentId && x.DeletedDate == null)
             .Select(x => x.Id)
             .ToList();
 
@@ -185,7 +185,7 @@ public class CategoriesRepository : ICategoriesRepository
     public List<Category> GetDeletedCategories()
     {
         return _context.Categories
-            .Where(x => x.IsDeleted)
+            .Where(x => x.DeletedDate != null)
             .Where(x => x.Id != Constants.RecycleBinCategoryId)
             .ToList();
     }
@@ -200,7 +200,7 @@ public class CategoriesRepository : ICategoriesRepository
     private void CollectDeletedDescendants(int parentId, List<int> result)
     {
         var childIds = _context.Categories
-            .Where(x => x.ParentCategoryId == parentId && x.IsDeleted)
+            .Where(x => x.ParentCategoryId == parentId && x.DeletedDate != null)
             .Select(x => x.Id)
             .ToList();
 
@@ -214,7 +214,7 @@ public class CategoriesRepository : ICategoriesRepository
     public int GetActiveCategoriesCount()
     {
         return _context.Categories
-            .Where(x => !x.IsDeleted)
+            .Where(x => x.DeletedDate == null)
             .Count(x => x.Id != Constants.RecycleBinCategoryId);
     }
 

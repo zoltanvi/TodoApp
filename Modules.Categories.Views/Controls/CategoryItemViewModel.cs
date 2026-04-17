@@ -29,7 +29,9 @@ public class CategoryItemViewModel : BaseViewModel, IEquatable<CategoryItemViewM
     public int ListOrder { get; set; }
     public DateTime CreationDate { get; set; }
     public DateTime ModificationDate { get; set; }
-    public bool IsDeleted { get; set; }
+    public DateTime? DeletedDate { get; set; }
+
+    public bool IsDeleted => DeletedDate.HasValue;
 
     public ObservableCollection<CategoryItemViewModel> Children { get; set; } = [];
     public bool HasChildren { get; set; }
