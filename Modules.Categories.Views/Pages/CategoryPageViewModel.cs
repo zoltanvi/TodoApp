@@ -88,6 +88,7 @@ public class CategoryPageViewModel : BaseViewModel
     public ICommand OpenRecycleBinPageCommand { get; }
     public ObservableCollection<CategoryItemViewModel> FlattenedItems { get; }
     public int ActiveCategoryId { get; private set; }
+    public int FocusedCategoryId { get; set; } = -1;
 
     public IEnumerable<CategoryItemViewModel> AllCategories => GetAllCategoriesFlat();
 
@@ -402,11 +403,48 @@ public class CategoryPageViewModel : BaseViewModel
             AppSettings.Instance.SessionSettings.ActiveCategoryId = ActiveCategoryId;
         }
 
+        FocusedCategoryId = category.Id;
+
         _mediator.Publish(new ActiveCategoryChangedEvent
         {
             CategoryId = category.Id,
             CategoryName = category.Name
         });
+    }
+
+    public void ExpandCategory(int categoryId)
+    {
+        var category = FindInTree(categoryId);
+        if (category == null || !category.HasChildren || category.IsExpanded) return;
+
+        category.IsExpanded = true;
+        RebuildFlatList();
+    }
+
+    public void CollapseCategory(int categoryId)
+    {
+        var category = FindInTree(categoryId);
+        if (category == null || !category.IsExpanded) return;
+
+        category.IsExpanded = false;
+        RebuildFlatList();
+    }
+
+    public void ActivateCategory(int categoryId)
+    {
+        SetActiveCategory(categoryId);
+    }
+
+    public int GetFocusedIndex()
+    {
+        if (FocusedCategoryId < 0) return -1;
+
+        for (int i = 0; i < FlattenedItems.Count; i++)
+        {
+            if (FlattenedItems[i].Id == FocusedCategoryId) return i;
+        }
+
+        return -1;
     }
 
     private void OnToggleExpand(int categoryId)

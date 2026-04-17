@@ -88,7 +88,9 @@
                     dd:DragDrop.IsDropTarget="True"
                     Background="Transparent"
                     BorderThickness="0"
+                    Focusable="True"
                     ItemsSource="{Binding FlattenedItems}"
+                    PreviewKeyDown="OnCategoryListPreviewKeyDown"
                     ScrollViewer.CanContentScroll="False"
                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                     ScrollViewer.VerticalScrollBarVisibility="Auto"
@@ -110,6 +112,7 @@
                         <DataTemplate>
                             <local:CategoryItemControl
                                 ActiveCategoryId="{Binding DataContext.ActiveCategoryId, ElementName=CategoryListListView}"
+                                FocusedCategoryId="{Binding DataContext.FocusedCategoryId, ElementName=CategoryListListView}"
                                 Tag="{Binding DataContext, ElementName=CategoryListListView}" />
                         </DataTemplate>
                     </ListView.ItemTemplate>
