@@ -12,7 +12,7 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <Grid Margin="2 2">
+    <Grid Margin="1 0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
@@ -89,7 +89,7 @@
                     <controls:DynamicTextBox
                         Grid.Row="0"
                         Grid.Column="1"
-                        Margin="0 6"
+                        Margin="0 3"
                         Padding="7 0 0 0"
                         Background="Transparent"
                         IsReadOnly="True"
@@ -239,20 +239,27 @@
 
         <controls1:TwoStateButton
             Grid.Column="2"
+            Margin="2 0 0 0"
+            Width="{Binding UIScaler.FontSize.Large, Source={StaticResource UIScaler}}"
+            Height="{Binding UIScaler.FontSize.Large, Source={StaticResource UIScaler}}"
+            FontSize="{Binding UIScaler.FontSize.Small, Source={StaticResource UIScaler}}"
+            VerticalAlignment="Center"
+            Style="{StaticResource ButtonQuickActionStyle}"
             FirstCommand="{Binding ToggleDetailsCommand}"
             FirstContent="{StaticResource IconInfo}"
             FirstToolTip="Show details"
             IsInSecondState="{Binding DetailsVisible}"
             SecondCommand="{Binding ToggleDetailsCommand}"
             SecondContent="{StaticResource IconHideInfo}"
-            SecondToolTip="Hide details"
-            MaxHeight="{Binding UIScaler.ColorPickerHeight, Source={StaticResource UIScaler}}"
-            Margin="4 0 0 0"
-            />
+            SecondToolTip="Hide details" />
 
         <Button
             Grid.Column="3"
-            Margin="4 0 0 0"
+            Margin="2 0 2 0"
+            Width="{Binding UIScaler.FontSize.Large, Source={StaticResource UIScaler}}"
+            Height="{Binding UIScaler.FontSize.Large, Source={StaticResource UIScaler}}"
+            FontSize="{Binding UIScaler.FontSize.Small, Source={StaticResource UIScaler}}"
+            VerticalAlignment="Center"
             Command="{Binding RestoreTaskItemCommand}"
             Content="{StaticResource IconRestore}"
             Style="{StaticResource ButtonQuickActionStyle}"
