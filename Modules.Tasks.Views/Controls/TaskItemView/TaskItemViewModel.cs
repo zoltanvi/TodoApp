@@ -82,8 +82,9 @@ public class TaskItemViewModel : BaseViewModel, ITaskItemViewModel
 
     public bool IsAnyReminderOn { get; set; }
     public bool Pinned { get; set; }
-    public bool IsDeleted { get; set; }
     public DateTime? DeletedDate { get; set; }
+
+    public bool IsDeleted => DeletedDate.HasValue;
 
     public bool IsQuickActionsEnabled { get; set; }
 

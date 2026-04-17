@@ -17,8 +17,9 @@ public class TaskItem
     public string MarkerColor { get; set; } = Constants.ColorName.Transparent;
     public string BorderColor { get; set; } = Constants.ColorName.Transparent;
     public string BackgroundColor { get; set; } = Constants.ColorName.Transparent;
-    public bool IsDeleted { get; set; }
     public DateTime? DeletedDate { get; set; }
+
+    public bool IsDeleted => DeletedDate.HasValue;
 
     // Navigation properties
     public ICollection<TaskItemVersion> Versions { get; set; } = new List<TaskItemVersion>();

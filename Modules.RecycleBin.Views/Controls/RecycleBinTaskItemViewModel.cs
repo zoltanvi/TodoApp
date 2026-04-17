@@ -20,8 +20,9 @@ public class RecycleBinTaskItemViewModel : BaseViewModel
     public string? MarkerColor { get; set; }
     public string? BorderColor { get; set; }
     public string? BackgroundColor { get; set; }
-    public bool IsDeleted { get; set; }
     public DateTime? DeletedDate { get; set; }
+
+    public bool IsDeleted => DeletedDate.HasValue;
     public bool DetailsVisible { get; set; }
 
     public List<RecycleBinTaskItemVersionViewModel> Versions { get; set; } = [];

@@ -78,6 +78,9 @@ public class TaskItemDbContext : DbContext
                 .HasConversion(nullableDateTimeConverter);
 
             entity
+                .Ignore(e => e.IsDeleted);
+
+            entity
                 .HasMany(e => e.Reminders)
                 .WithOne(e => e.TaskItem)
                 .HasForeignKey(e => e.TaskId);

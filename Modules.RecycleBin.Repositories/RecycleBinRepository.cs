@@ -38,7 +38,6 @@ public class RecycleBinRepository
         var dbTask = _context.Tasks.Find(taskItem.Id);
         ArgumentNullException.ThrowIfNull(dbTask);
 
-        dbTask.IsDeleted = false;
         dbTask.DeletedDate = null;
         dbTask.Pinned = false;
         dbTask.ListOrder = newListOrder;

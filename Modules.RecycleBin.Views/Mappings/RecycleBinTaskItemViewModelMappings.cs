@@ -21,7 +21,6 @@ public static class RecycleBinTaskItemViewModelMappings
             BorderColor = taskItem.BorderColor,
             CreationDate = taskItem.CreationDate,
             DeletedDate = taskItem.DeletedDate,
-            IsDeleted = taskItem.IsDeleted,
             ListOrder = taskItem.ListOrder,
             MarkerColor = taskItem.MarkerColor,
             ModificationDate = taskItem.ModificationDate,

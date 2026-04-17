@@ -257,7 +257,6 @@ public class TaskItemRepository : ITaskItemRepository
         ArgumentNullException.ThrowIfNull(dbTask);
 
         dbTask.DeletedDate = DateTime.Now;
-        dbTask.IsDeleted = true;
         dbTask.ListOrder = -1;
 
         _context.SaveChanges();
@@ -271,7 +270,6 @@ public class TaskItemRepository : ITaskItemRepository
             ArgumentNullException.ThrowIfNull(dbTask);
 
             dbTask.DeletedDate = DateTime.Now;
-            dbTask.IsDeleted = true;
             dbTask.ListOrder = -1;
         }
 
@@ -289,7 +287,6 @@ public class TaskItemRepository : ITaskItemRepository
         foreach (TaskItem dbTask in dbTasks)
         {
             dbTask.DeletedDate = DateTime.Now;
-            dbTask.IsDeleted = true;
             dbTask.ListOrder = -1;
         }
 
@@ -309,7 +306,6 @@ public class TaskItemRepository : ITaskItemRepository
         foreach (TaskItem dbTask in dbTasks)
         {
             dbTask.DeletedDate = null;
-            dbTask.IsDeleted = false;
             dbTask.Pinned = false;
             dbTask.ListOrder = listOrder;
 
@@ -325,7 +321,6 @@ public class TaskItemRepository : ITaskItemRepository
         ArgumentNullException.ThrowIfNull(dbTask);
 
         dbTask.DeletedDate = null;
-        dbTask.IsDeleted = false;
         dbTask.Pinned = false;
         dbTask.ListOrder = newListOrder;
 

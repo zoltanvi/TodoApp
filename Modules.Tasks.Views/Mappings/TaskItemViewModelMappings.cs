@@ -30,7 +30,6 @@ public static class TaskItemViewModelMappings
             MarkerColor = vm.MarkerColor,
             BorderColor = vm.BorderColor,
             BackgroundColor = vm.BackgroundColor,
-            IsDeleted = vm.IsDeleted,
             DeletedDate = vm.DeletedDate,
             Versions = vm.Versions.MapList()
         };
@@ -62,7 +61,6 @@ public static class TaskItemViewModelMappings
             MarkerColor = taskItem.MarkerColor,
             BorderColor = taskItem.BorderColor,
             BackgroundColor = taskItem.BackgroundColor,
-            IsDeleted = taskItem.IsDeleted,
             DeletedDate = taskItem.DeletedDate,
             Versions = taskItem.Versions.MapToViewModelList(mediator),
             Tags = taskItem.Tags.MapTagItems()
