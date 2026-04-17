@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Modules.Categories.Contracts.Cqrs.Commands;
 using Modules.Categories.Contracts.Cqrs.Queries;
+using Modules.Categories.Contracts.Events;
 using Modules.Common;
 using Modules.Common.DataBinding;
 using Modules.Common.DataModels;
@@ -170,6 +171,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         _eventAggregator.GetEvent<HotkeyPressedCtrlNEvent>().Subscribe(OnCtrlNPressed);
         
         _eventAggregator.GetEvent<ThemeChangedEvent>().Subscribe(OnThemeChanged);
+        _eventAggregator.GetEvent<CategoryNameUpdatedEvent>().Subscribe(OnCategoryNameUpdated);
 
         _oneEditorOpenService.ChangedToDisplayMode += FocusAddNewTaskTextEditor;
         SearchBoxViewModel.SearchTermsChanged += OnSearchTermsChanged;
@@ -205,6 +207,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         _eventAggregator.GetEvent<HotkeyPressedCtrlNEvent>().Unsubscribe(OnCtrlNPressed);
 
         _eventAggregator.GetEvent<ThemeChangedEvent>().Unsubscribe(OnThemeChanged);
+        _eventAggregator.GetEvent<CategoryNameUpdatedEvent>().Unsubscribe(OnCategoryNameUpdated);
 
         _oneEditorOpenService.ChangedToDisplayMode -= FocusAddNewTaskTextEditor;
         SearchBoxViewModel.SearchTermsChanged -= OnSearchTermsChanged;
@@ -645,6 +648,22 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
     private void OnThemeChanged()
     {
         ItemsView.Refresh();
+    }
+
+    private async void OnCategoryNameUpdated(CategoryNameUpdatedPayload payload)
+    {
+        try
+        {
+            var activeCategory = await _mediator.Send(new GetSelectedCategoryQuery());
+            if (activeCategory.Id == payload.CategoryId)
+            {
+                ActiveCategoryName = payload.CategoryName;
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Trace.TraceError($"{nameof(OnCategoryNameUpdated)} failed: {ex}");
+        }
     }
 
     private async void OnTaskSplitted(int categoryId)
