@@ -11,7 +11,7 @@
     mc:Ignorable="d">
     <Grid>
         <Border
-            Margin="4 1 0 0"
+            Margin="8 1 0 0"
             BorderBrush="{DynamicResource SecondaryContainer}"
             BorderThickness="1 0 0 0"
             CornerRadius="0">
