@@ -80,8 +80,11 @@
         Command="{Binding Path=ChangeCategoryCommand}"
         CommandParameter="{Binding DataContext, ElementName=CategoryListItem}"
         Cursor="Hand"
+        FocusVisualStyle="{x:Null}"
         Foreground="{DynamicResource OnPrimaryContainer}"
-        ToolTip="{Binding Name}">
+        
+        >
+        <!--ToolTip="{Binding Name}"-->
         <Button.LayoutTransform>
             <ScaleTransform ScaleX="{Binding Source={StaticResource UIScaler}, Path=UIScaler.ScaleValue}" ScaleY="{Binding Source={StaticResource UIScaler}, Path=UIScaler.ScaleValue}" />
         </Button.LayoutTransform>
@@ -127,6 +130,7 @@
                                         Command="{Binding ToggleExpandCommand}"
                                         Cursor="Hand"
                                         Focusable="False"
+                                        FocusVisualStyle="{x:Null}"
                                         Visibility="{Binding HasChildren, Converter={StaticResource BoolToVisibilityConverter}}">
                                         <Button.Style>
                                             <Style TargetType="Button">
@@ -173,6 +177,7 @@
                                         Command="{Binding Path=DeleteCategoryCommand}"
                                         CommandParameter="{Binding DataContext, ElementName=CategoryListItem}"
                                         Cursor="Hand"
+                                        FocusVisualStyle="{x:Null}"
                                         FontSize="{Binding AppSettings.CategorySettings.FontSize, Source={StaticResource AppSettings}, Converter={StaticResource FontSizeScaler}}"
                                         Style="{StaticResource ButtonIconCloseStyle}"
                                         ToolTip="Delete category"

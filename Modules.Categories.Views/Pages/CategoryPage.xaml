@@ -89,6 +89,7 @@
                     Background="Transparent"
                     BorderThickness="0"
                     Focusable="True"
+                    FocusVisualStyle="{x:Null}"
                     ItemsSource="{Binding FlattenedItems}"
                     PreviewKeyDown="OnCategoryListPreviewKeyDown"
                     ScrollViewer.CanContentScroll="False"
@@ -98,6 +99,7 @@
 
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
+                            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="ListViewItem">
