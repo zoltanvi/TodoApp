@@ -17,6 +17,8 @@ public interface ICategoriesRepository
     void UpdateCategoryListOrders(List<Category> categories);
     void MoveCategoryToParent(int categoryId, int? newParentId, int newListOrder);
     List<int> GetDescendantCategoryIds(int categoryId);
+    List<Category> GetDeletedCategories();
+    List<int> GetDeletedDescendantCategoryIds(int categoryId);
     int GetActiveCategoriesCount();
     Category? GetRecycleBin();
 }

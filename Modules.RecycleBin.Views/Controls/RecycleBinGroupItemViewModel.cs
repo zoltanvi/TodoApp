@@ -21,6 +21,8 @@ public class RecycleBinGroupItemViewModel : BaseViewModel
     public ObservableCollection<RecycleBinTaskItemViewModel> Items { get; set; }
     public ICollectionView ItemsView { get; set; }
 
+    public ObservableCollection<RecycleBinGroupItemViewModel> Children { get; set; } = new();
+
     public ICommand ToggleGroupIsOpen { get; }
     public ICommand RestoreFullCategoryCommand { get; }
 
@@ -44,13 +46,25 @@ public class RecycleBinGroupItemViewModel : BaseViewModel
 
         _mediator = mediator;
         ToggleGroupIsOpen = new RelayCommand(() => IsOpen ^= true);
-        RestoreFullCategoryCommand = new RelayCommand(() => _mediator.Send(new RestoreTaskItemsInCategoryCommand { CategoryId = CategoryId }));
+        RestoreFullCategoryCommand = new RelayCommand(RestoreTree);
 
         Items = items;
         ItemsView = CollectionViewSource.GetDefaultView(Items);
         ItemsView.Filter = FilterTaskItem;
 
         IsOpen = isOpen;
+    }
+
+    private void RestoreTree()
+    {
+        if (Children.Count > 0)
+        {
+            _mediator.Send(new RestoreCategoryTreeCommand { RootCategoryId = CategoryId });
+        }
+        else
+        {
+            _mediator.Send(new RestoreTaskItemsInCategoryCommand { CategoryId = CategoryId });
+        }
     }
 
     private bool FilterTaskItem(object obj)
@@ -69,6 +83,56 @@ public class RecycleBinGroupItemViewModel : BaseViewModel
         _searchTerms = searchTerms;
         ItemsView.Refresh();
 
-        return ItemsView.Cast<object>().Any();
+        var hasOwnItems = ItemsView.Cast<object>().Any();
+        var hasChildItems = Children.Any(c => c.SetSearchTerms(searchTerms));
+
+        return hasOwnItems || hasChildItems;
+    }
+
+    public RecycleBinGroupItemViewModel? FindGroupInTree(int categoryId)
+    {
+        if (CategoryId == categoryId) return this;
+
+        foreach (var child in Children)
+        {
+            var found = child.FindGroupInTree(categoryId);
+            if (found != null) return found;
+        }
+
+        return null;
+    }
+
+    public RecycleBinTaskItemViewModel? FindTaskInTree(int taskId, out RecycleBinGroupItemViewModel? ownerGroup)
+    {
+        var task = Items.FirstOrDefault(x => x.Id == taskId);
+        if (task != null)
+        {
+            ownerGroup = this;
+            return task;
+        }
+
+        foreach (var child in Children)
+        {
+            task = child.FindTaskInTree(taskId, out ownerGroup);
+            if (task != null) return task;
+        }
+
+        ownerGroup = null;
+        return null;
+    }
+
+    public bool HasAnyContent()
+    {
+        return Items.Count > 0 || Children.Any(c => c.HasAnyContent());
+    }
+
+    public List<int> GetAllCategoryIds()
+    {
+        var result = new List<int> { CategoryId };
+        foreach (var child in Children)
+        {
+            result.AddRange(child.GetAllCategoryIds());
+        }
+        return result;
     }
 }

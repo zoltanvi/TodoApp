@@ -182,6 +182,35 @@ public class CategoriesRepository : ICategoriesRepository
         }
     }
 
+    public List<Category> GetDeletedCategories()
+    {
+        return _context.Categories
+            .Where(x => x.IsDeleted)
+            .Where(x => x.Id != Constants.RecycleBinCategoryId)
+            .ToList();
+    }
+
+    public List<int> GetDeletedDescendantCategoryIds(int categoryId)
+    {
+        var result = new List<int>();
+        CollectDeletedDescendants(categoryId, result);
+        return result;
+    }
+
+    private void CollectDeletedDescendants(int parentId, List<int> result)
+    {
+        var childIds = _context.Categories
+            .Where(x => x.ParentCategoryId == parentId && x.IsDeleted)
+            .Select(x => x.Id)
+            .ToList();
+
+        foreach (var childId in childIds)
+        {
+            result.Add(childId);
+            CollectDeletedDescendants(childId, result);
+        }
+    }
+
     public int GetActiveCategoriesCount()
     {
         return _context.Categories
