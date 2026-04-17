@@ -70,5 +70,8 @@
     <system:String x:Key="IconArrowDown">&#xE74B;</system:String>
     <system:String x:Key="IconMoveTo">&#xE72D;</system:String>
     <system:String x:Key="IconResetAll">&#xE777;</system:String>
+    <system:String x:Key="IconFolder">&#xE8B7;</system:String>
+    <system:String x:Key="IconFolderOpen">&#xE838;</system:String>
+    <system:String x:Key="IconAdd">&#xE710;</system:String>
 
 </ResourceDictionary>

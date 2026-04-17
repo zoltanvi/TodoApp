@@ -31,11 +31,14 @@ public class CategoryDbContext : DbContext
             entity.HasKey(e => e.Id);
 
             entity
+            .Property(e => e.ParentCategoryId);
+
+            entity
             .Property(e => e.Name)
             .IsRequired();
 
             entity
-            .HasIndex(e => e.Name)
+            .HasIndex(e => new { e.ParentCategoryId, e.Name })
             .IsUnique();
 
             entity

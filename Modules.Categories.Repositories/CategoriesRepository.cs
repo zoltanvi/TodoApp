@@ -34,11 +34,39 @@ public class CategoriesRepository : ICategoriesRepository
         return _context.Categories.FirstOrDefault(c => c.Name.ToUpper() == name.ToUpper());
     }
 
+    public Category? GetCategoryByName(string name, int? parentCategoryId)
+    {
+        ArgumentNullException.ThrowIfNull(name);
+
+        return _context.Categories.FirstOrDefault(c =>
+            c.Name.ToUpper() == name.ToUpper() &&
+            c.ParentCategoryId == parentCategoryId);
+    }
+
     public List<Category> GetActiveCategories()
     {
         return _context.Categories
             .Where(x => !x.IsDeleted)
             .Where(x => x.Id != Constants.RecycleBinCategoryId)
+            .OrderBy(x => x.ListOrder)
+            .ToList();
+    }
+
+    public List<Category> GetRootCategories()
+    {
+        return _context.Categories
+            .Where(x => !x.IsDeleted)
+            .Where(x => x.Id != Constants.RecycleBinCategoryId)
+            .Where(x => x.ParentCategoryId == null)
+            .OrderBy(x => x.ListOrder)
+            .ToList();
+    }
+
+    public List<Category> GetChildCategories(int parentCategoryId)
+    {
+        return _context.Categories
+            .Where(x => !x.IsDeleted)
+            .Where(x => x.ParentCategoryId == parentCategoryId)
             .OrderBy(x => x.ListOrder)
             .ToList();
     }
@@ -50,6 +78,7 @@ public class CategoriesRepository : ICategoriesRepository
 
         dbCategory.Name = category.Name;
         dbCategory.ListOrder = category.ListOrder;
+        dbCategory.ParentCategoryId = category.ParentCategoryId;
         dbCategory.ModificationDate = DateTime.Now;
 
         _context.SaveChanges();
@@ -65,7 +94,33 @@ public class CategoriesRepository : ICategoriesRepository
         dbCategory.IsDeleted = true;
         dbCategory.ListOrder = -1;
 
+        // Cascade soft-delete to children
+        var children = _context.Categories
+            .Where(x => x.ParentCategoryId == dbCategory.Id && !x.IsDeleted)
+            .ToList();
+
+        foreach (var child in children)
+        {
+            child.IsDeleted = true;
+            child.ListOrder = -1;
+            CascadeDeleteChildren(child.Id);
+        }
+
         _context.SaveChanges();
+    }
+
+    private void CascadeDeleteChildren(int parentId)
+    {
+        var children = _context.Categories
+            .Where(x => x.ParentCategoryId == parentId && !x.IsDeleted)
+            .ToList();
+
+        foreach (var child in children)
+        {
+            child.IsDeleted = true;
+            child.ListOrder = -1;
+            CascadeDeleteChildren(child.Id);
+        }
     }
 
     public Category RestoreCategory(Category category, int newListOrder)
@@ -92,6 +147,39 @@ public class CategoriesRepository : ICategoriesRepository
         }
 
         _context.SaveChanges();
+    }
+
+    public void MoveCategoryToParent(int categoryId, int? newParentId, int newListOrder)
+    {
+        var dbCategory = _context.Categories.Find(categoryId);
+        ArgumentNullException.ThrowIfNull(dbCategory);
+
+        dbCategory.ParentCategoryId = newParentId;
+        dbCategory.ListOrder = newListOrder;
+        dbCategory.ModificationDate = DateTime.Now;
+
+        _context.SaveChanges();
+    }
+
+    public List<int> GetDescendantCategoryIds(int categoryId)
+    {
+        var result = new List<int>();
+        CollectDescendants(categoryId, result);
+        return result;
+    }
+
+    private void CollectDescendants(int parentId, List<int> result)
+    {
+        var childIds = _context.Categories
+            .Where(x => x.ParentCategoryId == parentId && !x.IsDeleted)
+            .Select(x => x.Id)
+            .ToList();
+
+        foreach (var childId in childIds)
+        {
+            result.Add(childId);
+            CollectDescendants(childId, result);
+        }
     }
 
     public int GetActiveCategoriesCount()

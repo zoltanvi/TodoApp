@@ -11,4 +11,6 @@
 
     <valueConverters:EnumToFontFamilyConverter x:Key="EnumToFontFamilyConverter" />
 
+    <valueConverters:DepthToMarginConverter x:Key="DepthToMarginConverter" />
+
 </ResourceDictionary>

@@ -15,11 +15,55 @@
     <UserControl.ContextMenu>
         <ContextMenu>
             <MenuItem
+                Command="{Binding Path=PlacementTarget.DataContext.AddSubcategoryCommand, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
+                Header="Add subcategory">
+                <MenuItem.Icon>
+                    <Label
+                        Content="{StaticResource IconAdd}"
+                        Foreground="{DynamicResource OnSurfaceVariant}"
+                        FontFamily="{StaticResource IconFont}"
+                        FontSize="12"
+                        Padding="0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center" />
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem
+                Command="{Binding Path=PlacementTarget.DataContext.RenameCommand, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
+                Header="Rename">
+                <MenuItem.Icon>
+                    <Label
+                        Content="{StaticResource IconEdit}"
+                        Foreground="{DynamicResource OnSurfaceVariant}"
+                        FontFamily="{StaticResource IconFont}"
+                        FontSize="12"
+                        Padding="0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center" />
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem
                 Command="{Binding Path=PlacementTarget.DataContext.DeleteCategoryCommand, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
                 Header="Delete">
                 <MenuItem.Icon>
                     <Label
                         Content="{StaticResource IconTrash}"
+                        Foreground="{DynamicResource OnSurfaceVariant}"
+                        FontFamily="{StaticResource IconFont}"
+                        FontSize="12"
+                        Padding="0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center" />
+                </MenuItem.Icon>
+            </MenuItem>
+            <Separator />
+            <MenuItem
+                Command="{Binding Path=PlacementTarget.DataContext.MoveToRootCommand, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
+                Header="Move to root"
+                Visibility="{Binding Path=PlacementTarget.DataContext.IsSubcategory, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}, Converter={StaticResource BoolToVisibilityConverter}}">
+                <MenuItem.Icon>
+                    <Label
+                        Content="{StaticResource IconMoveTo}"
                         Foreground="{DynamicResource OnSurfaceVariant}"
                         FontFamily="{StaticResource IconFont}"
                         FontSize="12"
@@ -49,42 +93,80 @@
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type Button}">
                             <Border
-                                Margin="0 0 4 0"
+                                Margin="{Binding Depth, Converter={StaticResource DepthToMarginConverter}}"
                                 Padding="{TemplateBinding Padding}"
                                 CornerRadius="4">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="auto" />
+                                        <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
 
                                     <Border
                                         Grid.Column="0"
-                                        Grid.ColumnSpan="3"
+                                        Grid.ColumnSpan="4"
                                         Background="{TemplateBinding Background}"
                                         CornerRadius="4"
                                         Opacity="{TemplateBinding Opacity}" />
 
-                                    <Label
+                                    <!-- Expand/Collapse chevron, only visible when category has children -->
+                                    <Button
+                                        x:Name="PART_ExpandButton"
                                         Grid.Column="0"
-                                        Margin="6 0"
+                                        Grid.ColumnSpan="2"
+                                        Width="20"
+                                        Margin="2 0 0 0"
                                         Padding="0"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
-                                        Content="{StaticResource IconList}"
-                                        FontSize="12"
-                                        Style="{StaticResource IconLabelStyle}" />
+                                        Command="{Binding ToggleExpandCommand}"
+                                        Cursor="Hand"
+                                        Focusable="False"
+                                        Visibility="{Binding HasChildren, Converter={StaticResource BoolToVisibilityConverter}}">
+                                        <Button.Style>
+                                            <Style TargetType="Button">
+                                                <Setter Property="Background" Value="Transparent" />
+                                                <Setter Property="BorderThickness" Value="0" />
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="Button">
+                                                            <Border Background="Transparent" Padding="1">
+                                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                                            </Border>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </Button.Style>
+                                        <Label
+                                            Padding="0"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            FontSize="10"
+                                            Style="{StaticResource IconLabelStyle}">
+                                            <Label.Content>
+                                                <Binding Path="IsExpanded">
+                                                    <Binding.Converter>
+                                                        <local:BoolToChevronConverter />
+                                                    </Binding.Converter>
+                                                </Binding>
+                                            </Label.Content>
+                                        </Label>
+                                    </Button>
 
+                                    <!-- Category name or rename textbox -->
                                     <ContentPresenter
-                                        Grid.Column="1"
+                                        Grid.Column="2"
                                         Margin="6 4"
                                         HorizontalAlignment="Stretch"
                                         VerticalAlignment="Center" />
 
+                                    <!-- Delete button -->
                                     <Button
                                         x:Name="PART_DeleteButton"
-                                        Grid.Column="2"
+                                        Grid.Column="3"
                                         Command="{Binding Path=DeleteCategoryCommand}"
                                         CommandParameter="{Binding DataContext, ElementName=CategoryListItem}"
                                         Cursor="Hand"
@@ -143,41 +225,53 @@
             </Style>
         </Button.Style>
 
-        <TextBlock
-            FontSize="13"
-            FontWeight="Normal"
-            Text="{Binding Name}">
+        <Grid>
+            <!-- Normal display: category name -->
+            <TextBlock
+                FontSize="13"
+                FontWeight="Normal"
+                Text="{Binding Name}"
+                Visibility="{Binding IsRenaming, Converter={StaticResource BoolToVisibilityNegatedConverter}}">
 
-            <TextBlock.Style>
-                <Style
-                    BasedOn="{StaticResource CategoryTextBlockStyle}"
-                    TargetType="TextBlock">
-                    <Style.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Foreground" Value="{DynamicResource OnSecondaryContainer}" />
-                        </Trigger>
+                <TextBlock.Style>
+                    <Style
+                        BasedOn="{StaticResource CategoryTextBlockStyle}"
+                        TargetType="TextBlock">
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="{DynamicResource OnSecondaryContainer}" />
+                            </Trigger>
 
-                        <DataTrigger Value="True">
-                            <DataTrigger.Binding>
-                                <MultiBinding>
-                                    <MultiBinding.Converter>
-                                        <converters:EqualityConverter />
-                                    </MultiBinding.Converter>
-                                    <Binding Path="Id" />
-                                    <Binding
-                                        Path="ActiveCategoryId"
-                                        RelativeSource="{RelativeSource AncestorType={x:Type local:CategoryItemControl}}" />
-                                </MultiBinding>
-                            </DataTrigger.Binding>
-                            <Setter Property="Foreground" Value="{DynamicResource OnPrimaryContainer}" />
-                        </DataTrigger>
+                            <DataTrigger Value="True">
+                                <DataTrigger.Binding>
+                                    <MultiBinding>
+                                        <MultiBinding.Converter>
+                                            <converters:EqualityConverter />
+                                        </MultiBinding.Converter>
+                                        <Binding Path="Id" />
+                                        <Binding
+                                            Path="ActiveCategoryId"
+                                            RelativeSource="{RelativeSource AncestorType={x:Type local:CategoryItemControl}}" />
+                                    </MultiBinding>
+                                </DataTrigger.Binding>
+                                <Setter Property="Foreground" Value="{DynamicResource OnPrimaryContainer}" />
+                            </DataTrigger>
 
-                    </Style.Triggers>
-                    <Setter Property="Foreground" Value="{DynamicResource OnSecondaryContainer}" />
+                        </Style.Triggers>
+                        <Setter Property="Foreground" Value="{DynamicResource OnSecondaryContainer}" />
 
-                </Style>
-            </TextBlock.Style>
-        </TextBlock>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+
+            <!-- Rename mode: editable textbox -->
+            <TextBox
+                x:Name="RenameTextBox"
+                FontSize="13"
+                Text="{Binding RenameText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                Visibility="{Binding IsRenaming, Converter={StaticResource BoolToVisibilityConverter}}"
+                local:RenameBehavior.IsInRenameMode="{Binding IsRenaming}" />
+        </Grid>
 
     </Button>
 

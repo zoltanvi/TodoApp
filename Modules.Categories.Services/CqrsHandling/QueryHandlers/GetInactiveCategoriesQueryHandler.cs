@@ -22,7 +22,12 @@ public class GetInactiveCategoriesQueryHandler : IRequestHandler<GetInactiveCate
         var inactiveCategories = _categoriesRepository.GetActiveCategories().Where(x => x.Id != activeCategoryId);
 
         var result = new List<CategoryInfo>(
-            inactiveCategories.Select(x => new CategoryInfo { Id = x.Id, Name = x.Name }));
+            inactiveCategories.Select(x => new CategoryInfo
+            {
+                Id = x.Id,
+                ParentCategoryId = x.ParentCategoryId,
+                Name = x.Name
+            }));
 
         return Task.FromResult(result);
     }

@@ -3,9 +3,6 @@ using System.Windows.Controls;
 
 namespace Modules.Categories.Views.Controls;
 
-/// <summary>
-/// Interaction logic for CategoryListItemControl.xaml
-/// </summary>
 public partial class CategoryItemControl : UserControl
 {
     public static readonly DependencyProperty ActiveCategoryIdProperty =

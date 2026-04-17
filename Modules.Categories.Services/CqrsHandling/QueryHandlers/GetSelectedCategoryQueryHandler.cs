@@ -24,6 +24,7 @@ public class GetSelectedCategoryQueryHandler : IRequestHandler<GetSelectedCatego
         return Task.FromResult(new CategoryInfo
         {
             Id = activeCategory?.Id ?? -1,
+            ParentCategoryId = activeCategory?.ParentCategoryId,
             Name = activeCategory?.Name ?? string.Empty
         });
     }

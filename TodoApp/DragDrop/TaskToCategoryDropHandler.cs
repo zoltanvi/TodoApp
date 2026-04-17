@@ -1,5 +1,6 @@
 ﻿using GongSolutions.Wpf.DragDrop;
 using MediatR;
+using Modules.Categories.Contracts.Cqrs.Commands;
 using Modules.Categories.Views.Controls;
 using Modules.Common.Views.DragDrop;
 using Modules.Common.Views.Services;
@@ -10,7 +11,8 @@ using DragDropEffects = System.Windows.DragDropEffects;
 namespace TodoApp.DragDrop;
 
 /// <summary>
-/// Handles dropping a [task on a category] or drag n drop a [category next to another category].
+/// Handles dropping a [task on a category], drag n drop a [category next to another category],
+/// or dropping a [category onto another category] to make it a subcategory.
 /// </summary>
 public class TaskToCategoryDropHandler : DefaultDropHandler
 {
@@ -20,7 +22,12 @@ public class TaskToCategoryDropHandler : DefaultDropHandler
     {
         if (dropInfo is { Data: TaskItemViewModel, TargetItem: CategoryItemViewModel })
         {
-            // Set effects to show that the drop is allowed
+            dropInfo.Effects = DragDropEffects.Move;
+            dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
+        }
+        else if (dropInfo is { Data: CategoryItemViewModel source, TargetItem: CategoryItemViewModel target }
+                 && source.Id != target.Id)
+        {
             dropInfo.Effects = DragDropEffects.Move;
             dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
         }
@@ -38,6 +45,18 @@ public class TaskToCategoryDropHandler : DefaultDropHandler
             ArgumentNullException.ThrowIfNull(mediator);
 
             mediator.Send(new MoveTaskToNewCategoryCommand { TaskId = task.Id, CategoryId = category.Id });
+        }
+        else if (dropInfo is { Data: CategoryItemViewModel sourceCategory, TargetItem: CategoryItemViewModel targetCategory }
+                 && sourceCategory.Id != targetCategory.Id)
+        {
+            var mediator = ServiceLocator.GetService<IMediator>();
+            ArgumentNullException.ThrowIfNull(mediator);
+
+            mediator.Send(new MoveCategoryCommand
+            {
+                CategoryId = sourceCategory.Id,
+                NewParentCategoryId = targetCategory.Id
+            });
         }
         else
         {
