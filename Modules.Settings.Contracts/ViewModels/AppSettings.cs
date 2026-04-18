@@ -1,6 +1,6 @@
 ﻿namespace Modules.Settings.Contracts.ViewModels;
 
-public sealed class AppSettings : SettingsBase
+public sealed class AppSettings : SettingsBase, IAppSettings
 {
     public static AppSettings Instance { get; } = new();
 

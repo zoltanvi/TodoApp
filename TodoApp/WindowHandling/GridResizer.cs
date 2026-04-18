@@ -22,6 +22,7 @@ public class GridResizer
     private readonly GridSplitter _resizer;
     private readonly Window _window;
     private readonly IUIScaler _uiScaler;
+    private readonly IAppSettings _appSettings;
     private bool _isDragging;
     private bool _isDraggingEnabled = true;
 
@@ -30,7 +31,7 @@ public class GridResizer
     private double GridHalfWidth => _grid.ActualWidth / 2;
     private double MaxColumnWidth => GridHalfWidth < MinColumnWidth ? MinColumnWidth : GridHalfWidth;
     private double SnappingWidth => UnscaledSnappingWidth * _uiScaler.ScaleValue;
-    private SessionSettings SessionSettings => AppSettings.Instance.SessionSettings;
+    private SessionSettings SessionSettings => _appSettings.SessionSettings;
 
     private double LeftColumnWidth
     {
@@ -83,21 +84,24 @@ public class GridResizer
     }
 
     public GridResizer(
-        Grid grid, 
-        GridSplitter resizer, 
-        Window window, 
+        Grid grid,
+        GridSplitter resizer,
+        Window window,
         IUIScaler uiScaler,
-        IEventAggregator eventAggregator)
+        IEventAggregator eventAggregator,
+        IAppSettings appSettings)
     {
         ArgumentNullException.ThrowIfNull(grid);
         ArgumentNullException.ThrowIfNull(resizer);
         ArgumentNullException.ThrowIfNull(window);
         ArgumentNullException.ThrowIfNull(uiScaler);
         ArgumentNullException.ThrowIfNull(eventAggregator);
-        
+        ArgumentNullException.ThrowIfNull(appSettings);
+
         _grid = grid;
         _resizer = resizer;
         _window = window;
+        _appSettings = appSettings;
         _uiScaler = uiScaler;
 
         _doubleClickTimer = TimerService.Instance.CreateTimer(100, OnDoubleClickTimer);

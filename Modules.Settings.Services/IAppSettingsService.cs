@@ -4,6 +4,6 @@ namespace Modules.Settings.Services;
 
 public interface IAppSettingsService
 {
-    void UpdateAppSettingsFromDatabase(AppSettings appSettings);
-    void UpdateDatabaseFromAppSettings(AppSettings appSettings);
+    void UpdateAppSettingsFromDatabase(IAppSettings appSettings);
+    void UpdateDatabaseFromAppSettings(IAppSettings appSettings);
 }

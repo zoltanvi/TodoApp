@@ -17,15 +17,22 @@ public sealed class CategoryPageTreeState
     private List<CategoryItemViewModel> _treeRoots = [];
     private readonly ICategoriesRepository _categoriesRepository;
     private readonly IEventAggregator _eventAggregator;
+    private readonly IAppSettings _appSettings;
     private readonly Action _onFlatListRebuilt;
 
     public CategoryPageTreeState(
         ICategoriesRepository categoriesRepository,
         IEventAggregator eventAggregator,
+        IAppSettings appSettings,
         Action onFlatListRebuilt)
     {
+        ArgumentNullException.ThrowIfNull(categoriesRepository);
+        ArgumentNullException.ThrowIfNull(eventAggregator);
+        ArgumentNullException.ThrowIfNull(appSettings);
+
         _categoriesRepository = categoriesRepository;
         _eventAggregator = eventAggregator;
+        _appSettings = appSettings;
         _onFlatListRebuilt = onFlatListRebuilt;
     }
 
@@ -102,7 +109,7 @@ public sealed class CategoryPageTreeState
             .Where(c => c.IsExpanded && c.HasChildren)
             .Select(c => c.Id);
 
-        AppSettings.Instance.SessionSettings.SetExpandedCategoryIds(expandedIds);
+        _appSettings.SessionSettings.SetExpandedCategoryIds(expandedIds);
     }
 
     public void RebuildFlatList()
@@ -194,7 +201,7 @@ public sealed class CategoryPageTreeState
 
     private void RestoreExpandedStates()
     {
-        var expandedIds = AppSettings.Instance.SessionSettings.GetExpandedCategoryIds();
+        var expandedIds = _appSettings.SessionSettings.GetExpandedCategoryIds();
         if (expandedIds.Count == 0) return;
 
         foreach (var category in GetAllCategoriesFlat())

@@ -13,20 +13,23 @@ public class ThemeManager
 {
     private readonly MaterialThemeManagerService _materialThemeManagerService;
     private readonly IEventAggregator _eventAggregator;
+    private readonly IAppSettings _appSettings;
 
     private const string DarkTheme = "pack://application:,,,/TodoApp;component/Themes/DarkTheme.xaml";
     private const string LightTheme = "pack://application:,,,/TodoApp;component/Themes/LightTheme.xaml";
 
-    public ThemeManager(MaterialThemeManagerService materialThemeManagerService, IEventAggregator eventAggregator)
+    public ThemeManager(MaterialThemeManagerService materialThemeManagerService, IEventAggregator eventAggregator, IAppSettings appSettings)
     {
         ArgumentNullException.ThrowIfNull(materialThemeManagerService);
         ArgumentNullException.ThrowIfNull(eventAggregator);
+        ArgumentNullException.ThrowIfNull(appSettings);
 
         _materialThemeManagerService = materialThemeManagerService;
         _eventAggregator = eventAggregator;
+        _appSettings = appSettings;
         _materialThemeManagerService.UpdateTheme();
 
-        AppSettings.Instance.ThemeSettings.SettingsChanged += OnThemeSettingsChanged;
+        _appSettings.ThemeSettings.SettingsChanged += OnThemeSettingsChanged;
 
         CheckAndSwitchLightAndDark();
     }
@@ -46,8 +49,8 @@ public class ThemeManager
 
     private void CheckAndSwitchLightAndDark()
     {
-        if (AppSettings.Instance.ThemeSettings.DarkMode ||
-            AppSettings.Instance.ThemeSettings.HighContrast)
+        if (_appSettings.ThemeSettings.DarkMode ||
+            _appSettings.ThemeSettings.HighContrast)
         {
             ChangeTheme(from: LightTheme, to: DarkTheme);
         }

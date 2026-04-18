@@ -13,13 +13,16 @@ namespace Modules.Settings.Views.Pages;
 public class SettingsPageViewModel : BaseViewModel, ICloseRequester
 {
     private readonly ISettingsPageNavigationService _navigation;
+    private readonly IAppSettings _appSettings;
     private int _activeCategoryId;
 
-    public SettingsPageViewModel(ISettingsPageNavigationService navigation)
+    public SettingsPageViewModel(ISettingsPageNavigationService navigation, IAppSettings appSettings)
     {
         ArgumentNullException.ThrowIfNull(navigation);
+        ArgumentNullException.ThrowIfNull(appSettings);
 
         _navigation = navigation;
+        _appSettings = appSettings;
 
         OpenPageCommand = new RelayParameterizedCommand<SettingsPageItemViewModel>(OpenSettingsPage);
 
@@ -57,7 +60,7 @@ public class SettingsPageViewModel : BaseViewModel, ICloseRequester
             if (value == _activeCategoryId) return;
 
             _activeCategoryId = value;
-            AppSettings.Instance.SessionSettings.ActiveSettingsCategoryId = value;
+            _appSettings.SessionSettings.ActiveSettingsCategoryId = value;
             
             NavigateToCategory(_activeCategoryId);
         }

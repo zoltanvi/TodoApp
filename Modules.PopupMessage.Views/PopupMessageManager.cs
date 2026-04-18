@@ -10,11 +10,13 @@ namespace Modules.PopupMessage.Views;
 [AddINotifyPropertyChangedInterface]
 public class PopupMessageManager : BaseViewModel
 {
-    public static PopupMessageManager Instance { get; } = new();
+    private readonly IAppSettings _appSettings;
 
-    private PopupMessageManager()
+    public PopupMessageManager(IAppSettings appSettings)
     {
-        AppSettings.Instance.ThemeSettings.SettingsChanged += OnThemeSettingsChanged;
+        ArgumentNullException.ThrowIfNull(appSettings);
+        _appSettings = appSettings;
+        _appSettings.ThemeSettings.SettingsChanged += OnThemeSettingsChanged;
         CloseMessageCommand = new RelayCommand(() =>
         {
             // Changing it to true triggers the animation to close, changing back to false does not.

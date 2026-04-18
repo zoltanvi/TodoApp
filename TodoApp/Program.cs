@@ -48,15 +48,18 @@ public static class Program
         // Prism = single pub/sub bus (UI + lifecycle + active category). MediatR reserved for IRequest/IRequestHandler (CQRS).
         services.AddSingleton<IEventAggregator, EventAggregator>();
 
+        services.AddSingleton<IAppSettings>(sp => AppSettings.Instance);
+        services.AddSingleton<PopupMessageManager>();
         services.AddSingleton<IPopupMessageService, PopupMessageService>();
 
         services.AddSingleton<IUIScaler>(provider =>
         {
+            var uiScaler = UIScaler.Instance;
             var popupMessageService = provider.GetRequiredService<IPopupMessageService>();
             var eventAggregator = provider.GetRequiredService<IEventAggregator>();
-            UIScaler.Instance.Setup(popupMessageService, eventAggregator);
+            uiScaler.Setup(popupMessageService, eventAggregator);
 
-            return UIScaler.Instance;
+            return uiScaler;
         });
 
         services.AddSingleton<ApplicationLifecyclePrismSubscriber>();
@@ -75,7 +78,7 @@ public static class Program
         services.AddSingleton<OneEditorOpenService>(provider => OneEditorOpenService.Instance);
         services.AddSingleton<AppSettings>(provider => AppSettings.Instance);
         services.AddSingleton<IAppSettingsAutoSaveService, AppSettingsAutoSaveService>();
-        services.AddSingleton<PopupMessageControl>();
+        services.AddSingleton<PopupMessageControl>(sp => new PopupMessageControl(sp.GetRequiredService<PopupMessageManager>()));
 
         services.AddScoped<IAppSettingsService, AppSettingsService>();
 

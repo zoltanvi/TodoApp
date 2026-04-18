@@ -43,6 +43,16 @@ public class CategoriesRepository : ICategoriesRepository
             c.ParentCategoryId == parentCategoryId);
     }
 
+    public bool ActiveCategoryExistsWithName(string name, int? parentCategoryId)
+    {
+        ArgumentNullException.ThrowIfNull(name);
+
+        return _context.Categories.Any(c =>
+            c.DeletedDate == null &&
+            c.Name.ToUpper() == name.ToUpper() &&
+            c.ParentCategoryId == parentCategoryId);
+    }
+
     public List<Category> GetActiveCategories()
     {
         return _context.Categories

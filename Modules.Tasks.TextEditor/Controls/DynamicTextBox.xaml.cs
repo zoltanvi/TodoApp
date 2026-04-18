@@ -28,7 +28,8 @@ public partial class DynamicTextBox : UserControl
 
         if (escape || enter && !shiftPressed)
         {
-            if (AppSettings.Instance.TaskPageSettings.SaveOnEnter || ctrlPressed && enter)
+            var saveOnEnter = AppSettingsAccess.Current?.TaskPageSettings.SaveOnEnter == true;
+            if (saveOnEnter || ctrlPressed && enter)
             {
                 if (DataContext is DynamicTextBoxViewModel viewModel)
                 {

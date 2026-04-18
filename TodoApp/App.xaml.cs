@@ -74,6 +74,8 @@ public partial class App : Application
             })
             .Build();
 
+        AppSettingsAccess.Current = ServiceProvider.GetRequiredService<IAppSettings>();
+
         ServiceProvider.InitializeDatabase();
     }
 
@@ -90,8 +92,9 @@ public partial class App : Application
         autoSaveService.StartService();
 
         // Set app version info
+        var appSettings = ServiceProvider.GetRequiredService<IAppSettings>();
         var version = (string)Current.TryFindResource(Constants.CurrentVersion);
-        AppSettings.Instance.ApplicationSettings.AppVersion = version;
+        appSettings.ApplicationSettings.AppVersion = version;
 
         CreateMainWindow();
     }
@@ -110,6 +113,8 @@ public partial class App : Application
 
     private void CreateMainWindow()
     {
+        var appSettings = ServiceProvider.GetRequiredService<IAppSettings>();
+
         // Show the main window
         var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
         var mainWindowViewModel = ServiceProvider.GetRequiredService<MainWindowViewModel>();
@@ -131,7 +136,7 @@ public partial class App : Application
         overlayPageNavigation.Initialize(mainWindow.OverlayFrame);
         overlayPageNavigation.InitializeOverlayElements(mainWindow.OverlayBackground, mainWindow.OverlayFrameGrid);
 
-        if (AppSettings.Instance.SessionSettings.ActiveCategoryId == Constants.RecycleBinCategoryId)
+        if (appSettings.SessionSettings.ActiveCategoryId == Constants.RecycleBinCategoryId)
         {
             mainPageNavigation.NavigateTo<IRecycleBinPage>();
         }

@@ -45,6 +45,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
     private readonly IEventAggregator _eventAggregator;
     private readonly TaskPageListCoordinator _listCoordinator;
     private readonly TaskDragDropIndexModifier _dropIndexModifier;
+    private readonly IAppSettings _appSettings;
 
     // For improved performance, the code which updates Items in a loop
     // should be surrounded with an '_listCoordinator.IgnoreCollectionChange = true scope' and update Items after that ONCE.
@@ -56,13 +57,15 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         ITaskItemRepository taskItemRepository,
         OneEditorOpenService oneEditorOpenService,
         IEventAggregator eventAggregator,
-        TaskDragDropIndexModifier dropIndexModifier)
+        TaskDragDropIndexModifier dropIndexModifier,
+        IAppSettings appSettings)
     {
         ArgumentNullException.ThrowIfNull(mediator);
         ArgumentNullException.ThrowIfNull(taskItemRepository);
         ArgumentNullException.ThrowIfNull(oneEditorOpenService);
         ArgumentNullException.ThrowIfNull(eventAggregator);
         ArgumentNullException.ThrowIfNull(dropIndexModifier);
+        ArgumentNullException.ThrowIfNull(appSettings);
 
         _mediator = mediator;
         _taskItemRepository = taskItemRepository;
@@ -70,6 +73,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         _eventAggregator = eventAggregator;
         _listCoordinator = new TaskPageListCoordinator(taskItemRepository);
         _dropIndexModifier = dropIndexModifier;
+        _appSettings = appSettings;
 
         var activeCategoryInfo = _mediator.Send(new GetSelectedCategoryQuery())
             .ConfigureAwait(false).GetAwaiter().GetResult();
@@ -89,11 +93,11 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         var tasks = _taskItemRepository.GetActiveTasksFromCategory(activeCategoryInfo.Id, includeNavigation: true);
 
         // Fixes list orders if necessary, when the task page opens
-        var orderedTasks = AppSettings.Instance.TaskPageSettings.ForceTaskOrderByState
+        var orderedTasks = _appSettings.TaskPageSettings.ForceTaskOrderByState
             ? _listCoordinator.OrderTasksByState(tasks)
             : tasks;
 
-        foreach (var vm in orderedTasks.MapToViewModelList(_mediator, oneEditorOpenService, _eventAggregator))
+        foreach (var vm in orderedTasks.MapToViewModelList(_mediator, oneEditorOpenService, _eventAggregator, _appSettings))
         {
             _listCoordinator.Items.Add(vm);
         }
@@ -128,8 +132,8 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
     public bool IsCategoryInEditMode { get; set; }
 
     public bool IsCategoryInDisplayMode => !IsCategoryInEditMode;
-    public bool IsCategoryNameTitleVisible => AppSettings.Instance.PageTitleSettings.Visible && !IsCategoryInEditMode;
-    public bool IsCategoryNameTitleEditorVisible => AppSettings.Instance.PageTitleSettings.Visible && IsCategoryInEditMode;
+    public bool IsCategoryNameTitleVisible => _appSettings.PageTitleSettings.Visible && !IsCategoryInEditMode;
+    public bool IsCategoryNameTitleEditorVisible => _appSettings.PageTitleSettings.Visible && IsCategoryInEditMode;
 
     public bool IsEmpty => Items.Count == 0;
 
@@ -146,7 +150,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
     public ICommand TextBoxFocusedCommand { get; }
     private void SubscribeToEvents()
     {
-        AppSettings.Instance.PageTitleSettings.SettingsChanged += OnPageTitleSettingsChanged;
+        _appSettings.PageTitleSettings.SettingsChanged += OnPageTitleSettingsChanged;
         Items.CollectionChanged += ItemsOnCollectionChanged;
 
         _eventAggregator.GetEvent<TaskItemDeleteClickedEvent>().Subscribe(OnDeleteTaskItemRequestedEvent);
@@ -183,7 +187,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
 
     private void UnsubscribeFromEvents()
     {
-        AppSettings.Instance.PageTitleSettings.SettingsChanged -= OnPageTitleSettingsChanged;
+        _appSettings.PageTitleSettings.SettingsChanged -= OnPageTitleSettingsChanged;
         Items.CollectionChanged -= ItemsOnCollectionChanged;
 
         _eventAggregator.GetEvent<TaskItemDeleteClickedEvent>().Unsubscribe(OnDeleteTaskItemRequestedEvent);
@@ -259,7 +263,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
 
                 _oneEditorOpenService.LastEditedTaskId = addedTask.Id;
 
-                Items.Insert(newListOrder, addedTask.MapToViewModel(_mediator, _oneEditorOpenService, _eventAggregator));
+                Items.Insert(newListOrder, addedTask.MapToViewModel(_mediator, _oneEditorOpenService, _eventAggregator, _appSettings));
 
                 if (!isLastItem)
                 {
@@ -508,7 +512,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         {
             case TaskSortingRequestedPayload.SortByProperty.State:
             {
-                if (AppSettings.Instance.TaskPageSettings.ForceTaskOrderByState) break;
+                if (_appSettings.TaskPageSettings.ForceTaskOrderByState) break;
 
                 var pinnedItems = Items.Where(x => x.Pinned && !x.IsDone);
                 var unfinishedItems = Items.Where(x => !x.Pinned && !x.IsDone);
@@ -545,7 +549,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         // If forced task order by state is turned on, re-sort the sorted items by state
         if (request.SortBy != TaskSortingRequestedPayload.SortByProperty.State)
         {
-            if (AppSettings.Instance.TaskPageSettings.ForceTaskOrderByState)
+            if (_appSettings.TaskPageSettings.ForceTaskOrderByState)
             {
                 var pinnedItems = sortedItems.Where(x => x.Pinned && !x.IsDone);
                 var unfinishedItems = sortedItems.Where(x => !x.Pinned && !x.IsDone);
@@ -646,7 +650,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
 
                 foreach (var taskItem in tasks)
                 {
-                    Items.Add(taskItem.MapToViewModel(_mediator, _oneEditorOpenService, _eventAggregator));
+                    Items.Add(taskItem.MapToViewModel(_mediator, _oneEditorOpenService, _eventAggregator, _appSettings));
                 }
 
                 _listCoordinator.FixItemsListOrders(persist: true);

@@ -12,6 +12,8 @@ public interface ICategoriesRepository
     Category? GetCategoryById(int id);
     Category? GetCategoryByName(string name);
     Category? GetCategoryByName(string name, int? parentCategoryId);
+    /// <summary>True if a non-deleted category exists with this name under the parent (sibling uniqueness).</summary>
+    bool ActiveCategoryExistsWithName(string name, int? parentCategoryId);
     Category RestoreCategory(Category category, int newListOrder);
     Category UpdateCategory(Category category);
     void UpdateCategoryListOrders(List<Category> categories);

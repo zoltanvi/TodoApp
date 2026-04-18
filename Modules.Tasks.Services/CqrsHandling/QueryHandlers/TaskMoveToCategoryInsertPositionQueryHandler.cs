@@ -12,12 +12,15 @@ namespace Modules.Tasks.Services.CqrsHandling.QueryHandlers;
 public class TaskMoveToCategoryInsertPositionQueryHandler : IRequestHandler<TaskMoveToCategoryInsertPositionQuery, int>
 {
     private readonly ITaskItemRepository _taskItemRepository;
+    private readonly IAppSettings _appSettings;
 
-    public TaskMoveToCategoryInsertPositionQueryHandler(ITaskItemRepository taskItemRepository)
+    public TaskMoveToCategoryInsertPositionQueryHandler(ITaskItemRepository taskItemRepository, IAppSettings appSettings)
     {
         ArgumentNullException.ThrowIfNull(taskItemRepository);
+        ArgumentNullException.ThrowIfNull(appSettings);
 
         _taskItemRepository = taskItemRepository;
+        _appSettings = appSettings;
     }
     public Task<int> Handle(TaskMoveToCategoryInsertPositionQuery request, CancellationToken cancellationToken)
     {
@@ -37,7 +40,7 @@ public class TaskMoveToCategoryInsertPositionQueryHandler : IRequestHandler<Task
 
         var pinnedItemsCount = stats.PinnedItemsCount;
         var activeTaskCount = stats.ActiveTaskCount;
-        var reversedOrder = AppSettings.Instance.TaskPageSettings.InsertOrderReversed;
+        var reversedOrder = _appSettings.TaskPageSettings.InsertOrderReversed;
 
         var result = dbTask.Pinned ? pinnedItemsCount : (reversedOrder ? activeTaskCount : pinnedItemsCount);
 

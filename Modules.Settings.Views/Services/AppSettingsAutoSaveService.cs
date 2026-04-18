@@ -8,11 +8,14 @@ namespace Modules.Settings.Views.Services;
 public class AppSettingsAutoSaveService : IAppSettingsAutoSaveService
 {
     private readonly IServiceProvider _serviceProvider;
+    private readonly IAppSettings _appSettings;
 
-    public AppSettingsAutoSaveService(IServiceProvider serviceProvider)
+    public AppSettingsAutoSaveService(IServiceProvider serviceProvider, IAppSettings appSettings)
     {
         ArgumentNullException.ThrowIfNull(serviceProvider);
+        ArgumentNullException.ThrowIfNull(appSettings);
         _serviceProvider = serviceProvider;
+        _appSettings = appSettings;
     }
 
     public void StartService()
@@ -22,12 +25,12 @@ public class AppSettingsAutoSaveService : IAppSettingsAutoSaveService
 
     private void TickEventHandler(object? sender, EventArgs e)
     {
-        if (AppSettings.Instance.IsDirty())
+        if (_appSettings.IsDirty())
         {
             using var scope = _serviceProvider.CreateScope();
             var appSettingsService = scope.ServiceProvider.GetRequiredService<IAppSettingsService>();
-            appSettingsService.UpdateDatabaseFromAppSettings(AppSettings.Instance);
-            AppSettings.Instance.Clean();
+            appSettingsService.UpdateDatabaseFromAppSettings(_appSettings);
+            _appSettings.Clean();
         }
     }
 }

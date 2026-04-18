@@ -8,11 +8,14 @@ namespace Modules.Tasks.Services.CqrsHandling.QueryHandlers;
 public class TaskInsertPositionQueryHandler : IRequestHandler<TaskInsertPositionQuery, int>
 {
     private readonly ITaskItemRepository _taskItemRepository;
+    private readonly IAppSettings _appSettings;
 
-    public TaskInsertPositionQueryHandler(ITaskItemRepository taskItemRepository)
+    public TaskInsertPositionQueryHandler(ITaskItemRepository taskItemRepository, IAppSettings appSettings)
     {
         ArgumentNullException.ThrowIfNull(taskItemRepository);
+        ArgumentNullException.ThrowIfNull(appSettings);
         _taskItemRepository = taskItemRepository;
+        _appSettings = appSettings;
     }
 
     public Task<int> Handle(TaskInsertPositionQuery request, CancellationToken cancellationToken)
@@ -35,8 +38,8 @@ public class TaskInsertPositionQueryHandler : IRequestHandler<TaskInsertPosition
     
         var pinnedItemsCount = stats.PinnedItemsCount;
         var activeTaskCount = stats.ActiveTaskCount;
-        var forcedOrder = AppSettings.Instance.TaskPageSettings.ForceTaskOrderByState;
-        var reversedOrder = AppSettings.Instance.TaskPageSettings.InsertOrderReversed;
+        var forcedOrder = _appSettings.TaskPageSettings.ForceTaskOrderByState;
+        var reversedOrder = _appSettings.TaskPageSettings.InsertOrderReversed;
         var newIndex = request.PositionChangeReason switch
         {
             PositionChangeReason.Pinned => 0,

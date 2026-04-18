@@ -13,19 +13,23 @@ public class RenameActiveCategoryCommandHandler : IRequestHandler<RenameActiveCa
     private readonly ICategoriesRepository _categoriesRepository;
     private readonly IPopupMessageService _popupMessageService;
     private readonly IEventAggregator _eventAggregator;
+    private readonly IAppSettings _appSettings;
 
     public RenameActiveCategoryCommandHandler(
         ICategoriesRepository categoriesRepository,
         IPopupMessageService popupMessageService,
-        IEventAggregator eventAggregator)
+        IEventAggregator eventAggregator,
+        IAppSettings appSettings)
     {
         ArgumentNullException.ThrowIfNull(categoriesRepository);
         ArgumentNullException.ThrowIfNull(popupMessageService);
         ArgumentNullException.ThrowIfNull(eventAggregator);
-        
+        ArgumentNullException.ThrowIfNull(appSettings);
+
         _categoriesRepository = categoriesRepository;
         _popupMessageService = popupMessageService;
         _eventAggregator = eventAggregator;
+        _appSettings = appSettings;
     }
 
     public Task<string> Handle(RenameActiveCategoryCommand request, CancellationToken cancellationToken)
@@ -35,7 +39,7 @@ public class RenameActiveCategoryCommandHandler : IRequestHandler<RenameActiveCa
             throw new InvalidOperationException("Category name must not be empty!");
         }
 
-        var activeCategoryId = AppSettings.Instance.SessionSettings.ActiveCategoryId;
+        var activeCategoryId = _appSettings.SessionSettings.ActiveCategoryId;
         var category = _categoriesRepository.GetCategoryById(activeCategoryId);
 
         ArgumentNullException.ThrowIfNull(category);

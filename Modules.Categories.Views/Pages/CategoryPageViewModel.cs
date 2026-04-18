@@ -33,6 +33,7 @@ public class CategoryPageViewModel : BaseViewModel
     private readonly IMediator _mediator;
     private readonly IPopupMessageService _popupMessageService;
     private readonly IEventAggregator _eventAggregator;
+    private readonly IAppSettings _appSettings;
     private readonly CategoryPageTreeState _treeState;
 
     public CategoryPageViewModel(
@@ -43,6 +44,7 @@ public class CategoryPageViewModel : BaseViewModel
         IMediator mediator,
         IPopupMessageService popupMessageService,
         IEventAggregator eventAggregator,
+        IAppSettings appSettings,
         TaskToCategoryDropHandler categoryDropHandler)
     {
         ArgumentNullException.ThrowIfNull(categoriesRepository);
@@ -52,6 +54,7 @@ public class CategoryPageViewModel : BaseViewModel
         ArgumentNullException.ThrowIfNull(mediator);
         ArgumentNullException.ThrowIfNull(popupMessageService);
         ArgumentNullException.ThrowIfNull(eventAggregator);
+        ArgumentNullException.ThrowIfNull(appSettings);
         ArgumentNullException.ThrowIfNull(categoryDropHandler);
 
         _categoriesRepository = categoriesRepository;
@@ -61,11 +64,13 @@ public class CategoryPageViewModel : BaseViewModel
         _mediator = mediator;
         _popupMessageService = popupMessageService;
         _eventAggregator = eventAggregator;
+        _appSettings = appSettings;
         CategoryDropHandler = categoryDropHandler;
 
         _treeState = new CategoryPageTreeState(
             categoriesRepository,
             eventAggregator,
+            appSettings,
             () =>
             {
                 OnPropertyChanged(nameof(InactiveCategories));
@@ -77,7 +82,7 @@ public class CategoryPageViewModel : BaseViewModel
         OpenNoteListPageCommand = new RelayCommand(OpenNoteListPage);
         OpenRecycleBinPageCommand = new RelayCommand(OpenRecycleBinPage);
 
-        ActiveCategoryId = AppSettings.Instance.SessionSettings.ActiveCategoryId;
+        ActiveCategoryId = _appSettings.SessionSettings.ActiveCategoryId;
 
         _treeState.Initialize();
 
@@ -134,13 +139,13 @@ public class CategoryPageViewModel : BaseViewModel
         }
         else
         {
-            AddNewCategory(null);
+            _ = AddNewCategory(null);
         }
 
         PendingAddNewCategoryText = string.Empty;
     }
 
-    private void AddNewCategory(int? parentCategoryId)
+    private Category AddNewCategory(int? parentCategoryId)
     {
         if (string.IsNullOrWhiteSpace(PendingAddNewCategoryText))
         {
@@ -169,6 +174,7 @@ public class CategoryPageViewModel : BaseViewModel
 
         var vm = addedCategory.MapToViewModel(_eventAggregator);
         _treeState.AddNewCategoryViewModel(vm, parentCategoryId);
+        return addedCategory;
     }
 
     private void OnHotkeyAddSubcategory()
@@ -199,17 +205,17 @@ public class CategoryPageViewModel : BaseViewModel
         var name = baseName;
         var counter = 1;
 
-        while (_categoriesRepository.GetCategoryByName(name, parentCategoryId) is { IsDeleted: false })
+        while (_categoriesRepository.ActiveCategoryExistsWithName(name, parentCategoryId))
         {
             name = $"{baseName} ({counter++})";
         }
 
         PendingAddNewCategoryText = name;
-        AddNewCategory(parentCategoryId);
+        var added = AddNewCategory(parentCategoryId);
         PendingAddNewCategoryText = string.Empty;
 
         // Put the new subcategory into rename mode
-        var newCategory = _treeState.FindInTree(_categoriesRepository.GetCategoryByName(name, parentCategoryId)?.Id ?? -1);
+        var newCategory = _treeState.FindInTree(added.Id);
         if (newCategory != null)
         {
             newCategory.RenameText = newCategory.Name;
@@ -291,7 +297,7 @@ public class CategoryPageViewModel : BaseViewModel
         if (ActiveCategoryId != category.Id)
         {
             ActiveCategoryId = category.Id;
-            AppSettings.Instance.SessionSettings.ActiveCategoryId = ActiveCategoryId;
+            _appSettings.SessionSettings.ActiveCategoryId = ActiveCategoryId;
         }
 
         FocusedCategoryId = category.Id;

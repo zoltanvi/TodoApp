@@ -8,11 +8,14 @@ namespace Modules.Tasks.Services.CqrsHandling.QueryHandlers;
 public class TaskDragDropInsertPositionQueryHandler : IRequestHandler<TaskDragDropInsertPositionQuery, int>
 {
     private readonly ITaskItemRepository _taskItemRepository;
+    private readonly IAppSettings _appSettings;
 
-    public TaskDragDropInsertPositionQueryHandler(ITaskItemRepository taskItemRepository)
+    public TaskDragDropInsertPositionQueryHandler(ITaskItemRepository taskItemRepository, IAppSettings appSettings)
     {
         ArgumentNullException.ThrowIfNull(taskItemRepository);
+        ArgumentNullException.ThrowIfNull(appSettings);
         _taskItemRepository = taskItemRepository;
+        _appSettings = appSettings;
     }
 
     public Task<int> Handle(TaskDragDropInsertPositionQuery request, CancellationToken cancellationToken)
@@ -36,7 +39,7 @@ public class TaskDragDropInsertPositionQueryHandler : IRequestHandler<TaskDragDr
         var pinnedItemsCount = stats.PinnedItemsCount;
         var activeTaskCount = stats.ActiveTaskCount;
         var doneItemsCount = stats.DoneItemsCount;
-        var forcedOrder = AppSettings.Instance.TaskPageSettings.ForceTaskOrderByState;
+        var forcedOrder = _appSettings.TaskPageSettings.ForceTaskOrderByState;
 
         var newIndex = request.RequestedInsertPosition;
 

@@ -27,6 +27,9 @@ public class UIScaler : BaseViewModel, IUIScaler
     private IPopupMessageService? _popupMessageService;
     private IEventAggregator? _eventAggregator;
 
+    /// <summary>
+    /// The single <see cref="IUIScaler"/> instance: registered in DI and used by WPF <c>x:Static</c> (e.g. <see cref="UIScalerBindingProxy"/>).
+    /// </summary>
     public static IUIScaler Instance { get; } = new UIScaler();
 
     private UIScaler()

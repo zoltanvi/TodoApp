@@ -13,24 +13,28 @@ namespace Modules.Categories.Services.PrismSubscribers;
 public sealed class ActiveCategoryNavigationPrismSubscriber
 {
     private readonly IMainPageNavigationService _mainPageNavigationService;
+    private readonly IAppSettings _appSettings;
 
     public ActiveCategoryNavigationPrismSubscriber(
         IEventAggregator eventAggregator,
-        IMainPageNavigationService mainPageNavigationService)
+        IMainPageNavigationService mainPageNavigationService,
+        IAppSettings appSettings)
     {
         ArgumentNullException.ThrowIfNull(eventAggregator);
         ArgumentNullException.ThrowIfNull(mainPageNavigationService);
+        ArgumentNullException.ThrowIfNull(appSettings);
 
         _mainPageNavigationService = mainPageNavigationService;
+        _appSettings = appSettings;
 
         eventAggregator.GetEvent<ActiveCategoryChangedEvent>().Subscribe(OnActiveCategoryChanged);
     }
 
     private void OnActiveCategoryChanged(ActiveCategoryChangedPayload payload)
     {
-        if (AppSettings.Instance.ApplicationSettings.CloseSideMenuOnPageChange)
+        if (_appSettings.ApplicationSettings.CloseSideMenuOnPageChange)
         {
-            AppSettings.Instance.SessionSettings.SideMenuOpen = false;
+            _appSettings.SessionSettings.SideMenuOpen = false;
         }
 
         if (payload.CategoryId == Constants.RecycleBinCategoryId)

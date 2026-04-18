@@ -24,19 +24,21 @@ public class TaskItemViewModel : BaseViewModel, ITaskItemViewModel
 
     public TaskItemViewModel(IMediator mediator,
         OneEditorOpenService oneEditorOpenService,
-        IEventAggregator eventAggregator, 
+        IEventAggregator eventAggregator,
+        IAppSettings appSettings,
         string content)
     {
         ArgumentNullException.ThrowIfNull(mediator);
         ArgumentNullException.ThrowIfNull(oneEditorOpenService);
         ArgumentNullException.ThrowIfNull(eventAggregator);
+        ArgumentNullException.ThrowIfNull(appSettings);
 
         _mediator = mediator;
         _oneEditorOpenService = oneEditorOpenService;
-        
+
         Content = new DynamicTextBoxViewModel(
-            focusOnEditMode: true, 
-            enterActionOnLostFocus: AppSettings.Instance.TaskPageSettings.ExitEditOnFocusLost,
+            focusOnEditMode: true,
+            enterActionOnLostFocus: appSettings.TaskPageSettings.ExitEditOnFocusLost,
             toolbarCloseOnLostFocus: false,
             acceptsTab: true);
         

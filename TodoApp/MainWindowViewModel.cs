@@ -34,21 +34,25 @@ public class MainWindowViewModel : BaseViewModel
     private double _myWidth;
     private double _myHeight;
     private readonly TimeDisplayService _timeDisplayService;
-    private static WindowSettings WindowSettings => AppSettings.Instance.WindowSettings;
-    private static ApplicationSettings ApplicationSettings => AppSettings.Instance.ApplicationSettings;
+    private readonly IAppSettings _appSettings;
+    private WindowSettings WindowSettings => _appSettings.WindowSettings;
+    private ApplicationSettings ApplicationSettings => _appSettings.ApplicationSettings;
     public MainWindowViewModel(
         IWindowService windowService,
         IEventAggregator eventAggregator,
         IUIScaler uiScaler,
         ThemeManager themeManager,
-        IOverlayPageNavigationService overlayPageNavigationService)
+        IOverlayPageNavigationService overlayPageNavigationService,
+        IAppSettings appSettings)
     {
         ArgumentNullException.ThrowIfNull(windowService);
         ArgumentNullException.ThrowIfNull(eventAggregator);
         ArgumentNullException.ThrowIfNull(uiScaler);
         ArgumentNullException.ThrowIfNull(themeManager);
         ArgumentNullException.ThrowIfNull(overlayPageNavigationService);
-        
+        ArgumentNullException.ThrowIfNull(appSettings);
+
+        _appSettings = appSettings;
         _windowService = windowService;
         _eventAggregator = eventAggregator;
         _uiScaler = uiScaler;
@@ -63,7 +67,7 @@ public class MainWindowViewModel : BaseViewModel
         {
             if (!overlayPageNavigationService.PageVisible)
             {
-                AppSettings.Instance.SessionSettings.SideMenuOpen ^= true;
+                _appSettings.SessionSettings.SideMenuOpen ^= true;
             }
         });
 
@@ -203,7 +207,7 @@ public class MainWindowViewModel : BaseViewModel
         }
     }
 
-    public int OuterMargin => 2 * AppSettings.Instance.ApplicationSettings.ResizeBorderSize;
+    public int OuterMargin => 2 * _appSettings.ApplicationSettings.ResizeBorderSize;
     public Rect ClipRect => new(0, 0, MyWidth, MyHeight);
     public Rect OuterClipRect => new(0, 0, MyWidth + OuterMargin, MyHeight + OuterMargin);
 
@@ -215,7 +219,7 @@ public class MainWindowViewModel : BaseViewModel
     public Thickness InnerContentPadding => new(ContentPadding);
 
     // The size of the resize border around the window
-    public int ResizeBorder => IsMaximized ? 0 : AppSettings.Instance.ApplicationSettings.ResizeBorderSize;
+    public int ResizeBorder => IsMaximized ? 0 : _appSettings.ApplicationSettings.ResizeBorderSize;
 
     // The size of the resize border around the window, taking into account the outer margin
     public Thickness ResizeBorderThickness => new(ResizeBorder);

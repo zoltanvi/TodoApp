@@ -10,7 +10,15 @@ namespace TodoApp.Themes;
 
 public class MaterialThemeManagerService
 {
-    private ThemeSettings ThemeSettings => AppSettings.Instance.ThemeSettings;
+    private readonly IAppSettings _appSettings;
+
+    public MaterialThemeManagerService(IAppSettings appSettings)
+    {
+        ArgumentNullException.ThrowIfNull(appSettings);
+        _appSettings = appSettings;
+    }
+
+    private ThemeSettings ThemeSettings => _appSettings.ThemeSettings;
     private uint SeedColor { get; set; }
     public Scheme<string> CurrentScheme { get; set; }
 

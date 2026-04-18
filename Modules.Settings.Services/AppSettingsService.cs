@@ -16,7 +16,7 @@ public sealed class AppSettingsService : IAppSettingsService
         _settingsRepository = settingsRepository;   
     }
 
-    public void UpdateAppSettingsFromDatabase(AppSettings appSettings)
+    public void UpdateAppSettingsFromDatabase(IAppSettings appSettings)
     {
         var settings = _settingsRepository.GetAllSettings();
 
@@ -26,7 +26,7 @@ public sealed class AppSettingsService : IAppSettingsService
         }
     }
 
-    public void UpdateDatabaseFromAppSettings(AppSettings appSettings)
+    public void UpdateDatabaseFromAppSettings(IAppSettings appSettings)
     {
         var settingList = CreateSettingsList(appSettings, string.Empty);
      

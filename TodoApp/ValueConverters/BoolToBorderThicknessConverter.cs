@@ -12,9 +12,11 @@ public class BoolToBorderThicknessConverter : BaseValueConverter
         // true: maximized, false: docked
         var isMaximized = (bool)value;
 
+        var border = AppSettingsAccess.Current?.ApplicationSettings.ResizeBorderSize ?? 9;
+
         return new Thickness(
-            isMaximized 
-                ? 0 
-                : AppSettings.Instance.ApplicationSettings.ResizeBorderSize);
+            isMaximized
+                ? 0
+                : border);
     }
 }

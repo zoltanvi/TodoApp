@@ -11,7 +11,12 @@ namespace Modules.PopupMessage.Views
         public PopupMessageControl()
         {
             InitializeComponent();
-            DataContext = PopupMessageManager.Instance;
+        }
+
+        public PopupMessageControl(PopupMessageManager manager) : this()
+        {
+            ArgumentNullException.ThrowIfNull(manager);
+            DataContext = manager;
         }
     }
 }
