@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.3.0" />
     <PackageReference Include="gong-wpf-dragdrop" Version="3.2.1" />
     <PackageReference Include="Fody" Version="6.*">
 	    <PrivateAssets>all</PrivateAssets>
@@ -25,6 +26,7 @@
     <ProjectReference Include="..\Modules.Common\Modules.Common.csproj" />
     <ProjectReference Include="..\Modules.Settings.Contracts\Modules.Settings.Contracts.csproj" />
     <ProjectReference Include="..\Modules.Tasks.Contracts\Modules.Tasks.Contracts.csproj" />
+    <ProjectReference Include="..\Modules.Tasks.Views\Modules.Tasks.Views.csproj" />
   </ItemGroup>
 
 </Project>

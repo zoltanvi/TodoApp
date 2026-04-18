@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Modules.Categories.Repositories;
 using Modules.Categories.Services.CqrsHandling;
 using Modules.Categories.Services.PrismSubscribers;
+using Modules.Categories.Views.DragDrop;
 using Modules.Categories.Views.Pages;
 using Modules.Common.Database;
 using Modules.Common.Navigation;
@@ -61,6 +62,8 @@ public static class Program
         services.AddSingleton<ApplicationLifecyclePrismSubscriber>();
         services.AddSingleton<TaskViewActiveCategoryPrismSubscriber>();
         services.AddSingleton<ActiveCategoryNavigationPrismSubscriber>();
+
+        services.AddSingleton<TaskToCategoryDropHandler>();
 
         services.AddSingleton<IThemeEditorService, ThemeEditorService>();
         services.AddSingleton<MaterialThemeManagerService>();

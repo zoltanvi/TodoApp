@@ -4,6 +4,7 @@ using Modules.Categories.Contracts.Cqrs.Commands;
 using Modules.Categories.Contracts.Events;
 using Modules.Categories.Contracts.Models;
 using Modules.Categories.Views.Controls;
+using Modules.Categories.Views.DragDrop;
 using Modules.Categories.Views.Events;
 using Modules.Categories.Views.Mappings;
 using Modules.Common;
@@ -39,7 +40,8 @@ public class CategoryPageViewModel : BaseViewModel
         ISideMenuPageNavigationService sideMenuPageNavigationService,
         IOverlayPageNavigationService overlayPageNavigationService,
         IMediator mediator,
-        IEventAggregator eventAggregator)
+        IEventAggregator eventAggregator,
+        TaskToCategoryDropHandler categoryDropHandler)
     {
         ArgumentNullException.ThrowIfNull(categoriesRepository);
         ArgumentNullException.ThrowIfNull(mainPageNavigationService);
@@ -47,6 +49,7 @@ public class CategoryPageViewModel : BaseViewModel
         ArgumentNullException.ThrowIfNull(overlayPageNavigationService);
         ArgumentNullException.ThrowIfNull(mediator);
         ArgumentNullException.ThrowIfNull(eventAggregator);
+        ArgumentNullException.ThrowIfNull(categoryDropHandler);
 
         _categoriesRepository = categoriesRepository;
         _mainPageNavigationService = mainPageNavigationService;
@@ -54,6 +57,7 @@ public class CategoryPageViewModel : BaseViewModel
         _overlayPageNavigationService = overlayPageNavigationService;
         _mediator = mediator;
         _eventAggregator = eventAggregator;
+        CategoryDropHandler = categoryDropHandler;
 
         _treeState = new CategoryPageTreeState(
             categoriesRepository,
@@ -93,6 +97,7 @@ public class CategoryPageViewModel : BaseViewModel
     public ICommand OpenNoteListPageCommand { get; }
     public ICommand OpenRecycleBinPageCommand { get; }
     public ObservableCollection<CategoryItemViewModel> FlattenedItems => _treeState.FlattenedItems;
+    public TaskToCategoryDropHandler CategoryDropHandler { get; }
     public int ActiveCategoryId { get; private set; }
     public int FocusedCategoryId { get; set; } = -1;
 

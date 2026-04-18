@@ -6,7 +6,6 @@ using Modules.Common.Database;
 using Modules.Common.Events;
 using Modules.Common.Navigation;
 using Modules.Common.Services.Navigation;
-using Modules.Common.Views.Services;
 using Modules.PopupMessage.Views;
 using Modules.Settings.Contracts.ViewModels;
 using Modules.Settings.Views.Services;
@@ -75,7 +74,6 @@ public partial class App : Application
             })
             .Build();
 
-        ServiceLocator.ServiceProvider = ServiceProvider;
         ServiceProvider.InitializeDatabase();
     }
 

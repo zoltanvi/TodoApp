@@ -1,16 +1,15 @@
-﻿using GongSolutions.Wpf.DragDrop;
+using GongSolutions.Wpf.DragDrop;
 using GongSolutions.Wpf.DragDrop.Utilities;
 using MediatR;
 using Modules.Categories.Contracts.Cqrs.Commands;
 using Modules.Categories.Views.Controls;
-using Modules.Common.Views.DragDrop;
-using Modules.Common.Views.Services;
 using Modules.Tasks.Contracts.Cqrs.Commands;
+using Modules.Common.Views.DragDrop;
 using Modules.Tasks.Views.Controls.TaskItemView;
 using System.Collections;
 using DragDropEffects = System.Windows.DragDropEffects;
 
-namespace TodoApp.DragDrop;
+namespace Modules.Categories.Views.DragDrop;
 
 /// <summary>
 /// Handles dropping a [task on a category], drag n drop a [category next to another category],
@@ -18,7 +17,13 @@ namespace TodoApp.DragDrop;
 /// </summary>
 public class TaskToCategoryDropHandler : DefaultDropHandler
 {
-    public static TaskToCategoryDropHandler Instance { get; } = new();
+    private readonly IMediator _mediator;
+
+    public TaskToCategoryDropHandler(IMediator mediator)
+    {
+        ArgumentNullException.ThrowIfNull(mediator);
+        _mediator = mediator;
+    }
 
     public override void DragOver(IDropInfo dropInfo)
     {
@@ -43,18 +48,12 @@ public class TaskToCategoryDropHandler : DefaultDropHandler
     {
         if (dropInfo is { Data: TaskItemViewModel task, TargetItem: CategoryItemViewModel category })
         {
-            var mediator = ServiceLocator.GetService<IMediator>();
-            ArgumentNullException.ThrowIfNull(mediator);
-
-            mediator.Send(new MoveTaskToNewCategoryCommand { TaskId = task.Id, CategoryId = category.Id });
+            _mediator.Send(new MoveTaskToNewCategoryCommand { TaskId = task.Id, CategoryId = category.Id });
         }
         else if (dropInfo is { Data: CategoryItemViewModel sourceCategory, TargetItem: CategoryItemViewModel targetCategory }
                  && sourceCategory.Id != targetCategory.Id)
         {
-            var mediator = ServiceLocator.GetService<IMediator>();
-            ArgumentNullException.ThrowIfNull(mediator);
-
-            mediator.Send(new MoveCategoryCommand
+            _mediator.Send(new MoveCategoryCommand
             {
                 CategoryId = sourceCategory.Id,
                 NewParentCategoryId = targetCategory.Id
@@ -64,10 +63,7 @@ public class TaskToCategoryDropHandler : DefaultDropHandler
         {
             if (ShouldMoveToRoot(dropInfo, draggedCategory))
             {
-                var mediator = ServiceLocator.GetService<IMediator>();
-                ArgumentNullException.ThrowIfNull(mediator);
-
-                mediator.Send(new MoveCategoryCommand
+                _mediator.Send(new MoveCategoryCommand
                 {
                     CategoryId = draggedCategory.Id,
                     NewParentCategoryId = null
@@ -132,4 +128,3 @@ public class TaskToCategoryDropHandler : DefaultDropHandler
         return false;
     }
 }
-
