@@ -78,6 +78,7 @@ public class CategoryPageViewModel : BaseViewModel
         eventAggregator.GetEvent<CategoryRestoredEvent>().Subscribe(OnCategoryRestored);
         eventAggregator.GetEvent<CategoryToggleExpandEvent>().Subscribe(OnToggleExpand);
         eventAggregator.GetEvent<CategoryAddSubcategoryClickedEvent>().Subscribe(OnAddSubcategory);
+        eventAggregator.GetEvent<HotkeyPressedCtrlShiftNEvent>().Subscribe(OnHotkeyAddSubcategory);
         eventAggregator.GetEvent<CategoryRenameClickedEvent>().Subscribe(OnRenameClicked);
         eventAggregator.GetEvent<CategoryMoveToRootClickedEvent>().Subscribe(OnMoveToRoot);
         eventAggregator.GetEvent<CategoryMovedEvent>().Subscribe(OnCategoryMoved);
@@ -306,6 +307,28 @@ public class CategoryPageViewModel : BaseViewModel
         }
 
         RebuildFlatList();
+    }
+
+    private void OnHotkeyAddSubcategory()
+    {
+        var parentId = ResolveSubcategoryParentCategoryId();
+        if (parentId < 0) return;
+
+        OnAddSubcategory(parentId);
+    }
+
+    /// <summary>
+    /// Focused category if set and not recycle bin; otherwise the active category if not recycle bin.
+    /// </summary>
+    private int ResolveSubcategoryParentCategoryId()
+    {
+        if (FocusedCategoryId >= 0 && FocusedCategoryId != Constants.RecycleBinCategoryId)
+            return FocusedCategoryId;
+
+        if (ActiveCategoryId != Constants.RecycleBinCategoryId)
+            return ActiveCategoryId;
+
+        return -1;
     }
 
     private void OnAddSubcategory(int parentCategoryId)
@@ -594,6 +617,7 @@ public class CategoryPageViewModel : BaseViewModel
         _eventAggregator.GetEvent<CategoryRestoredEvent>().Unsubscribe(OnCategoryRestored);
         _eventAggregator.GetEvent<CategoryToggleExpandEvent>().Unsubscribe(OnToggleExpand);
         _eventAggregator.GetEvent<CategoryAddSubcategoryClickedEvent>().Unsubscribe(OnAddSubcategory);
+        _eventAggregator.GetEvent<HotkeyPressedCtrlShiftNEvent>().Unsubscribe(OnHotkeyAddSubcategory);
         _eventAggregator.GetEvent<CategoryRenameClickedEvent>().Unsubscribe(OnRenameClicked);
         _eventAggregator.GetEvent<CategoryMoveToRootClickedEvent>().Unsubscribe(OnMoveToRoot);
         _eventAggregator.GetEvent<CategoryMovedEvent>().Unsubscribe(OnCategoryMoved);

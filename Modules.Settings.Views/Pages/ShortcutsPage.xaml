@@ -152,6 +152,12 @@
                     Description="Move focus to task page add-task field"
                     Key1="Tab" />
 
+                <controls:ShortcutItemControl
+                    Description="Add subcategory under focused category (or active category if none focused)"
+                    Key1="Ctrl"
+                    Key2="Shift"
+                    Key3="N" />
+
                 <Border Height="{Binding UIScaler.FontSize.Small, Source={StaticResource UIScaler}}" />
 
                 <Label

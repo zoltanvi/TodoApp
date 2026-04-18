@@ -300,9 +300,17 @@ public class MainWindowViewModel : BaseViewModel
                 }
                 case Key.N:
                 {
-                    // Ctrl + N
-                    // Set focus on task page bottom text editor
-                    _eventAggregator.GetEvent<HotkeyPressedCtrlNEvent>().Publish();
+                    if (Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
+                    {
+                        // Ctrl + Shift + N — new subcategory (category page)
+                        _eventAggregator.GetEvent<HotkeyPressedCtrlShiftNEvent>().Publish();
+                    }
+                    else
+                    {
+                        // Ctrl + N — focus task page new-task editor
+                        _eventAggregator.GetEvent<HotkeyPressedCtrlNEvent>().Publish();
+                    }
+
                     break;
                 }
             }
