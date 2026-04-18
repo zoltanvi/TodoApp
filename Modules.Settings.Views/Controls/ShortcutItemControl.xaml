@@ -12,9 +12,8 @@
         <Border Style="{StaticResource SettingsItemStyle}">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="*" MinWidth="0" />
+                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <TextBlock
                     Grid.Column="0"
@@ -23,7 +22,8 @@
 
                 <StackPanel
                     Orientation="Horizontal"
-                    Grid.Column="2">
+                    Grid.Column="1"
+                    HorizontalAlignment="Right">
                     <local:ShortcutKey
                         Content="{Binding Key1, RelativeSource={RelativeSource AncestorType=UserControl}}"
                         Visibility="{Binding Key1, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource StringToVisibilityConverter}}" />

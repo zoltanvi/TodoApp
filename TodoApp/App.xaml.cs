@@ -1,16 +1,19 @@
-﻿using MediatR;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Modules.Common;
-using Modules.Common.Cqrs.Events;
 using Modules.Common.Database;
+using Modules.Common.Events;
 using Modules.Common.Navigation;
 using Modules.Common.Services.Navigation;
 using Modules.Common.Views.Services;
 using Modules.PopupMessage.Views;
 using Modules.Settings.Contracts.ViewModels;
 using Modules.Settings.Views.Services;
+using Modules.Categories.Services.PrismSubscribers;
+using Modules.Settings.Services.PrismSubscribers;
+using Modules.Tasks.Views.PrismSubscribers;
+using Prism.Events;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -74,10 +77,6 @@ public partial class App : Application
 
         ServiceLocator.ServiceProvider = ServiceProvider;
         ServiceProvider.InitializeDatabase();
-        PublishApplicationOpeningEvent();
-
-        var autoSaveService = ServiceProvider.GetRequiredService<IAppSettingsAutoSaveService>();
-        autoSaveService.StartService();
     }
 
     protected override void OnStartup(StartupEventArgs e)
@@ -86,6 +85,12 @@ public partial class App : Application
 
         if (_host == null) return;
 
+        WirePrismEventSubscribers();
+        PublishApplicationOpeningEvent();
+
+        var autoSaveService = ServiceProvider.GetRequiredService<IAppSettingsAutoSaveService>();
+        autoSaveService.StartService();
+
         // Set app version info
         var version = (string)Current.TryFindResource(Constants.CurrentVersion);
         AppSettings.Instance.ApplicationSettings.AppVersion = version;
@@ -93,10 +98,16 @@ public partial class App : Application
         CreateMainWindow();
     }
 
+    private void WirePrismEventSubscribers()
+    {
+        _ = ServiceProvider.GetRequiredService<ApplicationLifecyclePrismSubscriber>();
+        _ = ServiceProvider.GetRequiredService<TaskViewActiveCategoryPrismSubscriber>();
+        _ = ServiceProvider.GetRequiredService<ActiveCategoryNavigationPrismSubscriber>();
+    }
+
     private void PublishApplicationOpeningEvent()
     {
-        var mediator = ServiceProvider.GetRequiredService<IMediator>();
-        mediator.Publish(new ApplicationOpeningEvent());
+        ServiceProvider.GetRequiredService<IEventAggregator>().GetEvent<ApplicationOpeningEvent>().Publish();
     }
 
     private void CreateMainWindow()

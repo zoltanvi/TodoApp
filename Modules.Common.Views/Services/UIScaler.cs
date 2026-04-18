@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Modules.Common.Cqrs.Events;
 using Modules.Common.Events;
 using Modules.Common.Services;
 using Modules.Common.ViewModel;
@@ -87,13 +86,7 @@ public class UIScaler : BaseViewModel, IUIScaler
 
         if (zoomed)
         {
-            _mediator?.Publish(new UiScaledEvent
-            {
-                OldScaleValue = oldScaleValue,
-                NewScaleValue = StaticScaleValue
-            });
-
-            _eventAggregator?.GetEvent<UiScaledViewEvent>().Publish(new UiScaledViewPayload 
+            _eventAggregator?.GetEvent<UiScaledViewEvent>().Publish(new UiScaledViewPayload
             {
                 OldScaleValue = oldScaleValue,
                 NewScaleValue = StaticScaleValue

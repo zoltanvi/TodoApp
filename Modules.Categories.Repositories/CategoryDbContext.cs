@@ -44,7 +44,8 @@ public class CategoryDbContext : DbContext
 
             entity
             .HasIndex(e => new { e.ParentCategoryId, e.Name })
-            .IsUnique();
+            .IsUnique()
+            .HasFilter("\"DeletedDate\" IS NULL");
 
             entity
             .Property(e => e.ListOrder)

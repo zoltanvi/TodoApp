@@ -1,8 +1,13 @@
 ﻿using MediatR;
+using Modules.Common.Events;
 using Prism.Events;
 
 namespace Modules.Common.Services;
 
+/// <summary>
+/// App-wide UI scale. Scale changes broadcast via Prism <see cref="UiScaledViewEvent"/> (single pub/sub bus).
+/// <see cref="IMediator"/> used only for <c>IRequest</c> (e.g. zoom toast command).
+/// </summary>
 public interface IUIScaler
 {
     double ColorPickerHeight { get; }

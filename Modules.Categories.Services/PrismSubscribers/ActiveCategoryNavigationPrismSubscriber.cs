@@ -1,30 +1,39 @@
-﻿using MediatR;
-using Modules.Categories.Contracts.Cqrs.Events;
+using Modules.Categories.Contracts.Events;
 using Modules.Common;
 using Modules.Common.Navigation;
 using Modules.Common.Services.Navigation;
 using Modules.Settings.Contracts.ViewModels;
+using Prism.Events;
 
-namespace Modules.Categories.Services.CqrsHandling.EventHandlers;
+namespace Modules.Categories.Services.PrismSubscribers;
 
-public class ActiveCategoryChangedEventHandler : INotificationHandler<ActiveCategoryChangedEvent>
+/// <summary>
+/// Navigates main content when active category changes (Prism pub/sub).
+/// </summary>
+public sealed class ActiveCategoryNavigationPrismSubscriber
 {
     private readonly IMainPageNavigationService _mainPageNavigationService;
 
-    public ActiveCategoryChangedEventHandler(IMainPageNavigationService mainPageNavigationService)
+    public ActiveCategoryNavigationPrismSubscriber(
+        IEventAggregator eventAggregator,
+        IMainPageNavigationService mainPageNavigationService)
     {
+        ArgumentNullException.ThrowIfNull(eventAggregator);
         ArgumentNullException.ThrowIfNull(mainPageNavigationService);
+
         _mainPageNavigationService = mainPageNavigationService;
+
+        eventAggregator.GetEvent<ActiveCategoryChangedEvent>().Subscribe(OnActiveCategoryChanged);
     }
 
-    public Task Handle(ActiveCategoryChangedEvent notification, CancellationToken cancellationToken)
+    private void OnActiveCategoryChanged(ActiveCategoryChangedPayload payload)
     {
         if (AppSettings.Instance.ApplicationSettings.CloseSideMenuOnPageChange)
         {
             AppSettings.Instance.SessionSettings.SideMenuOpen = false;
         }
 
-        if (notification.CategoryId == Constants.RecycleBinCategoryId)
+        if (payload.CategoryId == Constants.RecycleBinCategoryId)
         {
             _mainPageNavigationService.NavigateTo<IRecycleBinPage>();
         }
@@ -32,7 +41,5 @@ public class ActiveCategoryChangedEventHandler : INotificationHandler<ActiveCate
         {
             _mainPageNavigationService.NavigateTo<ITaskPage>();
         }
-
-        return Task.CompletedTask;
     }
 }

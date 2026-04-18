@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Modules.Categories.Contracts;
 using Modules.Categories.Contracts.Cqrs.Commands;
-using Modules.Categories.Contracts.Cqrs.Events;
 using Modules.Categories.Contracts.Events;
 using Modules.Categories.Contracts.Models;
 using Modules.Categories.Views.Controls;
@@ -457,7 +456,7 @@ public class CategoryPageViewModel : BaseViewModel
 
         FocusedCategoryId = category.Id;
 
-        _mediator.Publish(new ActiveCategoryChangedEvent
+        _eventAggregator.GetEvent<ActiveCategoryChangedEvent>().Publish(new ActiveCategoryChangedPayload
         {
             CategoryId = category.Id,
             CategoryName = category.Name

@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Modules.Categories.Repositories;
 using Modules.Categories.Services.CqrsHandling;
+using Modules.Categories.Services.PrismSubscribers;
 using Modules.Categories.Views.Pages;
 using Modules.Common.Database;
 using Modules.Common.Navigation;
@@ -22,6 +23,7 @@ using Modules.Settings.Contracts.ViewModels;
 using Modules.Settings.Repositories;
 using Modules.Settings.Services;
 using Modules.Settings.Services.CqrsHandling;
+using Modules.Settings.Services.PrismSubscribers;
 using Modules.Settings.Views;
 using Modules.Settings.Views.Pages;
 using Modules.Settings.Views.Services;
@@ -29,6 +31,7 @@ using Modules.Tasks.Repositories;
 using Modules.Tasks.Services.CqrsHandling;
 using Modules.Tasks.Views.CqrsHandling;
 using Modules.Tasks.Views.Pages;
+using Modules.Tasks.Views.PrismSubscribers;
 using Modules.Tasks.Views.Services;
 using Prism.Events;
 using TodoApp.DefaultData;
@@ -43,7 +46,7 @@ public static class Program
     {
         AddMediatR(services);
 
-        // Prism.Core
+        // Prism = single pub/sub bus (UI + lifecycle + active category). MediatR reserved for IRequest/IRequestHandler (CQRS).
         services.AddSingleton<IEventAggregator, EventAggregator>();
 
         services.AddSingleton<IUIScaler>(provider =>
@@ -54,6 +57,10 @@ public static class Program
 
             return UIScaler.Instance;
         });
+
+        services.AddSingleton<ApplicationLifecyclePrismSubscriber>();
+        services.AddSingleton<TaskViewActiveCategoryPrismSubscriber>();
+        services.AddSingleton<ActiveCategoryNavigationPrismSubscriber>();
 
         services.AddSingleton<IThemeEditorService, ThemeEditorService>();
         services.AddSingleton<MaterialThemeManagerService>();
@@ -79,7 +86,6 @@ public static class Program
     private static void AddMediatR(IServiceCollection services)
     {
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(
-            typeof(App).Assembly,
             typeof(SettingsCqrsRegistration).Assembly,
             typeof(PopupMessageCqrsRegistration).Assembly,
             typeof(CategoriesCqrsRegistration).Assembly,

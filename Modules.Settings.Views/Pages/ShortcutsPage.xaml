@@ -68,7 +68,7 @@
                     Key1="Tab" />
 
                 <controls:ShortcutItemControl
-                    Description="Add subcategory under focused category (or active category if none focused)"
+                    Description="Add subcategory (focused row, or active category if none focused)"
                     Key1="Ctrl"
                     Key2="Shift"
                     Key3="N" />

@@ -1,6 +1,5 @@
-﻿using MediatR;
-using Modules.Common.Cqrs.Events;
-using Modules.Common.DataBinding;
+﻿using Modules.Common.DataBinding;
+using Modules.Common.Events;
 using Modules.Common.Events;
 using Modules.Common.Services;
 using Modules.Common.Services.Navigation;
@@ -27,7 +26,6 @@ public class MainWindowViewModel : BaseViewModel
     private int _prevHeight;
 
     private readonly IWindowService _windowService;
-    private readonly IMediator _mediator;
     private readonly IEventAggregator _eventAggregator;
     private readonly IUIScaler _uiScaler;
     private readonly ThemeManager _themeManager;
@@ -40,21 +38,18 @@ public class MainWindowViewModel : BaseViewModel
     private static ApplicationSettings ApplicationSettings => AppSettings.Instance.ApplicationSettings;
     public MainWindowViewModel(
         IWindowService windowService,
-        IMediator mediator,
         IEventAggregator eventAggregator,
         IUIScaler uiScaler,
         ThemeManager themeManager,
         IOverlayPageNavigationService overlayPageNavigationService)
     {
         ArgumentNullException.ThrowIfNull(windowService);
-        ArgumentNullException.ThrowIfNull(mediator);
         ArgumentNullException.ThrowIfNull(eventAggregator);
         ArgumentNullException.ThrowIfNull(uiScaler);
         ArgumentNullException.ThrowIfNull(themeManager);
         ArgumentNullException.ThrowIfNull(overlayPageNavigationService);
         
         _windowService = windowService;
-        _mediator = mediator;
         _eventAggregator = eventAggregator;
         _uiScaler = uiScaler;
         // ThemeManager is injected so it is being created
@@ -330,6 +325,6 @@ public class MainWindowViewModel : BaseViewModel
             WindowSettings.Height = (int)_windowService.Height;
         }
 
-        _mediator.Publish(new ApplicationClosingEvent());
+        _eventAggregator.GetEvent<ApplicationClosingEvent>().Publish();
     }
 }

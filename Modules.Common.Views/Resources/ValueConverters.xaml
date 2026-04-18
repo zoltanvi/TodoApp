@@ -8,6 +8,7 @@
     <valueConverters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
     <valueConverters:BoolToVisibilityHiddenConverter x:Key="BoolToVisibilityHiddenConverter" />
     <valueConverters:BoolToVisibilityNegatedConverter x:Key="BoolToVisibilityNegatedConverter" />
+    <valueConverters:BoolNegatedConverter x:Key="BoolNegatedConverter" />
 
     <valueConverters:EnumToFontFamilyConverter x:Key="EnumToFontFamilyConverter" />
 
