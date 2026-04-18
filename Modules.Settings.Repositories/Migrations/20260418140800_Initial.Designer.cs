@@ -10,8 +10,8 @@ using Modules.Settings.Repositories;
 namespace Modules.Settings.Repositories.Migrations
 {
     [DbContext(typeof(SettingDbContext))]
-    [Migration("20240619112312_Settings_Initial")]
-    partial class Settings_Initial
+    [Migration("20260418140800_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

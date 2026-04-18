@@ -5,7 +5,7 @@
 namespace Modules.Tasks.Repositories.Migrations
 {
     /// <inheritdoc />
-    public partial class Tasks_Initial : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -32,7 +32,6 @@ namespace Modules.Tasks.Repositories.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     CategoryId = table.Column<int>(type: "INTEGER", nullable: false),
                     Content = table.Column<string>(type: "TEXT", nullable: false),
-                    IsContentPlainText = table.Column<bool>(type: "INTEGER", nullable: false),
                     ContentPreview = table.Column<string>(type: "TEXT", nullable: false),
                     ListOrder = table.Column<int>(type: "INTEGER", nullable: false, defaultValue: 0),
                     Pinned = table.Column<bool>(type: "INTEGER", nullable: false),
@@ -42,7 +41,6 @@ namespace Modules.Tasks.Repositories.Migrations
                     MarkerColor = table.Column<string>(type: "TEXT", nullable: false),
                     BorderColor = table.Column<string>(type: "TEXT", nullable: false),
                     BackgroundColor = table.Column<string>(type: "TEXT", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false),
                     DeletedDate = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
@@ -116,7 +114,6 @@ namespace Modules.Tasks.Repositories.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     TaskId = table.Column<int>(type: "INTEGER", nullable: false),
                     Content = table.Column<string>(type: "TEXT", nullable: false),
-                    IsContentPlainText = table.Column<bool>(type: "INTEGER", nullable: false),
                     ContentPreview = table.Column<string>(type: "TEXT", nullable: false),
                     VersionDate = table.Column<string>(type: "TEXT", nullable: false)
                 },

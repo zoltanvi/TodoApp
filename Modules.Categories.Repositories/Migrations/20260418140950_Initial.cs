@@ -5,7 +5,7 @@
 namespace Modules.Categories.Repositories.Migrations
 {
     /// <inheritdoc />
-    public partial class Categories_Initial : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -16,11 +16,12 @@ namespace Modules.Categories.Repositories.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
+                    ParentCategoryId = table.Column<int>(type: "INTEGER", nullable: true),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
                     ListOrder = table.Column<int>(type: "INTEGER", nullable: false, defaultValue: 0),
                     CreationDate = table.Column<string>(type: "TEXT", nullable: false),
                     ModificationDate = table.Column<string>(type: "TEXT", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false)
+                    DeletedDate = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -41,9 +42,9 @@ namespace Modules.Categories.Repositories.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Categories_Name",
+                name: "IX_Categories_ParentCategoryId_Name",
                 table: "Categories",
-                column: "Name",
+                columns: new[] { "ParentCategoryId", "Name" },
                 unique: true);
         }
 
