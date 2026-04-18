@@ -140,6 +140,7 @@ public static class Program
         services.AddTransient<CategoryPageViewModel>();
 
         services.AddTransient<ITaskPage, TaskPage>();
+        services.AddTransient<TaskDragDropIndexModifier>();
         services.AddTransient<TaskPageViewModel>();
 
         services.AddTransient<IRecycleBinPage, RecycleBinPage>();

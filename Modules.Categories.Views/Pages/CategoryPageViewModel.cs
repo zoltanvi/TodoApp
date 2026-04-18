@@ -31,8 +31,7 @@ public class CategoryPageViewModel : BaseViewModel
     private readonly IOverlayPageNavigationService _overlayPageNavigationService;
     private readonly IMediator _mediator;
     private readonly IEventAggregator _eventAggregator;
-
-    private List<CategoryItemViewModel> _treeRoots = [];
+    private readonly CategoryPageTreeState _treeState;
 
     public CategoryPageViewModel(
         ICategoriesRepository categoriesRepository,
@@ -56,6 +55,15 @@ public class CategoryPageViewModel : BaseViewModel
         _mediator = mediator;
         _eventAggregator = eventAggregator;
 
+        _treeState = new CategoryPageTreeState(
+            categoriesRepository,
+            eventAggregator,
+            () =>
+            {
+                OnPropertyChanged(nameof(InactiveCategories));
+                OnPropertyChanged(nameof(AllCategories));
+            });
+
         AddCategoryCommand = new RelayCommand(AddCategory);
         OpenSettingsPageCommand = new RelayCommand(OpenSettingsPage);
         OpenNoteListPageCommand = new RelayCommand(OpenNoteListPage);
@@ -63,13 +71,7 @@ public class CategoryPageViewModel : BaseViewModel
 
         ActiveCategoryId = AppSettings.Instance.SessionSettings.ActiveCategoryId;
 
-        var activeCategories = categoriesRepository.GetActiveCategories();
-        _treeRoots = activeCategories.BuildTree(_eventAggregator);
-        
-        RestoreExpandedStates();
-        
-        FlattenedItems = new ObservableCollection<CategoryItemViewModel>();
-        RebuildFlatList();
+        _treeState.Initialize();
 
         eventAggregator.GetEvent<CategoryDeleteClickedEvent>().Subscribe(DeleteCategory);
         eventAggregator.GetEvent<CategoryClickedEvent>().Subscribe(SetActiveCategory);
@@ -90,144 +92,14 @@ public class CategoryPageViewModel : BaseViewModel
     public ICommand OpenSettingsPageCommand { get; }
     public ICommand OpenNoteListPageCommand { get; }
     public ICommand OpenRecycleBinPageCommand { get; }
-    public ObservableCollection<CategoryItemViewModel> FlattenedItems { get; }
+    public ObservableCollection<CategoryItemViewModel> FlattenedItems => _treeState.FlattenedItems;
     public int ActiveCategoryId { get; private set; }
     public int FocusedCategoryId { get; set; } = -1;
 
-    public IEnumerable<CategoryItemViewModel> AllCategories => GetAllCategoriesFlat();
+    public IEnumerable<CategoryItemViewModel> AllCategories => _treeState.GetAllCategoriesFlat();
 
     public IEnumerable<CategoryItemViewModel> InactiveCategories =>
-        GetAllCategoriesFlat().Where(c => c.Id != ActiveCategoryId);
-
-    private IEnumerable<CategoryItemViewModel> GetAllCategoriesFlat()
-    {
-        var result = new List<CategoryItemViewModel>();
-        CollectAll(_treeRoots, result);
-        return result;
-    }
-
-    private static void CollectAll(IEnumerable<CategoryItemViewModel> items, List<CategoryItemViewModel> result)
-    {
-        foreach (var item in items)
-        {
-            result.Add(item);
-            CollectAll(item.Children, result);
-        }
-    }
-
-    private void RebuildFlatList()
-    {
-        FlattenedItems.Clear();
-        FlattenVisible(_treeRoots, FlattenedItems);
-        OnPropertyChanged(nameof(InactiveCategories));
-        OnPropertyChanged(nameof(AllCategories));
-    }
-
-    private static void FlattenVisible(
-        IEnumerable<CategoryItemViewModel> items,
-        ObservableCollection<CategoryItemViewModel> target)
-    {
-        foreach (var item in items)
-        {
-            target.Add(item);
-            if (item.IsExpanded && item.Children.Count > 0)
-            {
-                FlattenVisible(item.Children, target);
-            }
-        }
-    }
-
-    private CategoryItemViewModel? FindInTree(int categoryId)
-    {
-        return FindInTreeRecursive(_treeRoots, categoryId);
-    }
-
-    private static CategoryItemViewModel? FindInTreeRecursive(
-        IEnumerable<CategoryItemViewModel> items, int categoryId)
-    {
-        foreach (var item in items)
-        {
-            if (item.Id == categoryId) return item;
-            var found = FindInTreeRecursive(item.Children, categoryId);
-            if (found != null) return found;
-        }
-        return null;
-    }
-
-    private CategoryItemViewModel? FindParentOf(int categoryId)
-    {
-        return FindParentRecursive(_treeRoots, categoryId);
-    }
-
-    private static CategoryItemViewModel? FindParentRecursive(
-        IEnumerable<CategoryItemViewModel> items, int categoryId)
-    {
-        foreach (var item in items)
-        {
-            if (item.Children.Any(c => c.Id == categoryId)) return item;
-            var found = FindParentRecursive(item.Children, categoryId);
-            if (found != null) return found;
-        }
-        return null;
-    }
-
-    private void EnsureAncestorsExpanded(int? parentCategoryId)
-    {
-        if (parentCategoryId == null) return;
-        var parent = FindInTree(parentCategoryId.Value);
-        if (parent == null) return;
-
-        if (parent.ParentCategoryId != null)
-        {
-            EnsureAncestorsExpanded(parent.ParentCategoryId);
-        }
-        parent.IsExpanded = true;
-    }
-
-    private void RestoreExpandedStates()
-    {
-        var expandedIds = AppSettings.Instance.SessionSettings.GetExpandedCategoryIds();
-        if (expandedIds.Count == 0) return;
-
-        foreach (var category in GetAllCategoriesFlat())
-        {
-            if (expandedIds.Contains(category.Id) && category.HasChildren)
-            {
-                category.IsExpanded = true;
-            }
-        }
-    }
-
-    private void SaveExpandedStates()
-    {
-        var expandedIds = GetAllCategoriesFlat()
-            .Where(c => c.IsExpanded && c.HasChildren)
-            .Select(c => c.Id);
-
-        AppSettings.Instance.SessionSettings.SetExpandedCategoryIds(expandedIds);
-    }
-
-    private void RemoveFromTree(int categoryId)
-    {
-        var parent = FindParentOf(categoryId);
-        if (parent != null)
-        {
-            var child = parent.Children.FirstOrDefault(c => c.Id == categoryId);
-            if (child != null)
-            {
-                parent.Children.Remove(child);
-                parent.HasChildren = parent.Children.Count > 0;
-            }
-        }
-        else
-        {
-            var root = _treeRoots.FirstOrDefault(c => c.Id == categoryId);
-            if (root != null)
-            {
-                _treeRoots.Remove(root);
-            }
-        }
-    }
+        _treeState.GetAllCategoriesFlat().Where(c => c.Id != ActiveCategoryId);
 
     private void AddCategory()
     {
@@ -287,25 +159,7 @@ public class CategoryPageViewModel : BaseViewModel
             });
 
         var vm = addedCategory.MapToViewModel(_eventAggregator);
-        vm.Depth = parentCategoryId.HasValue ? (FindInTree(parentCategoryId.Value)?.Depth ?? 0) + 1 : 0;
-
-        if (parentCategoryId.HasValue)
-        {
-            var parentVm = FindInTree(parentCategoryId.Value);
-            if (parentVm != null)
-            {
-                parentVm.Children.Add(vm);
-                parentVm.HasChildren = true;
-                parentVm.IsExpanded = true;
-                SaveExpandedStates();
-            }
-        }
-        else
-        {
-            _treeRoots.Add(vm);
-        }
-
-        RebuildFlatList();
+        _treeState.AddNewCategoryViewModel(vm, parentCategoryId);
     }
 
     private void OnHotkeyAddSubcategory()
@@ -346,7 +200,7 @@ public class CategoryPageViewModel : BaseViewModel
         PendingAddNewCategoryText = string.Empty;
 
         // Put the new subcategory into rename mode
-        var newCategory = FindInTree(_categoriesRepository.GetCategoryByName(name, parentCategoryId)?.Id ?? -1);
+        var newCategory = _treeState.FindInTree(_categoriesRepository.GetCategoryByName(name, parentCategoryId)?.Id ?? -1);
         if (newCategory != null)
         {
             newCategory.RenameText = newCategory.Name;
@@ -360,35 +214,12 @@ public class CategoryPageViewModel : BaseViewModel
         ArgumentNullException.ThrowIfNull(dbCategory);
 
         var vm = dbCategory.MapToViewModel(_eventAggregator);
-
-        if (dbCategory.ParentCategoryId.HasValue)
-        {
-            var parentVm = FindInTree(dbCategory.ParentCategoryId.Value);
-            if (parentVm != null)
-            {
-                vm.Depth = parentVm.Depth + 1;
-                parentVm.Children.Add(vm);
-                parentVm.HasChildren = true;
-            }
-            else
-            {
-                vm.ParentCategoryId = null;
-                vm.Depth = 0;
-                _treeRoots.Add(vm);
-            }
-        }
-        else
-        {
-            vm.Depth = 0;
-            _treeRoots.Add(vm);
-        }
-
-        RebuildFlatList();
+        _treeState.ApplyRestoredCategory(dbCategory, vm);
     }
 
     private void DeleteCategory(int categoryId)
     {
-        var category = FindInTree(categoryId);
+        var category = _treeState.FindInTree(categoryId);
         ArgumentNullException.ThrowIfNull(category);
 
         var activeCategories = _categoriesRepository.GetActiveCategories();
@@ -406,7 +237,7 @@ public class CategoryPageViewModel : BaseViewModel
             _mediator.Send(new DeleteTaskItemsInCategoryCommand { CategoryId = descId });
         }
 
-        RemoveFromTree(categoryId);
+        _treeState.RemoveFromTree(categoryId);
         _categoriesRepository.DeleteCategory(category.Map());
 
         _mediator.Send(new ShowMessageInfoCommand { Message = $"Deleted category: {category.Name}" });
@@ -417,11 +248,11 @@ public class CategoryPageViewModel : BaseViewModel
             _eventAggregator.GetEvent<CategoryDeletedEvent>().Publish(descId);
         }
 
-        RebuildFlatList();
+        _treeState.RebuildFlatList();
 
         if (category.Id == ActiveCategoryId || descendantIds.Contains(ActiveCategoryId))
         {
-            var allFlat = GetAllCategoriesFlat().ToList();
+            var allFlat = _treeState.GetAllCategoriesFlat().ToList();
             if (allFlat.Count > 0)
             {
                 SetActiveCategory(allFlat.First().Id);
@@ -440,12 +271,12 @@ public class CategoryPageViewModel : BaseViewModel
         }
         else
         {
-            category = FindInTree(categoryId);
+            category = _treeState.FindInTree(categoryId);
             ArgumentNullException.ThrowIfNull(category);
 
-            EnsureAncestorsExpanded(category.ParentCategoryId);
-            SaveExpandedStates();
-            RebuildFlatList();
+            _treeState.EnsureAncestorsExpanded(category.ParentCategoryId);
+            _treeState.SaveExpandedStates();
+            _treeState.RebuildFlatList();
         }
 
         if (ActiveCategoryId != category.Id)
@@ -463,25 +294,9 @@ public class CategoryPageViewModel : BaseViewModel
         });
     }
 
-    public void ExpandCategory(int categoryId)
-    {
-        var category = FindInTree(categoryId);
-        if (category == null || !category.HasChildren || category.IsExpanded) return;
+    public void ExpandCategory(int categoryId) => _treeState.ExpandCategory(categoryId);
 
-        category.IsExpanded = true;
-        SaveExpandedStates();
-        RebuildFlatList();
-    }
-
-    public void CollapseCategory(int categoryId)
-    {
-        var category = FindInTree(categoryId);
-        if (category == null || !category.IsExpanded) return;
-
-        category.IsExpanded = false;
-        SaveExpandedStates();
-        RebuildFlatList();
-    }
+    public void CollapseCategory(int categoryId) => _treeState.CollapseCategory(categoryId);
 
     public void ActivateCategory(int categoryId)
     {
@@ -510,19 +325,11 @@ public class CategoryPageViewModel : BaseViewModel
         return -1;
     }
 
-    private void OnToggleExpand(int categoryId)
-    {
-        var category = FindInTree(categoryId);
-        if (category == null) return;
-
-        category.IsExpanded = !category.IsExpanded;
-        SaveExpandedStates();
-        RebuildFlatList();
-    }
+    private void OnToggleExpand(int categoryId) => _treeState.ToggleExpand(categoryId);
 
     private void OnRenameClicked(int categoryId)
     {
-        var category = FindInTree(categoryId);
+        var category = _treeState.FindInTree(categoryId);
         if (category == null) return;
 
         category.RenameText = category.Name;
@@ -531,7 +338,7 @@ public class CategoryPageViewModel : BaseViewModel
 
     public void FinishRename(int categoryId, string? newName)
     {
-        var category = FindInTree(categoryId);
+        var category = _treeState.FindInTree(categoryId);
         if (category == null) return;
 
         category.IsRenaming = false;
@@ -546,7 +353,7 @@ public class CategoryPageViewModel : BaseViewModel
 
     public void CancelRename(int categoryId)
     {
-        var category = FindInTree(categoryId);
+        var category = _treeState.FindInTree(categoryId);
         if (category == null) return;
 
         category.IsRenaming = false;
@@ -568,18 +375,7 @@ public class CategoryPageViewModel : BaseViewModel
 
     private void OnCategoryMoved(CategoryMovedPayload payload)
     {
-        ReloadTree();
-    }
-
-    private void ReloadTree()
-    {
-        var activeCategories = _categoriesRepository.GetActiveCategories();
-        _treeRoots = activeCategories.BuildTree(_eventAggregator);
-
-        RestoreExpandedStates();
-        EnsureAncestorsExpanded(FindInTree(ActiveCategoryId)?.ParentCategoryId);
-
-        RebuildFlatList();
+        _treeState.ReloadTree(ActiveCategoryId);
     }
 
     private void OpenSettingsPage()
@@ -600,11 +396,11 @@ public class CategoryPageViewModel : BaseViewModel
 
     private void OnCategoryNameUpdated(CategoryNameUpdatedPayload payload)
     {
-        var category = FindInTree(payload.CategoryId);
+        var category = _treeState.FindInTree(payload.CategoryId);
         if (category != null)
         {
             category.Name = payload.CategoryName;
-            RebuildFlatList();
+            _treeState.RebuildFlatList();
         }
     }
 

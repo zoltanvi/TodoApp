@@ -43,11 +43,11 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
     private readonly ITaskItemRepository _taskItemRepository;
     private readonly OneEditorOpenService _oneEditorOpenService;
     private readonly IEventAggregator _eventAggregator;
+    private readonly TaskPageListCoordinator _listCoordinator;
+    private readonly TaskDragDropIndexModifier _dropIndexModifier;
 
     // For improved performance, the code which updates Items in a loop
-    // should be surrounded with an '_ignoreCollectionChange = true scope' and update Items after that ONCE.
-    private bool _ignoreCollectionChange;
-
+    // should be surrounded with an '_listCoordinator.IgnoreCollectionChange = true scope' and update Items after that ONCE.
     public event EventHandler? FocusAddNewTaskTextEditorRequested;
     public event Action<int>? ScrollIntoViewRequested;
 
@@ -55,17 +55,21 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         IMediator mediator,
         ITaskItemRepository taskItemRepository,
         OneEditorOpenService oneEditorOpenService,
-        IEventAggregator eventAggregator)
+        IEventAggregator eventAggregator,
+        TaskDragDropIndexModifier dropIndexModifier)
     {
         ArgumentNullException.ThrowIfNull(mediator);
         ArgumentNullException.ThrowIfNull(taskItemRepository);
         ArgumentNullException.ThrowIfNull(oneEditorOpenService);
         ArgumentNullException.ThrowIfNull(eventAggregator);
+        ArgumentNullException.ThrowIfNull(dropIndexModifier);
 
         _mediator = mediator;
         _taskItemRepository = taskItemRepository;
         _oneEditorOpenService = oneEditorOpenService;
         _eventAggregator = eventAggregator;
+        _listCoordinator = new TaskPageListCoordinator(taskItemRepository);
+        _dropIndexModifier = dropIndexModifier;
 
         var activeCategoryInfo = _mediator.Send(new GetSelectedCategoryQuery())
             .ConfigureAwait(false).GetAwaiter().GetResult();
@@ -86,18 +90,20 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
 
         // Fixes list orders if necessary, when the task page opens
         var orderedTasks = AppSettings.Instance.TaskPageSettings.ForceTaskOrderByState
-            ? OrderTasksByState(tasks)
+            ? _listCoordinator.OrderTasksByState(tasks)
             : tasks;
 
-        Items = new ObservableCollection<TaskItemViewModel>(
-            orderedTasks.MapToViewModelList(_mediator, oneEditorOpenService, _eventAggregator));
+        foreach (var vm in orderedTasks.MapToViewModelList(_mediator, oneEditorOpenService, _eventAggregator))
+        {
+            _listCoordinator.Items.Add(vm);
+        }
 
         EditCategoryCommand = new RelayCommand(EditCategory);
         FinishCategoryEditCommand = new RelayCommand(FinishCategoryEdit);
         ToggleBottomPanelCommand = new RelayCommand(() => IsBottomPanelOpen ^= true);
         AddTaskItemCommand = new RelayCommand(AddTaskItem);
         TextBoxFocusedCommand = new RelayCommand(OnTextBoxFocused);
-        SetFirstItem();
+        _listCoordinator.SetFirstItem();
         RecalculateProgress();
 
         SearchBoxViewModel = new SearchBoxViewModel();
@@ -109,7 +115,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
 
     public SearchBoxViewModel SearchBoxViewModel { get; set; }
 
-    public ObservableCollection<TaskItemViewModel> Items { get; }
+    public ObservableCollection<TaskItemViewModel> Items => _listCoordinator.Items;
 
     public ICollectionView ItemsView { get; set; }
 
@@ -347,60 +353,13 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
 
     private void ItemsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs? e)
     {
-        if (_ignoreCollectionChange) return;
+        if (_listCoordinator.IgnoreCollectionChange) return;
 
-        FixItemsListOrders(persist: true);
+        _listCoordinator.FixItemsListOrders(persist: true);
     }
 
-    private List<TaskItem> OrderTasksByState(List<TaskItem> tasks)
-    {
-        List<TaskItem> orderedTasks = new List<TaskItem>();
-
-        var pinnedItems = tasks.Where(x => x.Pinned);
-        var activeItems = tasks.Where(x => !x.IsDone && !x.Pinned);
-        var doneItems = tasks.Where(x => x.IsDone);
-
-        orderedTasks.AddRange(pinnedItems);
-        orderedTasks.AddRange(activeItems);
-        orderedTasks.AddRange(doneItems);
-
-        orderedTasks.SetListOrdersToIndex();
-
-        _taskItemRepository.UpdateTaskListOrders(orderedTasks);
-
-        return orderedTasks;
-    }
-
-    private void MoveTaskItem(int newIndex, TaskItemViewModel taskItem)
-    {
-        Items.Remove(taskItem);
-        Items.Insert(newIndex, taskItem);
-    }
-
-    public int GetModifiedDropIndex(int dropIndex, object droppedObject)
-    {
-        if (droppedObject is not TaskItemViewModel taskItem)
-        {
-            throw new ArgumentException($"{nameof(droppedObject)} is not a {nameof(TaskItemViewModel)}");
-        }
-
-        var query = new TaskDragDropInsertPositionQuery
-        {
-            TaskId = taskItem.Id,
-            RequestedInsertPosition = dropIndex
-        };
-
-        return _mediator.Send(query).ConfigureAwait(false).GetAwaiter().GetResult();
-    }
-
-    private void SetFirstItem()
-    {
-        var firstItem = Items.FirstOrDefault();
-        if (firstItem != null)
-        {
-            firstItem.IsFirstItem = true;
-        }
-    }
+    int IDropIndexModifier.GetModifiedDropIndex(int dropIndex, object droppedObject) =>
+        _dropIndexModifier.GetModifiedDropIndex(dropIndex, droppedObject);
 
     // Event handlers below ===========
 
@@ -436,7 +395,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
 
             var newIndex = await _mediator.Send(query);
 
-            MoveTaskItem(newIndex, taskItem);
+            _listCoordinator.MoveTaskItem(newIndex, taskItem);
         }
         catch (Exception ex)
         {
@@ -463,7 +422,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
 
             var newIndex = await _mediator.Send(query);
 
-            MoveTaskItem(newIndex, taskItem);
+            _listCoordinator.MoveTaskItem(newIndex, taskItem);
         }
         catch (Exception ex)
         {
@@ -492,7 +451,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
 
             var newIndex = await _mediator.Send(query);
 
-            MoveTaskItem(newIndex, taskItem);
+            _listCoordinator.MoveTaskItem(newIndex, taskItem);
         }
         catch (Exception ex)
         {
@@ -520,7 +479,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
 
             var newIndex = await _mediator.Send(query);
 
-            MoveTaskItem(newIndex, taskItem);
+            _listCoordinator.MoveTaskItem(newIndex, taskItem);
         }
         catch (Exception ex)
         {
@@ -605,7 +564,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
 
         sortedItems = sortedItems.ToList();
 
-        _ignoreCollectionChange = true;
+        _listCoordinator.IgnoreCollectionChange = true;
 
         Items.Clear();
         foreach (var taskItem in sortedItems)
@@ -613,9 +572,9 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
             Items.Add(taskItem);
         }
 
-        FixItemsListOrders(persist: true);
+        _listCoordinator.FixItemsListOrders(persist: true);
 
-        _ignoreCollectionChange = false;
+        _listCoordinator.IgnoreCollectionChange = false;
     }
 
     private void OnVersionRestored(int taskId)
@@ -681,7 +640,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
             {
                 var tasks = _taskItemRepository.GetActiveTasksFromCategory(activeCategoryInfo.Id, includeNavigation: true);
 
-                _ignoreCollectionChange = true;
+                _listCoordinator.IgnoreCollectionChange = true;
 
                 Items.Clear();
 
@@ -690,16 +649,16 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
                     Items.Add(taskItem.MapToViewModel(_mediator, _oneEditorOpenService, _eventAggregator));
                 }
 
-                FixItemsListOrders(persist: true);
+                _listCoordinator.FixItemsListOrders(persist: true);
 
-                _ignoreCollectionChange = false;
+                _listCoordinator.IgnoreCollectionChange = false;
 
                 RecalculateProgress();
             }
         }
         catch (Exception ex)
         {
-            _ignoreCollectionChange = false;
+            _listCoordinator.IgnoreCollectionChange = false;
             System.Diagnostics.Trace.TraceError($"{nameof(OnTaskSplitted)} failed: {ex}");
         }
     }
@@ -719,7 +678,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
 
             var newIndex = await _mediator.Send(query);
 
-            MoveTaskItem(newIndex, taskItem);
+            _listCoordinator.MoveTaskItem(newIndex, taskItem);
         }
         catch (Exception ex)
         {
@@ -742,7 +701,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
 
             var newIndex = await _mediator.Send(query);
 
-            MoveTaskItem(newIndex, taskItem);
+            _listCoordinator.MoveTaskItem(newIndex, taskItem);
         }
         catch (Exception ex)
         {
@@ -815,7 +774,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
     {
         List<TaskItem> itemsToDelete;
 
-        _ignoreCollectionChange = true;
+        _listCoordinator.IgnoreCollectionChange = true;
 
         if (payload.DeleteMode == TaskDeleteAllRequestedPayload.Mode.All)
         {
@@ -839,9 +798,9 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
             throw new NotImplementedException("This delete mode is not implemented!");
         }
 
-        FixItemsListOrders(persist: true);
+        _listCoordinator.FixItemsListOrders(persist: true);
 
-        _ignoreCollectionChange = false;
+        _listCoordinator.IgnoreCollectionChange = false;
 
         _taskItemRepository.DeleteTasks(itemsToDelete);
         RecalculateProgress();
@@ -857,19 +816,19 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
                 var task = Items.FirstOrDefault(x => x.Id == payload.TaskId);
                 ArgumentNullException.ThrowIfNull(task);
 
-                _ignoreCollectionChange = true;
+                _listCoordinator.IgnoreCollectionChange = true;
             
                 Items.Remove(task);
-                FixItemsListOrders();
+                _listCoordinator.FixItemsListOrders();
             
-                _ignoreCollectionChange = false;
+                _listCoordinator.IgnoreCollectionChange = false;
 
                 RecalculateProgress();
             }
         }
         catch (Exception ex)
         {
-            _ignoreCollectionChange = false;
+            _listCoordinator.IgnoreCollectionChange = false;
             System.Diagnostics.Trace.TraceError($"{nameof(OnTaskCategoryChanged)} failed: {ex}");
         }
     }
@@ -881,7 +840,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
             var activeCategory = await _mediator.Send(new GetSelectedCategoryQuery());
             if (activeCategory.Id != payload.NewCategoryId)
             {
-                _ignoreCollectionChange = true;
+                _listCoordinator.IgnoreCollectionChange = true;
 
                 foreach (var taskId in payload.TaskIds)
                 {
@@ -890,16 +849,16 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
                     Items.Remove(task);
                 }
 
-                FixItemsListOrders();
+                _listCoordinator.FixItemsListOrders();
 
-                _ignoreCollectionChange = false;
+                _listCoordinator.IgnoreCollectionChange = false;
 
                 RecalculateProgress();
             }
         }
         catch (Exception ex)
         {
-            _ignoreCollectionChange = false;
+            _listCoordinator.IgnoreCollectionChange = false;
             System.Diagnostics.Trace.TraceError($"{nameof(OnTasksCategoryChanged)} failed: {ex}");
         }
     }
@@ -930,20 +889,6 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
                 tagOnTask.Color = EnumHelper.ConvertTo<TagColor>(tag.Color);
                 tagOnTask.Name = tag.Name;
             }
-        }
-    }
-
-    private void FixItemsListOrders(bool persist = false)
-    {
-        for (var i = 0; i < Items.Count; i++)
-        {
-            Items[i].ListOrder = i;
-            Items[i].IsFirstItem = i == 0;
-        }
-
-        if (persist)
-        {
-            _taskItemRepository.UpdateTaskListOrders(Items.MapList());
         }
     }
 
