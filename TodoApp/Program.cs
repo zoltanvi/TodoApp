@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Modules.Categories.Repositories;
-using Modules.Categories.Services.CqrsHandling;
+using Modules.Categories.Services.CqrsHandling.CommandHandlers;
 using Modules.Categories.Services.PrismSubscribers;
 using Modules.Categories.Views.DragDrop;
 using Modules.Categories.Views.Pages;
@@ -15,21 +15,20 @@ using Modules.Common.Views.Pages;
 using Modules.Common.Views.Services;
 using Modules.Common.Views.Services.Navigation;
 using Modules.Migration;
+using Modules.PopupMessage.Contracts;
 using Modules.PopupMessage.Views;
-using Modules.PopupMessage.Views.CqrsHandling;
 using Modules.RecycleBin.Repositories;
 using Modules.RecycleBin.Views.Pages;
 using Modules.Settings.Contracts;
 using Modules.Settings.Contracts.ViewModels;
 using Modules.Settings.Repositories;
 using Modules.Settings.Services;
-using Modules.Settings.Services.CqrsHandling;
 using Modules.Settings.Services.PrismSubscribers;
 using Modules.Settings.Views;
 using Modules.Settings.Views.Pages;
 using Modules.Settings.Views.Services;
 using Modules.Tasks.Repositories;
-using Modules.Tasks.Services.CqrsHandling;
+using Modules.Tasks.Services.CqrsHandling.CommandHandlers;
 using Modules.Tasks.Views.Pages;
 using Modules.Tasks.Views.PrismSubscribers;
 using Modules.Tasks.Views.Services;
@@ -49,11 +48,13 @@ public static class Program
         // Prism = single pub/sub bus (UI + lifecycle + active category). MediatR reserved for IRequest/IRequestHandler (CQRS).
         services.AddSingleton<IEventAggregator, EventAggregator>();
 
+        services.AddSingleton<IPopupMessageService, PopupMessageService>();
+
         services.AddSingleton<IUIScaler>(provider =>
         {
-            var mediator = provider.GetRequiredService<IMediator>();
+            var popupMessageService = provider.GetRequiredService<IPopupMessageService>();
             var eventAggregator = provider.GetRequiredService<IEventAggregator>();
-            UIScaler.Instance.Setup(mediator, eventAggregator);
+            UIScaler.Instance.Setup(popupMessageService, eventAggregator);
 
             return UIScaler.Instance;
         });
@@ -88,11 +89,8 @@ public static class Program
     private static void AddMediatR(IServiceCollection services)
     {
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(
-            typeof(SettingsCqrsRegistration).Assembly,
-            typeof(PopupMessageCqrsRegistration).Assembly,
-            typeof(CategoriesCqrsRegistration).Assembly,
-            typeof(TaskServicesCqrsRegistration).Assembly
-        ));
+            typeof(MoveCategoryCommandHandler).Assembly,
+            typeof(UpdateTaskCommandHandler).Assembly));
     }
 
     public static void InitializeDatabase(this IServiceProvider serviceProvider)

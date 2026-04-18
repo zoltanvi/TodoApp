@@ -1,8 +1,7 @@
-﻿using MediatR;
-using Modules.Common.Events;
+﻿using Modules.Common.Events;
 using Modules.Common.Services;
 using Modules.Common.ViewModel;
-using Modules.PopupMessage.Contracts.Cqrs.Commands;
+using Modules.PopupMessage.Contracts;
 using Prism.Events;
 using PropertyChanged;
 
@@ -25,7 +24,7 @@ public class UIScaler : BaseViewModel, IUIScaler
     private const int ColorPickerColumns = 9;
 
     private double _scalingPercent = OriginalScalingPercent;
-    private IMediator? _mediator;
+    private IPopupMessageService? _popupMessageService;
     private IEventAggregator? _eventAggregator;
 
     public static IUIScaler Instance { get; } = new UIScaler();
@@ -54,12 +53,12 @@ public class UIScaler : BaseViewModel, IUIScaler
     public double ScrollbarWidth => 6 * ScaleValue;
     public double TaskProgressBarHeight => OriginalTaskProgressBarHeight * ScaleValue;
 
-    public void Setup(IMediator mediator, IEventAggregator eventAggregator)
+    public void Setup(IPopupMessageService popupMessageService, IEventAggregator eventAggregator)
     {
-        ArgumentNullException.ThrowIfNull(mediator);
+        ArgumentNullException.ThrowIfNull(popupMessageService);
         ArgumentNullException.ThrowIfNull(eventAggregator);
 
-        _mediator = mediator;
+        _popupMessageService = popupMessageService;
         _eventAggregator = eventAggregator;
     }
 
@@ -114,9 +113,6 @@ public class UIScaler : BaseViewModel, IUIScaler
         _scalingPercent += zoomOffset;
         SetScaling(_scalingPercent / OriginalScalingPercent);
 
-        _mediator?.Send(new ShowMessageInfoCommand
-        {
-            Message = $"{_scalingPercent} %"
-        });
+        _popupMessageService?.ShowInfo($"{_scalingPercent} %");
     }
 }

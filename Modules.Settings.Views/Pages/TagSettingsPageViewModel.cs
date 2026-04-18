@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Modules.Common.ViewModel;
 using Modules.Common.Views.Controls;
+using Modules.PopupMessage.Contracts;
 using Modules.Settings.Views.Mappings;
 using Modules.Settings.Views.Tag;
 using Modules.Tasks.Contracts;
@@ -15,25 +16,29 @@ namespace Modules.Settings.Views.Pages;
 public class TagSettingsPageViewModel : BaseViewModel
 {
     private readonly IMediator _mediator;
+    private readonly IPopupMessageService _popupMessageService;
     private readonly ITagItemRepository _tagItemRepository;
     private readonly IEventAggregator _eventAggregator;
 
     public TagSettingsPageViewModel(
         IMediator mediator,
+        IPopupMessageService popupMessageService,
         ITagItemRepository tagItemRepository,
         IEventAggregator eventAggregator)
     {
         ArgumentNullException.ThrowIfNull(mediator);
+        ArgumentNullException.ThrowIfNull(popupMessageService);
         ArgumentNullException.ThrowIfNull(tagItemRepository);
         ArgumentNullException.ThrowIfNull(eventAggregator);
 
         _mediator = mediator;
+        _popupMessageService = popupMessageService;
         _tagItemRepository = tagItemRepository;
         _eventAggregator = eventAggregator;
 
         var tags = _tagItemRepository.GetTags();
         Items = new ObservableCollection<TagItemViewModel>(tags.MapToViewModelList(_mediator));
-        TagCreator = new TagCreatorViewModel(_tagItemRepository, _mediator, _eventAggregator);
+        TagCreator = new TagCreatorViewModel(_tagItemRepository, _popupMessageService, _eventAggregator);
 
         _eventAggregator.GetEvent<TagItemCreatedEvent>().Subscribe(OnTagItemCreated);
         _eventAggregator.GetEvent<TagItemUpdatedEvent>().Subscribe(OnTagItemUpdated);

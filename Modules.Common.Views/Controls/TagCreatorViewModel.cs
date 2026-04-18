@@ -1,8 +1,7 @@
-﻿using MediatR;
-using Modules.Common.DataBinding;
+﻿using Modules.Common.DataBinding;
 using Modules.Common.DataModels;
 using Modules.Common.ViewModel;
-using Modules.PopupMessage.Contracts.Cqrs.Commands;
+using Modules.PopupMessage.Contracts;
 using Modules.Tasks.Contracts;
 using Modules.Tasks.Contracts.Events;
 using Modules.Tasks.Contracts.Models;
@@ -16,20 +15,20 @@ namespace Modules.Common.Views.Controls;
 public class TagCreatorViewModel : BaseViewModel
 {
     private readonly ITagItemRepository _tagItemRepository;
-    private readonly IMediator _mediator;
+    private readonly IPopupMessageService _popupMessageService;
     private readonly IEventAggregator _eventAggregator;
 
     public TagCreatorViewModel(
         ITagItemRepository tagItemRepository,
-        IMediator mediator,
+        IPopupMessageService popupMessageService,
         IEventAggregator eventAggregator)
     {
         ArgumentNullException.ThrowIfNull(tagItemRepository);
-        ArgumentNullException.ThrowIfNull(mediator);
+        ArgumentNullException.ThrowIfNull(popupMessageService);
         ArgumentNullException.ThrowIfNull(eventAggregator);
 
         _tagItemRepository = tagItemRepository;
-        _mediator = mediator;
+        _popupMessageService = popupMessageService;
         _eventAggregator = eventAggregator;
 
         AddNewTagCommand = new RelayCommand(AddTag);
@@ -48,7 +47,7 @@ public class TagCreatorViewModel : BaseViewModel
         var tagItem = _tagItemRepository.GetTagByName(PendingAddNewTagText);
         if (tagItem != null)
         {
-            _mediator.Send(new ShowMessageErrorCommand { Message = "A tag with this name already exists!" });
+            _popupMessageService.ShowError("A tag with this name already exists!");
             return;
         }
 

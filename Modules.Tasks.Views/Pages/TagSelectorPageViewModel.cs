@@ -1,8 +1,8 @@
-﻿using MediatR;
-using Modules.Common.DataBinding;
+﻿using Modules.Common.DataBinding;
 using Modules.Common.Navigation;
 using Modules.Common.ViewModel;
 using Modules.Common.Views.Controls;
+using Modules.PopupMessage.Contracts;
 using Modules.Tasks.Contracts;
 using Modules.Tasks.Contracts.Events;
 using Modules.Tasks.Contracts.Models;
@@ -18,29 +18,29 @@ public class TagSelectorPageViewModel : BaseViewModel, IParameterReceiver, IClos
 {
     private readonly ITaskItemRepository _taskItemRepository;
     private readonly ITagItemRepository _tagItemRepository;
-    private readonly IMediator _mediator;
+    private readonly IPopupMessageService _popupMessageService;
     private readonly IEventAggregator _eventAggregator;
     private int _taskId;
 
     public TagSelectorPageViewModel(
         ITaskItemRepository taskItemRepository,
         ITagItemRepository tagItemRepository,
-        IMediator mediator,
+        IPopupMessageService popupMessageService,
         IEventAggregator eventAggregator)
     {
         ArgumentNullException.ThrowIfNull(taskItemRepository);
         ArgumentNullException.ThrowIfNull(tagItemRepository);
-        ArgumentNullException.ThrowIfNull(mediator);
+        ArgumentNullException.ThrowIfNull(popupMessageService);
         ArgumentNullException.ThrowIfNull(eventAggregator);
 
         _taskItemRepository = taskItemRepository;
         _tagItemRepository = tagItemRepository;
-        _mediator = mediator;
+        _popupMessageService = popupMessageService;
         _eventAggregator = eventAggregator;
 
         List<TagItem> tags = _tagItemRepository.GetTags();
         Items = new ObservableCollection<TagSelectionItemViewModel>(tags.MapToViewModelList(eventAggregator));
-        TagCreator = new TagCreatorViewModel(_tagItemRepository, _mediator, _eventAggregator);
+        TagCreator = new TagCreatorViewModel(_tagItemRepository, _popupMessageService, _eventAggregator);
 
         DeselectAllTagsCommand = new RelayCommand(DeselectAllTags);
 

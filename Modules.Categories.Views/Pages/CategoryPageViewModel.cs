@@ -13,7 +13,7 @@ using Modules.Common.Events;
 using Modules.Common.Navigation;
 using Modules.Common.Services.Navigation;
 using Modules.Common.ViewModel;
-using Modules.PopupMessage.Contracts.Cqrs.Commands;
+using Modules.PopupMessage.Contracts;
 using Modules.Settings.Contracts.ViewModels;
 using Modules.Tasks.Contracts.Cqrs.Commands;
 using Prism.Events;
@@ -31,6 +31,7 @@ public class CategoryPageViewModel : BaseViewModel
     private readonly ISideMenuPageNavigationService _sideMenuPageNavigationService;
     private readonly IOverlayPageNavigationService _overlayPageNavigationService;
     private readonly IMediator _mediator;
+    private readonly IPopupMessageService _popupMessageService;
     private readonly IEventAggregator _eventAggregator;
     private readonly CategoryPageTreeState _treeState;
 
@@ -40,6 +41,7 @@ public class CategoryPageViewModel : BaseViewModel
         ISideMenuPageNavigationService sideMenuPageNavigationService,
         IOverlayPageNavigationService overlayPageNavigationService,
         IMediator mediator,
+        IPopupMessageService popupMessageService,
         IEventAggregator eventAggregator,
         TaskToCategoryDropHandler categoryDropHandler)
     {
@@ -48,6 +50,7 @@ public class CategoryPageViewModel : BaseViewModel
         ArgumentNullException.ThrowIfNull(sideMenuPageNavigationService);
         ArgumentNullException.ThrowIfNull(overlayPageNavigationService);
         ArgumentNullException.ThrowIfNull(mediator);
+        ArgumentNullException.ThrowIfNull(popupMessageService);
         ArgumentNullException.ThrowIfNull(eventAggregator);
         ArgumentNullException.ThrowIfNull(categoryDropHandler);
 
@@ -56,6 +59,7 @@ public class CategoryPageViewModel : BaseViewModel
         _sideMenuPageNavigationService = sideMenuPageNavigationService;
         _overlayPageNavigationService = overlayPageNavigationService;
         _mediator = mediator;
+        _popupMessageService = popupMessageService;
         _eventAggregator = eventAggregator;
         CategoryDropHandler = categoryDropHandler;
 
@@ -125,7 +129,7 @@ public class CategoryPageViewModel : BaseViewModel
             }
             else
             {
-                _mediator.Send(new ShowMessageWarningCommand { Message = "A root category with this name already exists!" });
+                _popupMessageService.ShowWarning("A root category with this name already exists!");
             }
         }
         else
@@ -230,7 +234,7 @@ public class CategoryPageViewModel : BaseViewModel
         var activeCategories = _categoriesRepository.GetActiveCategories();
         if (activeCategories.Count <= 1)
         {
-            _mediator.Send(new ShowMessageErrorCommand { Message = "Cannot delete last category." });
+            _popupMessageService.ShowError("Cannot delete last category.");
             return;
         }
 
@@ -245,7 +249,7 @@ public class CategoryPageViewModel : BaseViewModel
         _treeState.RemoveFromTree(categoryId);
         _categoriesRepository.DeleteCategory(category.Map());
 
-        _mediator.Send(new ShowMessageInfoCommand { Message = $"Deleted category: {category.Name}" });
+        _popupMessageService.ShowInfo($"Deleted category: {category.Name}");
 
         _eventAggregator.GetEvent<CategoryDeletedEvent>().Publish(categoryId);
         foreach (var descId in descendantIds)

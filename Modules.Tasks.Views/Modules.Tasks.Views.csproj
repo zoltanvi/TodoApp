@@ -20,6 +20,7 @@
     <ProjectReference Include="..\Modules.Categories.Contracts\Modules.Categories.Contracts.csproj" />
     <ProjectReference Include="..\Modules.Common.Navigation\Modules.Common.Navigation.csproj" />
     <ProjectReference Include="..\Modules.Common.Views\Modules.Common.Views.csproj" />
+    <ProjectReference Include="..\Modules.PopupMessage.Contracts\Modules.PopupMessage.Contracts.csproj" />
     <ProjectReference Include="..\Modules.Settings.Contracts\Modules.Settings.Contracts.csproj" />
     <ProjectReference Include="..\Modules.Tasks.Contracts\Modules.Tasks.Contracts.csproj" />
     <ProjectReference Include="..\Modules.Tasks.Services\Modules.Tasks.Services.csproj" />

@@ -1,12 +1,12 @@
-﻿using MediatR;
-using Modules.Common.Events;
+﻿using Modules.Common.Events;
+using Modules.PopupMessage.Contracts;
 using Prism.Events;
 
 namespace Modules.Common.Services;
 
 /// <summary>
 /// App-wide UI scale. Scale changes broadcast via Prism <see cref="UiScaledViewEvent"/> (single pub/sub bus).
-/// <see cref="IMediator"/> used only for <c>IRequest</c> (e.g. zoom toast command).
+/// <see cref="IPopupMessageService"/> used for zoom percentage toast.
 /// </summary>
 public interface IUIScaler
 {
@@ -28,7 +28,7 @@ public interface IUIScaler
     double DbLocationTextBoxWidth { get; }
     double TaskProgressBarHeight { get; }
 
-    void Setup(IMediator mediator, IEventAggregator eventAggregator);
+    void Setup(IPopupMessageService popupMessageService, IEventAggregator eventAggregator);
     void SetScaling(double value);
     void ZoomIn();
     void ZoomOut();

@@ -2,7 +2,7 @@ using MediatR;
 using Modules.Categories.Contracts;
 using Modules.Categories.Contracts.Cqrs.Commands;
 using Modules.Categories.Contracts.Events;
-using Modules.PopupMessage.Contracts.Cqrs.Commands;
+using Modules.PopupMessage.Contracts;
 using Prism.Events;
 
 namespace Modules.Categories.Services.CqrsHandling.CommandHandlers;
@@ -10,35 +10,32 @@ namespace Modules.Categories.Services.CqrsHandling.CommandHandlers;
 public class MoveCategoryCommandHandler : IRequestHandler<MoveCategoryCommand>
 {
     private readonly ICategoriesRepository _categoriesRepository;
-    private readonly IMediator _mediator;
+    private readonly IPopupMessageService _popupMessageService;
     private readonly IEventAggregator _eventAggregator;
 
     public MoveCategoryCommandHandler(
         ICategoriesRepository categoriesRepository,
-        IMediator mediator,
+        IPopupMessageService popupMessageService,
         IEventAggregator eventAggregator)
     {
         ArgumentNullException.ThrowIfNull(categoriesRepository);
-        ArgumentNullException.ThrowIfNull(mediator);
+        ArgumentNullException.ThrowIfNull(popupMessageService);
         ArgumentNullException.ThrowIfNull(eventAggregator);
 
         _categoriesRepository = categoriesRepository;
-        _mediator = mediator;
+        _popupMessageService = popupMessageService;
         _eventAggregator = eventAggregator;
     }
 
-    public async Task Handle(MoveCategoryCommand request, CancellationToken cancellationToken)
+    public Task Handle(MoveCategoryCommand request, CancellationToken cancellationToken)
     {
         var category = _categoriesRepository.GetCategoryById(request.CategoryId);
         ArgumentNullException.ThrowIfNull(category);
 
         if (request.NewParentCategoryId == request.CategoryId)
         {
-            await _mediator.Send(new ShowMessageErrorCommand
-            {
-                Message = "Cannot move a category under itself!"
-            }, cancellationToken);
-            return;
+            _popupMessageService.ShowError("Cannot move a category under itself!");
+            return Task.CompletedTask;
         }
 
         // Prevent circular references
@@ -47,11 +44,8 @@ public class MoveCategoryCommandHandler : IRequestHandler<MoveCategoryCommand>
             var descendants = _categoriesRepository.GetDescendantCategoryIds(request.CategoryId);
             if (descendants.Contains(request.NewParentCategoryId.Value))
             {
-                await _mediator.Send(new ShowMessageErrorCommand
-                {
-                    Message = "Cannot move a category under its own descendant!"
-                }, cancellationToken);
-                return;
+                _popupMessageService.ShowError("Cannot move a category under its own descendant!");
+                return Task.CompletedTask;
             }
         }
 
@@ -78,5 +72,7 @@ public class MoveCategoryCommandHandler : IRequestHandler<MoveCategoryCommand>
             OldParentCategoryId = oldParentId,
             NewParentCategoryId = request.NewParentCategoryId
         });
+
+        return Task.CompletedTask;
     }
 }

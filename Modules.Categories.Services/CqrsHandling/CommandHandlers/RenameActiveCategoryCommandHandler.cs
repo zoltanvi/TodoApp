@@ -2,7 +2,7 @@
 using Modules.Categories.Contracts;
 using Modules.Categories.Contracts.Cqrs.Commands;
 using Modules.Categories.Contracts.Events;
-using Modules.PopupMessage.Contracts.Cqrs.Commands;
+using Modules.PopupMessage.Contracts;
 using Modules.Settings.Contracts.ViewModels;
 using Prism.Events;
 
@@ -11,24 +11,24 @@ namespace Modules.Categories.Services.CqrsHandling.CommandHandlers;
 public class RenameActiveCategoryCommandHandler : IRequestHandler<RenameActiveCategoryCommand, string>
 {
     private readonly ICategoriesRepository _categoriesRepository;
-    private readonly IMediator _mediator;
+    private readonly IPopupMessageService _popupMessageService;
     private readonly IEventAggregator _eventAggregator;
 
     public RenameActiveCategoryCommandHandler(
         ICategoriesRepository categoriesRepository,
-        IMediator mediator,
+        IPopupMessageService popupMessageService,
         IEventAggregator eventAggregator)
     {
         ArgumentNullException.ThrowIfNull(categoriesRepository);
-        ArgumentNullException.ThrowIfNull(mediator);
+        ArgumentNullException.ThrowIfNull(popupMessageService);
         ArgumentNullException.ThrowIfNull(eventAggregator);
         
         _categoriesRepository = categoriesRepository;
-        _mediator = mediator;
+        _popupMessageService = popupMessageService;
         _eventAggregator = eventAggregator;
     }
 
-    public async Task<string> Handle(RenameActiveCategoryCommand request, CancellationToken cancellationToken)
+    public Task<string> Handle(RenameActiveCategoryCommand request, CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(request.Name))
         {
@@ -44,12 +44,9 @@ public class RenameActiveCategoryCommandHandler : IRequestHandler<RenameActiveCa
 
         if (duplicateCategory != null && duplicateCategory.Id != category.Id)
         {
-            await _mediator.Send(new ShowMessageErrorCommand
-            {
-                Message = $"A sibling category named [{request.Name}] already exists!"
-            }, cancellationToken);
+            _popupMessageService.ShowError($"A sibling category named [{request.Name}] already exists!");
 
-            return category.Name;
+            return Task.FromResult(category.Name);
         }
         
         category.Name = request.Name;
@@ -63,6 +60,6 @@ public class RenameActiveCategoryCommandHandler : IRequestHandler<RenameActiveCa
                 CategoryName = updatedCategory.Name
             });
 
-        return updatedCategory.Name;
+        return Task.FromResult(updatedCategory.Name);
     }
 }
