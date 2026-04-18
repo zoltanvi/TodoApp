@@ -9,6 +9,7 @@ using Modules.Categories.Views.Events;
 using Modules.Categories.Views.Mappings;
 using Modules.Common;
 using Modules.Common.DataBinding;
+using Modules.Common.Events;
 using Modules.Common.Navigation;
 using Modules.Common.Services.Navigation;
 using Modules.Common.ViewModel;
@@ -463,6 +464,16 @@ public class CategoryPageViewModel : BaseViewModel
     public void ActivateCategory(int categoryId)
     {
         SetActiveCategory(categoryId);
+    }
+
+    /// <summary>
+    /// When a normal (non-recycle-bin) category is active, moves focus to the task page new-task editor.
+    /// </summary>
+    public void MoveFocusToTaskPageNewTaskInput()
+    {
+        if (ActiveCategoryId == Constants.RecycleBinCategoryId) return;
+
+        _eventAggregator.GetEvent<FocusTaskPageNewTaskEditorEvent>().Publish();
     }
 
     public int GetFocusedIndex()

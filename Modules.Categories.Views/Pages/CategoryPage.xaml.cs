@@ -1,4 +1,5 @@
-﻿using Modules.Common.Navigation;
+﻿using Modules.Common;
+using Modules.Common.Navigation;
 using Modules.Common.Views.Pages;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -100,6 +101,14 @@ public partial class CategoryPage : GenericBasePage<CategoryPageViewModel>, ICat
                     item.RenameText = item.Name;
                     item.IsRenaming = true;
                 }
+                e.Handled = true;
+                break;
+
+            case Key.Tab:
+                if (Keyboard.Modifiers == ModifierKeys.Shift) break;
+                if (vm.ActiveCategoryId == Constants.RecycleBinCategoryId) break;
+
+                vm.MoveFocusToTaskPageNewTaskInput();
                 e.Handled = true;
                 break;
         }

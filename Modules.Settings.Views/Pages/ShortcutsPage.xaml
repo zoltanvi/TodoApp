@@ -148,6 +148,10 @@
                     Key1="Enter"
                     Key2="Space" />
 
+                <controls:ShortcutItemControl
+                    Description="Move focus to task page add-task field"
+                    Key1="Tab" />
+
                 <Border Height="{Binding UIScaler.FontSize.Small, Source={StaticResource UIScaler}}" />
 
                 <Label

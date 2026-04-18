@@ -4,8 +4,8 @@ using Modules.Categories.Contracts.Cqrs.Queries;
 using Modules.Categories.Contracts.Events;
 using Modules.Common;
 using Modules.Common.DataBinding;
-using Modules.Common.DataModels;
 using Modules.Common.Events;
+using Modules.Common.DataModels;
 using Modules.Common.Extensions;
 using Modules.Common.Helpers;
 using Modules.Common.ViewModel;
@@ -29,8 +29,10 @@ using PropertyChanged;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace Modules.Tasks.Views.Pages;
 
@@ -169,6 +171,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
 
         _eventAggregator.GetEvent<HotkeyPressedCtrlFEvent>().Subscribe(OnCtrlFPressed);
         _eventAggregator.GetEvent<HotkeyPressedCtrlNEvent>().Subscribe(OnCtrlNPressed);
+        _eventAggregator.GetEvent<FocusTaskPageNewTaskEditorEvent>().Subscribe(OnFocusTaskPageNewTaskEditor);
         
         _eventAggregator.GetEvent<ThemeChangedEvent>().Subscribe(OnThemeChanged);
         _eventAggregator.GetEvent<CategoryNameUpdatedEvent>().Subscribe(OnCategoryNameUpdated);
@@ -205,6 +208,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
 
         _eventAggregator.GetEvent<HotkeyPressedCtrlFEvent>().Unsubscribe(OnCtrlFPressed);
         _eventAggregator.GetEvent<HotkeyPressedCtrlNEvent>().Unsubscribe(OnCtrlNPressed);
+        _eventAggregator.GetEvent<FocusTaskPageNewTaskEditorEvent>().Unsubscribe(OnFocusTaskPageNewTaskEditor);
 
         _eventAggregator.GetEvent<ThemeChangedEvent>().Unsubscribe(OnThemeChanged);
         _eventAggregator.GetEvent<CategoryNameUpdatedEvent>().Unsubscribe(OnCategoryNameUpdated);
@@ -643,6 +647,14 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
     private void OnCtrlNPressed()
     {
         NewContentViewModel.TriggerFocus = true;
+    }
+
+    private void OnFocusTaskPageNewTaskEditor()
+    {
+        IsBottomPanelOpen = true;
+        Application.Current?.Dispatcher.BeginInvoke(
+            DispatcherPriority.Loaded,
+            new Action(() => NewContentViewModel.TriggerFocus = true));
     }
 
     private void OnThemeChanged()
