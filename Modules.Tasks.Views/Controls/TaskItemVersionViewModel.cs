@@ -22,7 +22,6 @@ public class TaskItemVersionViewModel : BaseViewModel
 
     public TaskItemVersionViewModel(
         IMediator mediator, 
-        bool isContentPlainText, 
         string content)
     {
         ArgumentNullException.ThrowIfNull(mediator);
@@ -30,7 +29,7 @@ public class TaskItemVersionViewModel : BaseViewModel
         _mediator = mediator;
 
         Content = new DynamicTextBoxViewModel(isReadOnly: true);
-        Content.SetContent(isContentPlainText, content);
+        Content.SetContent(content);
 
         RestoreToThisCommand = new RelayCommand(() => _mediator.Send(
             new RestoreTaskItemVersionCommand

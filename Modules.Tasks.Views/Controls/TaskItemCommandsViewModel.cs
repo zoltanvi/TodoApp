@@ -51,13 +51,6 @@ public class TaskItemCommandsViewModel : BaseViewModel
         ToggleDetailsCommand = new RelayCommand(() => _taskItem.DetailsVisible ^= true);
         ShowTagSelectorCommand = new RelayCommand(() => _mediator.Send(new OpenTagSelectorCommand { TaskId = _taskItem.Id }));
         ShowHistoryCommand = new RelayCommand(() => _mediator.Send(new OpenHistoryCommand { TaskId = _taskItem.Id }));
-        SwitchFormattedPlainTextModeCommand = new RelayCommand(() =>
-        {
-            _taskItem.Content.IsPlainTextMode ^= true;
-            _taskItemInternal.UpdateTask();
-            _taskItemInternal.UpdateHistory();
-        });
-
         MoveToTopCommand = new RelayCommand(() => _eventAggregator.GetEvent<TaskItemMoveToTopClickedEvent>().Publish(_taskItem.Id));
         MoveToBottomCommand = new RelayCommand(() => _eventAggregator.GetEvent<TaskItemMoveToBottomClickedEvent>().Publish(_taskItem.Id));
 
@@ -114,8 +107,6 @@ public class TaskItemCommandsViewModel : BaseViewModel
     public ICommand ToggleDetailsCommand { get; }
     public ICommand ShowTagSelectorCommand { get; }
     public ICommand ShowHistoryCommand { get; }
-    public ICommand SwitchFormattedPlainTextModeCommand { get; set; }
-
     public ICommand SplitLinesCommand { get; }
 
     public ICommand SortByStateCommand { get; }

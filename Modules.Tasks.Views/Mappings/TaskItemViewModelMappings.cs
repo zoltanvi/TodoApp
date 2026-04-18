@@ -20,7 +20,6 @@ public static class TaskItemViewModelMappings
             Id = vm.Id,
             CategoryId = vm.CategoryId,
             Content = vm.Content.GetContent(),
-            IsContentPlainText = vm.Content.IsPlainTextMode,
             ContentPreview = vm.Content.GetContentInPlainText(),
             ListOrder = vm.ListOrder,
             Pinned = vm.Pinned,
@@ -48,8 +47,7 @@ public static class TaskItemViewModelMappings
             mediator,
             oneEditorOpenService,
             eventAggregator,
-            taskItem.Content,
-            taskItem.IsContentPlainText)
+            taskItem.Content)
         {
             Id = taskItem.Id,
             CategoryId = taskItem.CategoryId,

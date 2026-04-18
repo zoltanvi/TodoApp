@@ -10,41 +10,11 @@ public partial class DynamicTextBox : UserControl
     public DynamicTextBox()
     {
         InitializeComponent();
-        DataContextChanged += OnDataContextChanged;
-    }
-
-    // When the listview virtualization mode is set to recycle,
-    // the DataContext is changed to display a different item on the same list item.
-    // Therefore, we handle the dataContext change to display the correct data on the item.
-    private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
-    {
-        ContentControlElement.ContentTemplateSelector = new DynamicTextBoxSelector();
-    }
-
-    public static readonly DependencyProperty IsPlainTextModeProperty = DependencyProperty.Register(nameof(IsPlainTextMode), typeof(bool), typeof(DynamicTextBox), new PropertyMetadata(true, OnIsPlainTextModeChanged));
-    public static readonly DependencyProperty IsReadOnlyProperty = DependencyProperty.Register(nameof(IsReadOnly), typeof(bool), typeof(DynamicTextBox), new PropertyMetadata(default(bool)));
-
-    public bool IsPlainTextMode
-    {
-        get => (bool)GetValue(IsPlainTextModeProperty);
-        set => SetValue(IsPlainTextModeProperty, value);
-    }
-
-    public bool IsReadOnly
-    {
-        get => (bool)GetValue(IsReadOnlyProperty);
-        set => SetValue(IsReadOnlyProperty, value);
-    }
-
-    private static void OnIsPlainTextModeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-    {
-        var control = (DynamicTextBox)d;
-        control.ContentControlElement.ContentTemplateSelector = new DynamicTextBoxSelector();
     }
 
     public void SetFocus()
     {
-        // TODO:
+        TextBoxElement.Focus();
     }
 
     private void TextBoxElement_OnPreviewKeyDown(object sender, KeyEventArgs e)

@@ -6,8 +6,7 @@ public class TaskItem
 {
     public int Id { get; set; }
     public required int CategoryId { get; set; }
-    public required string Content { get; set; } // Keep current content here
-    public required bool IsContentPlainText { get; set; }
+    public required string Content { get; set; } // Plain text only
     public required string ContentPreview { get; set; }
     public int ListOrder { get; set; }
     public bool Pinned { get; set; }

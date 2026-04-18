@@ -95,13 +95,15 @@ public static class Program
         using var scope = serviceProvider.CreateScope();
         var scopedProvider = scope.ServiceProvider;
 
+        var taskItemContext = scopedProvider.GetRequiredService<TaskItemDbContext>();
+
         var migrationService = scopedProvider.GetRequiredService<IMigrationService>();
 
         var dbContextList = new List<DbContext>
         {
             scopedProvider.GetRequiredService<SettingDbContext>(),
             scopedProvider.GetRequiredService<CategoryDbContext>(),
-            scopedProvider.GetRequiredService<TaskItemDbContext>()
+            taskItemContext
         };
 
         migrationService.Run(dbContextList);

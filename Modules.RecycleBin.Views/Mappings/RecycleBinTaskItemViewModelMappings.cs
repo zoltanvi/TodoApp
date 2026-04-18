@@ -10,8 +10,7 @@ public static class RecycleBinTaskItemViewModelMappings
     {
         return new RecycleBinTaskItemViewModel(
             mediator, 
-            taskItem.Content, 
-            taskItem.IsContentPlainText)
+            taskItem.Content)
         {
             Id = taskItem.Id,
             CategoryId = taskItem.CategoryId,

@@ -77,7 +77,6 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
             enterActionOnLostFocus: false,
             toolbarCloseOnLostFocus: true,
             acceptsTab: true,
-            isPlainTextMode: true,
             enterAction: AddTaskItem);
 
         NewContentViewModel.WatermarkText = "Add new task";
@@ -98,8 +97,6 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         ToggleBottomPanelCommand = new RelayCommand(() => IsBottomPanelOpen ^= true);
         AddTaskItemCommand = new RelayCommand(AddTaskItem);
         TextBoxFocusedCommand = new RelayCommand(OnTextBoxFocused);
-        SwitchFormatMode = new RelayCommand(() => NewContentViewModel.IsPlainTextMode ^= true);
-
         SetFirstItem();
         RecalculateProgress();
 
@@ -141,8 +138,6 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
     public ICommand ToggleBottomPanelCommand { get; }
     public ICommand AddTaskItemCommand { get; }
     public ICommand TextBoxFocusedCommand { get; }
-    public ICommand SwitchFormatMode { get; }
-
     private void SubscribeToEvents()
     {
         AppSettings.Instance.PageTitleSettings.SettingsChanged += OnPageTitleSettingsChanged;
@@ -250,7 +245,6 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
                 {
                     Content = NewContentViewModel.GetContent(),
                     ContentPreview = NewContentViewModel.GetContentInPlainText(),
-                    IsContentPlainText = NewContentViewModel.IsPlainTextMode,
                     CategoryId = activeCategory.Id,
                     ListOrder = newListOrder
                 };
@@ -276,7 +270,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
                 ScrollIntoViewRequested?.Invoke(newListOrder);
                 RecalculateProgress();
 
-                NewContentViewModel.SetContent(NewContentViewModel.IsPlainTextMode, string.Empty);
+                NewContentViewModel.SetContent(string.Empty);
             }
         }
         catch (Exception ex)
@@ -632,7 +626,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         var updatedTask = Items.FirstOrDefault(x => x.Id == taskId);
         ArgumentNullException.ThrowIfNull(updatedTask);
 
-        updatedTask.Content.SetContent(dbTask.IsContentPlainText, dbTask.Content);
+        updatedTask.Content.SetContent(dbTask.Content);
 
         updatedTask.ModificationDate = dbTask.ModificationDate;
         updatedTask.Versions = dbTask.Versions.MapToViewModelList(_mediator);

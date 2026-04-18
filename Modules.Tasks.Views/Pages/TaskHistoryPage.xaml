@@ -85,8 +85,6 @@
                                     Margin="0 6"
                                     Padding="7 0"
                                     DataContext="{Binding CurrentItem.Content}"
-                                    IsPlainTextMode="{Binding IsPlainTextMode}"
-                                    IsReadOnly="True"
                                 />
 
                                 <Border
@@ -186,7 +184,6 @@
                                             Margin="0 6"
                                             Padding="7 0"
                                             DataContext="{Binding Content}"
-                                            IsReadOnly="True"
                                             />
                                         
                                         <Border

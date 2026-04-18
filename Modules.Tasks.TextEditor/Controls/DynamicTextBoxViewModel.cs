@@ -1,8 +1,6 @@
 ﻿using Modules.Common;
 using Modules.Common.DataBinding;
 using Modules.Common.ViewModel;
-using Modules.Settings.Contracts.ViewModels;
-using Modules.Tasks.TextEditor.Helpers;
 using PropertyChanged;
 using System.Windows.Input;
 
@@ -14,7 +12,6 @@ public class DynamicTextBoxViewModel : BaseViewModel
     private bool _isEditMode;
     private readonly bool _enterActionOnLostFocus;
     private readonly bool _toolbarCloseOnLostFocus;
-    private bool _isPlainTextMode;
     private bool _triggerFocus;
 
     public DynamicTextBoxViewModel(
@@ -22,7 +19,6 @@ public class DynamicTextBoxViewModel : BaseViewModel
         bool enterActionOnLostFocus = false,
         bool toolbarCloseOnLostFocus = false,
         bool acceptsTab = true,
-        bool isPlainTextMode = true,
         bool isReadOnly = false,
         Action? enterAction = null)
     {
@@ -32,7 +28,6 @@ public class DynamicTextBoxViewModel : BaseViewModel
         FocusOnEditMode = focusOnEditMode;
         LostFocusCommand = new RelayCommand(OnLostFocus);
         AcceptsTab = acceptsTab;
-        IsPlainTextMode = isPlainTextMode;
         IsReadOnly = isReadOnly;
 
         EnterAction = enterAction;
@@ -40,23 +35,6 @@ public class DynamicTextBoxViewModel : BaseViewModel
 
     public bool TextBoxAcceptsTab { get; set; } = true;
     public bool IsReadOnly { get; set; }
-    public bool IsPlainTextMode
-    {
-        get => _isPlainTextMode;
-        set
-        {
-            if (_isPlainTextMode)
-            {
-                DocumentContent = XmlToPlainTextConverter.ConvertToXml(PlainTextContent);
-            }
-            else
-            {
-                PlainTextContent = XmlToPlainTextConverter.ConvertToPlainText(DocumentContent);
-            }
-
-            _isPlainTextMode = value;
-        }
-    }
 
     public bool Focusable { get; set; }
 
@@ -70,13 +48,11 @@ public class DynamicTextBoxViewModel : BaseViewModel
                 _triggerFocus = value;
             }
 
-            // Auto reset to false. It is only used to notify the view about the change
             _triggerFocus = false;
         }
     }
 
     public bool AcceptsTab { get; set; }
-    public bool IsFormattedPasteEnabled => AppSettings.Instance.TaskPageSettings.FormattedPasteEnabled;
     public string WatermarkText { get; set; }
     public bool IsEditMode
     {
@@ -87,7 +63,7 @@ public class DynamicTextBoxViewModel : BaseViewModel
             if (FocusOnEditMode)
             {
                 Focusable = value;
-    
+
                 if (value)
                 {
                     TriggerFocus = value;
@@ -100,25 +76,14 @@ public class DynamicTextBoxViewModel : BaseViewModel
     public bool FocusOnEditMode { get; set; }
     public bool IsContentEmpty { get; set; }
 
-    public string DocumentContent { get; set; }
-
     public string PlainTextContent { get; set; }
 
-    public string GetContent() => IsPlainTextMode ? PlainTextContent : DocumentContent;
-    public string GetContentInPlainText() => IsPlainTextMode ? PlainTextContent : XmlToPlainTextConverter.ConvertToPlainText(DocumentContent);
+    public string GetContent() => PlainTextContent;
+    public string GetContentInPlainText() => PlainTextContent;
 
-    public void SetContent(bool isPlainTextContent, string content)
+    public void SetContent(string content)
     {
-        IsPlainTextMode = isPlainTextContent;
-
-        if (IsPlainTextMode)
-        {
-            PlainTextContent = content;
-        }
-        else
-        {
-            DocumentContent = content;
-        }
+        PlainTextContent = content;
     }
 
     public bool IsToolbarOpen { get; set; }
@@ -145,5 +110,5 @@ public class DynamicTextBoxViewModel : BaseViewModel
 
     public Action? EnterAction { get; set; }
 
-    public bool IsEmpty => IsPlainTextMode ? string.IsNullOrWhiteSpace(PlainTextContent) : IsContentEmpty;
+    public bool IsEmpty => string.IsNullOrWhiteSpace(PlainTextContent);
 }

@@ -73,13 +73,6 @@
                     Icon="{StaticResource IconMargin}"
                     IsChecked="{Binding AppSettings.TaskPageSettings.TaskListMargin, Source={StaticResource AppSettings}, Mode=TwoWay}" />
 
-                <!--  Allow pasting formatted text  -->
-                <controls:ToggleButtonSettingControl
-                    Description="Allow pasting formatted text"
-                    Icon="{StaticResource IconPaste}"
-                    IsChecked="{Binding AppSettings.TaskPageSettings.FormattedPasteEnabled, Source={StaticResource AppSettings}, Mode=TwoWay}" />
-
-                <!--  Allow pasting formatted text  -->
                 <controls:ToggleButtonSettingControl
                     Description="Progress bar"
                     Icon="{StaticResource IconProgress}"

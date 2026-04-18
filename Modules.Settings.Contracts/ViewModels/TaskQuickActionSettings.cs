@@ -11,7 +11,6 @@ public class TaskQuickActionSettings : SettingsBase
         TagEnabled ||
         PinEnabled ||
         DetailsEnabled ||
-        SwitchFormattedPlainTextModeEnabled ||
         TrashEnabled);
 
     public bool Enabled { get; set; } = true;
@@ -22,7 +21,6 @@ public class TaskQuickActionSettings : SettingsBase
     public bool TagEnabled { get; set; } = true;
     public bool PinEnabled { get; set; } = true;
     public bool DetailsEnabled { get; set; } = true;
-    public bool SwitchFormattedPlainTextModeEnabled { get; set; } = true;
     public bool TrashEnabled { get; set; } = true;
     
     // Not on quick actions panel

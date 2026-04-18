@@ -12,7 +12,6 @@ public static class RecycleBinTaskItemVersionViewModelMappings
             Id = vm.Id,
             TaskId = vm.TaskId,
             Content = vm.Content.GetContent(),
-            IsContentPlainText = vm.Content.IsPlainTextMode,
             ContentPreview = vm.Content.GetContentInPlainText(),
             VersionDate = vm.VersionDate
         };
@@ -23,7 +22,7 @@ public static class RecycleBinTaskItemVersionViewModelMappings
 
     public static RecycleBinTaskItemVersionViewModel MapToViewModel(this TaskItemVersion version)
     {
-        return new RecycleBinTaskItemVersionViewModel(version.Content, version.IsContentPlainText)
+        return new RecycleBinTaskItemVersionViewModel(version.Content)
         {
             Id = version.Id,
             TaskId = version.TaskId,

@@ -47,7 +47,6 @@
 
         public struct ResourceNames
         {
-            public const string TextEditorToolbar = "TextEditorToolbar";
             public const string ColorPickerPopup = "ColorPickerPopup";
             public const string OutlineVariant = "OutlineVariant";
         }

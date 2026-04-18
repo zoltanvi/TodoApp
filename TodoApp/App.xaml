@@ -22,9 +22,6 @@
                 <ResourceDictionary Source="pack://application:,,,/Modules.Tasks.Views;component/Resources/BindingProxies.xaml" />
 
 
-                <ResourceDictionary Source="pack://application:,,,/Modules.Tasks.TextEditor;component/Resources/DataTemplateSelectors.xaml" />
-
-
                 <ResourceDictionary Source="pack://application:,,,/Modules.Settings.Views;component/Resources/DataProviders.xaml" />
 
 
@@ -32,7 +29,6 @@
                 <ResourceDictionary Source="pack://application:,,,/Modules.Settings.Views;component/Resources/ValueConverters.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Modules.PopupMessage.Views;component/Resources/ValueConverters.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Modules.Tasks.Views;component/Resources/ValueConverters.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/Modules.Tasks.TextEditor;component/Resources/ValueConverters.xaml" />
                 <ResourceDictionary Source="Resources/ValueConverters.xaml"/>
 
                 <ResourceDictionary Source="pack://application:,,,/ColorPicker;component/Styles/DefaultColorPickerStyle.xaml" />
@@ -61,7 +57,6 @@
                 <ResourceDictionary Source="pack://application:,,,/Modules.Settings.Views;component/Styles/Styles.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Modules.Categories.Views;component/Styles/Styles.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Modules.Tasks.Views;component/Styles/Styles.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/Modules.Tasks.TextEditor;component/Styles/Styles.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Modules.RecycleBin.Views;component/Styles/Styles.xaml" />
 
 
@@ -76,8 +71,6 @@
 
                 <ResourceDictionary Source="pack://application:,,,/Modules.RecycleBin.Views;component/Styles/Buttons.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Modules.Settings.Views;component/Styles/SliderStyles.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/Modules.Tasks.TextEditor;component/Styles/SingletonEditorColorPickerStyle.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/Modules.Tasks.TextEditor;component/Resources/TextEditorToolbar.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Modules.Tasks.Views;component/Styles/TaskCheckBoxStyles.xaml" />
                 <ResourceDictionary Source="Styles/TitleBarStyles.xaml"/>
                 <ResourceDictionary Source="Styles/MainWindowStyle.xaml"/>

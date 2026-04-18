@@ -5,7 +5,6 @@ using Modules.Tasks.Contracts.Cqrs.Queries;
 using Modules.Tasks.Contracts.Events;
 using Modules.Tasks.Contracts.Models;
 using Modules.Tasks.Services.Extensions;
-using Modules.Tasks.TextEditor.Helpers;
 using Modules.Tasks.Views.Extensions;
 using Prism.Events;
 
@@ -18,7 +17,7 @@ public class SplitTaskLinesCommandHandler : IRequestHandler<SplitTaskLinesComman
     private readonly IEventAggregator _eventAggregator;
 
     public SplitTaskLinesCommandHandler(
-        ITaskItemRepository taskItemRepository, 
+        ITaskItemRepository taskItemRepository,
         IMediator mediator,
         IEventAggregator eventAggregator)
     {
@@ -36,16 +35,9 @@ public class SplitTaskLinesCommandHandler : IRequestHandler<SplitTaskLinesComman
         var dbTask = _taskItemRepository.GetTaskById(request.TaskId);
         ArgumentNullException.ThrowIfNull(dbTask);
 
-        List<string> splitContent;
-
-        if (dbTask.IsContentPlainText)
-        {
-            splitContent = dbTask.Content.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).ToList();
-        }
-        else
-        {
-            splitContent = FlowDocumentSplitByLineHelper.SplitByLines(dbTask.Content);
-        }
+        var splitContent = dbTask.Content
+            .Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)
+            .ToList();
 
         var startingListOrder = await _mediator.Send(new TaskCreationListOrderQuery { CategoryId = dbTask.CategoryId }, cancellationToken);
 
@@ -55,10 +47,7 @@ public class SplitTaskLinesCommandHandler : IRequestHandler<SplitTaskLinesComman
             var task = new TaskItem
             {
                 Content = lineContent,
-                ContentPreview = dbTask.IsContentPlainText
-                    ? lineContent
-                    : XmlToPlainTextConverter.ConvertToPlainText(lineContent),
-                IsContentPlainText = dbTask.IsContentPlainText,
+                ContentPreview = lineContent,
                 CategoryId = dbTask.CategoryId,
                 ListOrder = startingListOrder
             };
@@ -67,24 +56,21 @@ public class SplitTaskLinesCommandHandler : IRequestHandler<SplitTaskLinesComman
 
             taskList.Add(task);
         }
-        
+
         _taskItemRepository.DeleteTask(dbTask);
         _taskItemRepository.AddTasks(taskList);
 
         var idList = taskList.Select(x => x.Id).ToHashSet();
 
-        // Filter out the new tasks to insert them into the correct position
         var otherTasksInCategory = _taskItemRepository.GetActiveTasksFromCategory(dbTask.CategoryId)
             .Where(x => !idList.Contains(x.Id))
             .ToList();
 
         foreach (var taskItem in taskList)
         {
-            // Insert into the correct position
             otherTasksInCategory.Insert(taskItem.ListOrder, taskItem);
         }
 
-        // Fix list orders
         otherTasksInCategory.SetListOrdersToIndex();
 
         _taskItemRepository.UpdateTaskListOrders(otherTasksInCategory);

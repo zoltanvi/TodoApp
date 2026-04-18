@@ -73,12 +73,6 @@
                     Icon="{StaticResource IconPin}"
                     IsChecked="{Binding AppSettings.TaskQuickActionSettings.PinEnabled, Source={StaticResource AppSettings}, Mode=TwoWay}" />
 
-                <!--  Switch button  -->
-                <controls:ToggleButtonSettingControl
-                    Description="Switch mode button"
-                    Icon="{StaticResource IconPlainText}"
-                    IsChecked="{Binding AppSettings.TaskQuickActionSettings.SwitchFormattedPlainTextModeEnabled, Source={StaticResource AppSettings}, Mode=TwoWay}" />
-
                 <!--  Details button  -->
                 <controls:ToggleButtonSettingControl
                     Description="Details button"
@@ -128,13 +122,6 @@
                                                         Content="{StaticResource IconInfo}"
                                                         Style="{StaticResource ButtonQuickActionStyle}"
                                                         ToolTip="Show details" />
-                                                </DataTemplate>
-
-                                                <DataTemplate x:Key="SwitchButtonTemplate">
-                                                    <Button
-                                                        Content="{StaticResource IconPlainText}"
-                                                        Style="{StaticResource ButtonQuickActionStyle}"
-                                                        ToolTip="Switch formatted / plain text mode" />
                                                 </DataTemplate>
 
                                                 <DataTemplate x:Key="PinButtonTemplate">
@@ -219,12 +206,6 @@
                                                     CanShow="{Binding AppSettings.TaskQuickActionSettings.PinEnabled, Source={StaticResource AppSettings}}"
                                                     Id="Pin button"
                                                     TemplateToShow="{StaticResource PinButtonTemplate}" />
-
-                                                <!--  Switch button  -->
-                                                <controls1:ShowHideControl
-                                                    CanShow="{Binding AppSettings.TaskQuickActionSettings.SwitchFormattedPlainTextModeEnabled, Source={StaticResource AppSettings}}"
-                                                    Id="Switch button"
-                                                    TemplateToShow="{StaticResource SwitchButtonTemplate}" />
 
                                                 <!--  Show details  -->
                                                 <controls1:ShowHideControl

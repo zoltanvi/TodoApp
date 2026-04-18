@@ -49,10 +49,6 @@ public class TaskItemDbContext : DbContext
                 .IsRequired();
 
             entity
-                .Property(e => e.IsContentPlainText)
-                .IsRequired();
-
-            entity
                 .Property(e => e.ContentPreview)
                 .IsRequired();
 
@@ -93,10 +89,6 @@ public class TaskItemDbContext : DbContext
 
             entity
                 .Property(e => e.Content)
-                .IsRequired();
-
-            entity
-                .Property(e => e.IsContentPlainText)
                 .IsRequired();
 
             entity

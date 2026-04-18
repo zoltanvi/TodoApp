@@ -50,7 +50,6 @@ public class TaskHistoryPageViewModel : BaseViewModel, IParameterReceiver, IClos
 
         var current = new TaskItemVersionViewModel(
             _mediator, 
-            _taskItem.IsContentPlainText, 
             _taskItem.Content)
         {
             Id = -1,
@@ -77,7 +76,6 @@ public class TaskHistoryPageViewModel : BaseViewModel, IParameterReceiver, IClos
             _taskItem = dbTask;
             var current = new TaskItemVersionViewModel(
                 _mediator,
-                _taskItem.IsContentPlainText,
                 _taskItem.Content)
             {
                 Id = -1,

@@ -12,7 +12,6 @@ public static class SettingsViewsServiceCollectionExtensions
         services.AddTransient<TagSettingsPageViewModel>();
         services.AddTransient<TaskPageSettingsPageViewModel>();
         services.AddTransient<TaskQuickActionsSettingsPageViewModel>();
-        services.AddTransient<TextEditorQuickActionsSettingsPageViewModel>();
         services.AddTransient<ThemeSettingsPageViewModel>();
         services.AddTransient<ApplicationSettingsPageViewModel>();
         services.AddTransient<PageTitleSettingsPageViewModel>();
@@ -24,7 +23,6 @@ public static class SettingsViewsServiceCollectionExtensions
         services.AddTransient<ITagSettingsPage, TagSettingsPage>();
         services.AddTransient<ITaskPageSettingsPage, TaskPageSettingsPage>();
         services.AddTransient<ITaskQuickActionsSettingsPage, TaskQuickActionsSettingsPage>();
-        services.AddTransient<ITextEditorQuickActionsSettingsPage, TextEditorQuickActionsSettingsPage>();
         services.AddTransient<IThemeSettingsPage, ThemeSettingsPage>();
         services.AddTransient<IApplicationSettingsPage, ApplicationSettingsPage>();
         services.AddTransient<IPageTitleSettingsPage, PageTitleSettingsPage>();

@@ -341,8 +341,7 @@
                                 MaxHeight="{Binding UIScaler.TextBoxMaxHeight, Source={StaticResource UIScaler}}"
                                 Padding="3 8"
                                 VerticalAlignment="Bottom"
-                                DataContext="{Binding NewContentViewModel}"
-                                IsPlainTextMode="{Binding IsPlainTextMode}">
+                                DataContext="{Binding NewContentViewModel}">
 
                                 <b:Interaction.Triggers>
                                     <b:EventTrigger EventName="GotFocus">
@@ -353,42 +352,21 @@
                             </textEditor:DynamicTextBox>
 
 
-                            <Grid Grid.Column="1">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="*" />
-                                </Grid.RowDefinitions>
-
-                                <controls1:TwoStateButton
-                                    Grid.Row="0"
-                                    VerticalAlignment="Top"
-                                    IsInSecondState="{Binding NewContentViewModel.IsPlainTextMode}"
-                                    FirstCommand="{Binding SwitchFormatMode}"
-                                    FirstContent="{StaticResource IconBold}"
-                                    FirstToolTip="Change to plain text. WARNING: removes all formatting!"
-                                    SecondCommand="{Binding SwitchFormatMode}"
-                                    SecondContent="{StaticResource IconPlainText}"
-                                    SecondToolTip="Change to formatted text."
-                                    FontSize="{Binding UIScaler.FontSize.Large, Source={StaticResource UIScaler}}"
-                                    />
-
-
-                                <Border
-                                    Grid.Row="1"
-                                    Visibility="{Binding AppSettings.TaskPageSettings.SendButtonVisible, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}">
-                                    <Button
-                                        Padding="5"
-                                        HorizontalAlignment="Right"
-                                        Background="{DynamicResource Surface3}"
-                                        Command="{Binding AddTaskItemCommand}"
-                                        Content="{StaticResource IconSend}"
-                                        Cursor="Hand"
-                                        Style="{StaticResource ButtonIconHoverStyle}"
-                                        ToolTip="Add task"
-                                        Visibility="{Binding NewContentViewModel.IsEmpty, Converter={StaticResource BoolToVisibilityNegatedConverter}}" />
-                                </Border>
-
-                            </Grid>
+                            <Border
+                                Grid.Column="1"
+                                VerticalAlignment="Bottom"
+                                Visibility="{Binding AppSettings.TaskPageSettings.SendButtonVisible, Source={StaticResource AppSettings}, Converter={StaticResource BoolToVisibilityConverter}}">
+                                <Button
+                                    Padding="5"
+                                    HorizontalAlignment="Right"
+                                    Background="{DynamicResource Surface3}"
+                                    Command="{Binding AddTaskItemCommand}"
+                                    Content="{StaticResource IconSend}"
+                                    Cursor="Hand"
+                                    Style="{StaticResource ButtonIconHoverStyle}"
+                                    ToolTip="Add task"
+                                    Visibility="{Binding NewContentViewModel.IsEmpty, Converter={StaticResource BoolToVisibilityNegatedConverter}}" />
+                            </Border>
 
                         </Grid>
                     </Border>

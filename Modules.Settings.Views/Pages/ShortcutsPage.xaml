@@ -27,7 +27,7 @@
             <StackPanel Orientation="Vertical" Grid.Row="1">
 
                 <Label
-                    Content="Text editor shortcuts"
+                    Content="Task shortcuts"
                     Style="{StaticResource BaseLabelClearTypeStyle}"
                     FontSize="{Binding UIScaler.FontSize.Large, Source={StaticResource UIScaler}}" />
                 
@@ -37,91 +37,6 @@
                     Description="Edit last added item"
                     Key1="Up arrow"
                     />
-
-                <controls:ShortcutItemControl
-                    Description="Bold"
-                    Key1="Ctrl"
-                    Key2="B" />
-
-                <controls:ShortcutItemControl
-                    Description="Underlined"
-                    Key1="Ctrl"
-                    Key2="U" />
-
-                <controls:ShortcutItemControl
-                    Description="Italic"
-                    Key1="Ctrl"
-                    Key2="I" />
-
-                <Border Height="{Binding UIScaler.FontSize.Smallest, Source={StaticResource UIScaler}}" />
-
-                <controls:ShortcutItemControl
-                    Description="Remove format (selection)"
-                    Key1="Ctrl"
-                    Key2="Space" />
-
-                <controls:ShortcutItemControl
-                    Description="Remove format (all)"
-                    Key1="Ctrl"
-                    Key2="H" />
-
-                <Border Height="{Binding UIScaler.FontSize.Smallest, Source={StaticResource UIScaler}}" />
-
-                <controls:ShortcutItemControl
-                    Description="Align left"
-                    Key1="Ctrl"
-                    Key2="L" />
-
-                <controls:ShortcutItemControl
-                    Description="Align center"
-                    Key1="Ctrl"
-                    Key2="E" />
-
-                <controls:ShortcutItemControl
-                    Description="Align right"
-                    Key1="Ctrl"
-                    Key2="R" />
-
-
-                <controls:ShortcutItemControl
-                    Description="Justify"
-                    Key1="Ctrl"
-                    Key2="J" />
-
-                <Border Height="{Binding UIScaler.FontSize.Smallest, Source={StaticResource UIScaler}}" />
-
-
-                <controls:ShortcutItemControl
-                    Description="Decrease font size"
-                    Key1="Ctrl"
-                    Key2="[" />
-
-                <controls:ShortcutItemControl
-                    Description="Increase font size"
-                    Key1="Ctrl"
-                    Key2="]" />
-
-                <Border Height="{Binding UIScaler.FontSize.Smallest, Source={StaticResource UIScaler}}" />
-
-
-                <controls:ShortcutItemControl
-                    Description="Subscript"
-                    Key1="Ctrl"
-                    Key2="=" />
-
-                <controls:ShortcutItemControl
-                    Description="Superscript"
-                    Key1="Ctrl"
-                    Key2="Shift"
-                    Key3="=" />
-
-                <Border Height="{Binding UIScaler.FontSize.Small, Source={StaticResource UIScaler}}" />
-
-                <controls:ShortcutItemControl
-                    Description="Toggle editor toolbar"
-                    Key1="Ctrl"
-                    Key2="Shift"
-                    Key3="Enter" />
 
                 <Border Height="{Binding UIScaler.FontSize.Small, Source={StaticResource UIScaler}}" />
 

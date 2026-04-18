@@ -10,7 +10,6 @@ public sealed class AppSettings : SettingsBase
     public TaskPageSettings TaskPageSettings { get; set; } = new();
     public TaskSettings TaskSettings { get; set; } = new();
     public TaskQuickActionSettings TaskQuickActionSettings { get; set; } = new();
-    public TextEditorQuickActionSettings TextEditorQuickActionSettings { get; set; } = new();
     public NoteSettings NoteSettings { get; set; } = new();
     public WindowSettings WindowSettings { get; set; } = new();
     public DateTimeSettings DateTimeSettings { get; set; } = new();
@@ -24,7 +23,6 @@ public sealed class AppSettings : SettingsBase
         TaskPageSettings.IsDirty() ||
         TaskSettings.IsDirty() ||
         TaskQuickActionSettings.IsDirty() ||
-        TextEditorQuickActionSettings.IsDirty() ||
         NoteSettings.IsDirty() ||
         WindowSettings.IsDirty() ||
         DateTimeSettings.IsDirty() ||
@@ -39,7 +37,6 @@ public sealed class AppSettings : SettingsBase
         TaskPageSettings.Clean();
         TaskSettings.Clean();
         TaskQuickActionSettings.Clean();
-        TextEditorQuickActionSettings.Clean();
         NoteSettings.Clean();
         WindowSettings.Clean();
         DateTimeSettings.Clean();

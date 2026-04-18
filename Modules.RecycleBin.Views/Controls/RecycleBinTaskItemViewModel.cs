@@ -31,7 +31,7 @@ public class RecycleBinTaskItemViewModel : BaseViewModel
     public ICommand ToggleDetailsCommand { get; }
     public ICommand RestoreTaskItemCommand { get; }
 
-    public RecycleBinTaskItemViewModel(IMediator mediator, string content, bool isContentPlainText)
+    public RecycleBinTaskItemViewModel(IMediator mediator, string content)
     {
         ArgumentNullException.ThrowIfNull(mediator);
 
@@ -39,6 +39,6 @@ public class RecycleBinTaskItemViewModel : BaseViewModel
         RestoreTaskItemCommand = new RelayCommand(() => mediator.Send(new RestoreTaskItemCommand { TaskId = Id }));
 
         Content = new DynamicTextBoxViewModel(isReadOnly: true);
-        Content.SetContent(isContentPlainText, content);
+        Content.SetContent(content);
     }
 }

@@ -25,8 +25,7 @@ public class TaskItemViewModel : BaseViewModel, ITaskItemViewModel
     public TaskItemViewModel(IMediator mediator,
         OneEditorOpenService oneEditorOpenService,
         IEventAggregator eventAggregator, 
-        string content,
-        bool isContentPlainText)
+        string content)
     {
         ArgumentNullException.ThrowIfNull(mediator);
         ArgumentNullException.ThrowIfNull(oneEditorOpenService);
@@ -39,11 +38,10 @@ public class TaskItemViewModel : BaseViewModel, ITaskItemViewModel
             focusOnEditMode: true, 
             enterActionOnLostFocus: AppSettings.Instance.TaskPageSettings.ExitEditOnFocusLost,
             toolbarCloseOnLostFocus: false,
-            acceptsTab: true,
-            isPlainTextMode: isContentPlainText);
+            acceptsTab: true);
         
         Content.EnterAction = ExitEditItem;
-        Content.SetContent(isContentPlainText, content);
+        Content.SetContent(content);
 
         Cmd = new TaskItemCommandsViewModel(this, mediator, eventAggregator);
 
@@ -119,7 +117,7 @@ public class TaskItemViewModel : BaseViewModel, ITaskItemViewModel
             if (Content.IsEmpty)
             {
                 // Empty content is rejected, roll back the previous content.
-                Content.SetContent(Content.IsPlainTextMode, _contentRollback);
+                Content.SetContent(_contentRollback);
             }
             else if (Content.GetContent() != _contentRollback)
             {

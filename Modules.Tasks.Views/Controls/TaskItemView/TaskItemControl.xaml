@@ -351,8 +351,7 @@
 
                                     <!--  TASK CONTENT  -->
                                     <controls1:DynamicTextBox
-                                        DataContext="{Binding Content}"
-                                        IsPlainTextMode="{Binding IsPlainTextMode}" />
+                                        DataContext="{Binding Content}" />
                                 </Grid>
 
 

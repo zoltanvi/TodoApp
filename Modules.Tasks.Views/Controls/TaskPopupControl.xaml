@@ -81,19 +81,6 @@
                         SecondToolTip="Unpin task" />
                 </DataTemplate>
 
-                <DataTemplate x:Key="SwitchFormatButtonTemplate">
-                    <controls:TwoStateButton
-                        DataContext="{Binding ElementName=Root, Path=DataContext}"
-                        IsInSecondState="{Binding Content.IsPlainTextMode}"
-                        FirstCommand="{Binding Cmd.SwitchFormattedPlainTextModeCommand}"
-                        FirstContent="{StaticResource IconBold}"
-                        FirstToolTip="Change to plain text. WARNING: removes all formatting!"
-                        SecondCommand="{Binding Cmd.SwitchFormattedPlainTextModeCommand}"
-                        SecondContent="{StaticResource IconPlainText}"
-                        SecondToolTip="Change to formatted text."
-                    />
-                </DataTemplate>
-
                 <DataTemplate x:Key="ShowDetailsButtonTemplate">
                     <controls:TwoStateButton
                         DataContext="{Binding ElementName=Root, Path=DataContext}"
@@ -187,13 +174,6 @@
                     DataContext="{Binding ElementName=Root, Path=DataContext}"
                     Id="Popup pin toggle button"
                     TemplateToShow="{StaticResource PinButtonTemplate}" />
-
-                <!--  Switch formatted / plain text mode  -->
-                <controls:ShowHideControl
-                    CanShow="{Binding AppSettings.TaskQuickActionSettings.SwitchFormattedPlainTextModeEnabled, Source={StaticResource AppSettings}}"
-                    DataContext="{Binding ElementName=Root, Path=DataContext}"
-                    Id="Popup switch format button"
-                    TemplateToShow="{StaticResource SwitchFormatButtonTemplate}" />
 
                 <!--  Show details  -->
                 <controls:ShowHideControl

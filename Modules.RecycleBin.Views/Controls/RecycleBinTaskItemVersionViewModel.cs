@@ -14,10 +14,10 @@ public class RecycleBinTaskItemVersionViewModel : BaseViewModel
 
     public DateTime VersionDate { get; set; }
 
-    public RecycleBinTaskItemVersionViewModel(string content, bool isContentPlainText)
+    public RecycleBinTaskItemVersionViewModel(string content)
     {
         Content = new DynamicTextBoxViewModel();
 
-        Content.SetContent(isContentPlainText, content);
+        Content.SetContent(content);
     }
 }
