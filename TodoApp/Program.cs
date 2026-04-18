@@ -30,7 +30,6 @@ using Modules.Settings.Views.Pages;
 using Modules.Settings.Views.Services;
 using Modules.Tasks.Repositories;
 using Modules.Tasks.Services.CqrsHandling;
-using Modules.Tasks.Views.CqrsHandling;
 using Modules.Tasks.Views.Pages;
 using Modules.Tasks.Views.PrismSubscribers;
 using Modules.Tasks.Views.Services;
@@ -92,7 +91,6 @@ public static class Program
             typeof(SettingsCqrsRegistration).Assembly,
             typeof(PopupMessageCqrsRegistration).Assembly,
             typeof(CategoriesCqrsRegistration).Assembly,
-            typeof(TasksCqrsRegistration).Assembly,
             typeof(TaskServicesCqrsRegistration).Assembly
         ));
     }

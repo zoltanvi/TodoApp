@@ -1,14 +1,13 @@
-﻿using MediatR;
+using MediatR;
 using Modules.Tasks.Contracts;
 using Modules.Tasks.Contracts.Cqrs.Commands;
 using Modules.Tasks.Contracts.Cqrs.Queries;
 using Modules.Tasks.Contracts.Events;
 using Modules.Tasks.Contracts.Models;
 using Modules.Tasks.Services.Extensions;
-using Modules.Tasks.Views.Extensions;
 using Prism.Events;
 
-namespace Modules.Tasks.Views.CqrsHandling.CommandHandlers;
+namespace Modules.Tasks.Services.CqrsHandling.CommandHandlers;
 
 public class SplitTaskLinesCommandHandler : IRequestHandler<SplitTaskLinesCommand>
 {
