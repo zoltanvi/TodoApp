@@ -24,7 +24,7 @@ using System.Windows.Input;
 namespace Modules.Categories.Views.Pages;
 
 [AddINotifyPropertyChangedInterface]
-public class CategoryPageViewModel : BaseViewModel
+public partial class CategoryPageViewModel : BaseViewModel
 {
     private readonly ICategoriesRepository _categoriesRepository;
     private readonly IMainPageNavigationService _mainPageNavigationService;
@@ -86,17 +86,7 @@ public class CategoryPageViewModel : BaseViewModel
 
         _treeState.Initialize();
 
-        eventAggregator.GetEvent<CategoryDeleteClickedEvent>().Subscribe(DeleteCategory);
-        eventAggregator.GetEvent<CategoryClickedEvent>().Subscribe(SetActiveCategory);
-        eventAggregator.GetEvent<CategoryNameUpdatedEvent>().Subscribe(OnCategoryNameUpdated);
-        eventAggregator.GetEvent<CategoryRestoredEvent>().Subscribe(OnCategoryRestored);
-        eventAggregator.GetEvent<CategoryToggleExpandEvent>().Subscribe(OnToggleExpand);
-        eventAggregator.GetEvent<CategoryAddSubcategoryClickedEvent>().Subscribe(OnAddSubcategory);
-        eventAggregator.GetEvent<HotkeyPressedCtrlShiftNEvent>().Subscribe(OnHotkeyAddSubcategory);
-        eventAggregator.GetEvent<CategoryRenameClickedEvent>().Subscribe(OnRenameClicked);
-        eventAggregator.GetEvent<CategoryMoveToRootClickedEvent>().Subscribe(OnMoveToRoot);
-        eventAggregator.GetEvent<CategoryMovedEvent>().Subscribe(OnCategoryMoved);
-        eventAggregator.GetEvent<CategoryMakeSubcategoryClickedEvent>().Subscribe(OnMakeSubcategory);
+        SubscribeToPrismEvents();
     }
 
     public int RecycleBinCategoryId => Constants.RecycleBinCategoryId;
@@ -419,18 +409,5 @@ public class CategoryPageViewModel : BaseViewModel
         }
     }
 
-    protected override void OnDispose()
-    {
-        _eventAggregator.GetEvent<CategoryDeleteClickedEvent>().Unsubscribe(DeleteCategory);
-        _eventAggregator.GetEvent<CategoryClickedEvent>().Unsubscribe(SetActiveCategory);
-        _eventAggregator.GetEvent<CategoryNameUpdatedEvent>().Unsubscribe(OnCategoryNameUpdated);
-        _eventAggregator.GetEvent<CategoryRestoredEvent>().Unsubscribe(OnCategoryRestored);
-        _eventAggregator.GetEvent<CategoryToggleExpandEvent>().Unsubscribe(OnToggleExpand);
-        _eventAggregator.GetEvent<CategoryAddSubcategoryClickedEvent>().Unsubscribe(OnAddSubcategory);
-        _eventAggregator.GetEvent<HotkeyPressedCtrlShiftNEvent>().Unsubscribe(OnHotkeyAddSubcategory);
-        _eventAggregator.GetEvent<CategoryRenameClickedEvent>().Unsubscribe(OnRenameClicked);
-        _eventAggregator.GetEvent<CategoryMoveToRootClickedEvent>().Unsubscribe(OnMoveToRoot);
-        _eventAggregator.GetEvent<CategoryMovedEvent>().Unsubscribe(OnCategoryMoved);
-        _eventAggregator.GetEvent<CategoryMakeSubcategoryClickedEvent>().Unsubscribe(OnMakeSubcategory);
-    }
+    protected override void OnDispose() => UnsubscribeFromPrismEvents();
 }

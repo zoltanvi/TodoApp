@@ -5,6 +5,7 @@ using Modules.Categories.Contracts.Events;
 using Modules.Common;
 using Modules.Common.DataBinding;
 using Modules.Common.Events;
+using Modules.Common.Services.Navigation;
 using Modules.Common.DataModels;
 using Modules.Common.Extensions;
 using Modules.Common.Helpers;
@@ -37,7 +38,7 @@ using System.Windows.Threading;
 namespace Modules.Tasks.Views.Pages;
 
 [AddINotifyPropertyChangedInterface]
-public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
+public partial class TaskPageViewModel : BaseViewModel, IDropIndexModifier
 {
     private readonly IMediator _mediator;
     private readonly ITaskItemRepository _taskItemRepository;
@@ -46,6 +47,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
     private readonly TaskPageListCoordinator _listCoordinator;
     private readonly TaskDragDropIndexModifier _dropIndexModifier;
     private readonly IAppSettings _appSettings;
+    private readonly IOverlayPageNavigationService _overlayPageNavigationService;
 
     // For improved performance, the code which updates Items in a loop
     // should be surrounded with an '_listCoordinator.IgnoreCollectionChange = true scope' and update Items after that ONCE.
@@ -58,7 +60,8 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         OneEditorOpenService oneEditorOpenService,
         IEventAggregator eventAggregator,
         TaskDragDropIndexModifier dropIndexModifier,
-        IAppSettings appSettings)
+        IAppSettings appSettings,
+        IOverlayPageNavigationService overlayPageNavigationService)
     {
         ArgumentNullException.ThrowIfNull(mediator);
         ArgumentNullException.ThrowIfNull(taskItemRepository);
@@ -66,6 +69,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         ArgumentNullException.ThrowIfNull(eventAggregator);
         ArgumentNullException.ThrowIfNull(dropIndexModifier);
         ArgumentNullException.ThrowIfNull(appSettings);
+        ArgumentNullException.ThrowIfNull(overlayPageNavigationService);
 
         _mediator = mediator;
         _taskItemRepository = taskItemRepository;
@@ -74,6 +78,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         _listCoordinator = new TaskPageListCoordinator(taskItemRepository);
         _dropIndexModifier = dropIndexModifier;
         _appSettings = appSettings;
+        _overlayPageNavigationService = overlayPageNavigationService;
 
         var activeCategoryInfo = _mediator.Send(new GetSelectedCategoryQuery())
             .ConfigureAwait(false).GetAwaiter().GetResult();
@@ -97,7 +102,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
             ? _listCoordinator.OrderTasksByState(tasks)
             : tasks;
 
-        foreach (var vm in orderedTasks.MapToViewModelList(_mediator, oneEditorOpenService, _eventAggregator, _appSettings))
+        foreach (var vm in orderedTasks.MapToViewModelList(_mediator, oneEditorOpenService, _eventAggregator, _appSettings, overlayPageNavigationService))
         {
             _listCoordinator.Items.Add(vm);
         }
@@ -114,7 +119,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         ItemsView = CollectionViewSource.GetDefaultView(Items);
         ItemsView.Filter = FilterTaskItem;
 
-        SubscribeToEvents();
+        SubscribeToTaskPageEvents();
     }
 
     public SearchBoxViewModel SearchBoxViewModel { get; set; }
@@ -148,79 +153,6 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
     public ICommand ToggleBottomPanelCommand { get; }
     public ICommand AddTaskItemCommand { get; }
     public ICommand TextBoxFocusedCommand { get; }
-    private void SubscribeToEvents()
-    {
-        _appSettings.PageTitleSettings.SettingsChanged += OnPageTitleSettingsChanged;
-        Items.CollectionChanged += ItemsOnCollectionChanged;
-
-        _eventAggregator.GetEvent<TaskItemDeleteClickedEvent>().Subscribe(OnDeleteTaskItemRequestedEvent);
-        _eventAggregator.GetEvent<TaskItemPinClickedEvent>().Subscribe(OnPinTaskItemRequested);
-        _eventAggregator.GetEvent<TaskItemUnpinClickedEvent>().Subscribe(OnUnpinTaskItemRequested);
-        _eventAggregator.GetEvent<TaskItemCheckedEvent>().Subscribe(OnFinishTaskItemRequested);
-        _eventAggregator.GetEvent<TaskItemUncheckedEvent>().Subscribe(OnUnfinishTaskItemRequested);
-        _eventAggregator.GetEvent<TaskItemCategoryChangedEvent>().Subscribe(OnTaskCategoryChanged);
-        _eventAggregator.GetEvent<TaskItemsCategoryChangedEvent>().Subscribe(OnTasksCategoryChanged);
-        
-        _eventAggregator.GetEvent<TaskSortingRequestedEvent>().Subscribe(OnSortingRequested);
-        _eventAggregator.GetEvent<TaskItemVersionRestoredEvent>().Subscribe(OnVersionRestored);
-        _eventAggregator.GetEvent<TaskSplittedByLinesEvent>().Subscribe(OnTaskSplitted);
-        _eventAggregator.GetEvent<TaskItemMoveToTopClickedEvent>().Subscribe(OnMoveToTopRequested);
-        _eventAggregator.GetEvent<TaskItemMoveToBottomClickedEvent>().Subscribe(OnMoveToBottomRequested);
-        _eventAggregator.GetEvent<TaskResetRequestedEvent>().Subscribe(OnTaskResetRequested);
-        
-        _eventAggregator.GetEvent<TaskDeleteAllRequestedEvent>().Subscribe(OnDeleteAllRequested);
-
-        _eventAggregator.GetEvent<TagsChangedOnTaskItemEvent>().Subscribe(OnTagsChangedOnTaskItem);
-        _eventAggregator.GetEvent<TagItemDeletedEvent>().Subscribe(OnTagItemDeleted);
-        _eventAggregator.GetEvent<TagItemUpdatedEvent>().Subscribe(OnTagItemUpdated);
-
-        _eventAggregator.GetEvent<HotkeyPressedCtrlFEvent>().Subscribe(OnCtrlFPressed);
-        _eventAggregator.GetEvent<HotkeyPressedCtrlNEvent>().Subscribe(OnCtrlNPressed);
-        _eventAggregator.GetEvent<FocusTaskPageNewTaskEditorEvent>().Subscribe(OnFocusTaskPageNewTaskEditor);
-        
-        _eventAggregator.GetEvent<ThemeChangedEvent>().Subscribe(OnThemeChanged);
-        _eventAggregator.GetEvent<CategoryNameUpdatedEvent>().Subscribe(OnCategoryNameUpdated);
-
-        _oneEditorOpenService.ChangedToDisplayMode += FocusAddNewTaskTextEditor;
-        SearchBoxViewModel.SearchTermsChanged += OnSearchTermsChanged;
-    }
-
-    private void UnsubscribeFromEvents()
-    {
-        _appSettings.PageTitleSettings.SettingsChanged -= OnPageTitleSettingsChanged;
-        Items.CollectionChanged -= ItemsOnCollectionChanged;
-
-        _eventAggregator.GetEvent<TaskItemDeleteClickedEvent>().Unsubscribe(OnDeleteTaskItemRequestedEvent);
-        _eventAggregator.GetEvent<TaskItemPinClickedEvent>().Unsubscribe(OnPinTaskItemRequested);
-        _eventAggregator.GetEvent<TaskItemUnpinClickedEvent>().Unsubscribe(OnUnpinTaskItemRequested);
-        _eventAggregator.GetEvent<TaskItemCheckedEvent>().Unsubscribe(OnFinishTaskItemRequested);
-        _eventAggregator.GetEvent<TaskItemUncheckedEvent>().Unsubscribe(OnUnfinishTaskItemRequested);
-        _eventAggregator.GetEvent<TaskItemCategoryChangedEvent>().Unsubscribe(OnTaskCategoryChanged);
-        _eventAggregator.GetEvent<TaskItemsCategoryChangedEvent>().Unsubscribe(OnTasksCategoryChanged);
-
-        _eventAggregator.GetEvent<TaskSortingRequestedEvent>().Unsubscribe(OnSortingRequested);
-        _eventAggregator.GetEvent<TaskItemVersionRestoredEvent>().Unsubscribe(OnVersionRestored);
-        _eventAggregator.GetEvent<TaskSplittedByLinesEvent>().Unsubscribe(OnTaskSplitted);
-        _eventAggregator.GetEvent<TaskItemMoveToTopClickedEvent>().Unsubscribe(OnMoveToTopRequested);
-        _eventAggregator.GetEvent<TaskItemMoveToBottomClickedEvent>().Unsubscribe(OnMoveToBottomRequested);
-        _eventAggregator.GetEvent<TaskResetRequestedEvent>().Unsubscribe(OnTaskResetRequested);
-
-        _eventAggregator.GetEvent<TaskDeleteAllRequestedEvent>().Unsubscribe(OnDeleteAllRequested);
-
-        _eventAggregator.GetEvent<TagsChangedOnTaskItemEvent>().Unsubscribe(OnTagsChangedOnTaskItem);
-        _eventAggregator.GetEvent<TagItemDeletedEvent>().Unsubscribe(OnTagItemDeleted);
-        _eventAggregator.GetEvent<TagItemUpdatedEvent>().Unsubscribe(OnTagItemUpdated);
-
-        _eventAggregator.GetEvent<HotkeyPressedCtrlFEvent>().Unsubscribe(OnCtrlFPressed);
-        _eventAggregator.GetEvent<HotkeyPressedCtrlNEvent>().Unsubscribe(OnCtrlNPressed);
-        _eventAggregator.GetEvent<FocusTaskPageNewTaskEditorEvent>().Unsubscribe(OnFocusTaskPageNewTaskEditor);
-
-        _eventAggregator.GetEvent<ThemeChangedEvent>().Unsubscribe(OnThemeChanged);
-        _eventAggregator.GetEvent<CategoryNameUpdatedEvent>().Unsubscribe(OnCategoryNameUpdated);
-
-        _oneEditorOpenService.ChangedToDisplayMode -= FocusAddNewTaskTextEditor;
-        SearchBoxViewModel.SearchTermsChanged -= OnSearchTermsChanged;
-    }
 
     private void OnTextBoxFocused() => _oneEditorOpenService.EditModeWithoutTask();
 
@@ -263,7 +195,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
 
                 _oneEditorOpenService.LastEditedTaskId = addedTask.Id;
 
-                Items.Insert(newListOrder, addedTask.MapToViewModel(_mediator, _oneEditorOpenService, _eventAggregator, _appSettings));
+                Items.Insert(newListOrder, addedTask.MapToViewModel(_mediator, _oneEditorOpenService, _eventAggregator, _appSettings, _overlayPageNavigationService));
 
                 if (!isLastItem)
                 {
@@ -650,7 +582,7 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
 
                 foreach (var taskItem in tasks)
                 {
-                    Items.Add(taskItem.MapToViewModel(_mediator, _oneEditorOpenService, _eventAggregator, _appSettings));
+                    Items.Add(taskItem.MapToViewModel(_mediator, _oneEditorOpenService, _eventAggregator, _appSettings, _overlayPageNavigationService));
                 }
 
                 _listCoordinator.FixItemsListOrders(persist: true);
@@ -896,5 +828,5 @@ public class TaskPageViewModel : BaseViewModel, IDropIndexModifier
         }
     }
 
-    protected override void OnDispose() => UnsubscribeFromEvents();
+    protected override void OnDispose() => UnsubscribeFromTaskPageEvents();
 }

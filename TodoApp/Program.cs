@@ -4,7 +4,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Modules.Categories.Repositories;
 using Modules.Categories.Services.CqrsHandling.CommandHandlers;
-using Modules.Categories.Services.PrismSubscribers;
 using Modules.Categories.Views.DragDrop;
 using Modules.Categories.Views.Pages;
 using Modules.Common.Database;
@@ -30,7 +29,6 @@ using Modules.Settings.Views.Services;
 using Modules.Tasks.Repositories;
 using Modules.Tasks.Services.CqrsHandling.CommandHandlers;
 using Modules.Tasks.Views.Pages;
-using Modules.Tasks.Views.PrismSubscribers;
 using Modules.Tasks.Views.Services;
 using Prism.Events;
 using TodoApp.DefaultData;
@@ -45,7 +43,10 @@ public static class Program
     {
         AddMediatR(services);
 
-        // Prism = single pub/sub bus (UI + lifecycle + active category). MediatR reserved for IRequest/IRequestHandler (CQRS).
+        // Messaging split (keep both; different roles):
+        // - Prism IEventAggregator: UI/cross-component pub-sub (clicks, lifecycle, theme, active category, task list reactions).
+        // - MediatR: IRequest handlers for application operations (repos, multi-step workflows, nested Send). Prefer direct
+        //   I*NavigationService.NavigateTo from viewmodels when the only work is opening a page (no MediatR indirection).
         services.AddSingleton<IEventAggregator, EventAggregator>();
 
         services.AddSingleton<IAppSettings>(sp => AppSettings.Instance);
@@ -63,8 +64,7 @@ public static class Program
         });
 
         services.AddSingleton<ApplicationLifecyclePrismSubscriber>();
-        services.AddSingleton<TaskViewActiveCategoryPrismSubscriber>();
-        services.AddSingleton<ActiveCategoryNavigationPrismSubscriber>();
+        services.AddSingleton<ActiveCategoryChangedCoordinator>();
 
         services.AddSingleton<TaskToCategoryDropHandler>();
 

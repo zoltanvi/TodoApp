@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Modules.Common.DataModels;
+using Modules.Common.Services.Navigation;
 using Modules.Settings.Contracts.ViewModels;
 using Modules.Common.Extensions;
 using Modules.Common.Helpers;
@@ -43,13 +44,15 @@ public static class TaskItemViewModelMappings
         IMediator mediator,
         OneEditorOpenService oneEditorOpenService,
         IEventAggregator eventAggregator,
-        IAppSettings appSettings)
+        IAppSettings appSettings,
+        IOverlayPageNavigationService overlayPageNavigationService)
     {
         return new TaskItemViewModel(
             mediator,
             oneEditorOpenService,
             eventAggregator,
             appSettings,
+            overlayPageNavigationService,
             taskItem.Content)
         {
             Id = taskItem.Id,
@@ -73,8 +76,9 @@ public static class TaskItemViewModelMappings
         IMediator mediator,
         OneEditorOpenService oneEditorOpenService,
         IEventAggregator eventAggregator,
-        IAppSettings appSettings) =>
-        taskList.Select(x => x.MapToViewModel(mediator, oneEditorOpenService, eventAggregator, appSettings)).ToList();
+        IAppSettings appSettings,
+        IOverlayPageNavigationService overlayPageNavigationService) =>
+        taskList.Select(x => x.MapToViewModel(mediator, oneEditorOpenService, eventAggregator, appSettings, overlayPageNavigationService)).ToList();
 
     public static ObservableCollection<TagItemOnTaskViewModel> MapTagItems(this IEnumerable<TagItem> tags)
     {

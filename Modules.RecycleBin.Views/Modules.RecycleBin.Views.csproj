@@ -17,7 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Modules.Categories.Contracts\Modules.Categories.Contracts.csproj" />
-    <ProjectReference Include="..\Modules.Common.Navigation\Modules.Common.Navigation.csproj" />
+    <ProjectReference Include="..\Modules.Common\Modules.Common.csproj" />
     <ProjectReference Include="..\Modules.Common.Views\Modules.Common.Views.csproj" />
     <ProjectReference Include="..\Modules.RecycleBin.Repositories\Modules.RecycleBin.Repositories.csproj" />
     <ProjectReference Include="..\Modules.Tasks.TextEditor\Modules.Tasks.TextEditor.csproj" />

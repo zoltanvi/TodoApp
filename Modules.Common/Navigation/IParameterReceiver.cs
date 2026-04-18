@@ -1,4 +1,4 @@
-﻿namespace Modules.Common.Navigation;
+namespace Modules.Common.Navigation;
 
 /// <summary>
 /// Interface to pass parameters to ViewModels of IPages

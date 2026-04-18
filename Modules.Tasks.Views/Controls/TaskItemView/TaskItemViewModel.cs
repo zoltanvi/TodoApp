@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Modules.Common.DataBinding;
+using Modules.Common.Services.Navigation;
 using Modules.Common.ViewModel;
 using Modules.Settings.Contracts.ViewModels;
 using Modules.Tasks.Contracts.Cqrs.Commands;
@@ -26,12 +27,14 @@ public class TaskItemViewModel : BaseViewModel, ITaskItemViewModel
         OneEditorOpenService oneEditorOpenService,
         IEventAggregator eventAggregator,
         IAppSettings appSettings,
+        IOverlayPageNavigationService overlayPageNavigationService,
         string content)
     {
         ArgumentNullException.ThrowIfNull(mediator);
         ArgumentNullException.ThrowIfNull(oneEditorOpenService);
         ArgumentNullException.ThrowIfNull(eventAggregator);
         ArgumentNullException.ThrowIfNull(appSettings);
+        ArgumentNullException.ThrowIfNull(overlayPageNavigationService);
 
         _mediator = mediator;
         _oneEditorOpenService = oneEditorOpenService;
@@ -45,7 +48,7 @@ public class TaskItemViewModel : BaseViewModel, ITaskItemViewModel
         Content.EnterAction = ExitEditItem;
         Content.SetContent(content);
 
-        Cmd = new TaskItemCommandsViewModel(this, mediator, eventAggregator);
+        Cmd = new TaskItemCommandsViewModel(this, mediator, eventAggregator, overlayPageNavigationService);
 
         EnableQuickActionsCommand = new RelayCommand(() => IsQuickActionsEnabled = true);
         DisableQuickActionsCommand = new RelayCommand(() => IsQuickActionsEnabled = false);

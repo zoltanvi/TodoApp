@@ -9,9 +9,7 @@ using Modules.Common.Services.Navigation;
 using Modules.PopupMessage.Views;
 using Modules.Settings.Contracts.ViewModels;
 using Modules.Settings.Views.Services;
-using Modules.Categories.Services.PrismSubscribers;
 using Modules.Settings.Services.PrismSubscribers;
-using Modules.Tasks.Views.PrismSubscribers;
 using Prism.Events;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -102,8 +100,7 @@ public partial class App : Application
     private void WirePrismEventSubscribers()
     {
         _ = ServiceProvider.GetRequiredService<ApplicationLifecyclePrismSubscriber>();
-        _ = ServiceProvider.GetRequiredService<TaskViewActiveCategoryPrismSubscriber>();
-        _ = ServiceProvider.GetRequiredService<ActiveCategoryNavigationPrismSubscriber>();
+        _ = ServiceProvider.GetRequiredService<ActiveCategoryChangedCoordinator>();
     }
 
     private void PublishApplicationOpeningEvent()

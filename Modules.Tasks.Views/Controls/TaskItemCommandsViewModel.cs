@@ -1,9 +1,12 @@
 ﻿using MediatR;
 using Modules.Categories.Contracts.Cqrs.Queries;
 using Modules.Common.DataBinding;
+using Modules.Common.Navigation;
+using Modules.Common.Services.Navigation;
 using Modules.Common.ViewModel;
 using Modules.Tasks.Contracts.Cqrs.Commands;
 using Modules.Tasks.Contracts.Events;
+using Modules.Tasks.Views.Pages;
 using Modules.Tasks.Views.Controls.ContextMenu;
 using Modules.Tasks.Views.Controls.TaskItemView;
 using Modules.Tasks.Views.Events;
@@ -21,20 +24,24 @@ public class TaskItemCommandsViewModel : BaseViewModel
     private readonly IMediator _mediator;
     private readonly ITaskItemViewModel _taskItemInternal;
     private readonly IEventAggregator _eventAggregator;
+    private readonly IOverlayPageNavigationService _overlayPageNavigationService;
 
     public TaskItemCommandsViewModel(
         TaskItemViewModel taskItem,
         IMediator mediator,
-        IEventAggregator eventAggregator)
+        IEventAggregator eventAggregator,
+        IOverlayPageNavigationService overlayPageNavigationService)
     {
         ArgumentNullException.ThrowIfNull(taskItem);
         ArgumentNullException.ThrowIfNull(mediator);
         ArgumentNullException.ThrowIfNull(eventAggregator);
+        ArgumentNullException.ThrowIfNull(overlayPageNavigationService);
 
         _taskItem = taskItem;
         _mediator = mediator;
         _taskItemInternal = taskItem;
         _eventAggregator = eventAggregator;
+        _overlayPageNavigationService = overlayPageNavigationService;
 
         IsDoneModifiedCommand = new RelayCommand(HandleIsDoneModified);
 
@@ -49,8 +56,8 @@ public class TaskItemCommandsViewModel : BaseViewModel
         UnpinItemCommand = new RelayCommand(() => _eventAggregator.GetEvent<TaskItemUnpinClickedEvent>().Publish(_taskItem.Id));
         DeleteItemCommand = new RelayCommand(() => _eventAggregator.GetEvent<TaskItemDeleteClickedEvent>().Publish(_taskItem.Id));
         ToggleDetailsCommand = new RelayCommand(() => _taskItem.DetailsVisible ^= true);
-        ShowTagSelectorCommand = new RelayCommand(() => _mediator.Send(new OpenTagSelectorCommand { TaskId = _taskItem.Id }));
-        ShowHistoryCommand = new RelayCommand(() => _mediator.Send(new OpenHistoryCommand { TaskId = _taskItem.Id }));
+        ShowTagSelectorCommand = new RelayCommand(() => _overlayPageNavigationService.NavigateTo<ITagSelectorPage>(_taskItem.Id));
+        ShowHistoryCommand = new RelayCommand(() => _overlayPageNavigationService.NavigateTo<ITaskHistoryPage>(_taskItem.Id));
         MoveToTopCommand = new RelayCommand(() => _eventAggregator.GetEvent<TaskItemMoveToTopClickedEvent>().Publish(_taskItem.Id));
         MoveToBottomCommand = new RelayCommand(() => _eventAggregator.GetEvent<TaskItemMoveToBottomClickedEvent>().Publish(_taskItem.Id));
 

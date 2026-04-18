@@ -1,4 +1,4 @@
-﻿namespace Modules.Common.Navigation;
+namespace Modules.Common.Navigation;
 
 public interface IPage;
 
